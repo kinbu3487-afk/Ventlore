@@ -1,0 +1,694 @@
+openapi: 3.1.0
+info:
+  title: Ventlore API
+  version: 0.3.0
+  description: >
+    Hợp đồng API chuẩn cho nền tảng Ventlore v0.3.
+    Mọi endpoint đều sử dụng tiền tố /api/v1.
+    Toàn bộ mutation đều yêu cầu Idempotency-Key và hỗ trợ expectedVersion khi chỉnh sửa bản nháp.
+servers:
+  - url: /api/v1
+    description: Production & Local Mock Route Handlers
+
+components:
+  securitySchemes:
+    SessionAuth:
+      type: apiKey
+      in: cookie
+      name: ventlore_session
+      description: Session cookie được cấp sau khi xác thực social login.
+
+  headers:
+    IdempotencyKey:
+      description: Khóa đảm bảo tính bất biến khi thực hiện lại mutation (actor + operation + payload).
+      schema:
+        type: string
+        format: uuid
+      required: true
+    IfMatchVersion:
+      description: Phiên bản dự kiến (expectedVersion) nhằm chống ghi đè khi sửa đổi song song.
+      schema:
+        type: integer
+    RequestTraceId:
+      description: Mã truy vết request phục vụ nhật ký kiểm toán và debug.
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+    UUID:
+      type: string
+      format: uuid
+      example: "018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e6f"
+
+    DisplayCode:
+      type: string
+      pattern: "^[A-Z]{3}-[0-9]{6,}$"
+      example: "PST-000001"
+
+    ErrorDetail:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+        code:
+          type: string
+
+    ErrorResponse:
+      type: object
+      required:
+        - code
+        - message
+        - requestTraceId
+      properties:
+        code:
+          type: string
+          example: "CONFLICT_MUTATION"
+        message:
+          type: string
+          example: "Yêu cầu có cùng Idempotency-Key nhưng payload khác nhau."
+        requestTraceId:
+          $ref: "#/components/schemas/UUID"
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ErrorDetail"
+
+    PaginationMeta:
+      type: object
+      required:
+        - hasMore
+      properties:
+        nextCursor:
+          type: string
+          nullable: true
+        hasMore:
+          type: boolean
+        totalCount:
+          type: integer
+
+    UserSession:
+      type: object
+      required:
+        - userId
+        - roleAssignments
+        - capabilities
+      properties:
+        userId:
+          $ref: "#/components/schemas/UUID"
+        handle:
+          type: string
+        displayName:
+          type: string
+        avatarUrl:
+          type: string
+        roleAssignments:
+          type: array
+          items:
+            type: object
+            properties:
+              roleAssignmentId:
+                $ref: "#/components/schemas/UUID"
+              role:
+                type: string
+                enum: [MEMBER, EXPERT, OPERATOR, TREASURY, ADMIN]
+              scope:
+                type: string
+              regionId:
+                $ref: "#/components/schemas/UUID"
+              validUntil:
+                type: string
+                format: date-time
+        membership:
+          type: object
+          nullable: true
+          properties:
+            membershipId:
+              $ref: "#/components/schemas/UUID"
+            planCode:
+              type: string
+            startsAt:
+              type: string
+              format: date-time
+            endsAt:
+              type: string
+              format: date-time
+            isActive:
+              type: boolean
+        capabilities:
+          type: array
+          items:
+            type: string
+          example: ["can_propose_place", "can_submit_post", "can_review_content"]
+
+    PlaceSummary:
+      type: object
+      required:
+        - placeId
+        - displayCode
+        - name
+        - status
+      properties:
+        placeId:
+          $ref: "#/components/schemas/UUID"
+        displayCode:
+          $ref: "#/components/schemas/DisplayCode"
+        name:
+          type: string
+        regionId:
+          $ref: "#/components/schemas/UUID"
+        status:
+          type: string
+          enum: [CANDIDATE, ACTIVE, MERGED, ARCHIVED]
+        canonicalPlaceId:
+          $ref: "#/components/schemas/UUID"
+          nullable: true
+        summary:
+          type: string
+        warnings:
+          type: array
+          items:
+            type: string
+
+    PostDetail:
+      type: object
+      required:
+        - postId
+        - displayCode
+        - placeId
+        - authorUserId
+        - currentRevisionId
+        - visibility
+      properties:
+        postId:
+          $ref: "#/components/schemas/UUID"
+        displayCode:
+          $ref: "#/components/schemas/DisplayCode"
+        placeId:
+          $ref: "#/components/schemas/UUID"
+        authorUserId:
+          $ref: "#/components/schemas/UUID"
+        currentRevisionId:
+          $ref: "#/components/schemas/UUID"
+        contributionType:
+          type: string
+          enum: [DISCOVERY, GUIDE, EXPERIENCE]
+        visibility:
+          type: string
+          enum: [REVIEW_ONLY, PUBLISHED, HIDDEN]
+        revision:
+          $ref: "#/components/schemas/RevisionDetail"
+
+    RevisionDetail:
+      type: object
+      required:
+        - revisionId
+        - displayCode
+        - postId
+        - versionNumber
+        - title
+        - content
+        - observedAt
+        - verificationStatus
+      properties:
+        revisionId:
+          $ref: "#/components/schemas/UUID"
+        displayCode:
+          $ref: "#/components/schemas/DisplayCode"
+        postId:
+          $ref: "#/components/schemas/UUID"
+        parentRevisionId:
+          $ref: "#/components/schemas/UUID"
+          nullable: true
+        versionNumber:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        observedAt:
+          type: string
+          format: date
+        contentHash:
+          type: string
+        accessTier:
+          type: string
+          enum: [PUBLIC, VIP]
+        verificationStatus:
+          type: string
+          enum: [UNVERIFIED, IN_REVIEW, VERIFIED, NEEDS_CHANGES, INCONCLUSIVE, REJECTED, EXPIRED, SUSPENDED]
+        checkedAt:
+          type: string
+          format: date-time
+          nullable: true
+        validUntil:
+          type: string
+          format: date-time
+          nullable: true
+        claims:
+          type: array
+          items:
+            type: object
+            properties:
+              claimId:
+                $ref: "#/components/schemas/UUID"
+              text:
+                type: string
+              category:
+                type: string
+
+    TaskDetail:
+      type: object
+      required:
+        - taskId
+        - displayCode
+        - reviewCaseId
+        - taskType
+        - workStatus
+        - feeAmount
+        - asset
+      properties:
+        taskId:
+          $ref: "#/components/schemas/UUID"
+        displayCode:
+          $ref: "#/components/schemas/DisplayCode"
+        reviewCaseId:
+          $ref: "#/components/schemas/UUID"
+        assigneeUserId:
+          $ref: "#/components/schemas/UUID"
+        taskType:
+          type: string
+          enum: [NEW_PLACE_REVIEW, EXISTING_PLACE_POST_REVIEW]
+        workStatus:
+          type: string
+          enum: [OFFERED, ACCEPTED, DECLINED, OFFER_EXPIRED, IN_PROGRESS, SUBMITTED, NEEDS_MORE, ACCEPTED_WORK, REJECTED_WORK, CANCELLED]
+        feeAmount:
+          type: string
+          description: Số tiền thù lao tính bằng đơn vị nguyên tử (atomic units string)
+        asset:
+          type: string
+        deadline:
+          type: string
+          format: date-time
+
+paths:
+  /auth/social/callback:
+    post:
+      summary: Xử lý callback sau khi đăng nhập mạng xã hội (U01-E04)
+      description: proposed
+      responses:
+        "200":
+          description: Đăng nhập thành công, trả thông tin session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSession"
+        "401":
+          description: Xác thực thất bại
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /me:
+    get:
+      summary: Lấy thông tin tài khoản hiện tại và server capabilities (U01-E05)
+      description: proposed
+      responses:
+        "200":
+          description: Thông tin session và quyền hạn
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSession"
+
+  /places:
+    get:
+      summary: Tìm kiếm danh sách địa điểm công khai (U01-E01)
+      description: proposed
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+        - name: regionId
+          in: query
+          schema:
+            $ref: "#/components/schemas/UUID"
+        - name: cursor
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        "200":
+          description: Danh sách địa điểm
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/PlaceSummary"
+                  pagination:
+                    $ref: "#/components/schemas/PaginationMeta"
+
+  /places/{placeId}:
+    get:
+      summary: Xem chi tiết một địa điểm và các cảnh báo an toàn (U01-E02)
+      description: proposed
+      parameters:
+        - name: placeId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UUID"
+      responses:
+        "200":
+          description: Chi tiết địa điểm
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlaceSummary"
+        "404":
+          description: Địa điểm không tồn tại
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /places/duplicate-check:
+    post:
+      summary: Kiểm tra khả năng trùng lặp của đề xuất địa điểm mới (U02-E02)
+      description: proposed
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                latitude:
+                  type: number
+                longitude:
+                  type: number
+      responses:
+        "200":
+          description: Danh sách địa điểm trùng tiềm năng
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hasMatch:
+                    type: boolean
+                  candidates:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/PlaceSummary"
+
+  /place-proposals:
+    post:
+      summary: Gửi đề xuất điểm đến mới kèm bài viết đầu tiên (U02-E05)
+      description: proposed
+      parameters:
+        - $ref: "#/components/headers/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - title
+                - content
+                - observedAt
+              properties:
+                name:
+                  type: string
+                regionId:
+                  $ref: "#/components/schemas/UUID"
+                title:
+                  type: string
+                content:
+                  type: string
+                observedAt:
+                  type: string
+                  format: date
+                claims:
+                  type: array
+                  items:
+                    type: string
+                evidenceIds:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/UUID"
+                contentUseConsent:
+                  type: boolean
+      responses:
+        "201":
+          description: Đề xuất được tạo thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  placeId:
+                    $ref: "#/components/schemas/UUID"
+                  postId:
+                    $ref: "#/components/schemas/UUID"
+                  revisionId:
+                    $ref: "#/components/schemas/UUID"
+                  visibility:
+                    type: string
+                    example: "REVIEW_ONLY"
+
+  /posts:
+    post:
+      summary: Khởi tạo bài viết mới tại một địa điểm đã biết (U03-E01)
+      description: proposed
+      parameters:
+        - $ref: "#/components/headers/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - placeId
+                - contributionType
+              properties:
+                placeId:
+                  $ref: "#/components/schemas/UUID"
+                contributionType:
+                  type: string
+                  enum: [GUIDE, EXPERIENCE]
+      responses:
+        "201":
+          description: Bài viết được tạo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  postId:
+                    $ref: "#/components/schemas/UUID"
+                  displayCode:
+                    $ref: "#/components/schemas/DisplayCode"
+
+  /posts/{postId}:
+    get:
+      summary: Đọc chi tiết bài viết và phiên bản cụ thể (U01-E03)
+      description: proposed
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UUID"
+        - name: revisionId
+          in: query
+          schema:
+            $ref: "#/components/schemas/UUID"
+      responses:
+        "200":
+          description: Chi tiết bài viết
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostDetail"
+
+  /posts/{postId}/revisions:
+    post:
+      summary: Đăng phiên bản nội dung mới cho bài viết (U03-E04, U03-E06)
+      description: proposed
+      parameters:
+        - $ref: "#/components/headers/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - content
+                - observedAt
+              properties:
+                parentRevisionId:
+                  $ref: "#/components/schemas/UUID"
+                title:
+                  type: string
+                content:
+                  type: string
+                observedAt:
+                  type: string
+                  format: date
+                claims:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "201":
+          description: Phiên bản được đăng thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  revisionId:
+                    $ref: "#/components/schemas/UUID"
+                  displayCode:
+                    $ref: "#/components/schemas/DisplayCode"
+                  verificationStatus:
+                    type: string
+                    example: "UNVERIFIED"
+
+  /donations:
+    post:
+      summary: Tạo ý định quyên góp cho dự án hoặc ủng hộ bài viết (U09-E02)
+      description: proposed
+      parameters:
+        - $ref: "#/components/headers/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - kind
+                - amountAtomic
+                - asset
+              properties:
+                kind:
+                  type: string
+                  enum: [PROJECT, POST_TIP]
+                routeId:
+                  $ref: "#/components/schemas/UUID"
+                  description: Bắt buộc nếu kind là POST_TIP
+                amountAtomic:
+                  type: string
+                  description: Số tiền nguyên tử (string BigInt)
+                asset:
+                  type: string
+      responses:
+        "201":
+          description: Ý định quyên góp được ghi nhận
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  donationId:
+                    $ref: "#/components/schemas/UUID"
+                  displayCode:
+                    $ref: "#/components/schemas/DisplayCode"
+                  authorAmount:
+                    type: string
+                  treasuryAmount:
+                    type: string
+
+  /vip/payments:
+    post:
+      summary: Tạo đơn mua hoặc gia hạn gói thành viên VIP 15 USD/năm (U10-E03)
+      description: proposed
+      parameters:
+        - $ref: "#/components/headers/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - planCode
+              properties:
+                planCode:
+                  type: string
+                  example: "VIP_ANNUAL"
+      responses:
+        "201":
+          description: Đơn thanh toán VIP được tạo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paymentId:
+                    $ref: "#/components/schemas/UUID"
+                  membershipId:
+                    $ref: "#/components/schemas/UUID"
+                  priceUsdCents:
+                    type: integer
+                    example: 1500
+                  termMonths:
+                    type: integer
+                    example: 12
+
+  /admin/entity-lookup:
+    get:
+      summary: Tra cứu thực thể bằng UUID, DisplayCode hoặc Chain Key (U12-E01)
+      description: proposed
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Kết quả tra cứu thực thể và các quan hệ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  canonicalId:
+                    $ref: "#/components/schemas/UUID"
+                  entityType:
+                    type: string
+                  displayCode:
+                    $ref: "#/components/schemas/DisplayCode"
+                  relatedRecords:
+                    type: array
+                    items:
+                      type: object

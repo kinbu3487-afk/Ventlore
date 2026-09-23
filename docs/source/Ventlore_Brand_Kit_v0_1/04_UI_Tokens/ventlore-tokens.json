@@ -1,0 +1,132 @@
+{
+  "version": "0.1",
+  "status": {
+    "review": {
+      "foreground": "#225A91",
+      "background": "#EAF2FB"
+    },
+    "pending": {
+      "foreground": "#805400",
+      "background": "#FFF1D6"
+    },
+    "danger": {
+      "foreground": "#AD3C32",
+      "background": "#FCEDEA"
+    },
+    "success": {
+      "foreground": "#21654B",
+      "background": "#E7F3EA"
+    },
+    "neutral": {
+      "foreground": "#52645C",
+      "background": "#EDF0ED"
+    },
+    "vip": {
+      "foreground": "#70502A",
+      "background": "#F4EBDD"
+    }
+  },
+  "brand": {
+    "forest": "#173F35",
+    "jade": "#2C7563",
+    "sage": "#DCE8DA",
+    "ivory": "#F5F1E8",
+    "amber": "#F0A44B",
+    "ink": "#182522"
+  },
+  "surface": {
+    "canvas": "#F5F1E8",
+    "card": "#FFFFFF",
+    "subtle": "#DCE8DA"
+  },
+  "text": {
+    "primary": "#182522",
+    "secondary": "#52645C",
+    "onBrand": "#F5F1E8"
+  },
+  "action": {
+    "primary": "#173F35",
+    "primaryHover": "#102E27",
+    "onPrimary": "#FFFFFF",
+    "focus": "#225A91"
+  },
+  "font": {
+    "family": "Be Vietnam Pro",
+    "weights": [
+      400,
+      500,
+      600,
+      700
+    ],
+    "bodySizePx": 16,
+    "bodyLineHeight": 1.6
+  },
+  "radiiPx": {
+    "input": 10,
+    "button": 12,
+    "card": 16,
+    "pill": 999
+  },
+  "spacePx": [
+    4,
+    8,
+    12,
+    16,
+    24,
+    32,
+    48,
+    64
+  ],
+  "sizePx": {
+    "touchTarget": 44,
+    "inputHeight": 48,
+    "buttonHeight": 48
+  },
+  "contrastPairs": [
+    {
+      "foreground": "#173F35",
+      "background": "#F5F1E8",
+      "ratio": 10.36
+    },
+    {
+      "foreground": "#182522",
+      "background": "#F5F1E8",
+      "ratio": 14.04
+    },
+    {
+      "foreground": "#FFFFFF",
+      "background": "#173F35",
+      "ratio": 11.67
+    },
+    {
+      "foreground": "#182522",
+      "background": "#F0A44B",
+      "ratio": 7.63
+    },
+    {
+      "foreground": "#225A91",
+      "background": "#EAF2FB",
+      "ratio": 6.33
+    },
+    {
+      "foreground": "#805400",
+      "background": "#FFF1D6",
+      "ratio": 5.9
+    },
+    {
+      "foreground": "#AD3C32",
+      "background": "#FCEDEA",
+      "ratio": 5.32
+    },
+    {
+      "foreground": "#21654B",
+      "background": "#E7F3EA",
+      "ratio": 6.08
+    },
+    {
+      "foreground": "#70502A",
+      "background": "#F4EBDD",
+      "ratio": 6.19
+    }
+  ]
+}

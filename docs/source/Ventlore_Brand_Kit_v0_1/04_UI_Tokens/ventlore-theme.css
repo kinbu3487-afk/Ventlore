@@ -1,0 +1,46 @@
+/* Ventlore visual identity v0.1. Light theme. */
+@font-face { font-family: "Be Vietnam Pro"; src: url("../05_Fonts/BeVietnamPro-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Be Vietnam Pro"; src: url("../05_Fonts/BeVietnamPro-Medium.ttf") format("truetype"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Be Vietnam Pro"; src: url("../05_Fonts/BeVietnamPro-SemiBold.ttf") format("truetype"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Be Vietnam Pro"; src: url("../05_Fonts/BeVietnamPro-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
+
+:root {
+  --vl-forest: #173F35;
+  --vl-jade: #2C7563;
+  --vl-sage: #DCE8DA;
+  --vl-ivory: #F5F1E8;
+  --vl-amber: #F0A44B;
+  --vl-ink: #182522;
+  --vl-surface-canvas: #F5F1E8;
+  --vl-surface-card: #FFFFFF;
+  --vl-surface-subtle: #DCE8DA;
+  --vl-text-primary: #182522;
+  --vl-text-secondary: #52645C;
+  --vl-text-on-brand: #F5F1E8;
+  --vl-action-primary: #173F35;
+  --vl-action-primary-hover: #102E27;
+  --vl-action-on-primary: #FFFFFF;
+  --vl-action-focus: #225A91;
+  --vl-status-review: #225A91;
+  --vl-status-review-bg: #EAF2FB;
+  --vl-status-pending: #805400;
+  --vl-status-pending-bg: #FFF1D6;
+  --vl-status-danger: #AD3C32;
+  --vl-status-danger-bg: #FCEDEA;
+  --vl-status-success: #21654B;
+  --vl-status-success-bg: #E7F3EA;
+  --vl-status-neutral: #52645C;
+  --vl-status-neutral-bg: #EDF0ED;
+  --vl-status-vip: #70502A;
+  --vl-status-vip-bg: #F4EBDD;
+  --vl-font: "Be Vietnam Pro", system-ui, sans-serif;
+  --vl-radius-card: 16px;
+  --vl-radius-control: 12px;
+  --vl-control-height: 48px;
+}
+
+.vl-button-primary { min-height: var(--vl-control-height); border: 0; border-radius: var(--vl-radius-control); padding: 12px 20px; background: var(--vl-action-primary); color: var(--vl-action-on-primary); font: 600 16px/1.4 var(--vl-font); }
+.vl-button-primary:hover { background: var(--vl-action-primary-hover); }
+.vl-button-primary:focus-visible { outline: 3px solid var(--vl-action-focus); outline-offset: 3px; }
+/* Status always includes a readable label; a color or icon alone is insufficient.
+Reviewed applies to a revision and scope; VIP does not imply expertise or credibility. */

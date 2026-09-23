@@ -1,0 +1,35 @@
+﻿field,prefix,name,createdWhen,references,uniqueness,keyKind,dbTable,dbPrimaryKey
+userId,USR,Tài khoản,Social login đầu tiên,identity; mọi actor là userId,Một provider + providerSubject chỉ trỏ một user,,users,user_id
+walletBindingId,WLT,Liên kết ví,Sau chứng minh quyền kiểm soát,userId; chainNamespace; walletAddress,Một địa chỉ đang active thuộc một user/namespace,,wallet_bindings,wallet_binding_id
+roleAssignmentId,ROL,Quyền vai trò,Mời và chấp nhận/cấp quyền,userId; role; scope; validUntil,Không trùng role + scope đang active cho cùng user,,role_assignments,role_assignment_id
+membershipId,MEM,Hồ sơ VIP,Lần đầu bắt đầu đăng ký plan,userId; planCode; các paymentId,"UNIQUE(userId, planCode)",,memberships,membership_id
+paymentId,VPM,Khoản mua/gia hạn VIP,Tạo một đơn mua kỳ VIP,membershipId; payerUserId; externalPaymentRef/actionId,Một provider event/receipt chỉ thanh toán một payment; một payment cấp một kỳ,,vip_payments,payment_id
+placeId,PLC,Địa điểm,Gửi đề xuất địa điểm mới,canonicalPlaceId nếu merged; sourceRevisionId,Không lấy tên/toạ độ làm PK; canonical không có chu trình,,places,place_id
+postId,PST,Bài đóng góp,Lưu nháp bài đầu tiên,placeId; authorUserId; contributionType,Một bài có nhiều revision; author cố định,post,posts,post_id
+revisionId,REV,Phiên bản nội dung,Công bố/gửi snapshot,postId; parentRevisionId; claimIds; contentHash,Snapshot bất biến; không sửa bytes đã freeze,revision,revisions,revision_id
+claimId,CLM,Nhận định cần kiểm tra,Freeze từng nhận định của revision,revisionId; text; evidenceIds,Claim thuộc đúng một revision; bản mới có claim mới,claim,claims,claim_id
+reviewCaseId,RVC,Vòng kiểm tra,Operator mở vòng review,revisionId; scopeClaimIds; previousCaseId,Một case có tối đa một decision kết thúc,,review_cases,review_case_id
+taskId,TSK,Nhiệm vụ/một lần giao,Gửi offer cho một chuyên gia,reviewCaseId; assigneeUserId; reservationId,Một task một assignee cố định; đổi người tạo task mới,,tasks,task_id
+reservationId,RSV,Cam kết ngân sách,Trước khi giao task,taskId; asset; amount,UNIQUE(taskId) trong baseline một mức công cố định,,reservations,reservation_id
+submissionId,SUB,Lần nộp kết quả,Chuyên gia nộp hoặc bổ sung,taskId; evidenceIds; submittedByUserId,Không ghi đè bản nộp cũ,,submissions,submission_id
+evidenceId,EVD,Bằng chứng,Nộp bằng chứng có quyền truy cập,ownerUserId; mediaId tùy loại; checksum,URL không là ID; file private kiểm quyền riêng,,evidence,evidence_id
+mediaId,MED,Tệp ảnh/tài liệu,Upload và xử lý hoàn tất,ownerUserId; storage key; checksum,ID không thay khi đổi signed URL,,media,media_id
+decisionId,DEC,Quyết định nội dung,Kết thúc reviewCase,reviewCaseId; revisionId; reviewerUserId; scopeClaimIds,UNIQUE(reviewCaseId); bất biến,,decisions,decision_id
+acceptanceId,ACP,Nghiệm thu công,Chấp nhận công việc của task,taskId; submissionId; acceptedByUserId,UNIQUE(taskId) cho nghiệm thu toàn bộ một mức công,,acceptances,acceptance_id
+payableId,PAY,Khoản công phải trả,Nghiệm thu tạo nghĩa vụ trả,acceptanceId; payeeUserId; asset; amount,UNIQUE(acceptanceId); giữ nguyên khi retry,payable,payables,payable_id
+payoutId,OUT,Lệnh chi,Quỹ chuẩn bị một lần thực thi trả,payableId; actionId,Không có hai lệnh pending/unknown cho một payable,,payouts,payout_id
+routeId,RTE,Cấu hình nhận tip,Chuẩn bị mở/đổi ví/gia hạn,revisionId; decisionId; beneficiaryBindingId; previousRouteId,Một route bất biến; tối đa một route active/revision/deployment,route,tip_routes,route_id
+donationId,DON,Ý định donate,Chốt một ý định ủng hộ,donorUserId tùy nguồn; donorAddress; kind; routeId nếu POST_TIP,Retry giữ ID; đổi ý định/số tiền tạo ID mới,donation-request,donations,donation_id
+credentialId,CRD,Chứng nhận SBT,Tạo offer cấp chứng nhận,subjectUserId; type; sourceDecisionId; supersedesCredentialId,Tối đa một CONTRIBUTOR đang active/user; replacement có lịch sử,credential,credentials,credential_id
+collectibleId,COL,NFT ghi nhận bài,Tạo offer NFT tác giả đầu tiên,postId; originalAuthorUserId; sourceRevisionId; sourceDecisionId,"UNIQUE(type=AUTHOR_CONTRIBUTION, postId) kể cả burn",collectible,author_collectibles,collectible_id
+reportId,RPT,Báo thông tin sai,Người dùng gửi report,reporterUserId; revisionId; claimId tùy chọn,Không gom nhiều reporter thành một ID rồi mất tác giả báo cáo,,reports,report_id
+fundingId,FND,Góp vốn vào quỹ,Ghi nhận nguồn vốn,source wallet; asset; sourceEventKey,Một dòng tiền nguồn chỉ ghi OWNER_FUNDING một lần,,fundings,funding_id
+refundId,RFD,Khoản hoàn riêng,Duyệt nghĩa vụ hoàn,sourceType + sourceIdentity; payer; recipient; amount,Không sửa receipt gốc; kiểm tổng hoàn theo nguồn,,refunds,refund_id
+actionId,ACT,Thao tác chain dự kiến,Chuẩn bị payload cần ký,purpose; businessId; deploymentId; expectedCaller,Một action gắn một payload/purpose; nhiều attempt,,chain_actions,action_id
+attemptId,ATT,Lần gửi giao dịch,Phát sinh một lần gửi hoặc replacement,actionId; chainId; txHash; sender; nonce,"UNIQUE(chainId, txHash) nếu đã biết hash",,transaction_attempts,attempt_id
+outboxId,OBX,Công việc nền,Cùng DB transaction nghiệp vụ,eventType; entityId; payloadVersion,Handler dedupe theo outboxId + handler,,outbox_events,outbox_id
+auditEventId,AUD,Nhật ký quyết định/thao tác,Mỗi thay đổi quan trọng,actorUserId; action; entityType; entityId; requestTraceId,"Append-only, không dùng thay business ID",,audit_events,audit_event_id
+requestTraceId,TRC,Truy vết request,Mỗi request API,logs; actor; idempotencyKey,Không dùng trace mới làm ý định thanh toán mới,,request_traces,request_trace_id
+deploymentId,DPL,Bộ triển khai chain,Chuẩn bị manifest môi trường,chainId; contract addresses; token; finality policy,Tên môi trường không thay thế deploymentId,,deployments,deployment_id
+regionId,RGN,Phạm vi địa phương,Tạo phạm vi chuẩn,roles; review routing,Không lấy tên vùng làm khóa,region,regions,region_id
+reasonId,RSN,Lý do quyết định onchain,Cần cam kết lý do block/revoke,reportId/reviewCaseId; public reason summary,Không hash dữ liệu cá nhân thô,reason,reasons,reason_id

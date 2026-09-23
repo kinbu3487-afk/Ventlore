@@ -1,0 +1,21 @@
+{
+  "name": "@ventlore/worker",
+  "version": "0.3.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "scripts": {
+    "dev": "node --loader ts-node/esm src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ventlore/chain": "workspace:*",
+    "@ventlore/db": "workspace:*",
+    "@ventlore/domain": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.10",
+    "typescript": "^5.7.3"
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "timestamp": "2026-09-24T06:00:00Z",
+  "phase": "Prompt 00 - Nền tảng và hợp đồng dữ liệu",
+  "checks": [
+    {
+      "name": "ID Registry Row Count",
+      "status": "PASS",
+      "details": "Đúng 34 định danh nghiệp vụ"
+    },
+    {
+      "name": "KeyKind Registry Alignment",
+      "status": "PASS",
+      "details": "10 keyKind khớp hoàn toàn đặc tả: ['post', 'revision', 'claim', 'route', 'donation-request', 'payable', 'credential', 'collectible', 'region', 'reason']"
+    },
+    {
+      "name": "APP_NAMESPACE Derivation",
+      "status": "PASS",
+      "hash": "0xe619ce7014f9f215692488f22178a42229f4d33f21dfd416cd9e0c15fb7c74ea"
+    },
+    {
+      "name": "RECEIPT_DOMAIN Derivation",
+      "status": "PASS",
+      "hash": "0x5e5da63d4155fbd578bdaf259d9483bf32041ccd0d15b03b329d22329e194dd6"
+    },
+    {
+      "name": "10 KeyKind EntityKey Generation",
+      "status": "PASS",
+      "details": "Đã sinh và kiểm tra toàn bộ 10 entityKey test vectors"
+    },
+    {
+      "name": "receiptKey Derivation",
+      "status": "PASS",
+      "receiptKey": "0x12bad9ecdec4eaa3b30a7e4ccdf07b10c7f9ceed5be6311ca42139220e6dc50e"
+    },
+    {
+      "name": "Coverage SCREEN_COVERAGE.md",
+      "status": "PASS",
+      "details": "Đủ 35/35 mục"
+    },
+    {
+      "name": "Coverage COMPONENT_COVERAGE.md",
+      "status": "PASS",
+      "details": "Đủ 50/50 mục"
+    },
+    {
+      "name": "Coverage EVENT_COVERAGE.md",
+      "status": "PASS",
+      "details": "Đủ 72/72 mục"
+    },
+    {
+      "name": "Required Documents Verification",
+      "status": "PASS",
+      "details": "Toàn bộ tài liệu quy tắc, hợp đồng và bàn giao đã tồn tại"
+    }
+  ],
+  "missing_references": [
+    "data/example-records.json",
+    "source/build_ids.py",
+    "sql/002_lookup_examples.sql",
+    "validation-report.json (tạo mới tại báo cáo này)",
+    "Tệp tài sản thương hiệu độc lập (01_Logos, 02_Brand_Board, 04_UI_Tokens, 05_Fonts, 06_Creative_Brief)"
+  ],
+  "test_vectors": [
+    {
+      "kind": "post",
+      "uuid": "018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e00",
+      "uuid_bytes16": "0x018e3a2b8a4c7c0a9f5b1a2b3c4d5e00",
+      "entityKey": "0x3a2400172186decf884aab9eb05812359525d1e13acf1172d6da0ffff562c7c7",
+      "tokenId": null
+    },
+    {
+      "kind": "revision",
+      "uuid": "018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e01",
+      "uuid_bytes16": "0x018e3a2b8a4c7c0a9f5b1a2b3c4d5e01",
+      "entityKey": "0x7864c3295f269323cfaa79b2fbea65997318d4fe421430c8f0a9c9b2ef3e7f46",
+      "tokenId": null
+    },
+    {
+      "kind": "claim",
+      "uuid": "018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e02",
+      "uuid_bytes16": "0x018e3a2b8a4c7c0a9f5b1a2b3c4d5e02",
+      "entityKey": "0x30ba27436cfa36b662be94e568b5d24fb68e097f6c41da9a4d37a82cae521fa0",
+      "tokenId": null
+    },
+    {
+      "kind": "route",
+      "uuid": "018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e03",
+      "uuid_bytes16": "0x018e3a2b8a4c7c0a9f5b1a2b3c4d5e03",
+      "entityKey": "0x33b9de56d23ac89fbe4a92fc60cefa4ad6ed5733bd4ea3cefb71dd57a5be6189",
+      "tokenId": null
+    },
+    {
+      "kind": "donation-request",
+      "uuid": "018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e04",
+      "uuid_bytes16": "0x018e3a2b8a4c7c0a9f5b1a2b3c4d5e04",
+      "entityKey": "0x2f0e5086d69420a8057ba0fb2cc00e35229fc52d6beae9782a0c29892a90463f",
+      "tokenId": null
+    },
+    {
+      "kind": "payable",
+      "uuid": "018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e05",
+      "uuid_bytes16": "0x018e3a2b8a4c7c0a9f5b1a2b3c4d5e05",
+      "entityKey": "0x9045358ff1a4bcc3f01d876d39518a523c9b593753c6e6f71d3148a410a1bf82",
+      "tokenId": null
+    },
+    {
+      "kind": "credential",
+      "uuid": "018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e06",
+      "uuid_bytes16": "0x018e3a2b8a4c7c0a9f5b1a2b3c4d5e06",
+      "entityKey": "0xb2ce3b66acfef7b5dc40f5de8bc40d0c0b5dabb5c4cd2d121030e5a3161135a4",
+      "tokenId": "80876067514333386756609262553589154805897602791871246692502923474358364091812"
+    },
+    {
+      "kind": "collectible",
+      "uuid": "018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e07",
+      "uuid_bytes16": "0x018e3a2b8a4c7c0a9f5b1a2b3c4d5e07",
+      "entityKey": "0x441199b183a2b4a99b4017f788e0cefbc46f673dbaa328675a6cfef6ac8fab8c",
+      "tokenId": "30788370856727809441549068215491987537353127812893703074554146311396733725580"
+    },
+    {
+      "kind": "region",
+      "uuid": "018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e08",
+      "uuid_bytes16": "0x018e3a2b8a4c7c0a9f5b1a2b3c4d5e08",
+      "entityKey": "0x3c879e4fe7d4cb2b3877e8891dc07e4ad53acff5e1696886dc71f0263c0d12a8",
+      "tokenId": null
+    },
+    {
+      "kind": "reason",
+      "uuid": "018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e09",
+      "uuid_bytes16": "0x018e3a2b8a4c7c0a9f5b1a2b3c4d5e09",
+      "entityKey": "0x9f29d6ae089b07e342d95e48ec85379186150871c186a298f72f31c2f10fca2d",
+      "tokenId": null
+    }
+  ],
+  "receipt_test_vector": {
+    "chainId": 421614,
+    "splitterAddress": "0x1111111111111111111111111111111111111111",
+    "donorAddress": "0x2222222222222222222222222222222222222222",
+    "requestKey": "0x2f0e5086d69420a8057ba0fb2cc00e35229fc52d6beae9782a0c29892a90463f",
+    "receiptKey": "0x12bad9ecdec4eaa3b30a7e4ccdf07b10c7f9ceed5be6311ca42139220e6dc50e"
+  }
+}

@@ -1,0 +1,90 @@
+# Trạng Thái Dự Án Ventlore (PROJECT_STATE)
+
+**Cập nhật lần cuối:** 24/09/2026 (Chặng 00)  
+**Phiên bản đặc tả cơ sở:** Logic-ID-DB v0.3, Event UI Spec v0.3, Brand Guide v0.1
+
+---
+
+## 1. Mốc hiện tại: Hoàn thành Chặng 00 (Nền tảng & Hợp đồng dữ liệu)
+
+| Chặng | Tên chặng | Trạng thái | Ghi chú |
+|---|---|---|---|
+| **00** | **Đọc nguồn, khóa quy tắc và dựng nền tảng** | **HOÀN THÀNH** | Đọc đủ 6 tài liệu nguồn; dựng cấu trúc workspace pnpm, AGENTS.md, OpenAPI, toàn bộ tài liệu kiến trúc/hợp đồng dữ liệu, ma trận coverage S01-S35 / C01-C50 / U01-U12, thư viện TypeScript và test runner kiểm tra ID. |
+| 01 | Front-end nền tảng và trải nghiệm người đọc | CHƯA BẮT ĐẦU | Mục tiêu kế tiếp: design tokens từ Brand Guide, S01-S05, S21, S34, mock adapter. |
+| 02 | Front-end đóng góp, chuyên gia và vận hành | CHƯA BẮT ĐẦU | S06-S12, S17-S19, S24-S27, S30, S31, S35. |
+| 03 | Front-end tiền, quyền lợi và bàn giao API | CHƯA BẮT ĐẦU | S13-S16, S20, S22, S23, S28, S29, S32-S34, hoàn thành C01-C50, FE_HANDOFF. |
+| 04 | Back-end dữ liệu, đăng nhập và phân quyền | CHƯA BẮT ĐẦU | Schema PostgreSQL 34 bảng, Supabase Auth, wallet challenge, API foundation. |
+| 05 | Back-end nội dung, review và nghĩa vụ trả công | CHƯA BẮT ĐẦU | Business services, duplicate detection, review lifecycle, budget reserve, BE_HANDOFF. |
+| 06 | Back-end thanh toán, VIP, outbox và indexer | CHƯA BẮT ĐẦU | Worker process, outbox pattern, payment adapter, accounting ledger. |
+| 07 | Smart contract Arbitrum: route, donate và trả công | CHƯA BẮT ĐẦU | Foundry, VentloreRegistry, VentlorePayments, EIP-712 route consent, CONTRACTS_HANDOFF. |
+| 08 | Smart contract SBT và NFT tác giả | CHƯA BẮT ĐẦU | ContributorSBT (ERC-5192), AuthorContributionNFT (ERC-721), token identity. |
+| 09 | Nối ba lớp và chuẩn bị Arbitrum Sepolia | CHƯA BẮT ĐẦU | Local end-to-end integration, Arbitrum Sepolia testnet package. |
+| 10 | Rà soát, sửa lỗi và bàn giao bản chạy được | CHƯA BẮT ĐẦU | QA01-QA25 verification, runbooks, readiness report. |
+
+---
+
+## 2. Kiểm kê mã nguồn và tài nguyên hiện có
+
+### 2.1 Tài liệu nguồn (`docs/source/`)
+1. `docs/source/Ventlore_Logic_ID_DB_v0_3.pdf` (17 trang) - Đã đọc đủ.
+2. `docs/source/Ventlore_ID_Registry_v0_3.csv` (36 dòng, 34 ID chuẩn) - Đã đọc và kiểm tra.
+3. `docs/source/Ventlore_So_do_Khoi_v0_3.pdf` (11 trang D01-D11) - Đã đọc đủ.
+4. `docs/source/Ventlore_Event_UI_Spec_v0_3.pdf` (22 trang) - Đã đọc đủ.
+5. `docs/source/Ventlore_Event_UI_Wireframes_v0_3.pdf` (16 trang) - Đã đọc đủ.
+6. `docs/source/Ventlore_Brand_Guide_v0_1.pdf` (12 trang) - Đã đọc đủ.
+
+### 2.2 Các tài liệu nhắc trong PDF nhưng không có sẵn (Được đánh dấu MISSING_REFERENCE)
+- `data/example-records.json` (hoặc `example-records.json`): Không có sẵn trong repo. Test vectors được sinh mới từ đặc tả trong chặng 00.
+- `source/build_ids.py`: Không có sẵn trong repo. Được thay thế bằng script kiểm tra mới `scripts/validate_foundation.py`.
+- `sql/002_lookup_examples.sql`: Không có sẵn trong repo. Truy vấn Q01-Q10 được đặc tả và tạo mới trong `packages/db`.
+- `validation-report.json`: Chưa có sẵn, được sinh tự động bởi script kiểm tra của Chặng 00 tại `docs/validation-report.json`.
+- Các tệp tài sản thương hiệu độc lập (`01_Logos`, `02_Brand_Board`, `04_UI_Tokens`, `05_Fonts`, `06_Creative_Brief`): Chưa có tệp lẻ; toàn bộ thông số được trích xuất trực tiếp từ PDF Brand Guide v0.1.
+
+---
+
+## 3. Cấu trúc Monorepo Workspace (pnpm)
+
+```text
+/Users/johnlebin/Downloads/Ventlore
+├── AGENTS.md                          # Quy tắc xuyên suốt cho AI Agent
+├── package.json                       # Root package config
+├── pnpm-workspace.yaml                # Cấu hình workspace
+├── tsconfig.base.json                 # Cấu hình TypeScript nghiêm ngặt chung
+├── apps/
+│   ├── web/                           # Next.js App Router (Giao diện + /api/v1 handlers)
+│   └── worker/                        # Tiến trình nền Node.js (Outbox, Indexer, Expiry)
+├── packages/
+│   ├── domain/                        # Pure domain rules, types, enums, Zod schemas
+│   ├── api-client/                    # Typed API client & Mock Adapters
+│   ├── db/                            # Schema PostgreSQL, Drizzle, migrations, repositories
+│   └── chain/                         # Key derivation, ABI generator, contract manifests
+├── contracts/                         # Foundry workspace (Solidity 0.8.28, Arbitrum target)
+├── scripts/
+│   └── validate_foundation.py         # Script kiểm tra hợp đồng ID và registry
+└── docs/
+    ├── Ventlore_Antigravity_Prompt_Pack_v1_0.md
+    ├── PROJECT_STATE.md               # Tài liệu này
+    ├── DECISIONS.md                   # Các quyết định kiến trúc (ADR)
+    ├── OPEN_QUESTIONS.md              # Câu hỏi & chính sách mở
+    ├── HANDOFF.md                     # Hướng dẫn bàn giao sang Chặng 01
+    ├── DOMAIN_RULES.md                # Quy tắc nghiệp vụ F01-F10
+    ├── ID_CONTRACT.md                 # Hợp đồng ID 3 lớp chi tiết
+    ├── STATE_MACHINES.md              # Máy trạng thái thực thể
+    ├── PERMISSIONS.md                 # Phân quyền & ma trận vai trò
+    ├── CHAIN_INTERFACE.md             # Giao diện tương tác blockchain
+    ├── SCREEN_COVERAGE.md             # Ma trận bao phủ S01-S35
+    ├── COMPONENT_COVERAGE.md          # Ma trận bao phủ C01-C50
+    ├── EVENT_COVERAGE.md              # Ma trận bao phủ 72 bước sự kiện
+    ├── validation-report.json         # Báo cáo kết quả kiểm tra Chặng 00
+    ├── api/
+    │   └── openapi.yaml               # OpenAPI 3.1 cho /api/v1
+    └── source/                        # 6 tài liệu nguồn gốc
+```
+
+---
+
+## 4. Trạng thái môi trường máy chủ
+- **Hệ điều hành:** macOS (Darwin arm64).
+- **Python:** 3.13.7 (được sử dụng cho runner kiểm tra và validation scripts).
+- **Homebrew:** 4.6.14.
+- **Node.js / pnpm:** Chưa cài sẵn qua package manager hệ thống; môi trường đã được chuẩn bị đầy đủ manifest và configuration để chạy ngay khi Node.js/pnpm được cài đặt.
