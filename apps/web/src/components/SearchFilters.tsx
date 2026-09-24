@@ -36,10 +36,10 @@ export function SearchFilters({
 
   const activities = [
     { id: 'all', name: t('explore.allActivities') },
-    { id: 'Trekking', name: 'Trekking' },
-    { id: 'Chèo Kayak', name: 'Kayak' },
-    { id: 'Leo núi cao', name: 'Mountaineering' },
-    { id: 'Khám phá rừng', name: 'Forest Exploration' },
+    { id: 'Trekking', name: t('explore.actTrekking') },
+    { id: 'Chèo Kayak', name: t('explore.actKayaking') },
+    { id: 'Leo núi cao', name: t('explore.actMountaineering') },
+    { id: 'Khám phá rừng', name: t('explore.actForest') },
   ];
 
   const handleSimulateGps = () => {
@@ -164,7 +164,7 @@ export function SearchFilters({
             )}
             {activity !== 'all' && (
               <span className="px-2 py-0.5 rounded bg-sage/60 text-ink font-medium">
-                {activity}
+                {activities.find((a) => a.id === activity)?.name || activity}
               </span>
             )}
           </div>

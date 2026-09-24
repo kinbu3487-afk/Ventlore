@@ -19,11 +19,23 @@ import {
 interface PlaceResultsProps {
   places: PlaceSummaryDTO[];
   isLoading?: boolean;
+  viewMode?: 'list' | 'map';
+  onViewModeChange?: (mode: 'list' | 'map') => void;
 }
 
-export function PlaceResults({ places, isLoading }: PlaceResultsProps) {
+export function PlaceResults({ places, isLoading, viewMode, onViewModeChange }: PlaceResultsProps) {
   const { t, getLocalizedPath } = useI18n();
-  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
+  const [internalViewMode, setInternalViewMode] = useState<'list' | 'map'>('list');
+  const currentViewMode = viewMode ?? internalViewMode;
+
+  const handleSetViewMode = (mode: 'list' | 'map') => {
+    if (onViewModeChange) {
+      onViewModeChange(mode);
+    } else {
+      setInternalViewMode(mode);
+    }
+  };
+
   const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
   const [expandedWarnings, setExpandedWarnings] = useState<Record<string, boolean>>({});
 
@@ -81,10 +93,10 @@ export function PlaceResults({ places, isLoading }: PlaceResultsProps) {
         <div className="inline-flex rounded-control border border-sage bg-surface-card p-1 shadow-xs">
           <button
             type="button"
-            onClick={() => setViewMode('list')}
-            aria-pressed={viewMode === 'list'}
+            onClick={() => handleSetViewMode('list')}
+            aria-pressed={currentViewMode === 'list'}
             className={`min-h-[36px] flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-control transition-colors ${
-              viewMode === 'list'
+              currentViewMode === 'list'
                 ? 'bg-forest text-white'
                 : 'text-ink-secondary hover:text-ink'
             }`}
@@ -94,10 +106,10 @@ export function PlaceResults({ places, isLoading }: PlaceResultsProps) {
           </button>
           <button
             type="button"
-            onClick={() => setViewMode('map')}
-            aria-pressed={viewMode === 'map'}
+            onClick={() => handleSetViewMode('map')}
+            aria-pressed={currentViewMode === 'map'}
             className={`min-h-[36px] flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-control transition-colors ${
-              viewMode === 'map'
+              currentViewMode === 'map'
                 ? 'bg-forest text-white'
                 : 'text-ink-secondary hover:text-ink'
             }`}
@@ -109,7 +121,7 @@ export function PlaceResults({ places, isLoading }: PlaceResultsProps) {
       </div>
 
       {/* Map Mode: Interactive OpenStreetMap with responsive split on desktop */}
-      {viewMode === 'map' && (
+      {currentViewMode === 'map' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left Column (Desktop): Compact Places List */}
           <div className="lg:col-span-5 space-y-3 max-h-[560px] overflow-y-auto pr-1">
@@ -171,11 +183,16 @@ export function PlaceResults({ places, isLoading }: PlaceResultsProps) {
       )}
 
       {/* List Mode: 3 Columns on Wide Desktop, 2 on Tablet, 1 on Mobile */}
-      {viewMode === 'list' && (
+      {currentViewMode === 'list' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {places.map((place) => {
             const isMerged = place.status === PlaceStatus.MERGED;
             const coverImage = place.coverImageUrl || place.imageUrl || '/destinations/hero-coastal.svg';
+            const fallbackSvg = place.displayCode === 'PLC-000004'
+              ? '/destinations/co-to.svg'
+              : place.displayCode === 'PLC-000005'
+              ? '/destinations/tay-con-linh.svg'
+              : '/destinations/cat-co-3.svg';
             const isWarningExpanded = expandedWarnings[place.placeId] === true;
 
             return (
@@ -197,6 +214,9 @@ export function PlaceResults({ places, isLoading }: PlaceResultsProps) {
                     alt={place.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = fallbackSvg;
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
 
@@ -205,6 +225,13 @@ export function PlaceResults({ places, isLoading }: PlaceResultsProps) {
                     <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-control bg-forest/90 text-ivory text-xs font-medium backdrop-blur-xs shadow-xs">
                       <MapPinIcon className="w-3 h-3 text-amber" />
                       {place.regionName}
+                    </span>
+                  </div>
+
+                  {/* Attribution Badge */}
+                  <div className="absolute bottom-2 right-2">
+                    <span className="px-1.5 py-0.5 rounded bg-black/60 backdrop-blur-xs text-white/80 text-[10px] font-medium">
+                      {t('explore.imageAttribution')}
                     </span>
                   </div>
 

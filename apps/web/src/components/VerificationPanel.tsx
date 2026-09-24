@@ -156,19 +156,52 @@ export function VerificationPanel({
             </div>
           )}
 
+          {/* Status-specific descriptions according to C06 state machine */}
           {status === VerificationStatus.UNVERIFIED && (
             <p className="text-ink-secondary italic bg-status-neutral-bg/60 p-2.5 rounded-control text-xs">
               {t('post.unverifiedDesc')}
             </p>
           )}
 
+          {status === VerificationStatus.IN_REVIEW && (
+            <p className="text-status-review font-medium bg-status-review-bg/60 p-2.5 rounded-control text-xs">
+              {t('post.inReviewDesc')}
+            </p>
+          )}
+
+          {status === VerificationStatus.NEEDS_CHANGES && (
+            <p className="text-status-pending font-medium bg-status-pending-bg/60 p-2.5 rounded-control text-xs">
+              {t('post.needsChangesDesc')}
+            </p>
+          )}
+
+          {status === VerificationStatus.INCONCLUSIVE && (
+            <p className="text-status-pending font-medium bg-status-pending-bg/60 p-2.5 rounded-control text-xs">
+              {t('post.inconclusiveDesc')}
+            </p>
+          )}
+
+          {status === VerificationStatus.REJECTED && (
+            <p className="text-status-danger font-medium bg-status-danger-bg/60 p-2.5 rounded-control text-xs">
+              {t('post.rejectedDesc')}
+            </p>
+          )}
+
           {status === VerificationStatus.EXPIRED && (
             <div className="bg-status-danger-bg text-status-danger p-3 rounded-control text-xs">
-              <strong>{t('post.expiredTitle')}:</strong> {t('post.expiredDesc', { date: formattedValidUntil || '' })}
+              <strong>{t('post.expiredTitle')}: </strong>
+              <span>{t('post.expiredDesc', { date: formattedValidUntil || '' })}</span>
             </div>
           )}
 
-          {inspectorNotes && (
+          {status === VerificationStatus.SUSPENDED && (
+            <p className="text-status-danger font-medium bg-status-danger-bg/60 p-2.5 rounded-control text-xs">
+              {t('post.suspendedDesc')}
+            </p>
+          )}
+
+          {/* Inspector notes only show if this revision was legitimately inspected */}
+          {inspectorNotes && status !== VerificationStatus.UNVERIFIED && (
             <div className="text-xs bg-surface-canvas p-3 rounded-control border border-sage">
               <div className="font-semibold text-ink-secondary mb-1">{t('post.inspectorNotes')}:</div>
               <p className="text-ink leading-relaxed">{inspectorNotes}</p>
@@ -180,9 +213,14 @@ export function VerificationPanel({
             </div>
           )}
 
-          <div className="pt-2 text-[11px] text-ink-muted border-t border-sage/40 flex items-center justify-between">
-            <span>{t('post.independentVerificationDesc')}</span>
-            <span>{t('place.noAbsoluteSafety')}</span>
+          {/* Bottom disclaimer: only VERIFIED gets affirmative statement, noAbsoluteSafety is global */}
+          <div className="pt-2 text-[11px] text-ink-muted border-t border-sage/40 flex flex-wrap items-center justify-between gap-2">
+            <span>
+              {status === VerificationStatus.VERIFIED
+                ? t('post.independentVerificationDesc')
+                : t('post.unverifiedDesc')}
+            </span>
+            <span className="font-medium text-amber-700">{t('place.noAbsoluteSafety')}</span>
           </div>
         </div>
       )}
