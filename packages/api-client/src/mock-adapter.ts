@@ -30,6 +30,44 @@ function normalizeSearchText(str?: string): string {
     .trim();
 }
 
+export const SHARED_BIO_TRANSLATIONS: Record<string, Record<string, string>> = {
+  minh_trailguide: {
+    en: 'Coastal and cliff navigation guide with over 8 years of fieldwork experience across Northeast Vietnam.',
+    ja: 'ベトナム北東部で8年以上の現場実務経験を持つ、沿岸および断崖ルート案内スペシャリスト。',
+    'zh-Hans': '越南东北部海岸与悬崖越野领队，具备8年以上实地探险考察与安全向导经验。',
+    ko: '베트남 동북부 지역에서 8년 이상의 현장 경험을 보유한 해안 및 절벽 내비게이션 전문가.',
+    fr: 'Guide de terrain littoral et falaises avec plus de 8 ans d’expérience dans le nord-est du Vietnam.',
+  },
+  bin_traveler: {
+    en: 'Island and coastal wilderness enthusiast, dedicated to documenting 50 remote offshore islands.',
+    ja: '島嶼と手つかずの自然を愛する旅人。沿岸50島の踏破・記録を目指して活動中。',
+    'zh-Hans': '海岛与野外荒野探险爱好者，正致力于记录50座近岸离岛的真实生态与地貌。',
+    ko: '섬과 야생 자연을 사랑하는 탐험가. 50개 연안 섬의 기록을 목표로 활동하고 있습니다.',
+    fr: 'Passionné d’îles et de nature sauvage, engagé dans la documentation de 50 îles côtières isolées.',
+  },
+  hoang_ranger: {
+    en: 'Forest ranger in charge of terrain safety and natural trails in the Northeast. 12 years of specialized conservation management and field verification.',
+    ja: '北東部の地形安全および自然遊歩道を管轄する森林警備隊員。12年の特別林管理および実地検証経験。',
+    'zh-Hans': '负责东北部地形安全与自然步道的森林巡护员，具备12年特种林区保护管理与实地核验经验。',
+    ko: '동북부 지형 안전 및 자연 트레일을 담당하는 산림 레인저. 12년간의 특수 산림 보호구역 관리 및 현장 검증 경력.',
+    fr: 'Garde forestier responsable de la sécurité des terrains et sentiers naturels du Nord-Est. 12 ans d’expérience en gestion forestière et vérification terrain.',
+  },
+  an_vip_explorer: {
+    en: 'Annual supporting member of the Ventlore exploration and conservation fund. Passionate about alpine trekking and speleological surveys.',
+    ja: 'Ventlore探検・保全基金の年間支援メンバー。アドベンチャートレッキングや洞窟探査に情熱を注ぐ。',
+    'zh-Hans': 'Ventlore探险与保护基金年度资助会员，热衷于高难度徒步越野与洞穴地貌勘测。',
+    ko: 'Ventlore 탐험 및 보존 기금의 연간 후원 회원. 고난도 트레킹과 동굴 지형 조사에 열정을 쏟고 있습니다.',
+    fr: 'Membre bienfaiteur annuel du fonds d’exploration et de conservation Ventlore. Passionné de trekking d’aventure et de spéléologie.',
+  },
+  guest_reader: {
+    en: 'Independent reader exploring community verified destinations and field reports on Ventlore.',
+    ja: 'Ventloreプラットフォームで検証済みスポットや現地レポートを閲覧する一般読者。',
+    'zh-Hans': '在Ventlore平台上探索核验目的地与实地考察手记的自由读者。',
+    ko: 'Ventlore 플랫폼에서 검증된 여행지와 현장 보고서를 탐색하는 일반 독자.',
+    fr: 'Lecteur indépendant découvrant les destinations vérifiées et rapports de terrain sur Ventlore.',
+  },
+};
+
 export class VentloreMockAdapter {
   private currentPersona: DemoPersona = 'guest';
 
@@ -884,6 +922,98 @@ Prenez le départ entre 06h30 et 08h30 avant les fortes chaleurs et au début de
         ],
         tipRoute: null,
         coverImageUrl: '/destinations/co-to.svg',
+        translations: {
+          en: {
+            locale: 'en',
+            title: 'Sunrise Experience at Dragon Claw Cliffs, Co To Island',
+            content: `Watching the sunrise from Dragon Claw Cliffs is among the most breathtaking experiences on Co To Island. Stratified sedimentary rock strata sweep like dragon talons reaching into the open sea to greet the dawn's earliest rays.
+
+### Field Observations:
+- Early morning offshore sea winds are intense; windbreaker jacket recommended.
+- Cliff steps are steep with loose gravel in sections; secure each footstep carefully.
+- **Publication Status:** This is a personal field observation not independently verified by an accredited expert. Travelers should review local authority alerts before setting out.`,
+            claims: [
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c10',
+                text: 'Sunrise is clearly visible from the cliffs at approximately 05:20 AM in summer',
+                category: 'Natural Event',
+                status: 'UNVERIFIED',
+              },
+            ],
+          },
+          ja: {
+            locale: 'ja',
+            title: 'コトー島・ドラゴンクロー断崖での日の出体験',
+            content: `ドラゴンクロー断崖（モングロン）の日の出は、コトー島で最も壮大な絶景の一つです。幾重にも重なる堆積岩層が竜の爪のように外海へと伸び、最初の陽光を迎えます。
+
+### 現地での観察所見：
+- 早朝は海風が非常に強いため、軽量ウィンドブレーカーの携行を推奨。
+- 岩段の傾斜が険しく、砂粒で滑りやすい箇所があります。三点確保で慎重に進んでください。
+- **投稿ステータス：** 本稿は寄稿者による個人の実地記録であり、独立した専門家による検証は受けていません。出発前に現地の最新注意情報をご確認ください。`,
+            claims: [
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c10',
+                text: '夏季の午前5時20分頃、断崖から日の出が鮮明に確認できる',
+                category: '自然現象',
+                status: 'UNVERIFIED',
+              },
+            ],
+          },
+          'zh-Hans': {
+            locale: 'zh-Hans',
+            title: '姑苏岛龙爪绝壁日出观赏实地体验',
+            content: `在龙爪绝壁（Móng Rồng）迎接破晓是姑苏岛最令人震撼的体验之一。层叠弯曲的沉积岩层宛如探入大海的龙爪，迎接清晨的第一缕曙光。
+
+### 实地考察感触：
+- 清晨海风凛冽，强烈建议携带轻便防风衣。
+- 岩石层阶陡峭，部分路面碎砂易滑，行走时务必步步踏实。
+- **审核状态声明：** 本记录为行者个人考察手记，尚未经独立专业人员实地复核。出行前请务必参考当地主管部门的最新安全公告。`,
+            claims: [
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c10',
+                text: '夏季清晨约05:20可自悬崖处清晰观赏日出全貌',
+                category: '自然现象',
+                status: 'UNVERIFIED',
+              },
+            ],
+          },
+          ko: {
+            locale: 'ko',
+            title: '꼬또섬 드래곤 클로 절벽 일출 감상 실측 기록',
+            content: `드래곤 클로(몽롱) 절벽에서 맞이하는 일출은 꼬또섬에서 가장 경이로운 순간 중 하나입니다. 용의 발톱처럼 바다로 뻗어나간 퇴적암 층리가 아침 첫 햇살을 맞이합니다.
+
+### 현장 관측 사항：
+- 새벽 바닷바람이 매우 강하므로 가벼운 방풍 재킷 지참 필수.
+- 바위 계단 경사가 가파르고 잔모래로 미끄러운 구간이 있으므로 발걸음을 안정적으로 내딛으세요.
+- **게시글 상태 안내：** 이 글은 개인적인 탐방 기록으로 공인 전문가의 독립적 검증을 거치지 않았습니다. 출발 전 현지 당국의 안전 권고를 반드시 확인하세요。`,
+            claims: [
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c10',
+                text: '여름철 오전 5시 20분경 절벽에서 일출을 선명하게 관측 가능',
+                category: '자연 현상',
+                status: 'UNVERIFIED',
+              },
+            ],
+          },
+          fr: {
+            locale: 'fr',
+            title: 'Expérience du lever de soleil sur les falaises de la Griffe du Dragon à Cô Tô',
+            content: `Le lever de soleil aux falaises de la Griffe du Dragon (Móng Rồng) est l’un des moments les plus spectaculaires de l’île de Cô Tô. Les strates rocheuses incurvées s’étirent comme les griffes d’un dragon vers le large pour accueillir les premières lueurs du jour.
+
+### Observations de terrain :
+- Vents marins matinaux très violents : coupe-vent léger indispensable.
+- Paliers rocheux escarpés avec gravillons glissants ; progressez avec appuis assurés.
+- **Statut de publication :** Il s’agit d’un compte rendu personnel non vérifié de manière indépendante par un auditeur agréé. Veuillez consulter les avis des autorités locales avant tout départ.`,
+            claims: [
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c10',
+                text: 'Lever de soleil visible distinctement depuis les falaises vers 05h20 en été',
+                category: 'Phénomène naturel',
+                status: 'UNVERIFIED',
+              },
+            ],
+          },
+        },
       },
       revisionsList: [
         {
@@ -949,6 +1079,98 @@ Chứng nhận kiểm định cho bài viết này đã hết hạn vào ngày 3
         ],
         tipRoute: null,
         coverImageUrl: '/destinations/tay-con-linh.svg',
+        translations: {
+          en: {
+            locale: 'en',
+            title: 'Winter Ascent along Tay Con Linh Trails (Expired Audit)',
+            content: `Nighttime temperatures on Tay Con Linh during winter can plummet below 4°C. Trails are heavily covered in slippery moss with fragile branches broken after severe hail.
+
+**AUDIT VALIDITY NOTICE:**
+The independent verification certification for this revision expired on December 31, 2025. Due to storm damage and subsequent landslides during the recent rainy season, trail conditions may have changed substantially compared to this report. Please consult local mountain guides before departing.`,
+            scope: 'Evaluation of winter conditions and camp establishment at 2,000m elevation',
+            inspectorNotes: 'Certification was strictly valid for the 2025 hiking season. Re-audit mandatory following the 2026 monsoon.',
+            claims: [
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c20',
+                text: 'Campground at 2000m has reliable underground water source during 2025 dry season',
+                category: 'Water Source',
+                status: 'EXPIRED',
+              },
+            ],
+          },
+          ja: {
+            locale: 'ja',
+            title: '冬季タイコンリン稜線越えトレイル（検証期限切れ）',
+            content: `冬季のタイコンリン峰は夜間気温が4度未満に急低下することがあります。トレイルは滑りやすい苔に覆われ、降雹後の倒木や脆い枝が散見されます。
+
+**検証有効期限に関する重要通知：**
+本改訂版の実地検証証明は2025年12月31日をもって有効期限が切れています。直近の雨季における暴風雨や土砂崩れの影響により、実際の路面状況は本資料から大きく変化している可能性があります。出発前に現地の山岳ガイドへ必ず最新状況をお問い合わせください。`,
+            scope: '標高2,000m地点における冬季気象条件およびキャンプ適地の調査評価',
+            inspectorNotes: '2025年登山シーズンに限り有効と判定。2026年雨季終了後に再度の実地検証が必須。',
+            claims: [
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c20',
+                text: '2025年乾季において標高2000m野営地に安定した地下水源が存在する',
+                category: '水源',
+                status: 'EXPIRED',
+              },
+            ],
+          },
+          'zh-Hans': {
+            locale: 'zh-Hans',
+            title: '西昆岭冬季穿越路线考察手记（核验已过期）',
+            content: `冬季西昆岭夜间气温可骤降至4摄氏度以下。石径密布湿滑青苔，冰雹灾害后残留诸多折断朽木。
+
+**核验时效预警：**
+本版本的独立实地核验认证已于2025年12月31日届满失效。受近期雨季风暴与滑坡影响，现场实际路线状况可能已较本报告发生重大变更。启程前请务必联系当地资深向导获取最新情报。`,
+            scope: '海拔2000米营地评估与冬季严寒气候风险排查',
+            inspectorNotes: '该核验证书仅对2025年登山季有效。2026年雨季后必须重新组织实地勘测。',
+            claims: [
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c20',
+                text: '2025年旱季期间海拔2000米营地具备稳定地下水源',
+                category: '水源',
+                status: 'EXPIRED',
+              },
+            ],
+          },
+          ko: {
+            locale: 'ko',
+            title: '겨울철 떠이꼰린 능선 횡단 여정 (검증 기한 만료)',
+            content: `겨울철 떠이꼰린의 야간 기온은 4도 이하로 떨어질 수 있습니다. 등산로는 미끄러운 이끼로 덮여 있으며 우박 후 부러진 나뭇가지들이 방치되어 있습니다.
+
+**검증 유효기간 경고:**
+본 리비전에 대한 독립 현장 검증 인증은 2025년 12월 31일부로 만료되었습니다. 지난 우기 태풍 및 산사태의 영향으로 실제 트레일 상태는 이 보고서와 크게 달라졌을 수 있습니다. 출발 전 반드시 현지 가이드에게 최신 상황을 문의하세요.`,
+            scope: '해발 2,000m 야영지 평가 및 겨울철 기후 조건 조사',
+            inspectorNotes: '인증은 2025년 등반 시즌에 한해 유효함. 2026년 우기 이후 현장 재검토 필수.',
+            claims: [
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c20',
+                text: '2025년 건기 동안 해발 2000m 야영지에 안정적인 지하수원이 존재함',
+                category: '식수원',
+                status: 'EXPIRED',
+              },
+            ],
+          },
+          fr: {
+            locale: 'fr',
+            title: 'Traversée hivernale des crêtes de Tay Con Linh (Vérification expirée)',
+            content: `En hiver sur le Tay Con Linh, les températures nocturnes peuvent chuter sous les 4°C. Le sentier est envahi de mousses glissantes et jonché de branchages cassés après de violentes averses de grêle.
+
+**AVIS DE VALIDITÉ DE L’AUDIT :**
+La certification de vérification indépendante pour cette révision est expirée depuis le 31 décembre 2025. Sous l’impact des récentes tempêtes et éboulements de la dernière saison des pluies, l’état réel du sentier peut avoir considérablement évolué. Consultez impérativement les guides locaux avant de vous engager.`,
+            scope: 'Évaluation des conditions hivernales et de la zone de bivouac à 2 000 m d’altitude',
+            inspectorNotes: 'Certification valable uniquement pour la saison 2025. Nouvel audit terrain impératif après la mousson 2026.',
+            claims: [
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c20',
+                text: 'Point d’eau souterrain stable au camp des 2000m durant la saison sèche 2025',
+                category: 'Point d’eau',
+                status: 'EXPIRED',
+              },
+            ],
+          },
+        },
       },
       revisionsList: [
         {
@@ -1521,6 +1743,24 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
       place.originalLocale = 'vi';
     }
 
+    // Translate post titles on destination cards if available
+    if (place.posts && place.posts.length > 0 && locale && locale !== 'vi') {
+      place.posts = place.posts.map(p => {
+        const postEntry = this.posts[p.postId];
+        const transTitle = postEntry?.revision?.translations?.[locale]?.title;
+        if (transTitle) {
+          return {
+            ...p,
+            currentRevision: {
+              ...p.currentRevision,
+              title: transTitle,
+            },
+          };
+        }
+        return p;
+      });
+    }
+
     return place;
   }
 
@@ -1621,6 +1861,24 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
       result.place.regionName = placeTrans.regionName ?? result.place.regionName;
     }
 
+    // Translate author bio using SHARED_BIO_TRANSLATIONS to keep profile and post views aligned
+    if (locale && locale !== 'vi') {
+      const authorBio = SHARED_BIO_TRANSLATIONS[result.author.handle]?.[locale];
+      if (authorBio) {
+        result.author.bio = authorBio;
+      }
+    }
+
+    // Translate revisions list titles if translations exist
+    if (locale && locale !== 'vi') {
+      result.revisionsList = result.revisionsList.map((rev) => {
+        if (rev.revisionId === result.revision.revisionId && result.revision.isTranslated) {
+          return { ...rev, title: result.revision.title };
+        }
+        return rev;
+      });
+    }
+
     // Security invariant: If post is VIP and user does not have active VIP membership,
     // REDACT content at the adapter level! DO NOT SEND VIP CONTENT TO CLIENT DOM!
     if (result.revision.accessTier === AccessTier.VIP && !isVipUser) {
@@ -1649,46 +1907,8 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
     const profile: UserProfileDTO = JSON.parse(JSON.stringify(rawProfile));
     const targetLocale = locale || 'vi';
 
-    const bioTranslations: Record<string, Record<string, string>> = {
-      minh_trailguide: {
-        en: 'Coastal and cliff navigation guide with over 8 years of fieldwork experience across Northeast Vietnam.',
-        ja: 'ベトナム北東部で8年以上の現場実務経験を持つ、沿岸および断崖ルート案内スペシャリスト。',
-        'zh-Hans': '越南东北部海岸与悬崖越野领队，具备8年以上实地探险考察与安全向导经验。',
-        ko: '베트남 동북부 지역에서 8년 이상의 현장 경험을 보유한 해안 및 절벽 내비게이션 전문가.',
-        fr: 'Guide de terrain littoral et falaises avec plus de 8 ans d’expérience dans le nord-est du Vietnam.',
-      },
-      bin_traveler: {
-        en: 'Island and coastal wilderness enthusiast, dedicated to documenting 50 remote offshore islands.',
-        ja: '島嶼と手つかずの自然を愛する旅人。沿岸50島の踏破・記録を目指して活動中。',
-        'zh-Hans': '海岛与野外荒野探险爱好者，正致力于记录50座近岸离岛的真实生态与地貌。',
-        ko: '섬과 야생 자연을 사랑하는 탐험가. 50개 연안 섬의 기록을 목표로 활동하고 있습니다.',
-        fr: 'Passionné d’îles et de nature sauvage, engagé dans la documentation de 50 îles côtières isolées.',
-      },
-      hoang_ranger: {
-        en: 'Forest ranger in charge of terrain safety and natural trails in the Northeast. 12 years of specialized conservation management and field verification.',
-        ja: '北東部の地形安全および自然遊歩道を管轄する森林警備隊員。12年の特別林管理および実地検証経験。',
-        'zh-Hans': '负责东北部地形安全与自然步道的森林巡护员，具备12年特种林区保护管理与实地核验经验。',
-        ko: '동북부 지형 안전 및 자연 트레일을 담당하는 산림 레인저. 12년간의 특수 산림 보호구역 관리 및 현장 검증 경력.',
-        fr: 'Garde forestier responsable de la sécurité des terrains et sentiers naturels du Nord-Est. 12 ans d’expérience en gestion forestière et vérification terrain.',
-      },
-      an_vip_explorer: {
-        en: 'Annual supporting member of the Ventlore exploration and conservation fund. Passionate about alpine trekking and speleological surveys.',
-        ja: 'Ventlore探検・保全基金の年間支援メンバー。アドベンチャートレッキングや洞窟探査に情熱を注ぐ。',
-        'zh-Hans': 'Ventlore探险与保护基金年度资助会员，热衷于高难度徒步越野与洞穴地貌勘测。',
-        ko: 'Ventlore 탐험 및 보존 기금의 연간 후원 회원. 고난도 트레킹과 동굴 지형 조사에 열정을 쏟고 있습니다.',
-        fr: 'Membre bienfaiteur annuel du fonds d’exploration et de conservation Ventlore. Passionné de trekking d’aventure et de spéléologie.',
-      },
-      guest_reader: {
-        en: 'Independent reader exploring community verified destinations and field reports on Ventlore.',
-        ja: 'Ventloreプラットフォームで検証済みスポットや現地レポートを閲覧する一般読者。',
-        'zh-Hans': '在Ventlore平台上探索核验目的地与实地考察手记的自由读者。',
-        ko: 'Ventlore 플랫폼에서 검증된 여행지와 현장 보고서를 탐색하는 일반 독자.',
-        fr: 'Lecteur indépendant découvrant les destinations vérifiées et rapports de terrain sur Ventlore.',
-      },
-    };
-
     if (targetLocale !== 'vi') {
-      const translatedBio = bioTranslations[profile.handle]?.[targetLocale];
+      const translatedBio = SHARED_BIO_TRANSLATIONS[profile.handle]?.[targetLocale];
       if (translatedBio) {
         profile.bio = translatedBio;
         profile.isOriginalBio = false;

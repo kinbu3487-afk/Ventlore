@@ -88,12 +88,65 @@ export function I18nProvider({
     }
   }, [pathLocale, locale]);
 
-  // Set html lang attribute
+  // Set html lang attribute and localized document title
   useEffect(() => {
     if (typeof document !== 'undefined') {
       document.documentElement.lang = locale;
+
+      const siteTaglines: Record<SupportedLocale, string> = {
+        vi: 'Ventlore - Hiểu nơi đến. Vững bước đi.',
+        en: 'Ventlore - Understand Your Trail. Step with Confidence.',
+        ja: 'Ventlore - 旅先を深く知り、確かな一歩を。',
+        'zh-Hans': 'Ventlore - 洞悉前路，行步坚定。',
+        ko: 'Ventlore - 목적지를 이해하고, 확신을 갖고 나아가다.',
+        fr: 'Ventlore - Comprendre sa destination. Avancer en confiance.',
+      };
+
+      const routeTitles: Record<string, Record<SupportedLocale, string>> = {
+        explore: {
+          vi: 'Khám phá điểm đến | Ventlore',
+          en: 'Explore Destinations | Ventlore',
+          ja: '目的地を探す | Ventlore',
+          'zh-Hans': '探索目的地 | Ventlore',
+          ko: '목적지 탐색 | Ventlore',
+          fr: 'Explorer les destinations | Ventlore',
+        },
+        transparency: {
+          vi: 'Minh bạch tài chính | Ventlore',
+          en: 'Financial Transparency | Ventlore',
+          ja: '財務の透明性 | Ventlore',
+          'zh-Hans': '资金透明账本 | Ventlore',
+          ko: '재정 투명성 | Ventlore',
+          fr: 'Transparence financière | Ventlore',
+        },
+        vip: {
+          vi: 'Gói hội viên VIP | Ventlore',
+          en: 'VIP Membership Plan | Ventlore',
+          ja: 'VIP会員プラン | Ventlore',
+          'zh-Hans': 'VIP会员计划 | Ventlore',
+          ko: 'VIP 멤버십 플랜 | Ventlore',
+          fr: 'Adhésion VIP | Ventlore',
+        },
+        login: {
+          vi: 'Đăng nhập | Ventlore',
+          en: 'Sign In | Ventlore',
+          ja: 'ログイン | Ventlore',
+          'zh-Hans': '用户登录 | Ventlore',
+          ko: '로그인 | Ventlore',
+          fr: 'Connexion | Ventlore',
+        },
+      };
+
+      const segments = pathname.split('/').filter(Boolean);
+      const route = segments.length > 1 ? segments[1] : '';
+
+      if (route && routeTitles[route]) {
+        document.title = routeTitles[route][locale] || siteTaglines[locale];
+      } else if (!route || route === '') {
+        document.title = siteTaglines[locale];
+      }
     }
-  }, [locale]);
+  }, [pathname, locale]);
 
   const setLocale = useCallback(
     (newLocale: SupportedLocale) => {
@@ -116,11 +169,12 @@ export function I18nProvider({
         // Replace current locale prefix with new one
         const segments = pathname.split('/').filter(Boolean);
         segments[0] = newLocale;
-        const newPath = '/' + segments.join('/') + searchSuffix;
+        const hasTrailingSlash = pathname.endsWith('/');
+        const newPath = '/' + segments.join('/') + (hasTrailingSlash && segments.length === 1 ? '/' : '') + searchSuffix;
         router.push(newPath);
       } else {
         // Legacy path without prefix: redirect to new locale prefix path
-        const newPath = `/${newLocale}${pathname === '/' ? '/explore' : pathname}${searchSuffix}`;
+        const newPath = `/${newLocale}${pathname === '/' ? '/' : pathname}${searchSuffix}`;
         router.push(newPath);
       }
     },
@@ -129,22 +183,42 @@ export function I18nProvider({
 
   const t = useCallback(
     (key: string, params?: Record<string, string | number>): string => {
-      // 1. Try active locale
-      let text = getNestedValue(catalogs[locale], key);
-      // 2. Fallback to English
+      // 1. Plural resolution if params has count
+      let resolvedKey = key;
+      if (params && typeof params.count === 'number') {
+        const count = Number(params.count);
+        const isOne = count === 1 || (locale === 'fr' && count === 0);
+        const pluralKey = isOne ? `${key}_one` : `${key}_other`;
+        const candidate =
+          getNestedValue(catalogs[locale], pluralKey) ||
+          getNestedValue(catalogs.en, pluralKey);
+        if (candidate) {
+          resolvedKey = pluralKey;
+        }
+      }
+
+      // 2. Try active locale
+      let text = getNestedValue(catalogs[locale], resolvedKey);
+      // 3. Fallback to English
       if (!text && locale !== 'en') {
-        text = getNestedValue(catalogs.en, key);
+        text = getNestedValue(catalogs.en, resolvedKey);
       }
-      // 3. Fallback to Vietnamese
+      // 4. Fallback to Vietnamese
       if (!text && locale !== 'vi') {
-        text = getNestedValue(catalogs.vi, key);
+        text = getNestedValue(catalogs.vi, resolvedKey);
       }
-      // 4. Handle missing key
+      // 5. Fallback to original key if plural key had no direct match
+      if (!text && resolvedKey !== key) {
+        text =
+          getNestedValue(catalogs[locale], key) ||
+          getNestedValue(catalogs.en, key) ||
+          getNestedValue(catalogs.vi, key);
+      }
+      // 6. Handle missing key
       if (!text) {
         if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
           console.warn(`[i18n] Missing key "${key}" for locale "${locale}"`);
         }
-        // Human-readable fallback rather than raw dot-notation string
         const lastPart = key.split('.').pop() || key;
         text = lastPart
           .replace(/([A-Z])/g, ' $1')
@@ -152,11 +226,38 @@ export function I18nProvider({
           .trim();
       }
 
+      // 7. Dynamic English & French Plural grammar correction for common nouns
+      if (params && typeof params.count === 'number') {
+        const count = Number(params.count);
+        if (count === 1) {
+          if (locale === 'en') {
+            text = text
+              .replace(/1 field posts/gi, '1 field post')
+              .replace(/1 destinations/gi, '1 destination');
+          } else if (locale === 'fr') {
+            text = text
+              .replace(/1 destinations/gi, '1 destination')
+              .replace(/1 articles de terrain/gi, '1 article de terrain');
+          }
+        }
+      }
+
       // Interpolation: replace {name} with params.name
       if (params) {
         Object.entries(params).forEach(([paramKey, val]) => {
           text = text!.replace(new RegExp(`\\{${paramKey}\\}`, 'g'), String(val));
         });
+        if (typeof params.count === 'number' && Number(params.count) === 1) {
+          if (locale === 'en') {
+            text = text
+              .replace(/1 field posts/gi, '1 field post')
+              .replace(/1 destinations/gi, '1 destination');
+          } else if (locale === 'fr') {
+            text = text
+              .replace(/1 destinations/gi, '1 destination')
+              .replace(/1 articles de terrain/gi, '1 article de terrain');
+          }
+        }
       }
 
       return text;
@@ -173,6 +274,7 @@ export function I18nProvider({
           year: 'numeric',
           month: 'short',
           day: 'numeric',
+          timeZone: 'UTC', // Ensure consistent date display without local timezone rollover discrepancies
           ...options,
         };
         const intlLocale = locale === 'zh-Hans' ? 'zh-CN' : locale;
@@ -199,7 +301,6 @@ export function I18nProvider({
   const formatCurrencyUsd = useCallback(
     (amount: number, isCents: boolean = true): string => {
       const dollars = isCents ? amount / 100 : amount;
-      // In all locales, $15 remains 15 USD, just formatted cleanly
       if (locale === 'vi') return `${dollars} USD`;
       if (locale === 'fr') return `${dollars} USD`;
       if (locale === 'ja') return `$${dollars} (USD)`;
@@ -221,10 +322,13 @@ export function I18nProvider({
       if (currentLoc) {
         stripped = cleanPath.replace(new RegExp(`^/${currentLoc}`), '') || '/';
       }
-      if (stripped === '/') {
-        return `/${loc}/explore`;
+      if (stripped === '/' || stripped === '') {
+        return `/${loc}/`;
       }
-      return `/${loc}${stripped}`;
+      if (stripped === '/explore' || stripped === '/explore/') {
+        return `/${loc}/explore/`;
+      }
+      return `/${loc}${stripped.startsWith('/') ? stripped : `/${stripped}`}`;
     },
     [locale]
   );
