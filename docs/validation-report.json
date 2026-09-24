@@ -56,6 +56,16 @@
       "name": "Brand Kit v0.1 Verification",
       "status": "PASS",
       "details": "Đầy đủ 14/14 tài sản thương hiệu trong Ventlore_Brand_Kit_v0_1"
+    },
+    {
+      "name": "FE-01 Screens & Components",
+      "status": "PASS",
+      "details": "Đầy đủ 7/7 màn hình FE-01 (S01, S02, S03, S04, S05, S21, S34) và 13/13 components (C01, C02, C03, C04, C05, C06, C07, C08, C09, C10, C46, C49, C50)"
+    },
+    {
+      "name": "FE-01 Fixtures & Invariants",
+      "status": "PASS",
+      "details": "Đầy đủ 6 kịch bản bắt buộc, tìm thấy 39 UUIDv7 canonical hợp lệ, bảo mật lọc VIP ở mock adapter"
     }
   ],
   "missing_references": [

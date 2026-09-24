@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="cotoSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1E3F35" />
+      <stop offset="40%" stop-color="#3D6A5D" />
+      <stop offset="80%" stop-color="#E5AA6A" />
+      <stop offset="100%" stop-color="#FCE5C2" />
+    </linearGradient>
+    <linearGradient id="cotoRock" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2D3B36" />
+      <stop offset="60%" stop-color="#1B2522" />
+      <stop offset="100%" stop-color="#0E1715" />
+    </linearGradient>
+    <linearGradient id="cotoSea" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#24584C" />
+      <stop offset="100%" stop-color="#13332A" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sunrise Sky -->
+  <rect width="800" height="500" fill="url(#cotoSky)" />
+
+  <!-- Dawn Sun -->
+  <circle cx="280" cy="240" r="45" fill="#FCE5C2" opacity="0.9" />
+
+  <!-- Ocean -->
+  <rect y="260" width="800" height="240" fill="url(#cotoSea)" />
+
+  <!-- Sun reflection on water -->
+  <path d="M 240 260 L 320 260 L 390 500 L 170 500 Z" fill="#F0A44B" opacity="0.15" />
+
+  <!-- Dragon Claw Stratified Rocks (Vách Đá Móng Rồng - Layered Coastal Formations) -->
+  <!-- Layer 1 (Far rock) -->
+  <path d="M 520 280 L 590 220 L 680 250 L 760 210 L 800 240 L 800 500 L 520 500 Z" fill="#2F423C" />
+
+  <!-- Layer 2 (Main dragon-claw rock ridge) -->
+  <path d="M 360 310 L 440 210 L 530 250 L 620 180 L 720 230 L 780 190 L 800 220 L 800 500 L 320 500 Z" fill="url(#cotoRock)" />
+
+  <!-- Rock stratification lines (nếp uốn địa chất Móng Rồng) -->
+  <path d="M 400 310 Q 520 250 680 260" stroke="#71857C" stroke-width="2" fill="none" opacity="0.6" />
+  <path d="M 440 340 Q 560 280 720 300" stroke="#71857C" stroke-width="2.5" fill="none" opacity="0.6" />
+  <path d="M 470 380 Q 600 320 760 340" stroke="#71857C" stroke-width="3" fill="none" opacity="0.6" />
+  <path d="M 500 420 Q 630 360 800 380" stroke="#71857C" stroke-width="3" fill="none" opacity="0.6" />
+
+  <!-- Sea foam breaking on coastal rocks -->
+  <path d="M 330 360 Q 370 330 410 370 T 480 390 T 560 410" stroke="#DCE8DA" stroke-width="4" stroke-opacity="0.7" fill="none" />
+  <path d="M 310 400 Q 350 370 390 410 T 460 430" stroke="#DCE8DA" stroke-width="3" stroke-opacity="0.6" fill="none" />
+
+  <!-- Waypoint Pin -->
+  <circle cx="620" cy="180" r="10" fill="#F0A44B" stroke="#FFFFFF" stroke-width="2.5" />
+</svg>

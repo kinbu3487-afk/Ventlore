@@ -1,0 +1,32 @@
+# ==============================================================================
+# Netlify Configuration for Ventlore Monorepo (apps/web)
+# ==============================================================================
+
+[build]
+  base = ""
+  publish = "apps/web/.next"
+  command = "pnpm --filter @ventlore/web build"
+
+[build.environment]
+  NODE_VERSION = "20.18.0"
+  PNPM_VERSION = "9.15.4"
+
+# Next.js Runtime on Netlify handles Next.js 15 App Router natively
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Optimized caching headers for immutable fonts & brand assets
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/brand/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
