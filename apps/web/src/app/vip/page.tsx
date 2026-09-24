@@ -6,16 +6,16 @@ import { AppShell } from '@/components/AppShell';
 import { AsyncState } from '@/components/AsyncState';
 import { mockApiClient, VipPlanDTO } from '@ventlore/api-client';
 import { useSession } from '@/components/SessionContext';
+import { useI18n } from '@/lib/i18n';
 import {
   SparklesIcon,
   CheckIcon,
-  ClockIcon,
   ShieldCheckIcon,
-  AlertTriangleIcon,
 } from '@/components/Icons';
 
 export default function VipPage() {
   const { session, persona, setPersona } = useSession();
+  const { t, formatDate, getLocalizedPath } = useI18n();
   const [plans, setPlans] = useState<VipPlanDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -48,15 +48,15 @@ export default function VipPage() {
         <div className="text-center space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-status-vip-bg border border-status-vip/30 text-status-vip text-xs font-bold uppercase tracking-wider">
             <SparklesIcon className="w-4 h-4" />
-            <span>Hội Viên Thám Hiểm VIP (S21)</span>
+            <span>{t('vip.badge')}</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl font-extrabold text-ink tracking-tight">
-            Nâng Tầm Trải Nghiệm Mạo Hiểm
+            {t('vip.mainTitle')}
           </h1>
 
           <p className="text-sm sm:text-base text-ink-secondary max-w-xl mx-auto leading-relaxed">
-            Hỗ trợ quỹ thẩm định thực địa cộng đồng và tiếp cận trọn vẹn bản đồ hốc trú bão, dữ liệu cứu hộ ngoại tuyến và tọa độ khẩn cấp.
+            {t('vip.subtitle')}
           </p>
         </div>
 
@@ -69,13 +69,12 @@ export default function VipPage() {
                   <SparklesIcon className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg text-ink">Gói Hội Viên Đang Hoạt Động</h3>
+                  <h3 className="font-bold text-lg text-ink">{t('vip.activeStatusTitle')}</h3>
                   <p className="text-xs text-ink-secondary">
-                    Thời hạn hiệu lực:{' '}
-                    <strong>
-                      {new Date(session.membership.startsAt).toLocaleDateString('vi-VN')} –{' '}
-                      {new Date(session.membership.endsAt).toLocaleDateString('vi-VN')}
-                    </strong>{' '}
+                    {t('vip.validUntilDate', {
+                      start: formatDate(session.membership.startsAt),
+                      end: formatDate(session.membership.endsAt),
+                    })}{' '}
                     (12 tháng lịch UTC)
                   </p>
                 </div>
@@ -92,7 +91,7 @@ export default function VipPage() {
         <AsyncState isLoading={isLoading}>
           <div className="grid grid-cols-1 md:grid-cols-1 gap-6 max-w-2xl mx-auto">
             {plans.map((plan) => {
-              const priceUsd = (plan.priceUsdCents / 100).toFixed(2);
+              const priceUsd = (plan.priceUsdCents / 100).toFixed(0);
 
               return (
                 <div
@@ -100,14 +99,14 @@ export default function VipPage() {
                   className="rounded-card border-2 border-forest bg-surface-card p-6 sm:p-8 shadow-md relative overflow-hidden"
                 >
                   <div className="absolute top-0 right-0 bg-forest text-white text-[11px] font-bold px-4 py-1 rounded-bl-control">
-                    KHUYÊN DÙNG
+                    {t('vip.recommended')}
                   </div>
 
                   <div className="mb-4">
                     <h3 className="text-xl font-bold text-ink">{plan.name}</h3>
                     <div className="mt-3 flex items-baseline gap-2">
                       <span className="text-4xl font-extrabold text-forest">${priceUsd}</span>
-                      <span className="text-sm text-ink-secondary font-medium">/ 12 tháng lịch UTC</span>
+                      <span className="text-sm text-ink-secondary font-medium">{t('vip.term12Months')}</span>
                       <span className="text-xs text-ink-muted">({plan.priceUsdCents} USD cents)</span>
                     </div>
                   </div>
@@ -125,14 +124,14 @@ export default function VipPage() {
                   <div className="space-y-3">
                     {isVipActive ? (
                       <div className="text-center p-3 rounded-control bg-status-success-bg text-status-success text-xs font-semibold">
-                        Tài khoản của bạn đang có gói VIP hiệu lực. Bạn có thể gia hạn khi gần hết hạn.
+                        {t('vip.alreadyActiveNotice')}
                       </div>
                     ) : persona === 'guest' ? (
                       <Link
-                        href={`/login?returnTo=${encodeURIComponent('/vip')}`}
+                        href={getLocalizedPath(`/login?returnTo=${encodeURIComponent('/vip')}`)}
                         className="w-full min-h-control inline-flex items-center justify-center px-6 py-3 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-sm"
                       >
-                        Đăng nhập để đăng ký gói VIP
+                        {t('vip.signInToSubscribe')}
                       </Link>
                     ) : (
                       <button
@@ -140,7 +139,7 @@ export default function VipPage() {
                         onClick={() => setPersona('vip')}
                         className="w-full min-h-control inline-flex items-center justify-center px-6 py-3 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-sm"
                       >
-                        Kích hoạt thử nghiệm gói VIP (Mô phỏng)
+                        {t('vip.simulateActivate')}
                       </button>
                     )}
                   </div>
@@ -154,17 +153,17 @@ export default function VipPage() {
         <div className="rounded-card border border-sage bg-surface-card p-6 shadow-sm text-xs text-ink-secondary space-y-2">
           <div className="flex items-center gap-2 font-bold text-ink text-sm">
             <ShieldCheckIcon className="w-4 h-4 text-forest" />
-            <span>Quy tắc vận hành gói VIP (Bất biến kiến trúc)</span>
+            <span>{t('vip.rulesTitle')}</span>
           </div>
           <ul className="space-y-1.5 list-disc list-inside">
             <li>
-              <strong>Độc lập vai trò:</strong> Gói VIP không cấp điểm uy tín, không cấp vai trò chuyên gia, và không có quyền phê duyệt nội dung.
+              <strong>{t('vip.roleIndependence')}:</strong> {t('vip.roleIndependenceDesc')}
             </li>
             <li>
-              <strong>Gia hạn chủ động:</strong> Hết hạn 12 tháng, hệ thống không tự động trừ tiền thẻ hay trừ ví. Người dùng chủ động gia hạn.
+              <strong>{t('vip.activeRenewal')}:</strong> {t('vip.activeRenewalDesc')}
             </li>
             <li>
-              <strong>Tách bạch quyên góp:</strong> Tiền quyên góp (Donation) 100% vào quỹ độc lập và không dùng để cấp hay quy đổi ra gói VIP.
+              <strong>{t('vip.donationSeparation')}:</strong> {t('vip.donationSeparationDesc')}
             </li>
           </ul>
         </div>

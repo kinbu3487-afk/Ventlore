@@ -52,6 +52,10 @@ export interface PlaceSummaryDTO {
   warnings: string[];
   activities: string[];
   imageUrl?: string;
+  coverImageUrl?: string;
+  translations?: Record<string, LocalizedContentDTO>;
+  isTranslated?: boolean;
+  originalLocale?: string;
   postsCount: number;
   coordinates?: {
     lat: number;
@@ -78,6 +82,17 @@ export interface PlacePostPreviewDTO {
   };
 }
 
+export interface LocalizedContentDTO {
+  locale: string;
+  name?: string;
+  title?: string;
+  summary?: string;
+  description?: string;
+  content?: string;
+  warnings?: string[];
+  regionName?: string;
+}
+
 export interface PlaceDetailDTO extends PlaceSummaryDTO {
   description: string;
   canonicalPlace?: {
@@ -86,6 +101,9 @@ export interface PlaceDetailDTO extends PlaceSummaryDTO {
     name: string;
   } | null;
   posts: PlacePostPreviewDTO[];
+  translations?: Record<string, LocalizedContentDTO>;
+  isTranslated?: boolean;
+  originalLocale?: string;
 }
 
 export interface ClaimDTO {
@@ -136,6 +154,10 @@ export interface PostRevisionDTO {
   claims: ClaimDTO[];
   sources: SourceRefDTO[];
   tipRoute?: TipRouteDTO | null;
+  coverImageUrl?: string;
+  translations?: Record<string, LocalizedContentDTO>;
+  isTranslated?: boolean;
+  originalLocale?: string;
 }
 
 export interface PostDetailDTO {

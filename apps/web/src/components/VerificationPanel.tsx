@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import { VerificationStatus } from '@ventlore/domain';
+import { useI18n } from '../lib/i18n';
 import {
   ShieldCheckIcon,
   ShieldAlertIcon,
@@ -25,6 +28,8 @@ export function VerificationBadge({
   status: VerificationStatus;
   size?: 'sm' | 'md' | 'lg';
 }) {
+  const { t } = useI18n();
+
   const sizeClasses = {
     sm: 'text-xs px-2 py-0.5 gap-1',
     md: 'text-sm px-3 py-1 gap-1.5',
@@ -35,73 +40,73 @@ export function VerificationBadge({
     case VerificationStatus.VERIFIED:
       return (
         <span
-          className={`inline-flex items-center font-medium rounded-control border border-status-success/30 bg-status-success-bg text-status-success ${sizeClasses}`}
+          className={`inline-flex items-center font-semibold rounded-control border border-status-success/30 bg-status-success-bg text-status-success ${sizeClasses}`}
         >
           <ShieldCheckIcon className={size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
-          <span>Đã kiểm định</span>
+          <span>{t('post.verifiedTitle')}</span>
         </span>
       );
     case VerificationStatus.UNVERIFIED:
       return (
         <span
-          className={`inline-flex items-center font-medium rounded-control border border-status-neutral/30 bg-status-neutral-bg text-status-neutral ${sizeClasses}`}
+          className={`inline-flex items-center font-semibold rounded-control border border-status-neutral/30 bg-status-neutral-bg text-status-neutral ${sizeClasses}`}
         >
           <AlertCircleIcon className={size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
-          <span>Chưa kiểm định</span>
+          <span>{t('post.unverifiedTitle')}</span>
         </span>
       );
     case VerificationStatus.IN_REVIEW:
       return (
         <span
-          className={`inline-flex items-center font-medium rounded-control border border-status-review/30 bg-status-review-bg text-status-review ${sizeClasses}`}
+          className={`inline-flex items-center font-semibold rounded-control border border-status-review/30 bg-status-review-bg text-status-review ${sizeClasses}`}
         >
           <ClockIcon className={size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
-          <span>Đang kiểm định</span>
+          <span>{t('post.inReviewTitle')}</span>
         </span>
       );
     case VerificationStatus.NEEDS_CHANGES:
       return (
         <span
-          className={`inline-flex items-center font-medium rounded-control border border-status-pending/30 bg-status-pending-bg text-status-pending ${sizeClasses}`}
+          className={`inline-flex items-center font-semibold rounded-control border border-status-pending/30 bg-status-pending-bg text-status-pending ${sizeClasses}`}
         >
           <AlertTriangleIcon className={size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
-          <span>Yêu cầu chỉnh sửa</span>
+          <span>{t('post.needsChangesTitle')}</span>
         </span>
       );
     case VerificationStatus.INCONCLUSIVE:
       return (
         <span
-          className={`inline-flex items-center font-medium rounded-control border border-status-pending/30 bg-status-pending-bg text-status-pending ${sizeClasses}`}
+          className={`inline-flex items-center font-semibold rounded-control border border-status-pending/30 bg-status-pending-bg text-status-pending ${sizeClasses}`}
         >
           <AlertCircleIcon className={size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
-          <span>Chưa đủ kết luận</span>
+          <span>{t('post.inconclusiveTitle')}</span>
         </span>
       );
     case VerificationStatus.EXPIRED:
       return (
         <span
-          className={`inline-flex items-center font-medium rounded-control border border-status-danger/30 bg-status-danger-bg text-status-danger ${sizeClasses}`}
+          className={`inline-flex items-center font-semibold rounded-control border border-status-danger/30 bg-status-danger-bg text-status-danger ${sizeClasses}`}
         >
           <AlertTriangleIcon className={size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
-          <span>Kiểm định hết hạn</span>
+          <span>{t('post.expiredTitle')}</span>
         </span>
       );
     case VerificationStatus.REJECTED:
       return (
         <span
-          className={`inline-flex items-center font-medium rounded-control border border-status-danger/30 bg-status-danger-bg text-status-danger ${sizeClasses}`}
+          className={`inline-flex items-center font-semibold rounded-control border border-status-danger/30 bg-status-danger-bg text-status-danger ${sizeClasses}`}
         >
           <ShieldAlertIcon className={size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
-          <span>Từ chối duyệt</span>
+          <span>{t('post.rejectedTitle')}</span>
         </span>
       );
     case VerificationStatus.SUSPENDED:
       return (
         <span
-          className={`inline-flex items-center font-medium rounded-control border border-status-danger/30 bg-status-danger-bg text-status-danger ${sizeClasses}`}
+          className={`inline-flex items-center font-semibold rounded-control border border-status-danger/30 bg-status-danger-bg text-status-danger ${sizeClasses}`}
         >
           <AlertTriangleIcon className={size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
-          <span>Tạm đình chỉ</span>
+          <span>{t('post.suspendedTitle')}</span>
         </span>
       );
     default:
@@ -118,21 +123,10 @@ export function VerificationPanel({
   revisionDisplayCode,
   isDetailed = true,
 }: VerificationPanelProps) {
-  const formatDate = (dateStr?: string | null) => {
-    if (!dateStr) return null;
-    try {
-      return new Date(dateStr).toLocaleDateString('vi-VN', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      });
-    } catch {
-      return dateStr;
-    }
-  };
+  const { t, formatDate } = useI18n();
 
-  const formattedCheckedAt = formatDate(checkedAt);
-  const formattedValidUntil = formatDate(validUntil);
+  const formattedCheckedAt = checkedAt ? formatDate(checkedAt) : null;
+  const formattedValidUntil = validUntil ? formatDate(validUntil) : null;
 
   return (
     <div className="rounded-card border border-sage bg-surface-card p-4 sm:p-5 shadow-sm">
@@ -148,7 +142,7 @@ export function VerificationPanel({
         {status === VerificationStatus.VERIFIED && validUntil && (
           <span className="text-xs text-ink-secondary flex items-center gap-1">
             <ClockIcon className="w-3.5 h-3.5 text-status-success" />
-            Có hiệu lực đến: <strong className="text-ink">{formattedValidUntil}</strong>
+            {t('post.validUntil')}: <strong className="text-ink">{formattedValidUntil}</strong>
           </span>
         )}
       </div>
@@ -156,40 +150,39 @@ export function VerificationPanel({
       {isDetailed && (
         <div className="mt-3.5 space-y-2.5 text-sm">
           {scope && (
-            <div className="text-ink">
-              <span className="font-semibold text-ink-secondary">Phạm vi kiểm tra: </span>
+            <div className="text-ink text-xs sm:text-sm">
+              <span className="font-semibold text-ink-secondary">{t('post.verificationScope')}: </span>
               <span>{scope}</span>
             </div>
           )}
 
           {status === VerificationStatus.UNVERIFIED && (
             <p className="text-ink-secondary italic bg-status-neutral-bg/60 p-2.5 rounded-control text-xs">
-              Lưu ý: Nội dung phiên bản này do thành viên cộng đồng cung cấp, chưa qua quy trình thẩm định độc lập bởi chuyên gia thực địa của Ventlore.
+              {t('post.unverifiedDesc')}
             </p>
           )}
 
           {status === VerificationStatus.EXPIRED && (
             <div className="bg-status-danger-bg text-status-danger p-3 rounded-control text-xs">
-              <strong>Cảnh báo:</strong> Kết quả kiểm định cho phiên bản này đã hết hạn vào ngày{' '}
-              {formattedValidUntil}. Địa hình và điều kiện an toàn thực tế có thể đã biến đổi sau các mùa mưa bão gần nhất.
+              <strong>{t('post.expiredTitle')}:</strong> {t('post.expiredDesc', { date: formattedValidUntil || '' })}
             </div>
           )}
 
           {inspectorNotes && (
             <div className="text-xs bg-surface-canvas p-3 rounded-control border border-sage">
-              <div className="font-semibold text-ink-secondary mb-1">Ghi chú của chuyên gia thẩm định:</div>
-              <p className="text-ink">{inspectorNotes}</p>
+              <div className="font-semibold text-ink-secondary mb-1">{t('post.inspectorNotes')}:</div>
+              <p className="text-ink leading-relaxed">{inspectorNotes}</p>
               {formattedCheckedAt && (
                 <div className="mt-1 text-[11px] text-ink-muted">
-                  Thời điểm kiểm tra: {formattedCheckedAt}
+                  {t('post.checkedAt')}: {formattedCheckedAt}
                 </div>
               )}
             </div>
           )}
 
           <div className="pt-2 text-[11px] text-ink-muted border-t border-sage/40 flex items-center justify-between">
-            <span>Kiểm định độc lập gắn chặt với phiên bản nội dung</span>
-            <span>Không cam kết an toàn tuyệt đối</span>
+            <span>{t('post.independentVerificationDesc')}</span>
+            <span>{t('place.noAbsoluteSafety')}</span>
           </div>
         </div>
       )}

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { SessionProvider } from '@/components/SessionContext';
+import { I18nProvider } from '@/lib/i18n';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -16,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body className="min-h-screen bg-surface-canvas text-ink antialiased">
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider>
+          <I18nProvider>{children}</I18nProvider>
+        </SessionProvider>
       </body>
     </html>
   );

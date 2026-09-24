@@ -19,6 +19,17 @@ import {
   DemoPersona,
 } from './types.js';
 
+function normalizeSearchText(str?: string): string {
+  if (!str) return '';
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'd')
+    .toLowerCase()
+    .trim();
+}
+
 export class VentloreMockAdapter {
   private currentPersona: DemoPersona = 'guest';
 
@@ -142,9 +153,71 @@ export class VentloreMockAdapter {
         'Khu vực không có nhân viên cứu hộ túc trực thường xuyên',
       ],
       activities: ['Trekking', 'Chèo Kayak', 'Chụp ảnh phong cảnh'],
-      imageUrl: '/brand/Ventlore_Identity_Board.png',
+      imageUrl: '/destinations/cat-co-3.svg',
       postsCount: 2,
       coordinates: { lat: 20.7183, lng: 107.0514 },
+      translations: {
+        en: {
+          locale: 'en',
+          name: 'Cat Co 3 Bay - Island Coastal Trail',
+          regionName: 'Hai Phong / Cat Ba Island',
+          summary: 'A breathtaking coastal walking trail connecting beaches and wild cliffs, ideal for day trekking.',
+          description: 'The Cat Co 3 coastal trail combines rocky cliffside paths and natural tidal reefs. Moderate slopes with morning dew and rising tides require proper footwear.',
+          warnings: [
+            'Heavy surf and rising swell during winter months (Nov - Feb)',
+            'Slippery rock ledges; never hike barefoot or with flat-soled shoes',
+            'No permanent lifeguard station on duty along the trail',
+          ],
+        },
+        ja: {
+          locale: 'ja',
+          name: 'カットコー3湾 海岸アイランドトレイル',
+          regionName: 'ハイフォン / カットバ島',
+          summary: '砂浜と手つかずの断崖を結ぶ絶景の海岸トレイル。日帰りハイキングに最適。',
+          description: 'カットコー3の海岸トレイルは、岩場と自然の干潟が織りなすルートです。朝露や満潮時は滑りやすいため、トレッキングシューズの着用が必須です。',
+          warnings: [
+            '冬期（11月〜2月）は高波と満潮に注意',
+            '岩肌が非常に滑りやすいため、平底靴や素足は厳禁',
+            '常駐の救助員がいないエリアです',
+          ],
+        },
+        'zh-Hans': {
+          locale: 'zh-Hans',
+          name: '吉古3号湾 海岛沿海步道',
+          regionName: '海防 / 吉婆岛',
+          summary: '连接沙滩与险峻岩壁的绝美沿海徒步路线，非常适合单日探险。',
+          description: '吉古3号湾沿海路线融合了悬崖步道与自然潮间带。部分路段坡度适中，但清晨受海雾与涨潮影响较为湿滑。',
+          warnings: [
+            '冬季（11月至次年2月）风浪较大且潮汐高涨',
+            '岩石湿滑，严禁赤足或穿平底鞋穿行',
+            '该区域无常驻专业救援人员',
+          ],
+        },
+        ko: {
+          locale: 'ko',
+          name: '깟꼬 3 베이 해안 아일랜드 트레일',
+          regionName: '하이퐁 / 깟바섬',
+          summary: '모래사장과 야생 해안 절벽을 잇는 환상적인 해안 트레킹 코스로 당일 탐방에 적합합니다.',
+          description: '깟꼬 3 해안로는 바위 절벽길과 자연 조간대가 어우러진 코스입니다. 경사는 완만하지만 아침 안개와 만조 시 미끄러우니 주의하십시오.',
+          warnings: [
+            '겨울철(11월~2월) 높은 파도 및 조수 간만의 차 주의',
+            '바위가 미끄러우므로 슬리퍼나 평평한 신발 착용 절대 금지',
+            '상주 안전 요원이 없는 야생 구역입니다',
+          ],
+        },
+        fr: {
+          locale: 'fr',
+          name: 'Baie de Cat Co 3 - Sentier Côtier Insulaire',
+          regionName: 'Hai Phong / Île de Cat Ba',
+          summary: 'Superbe sentier côtier reliant plages de sable et falaises sauvages, idéal pour une randonnée à la journée.',
+          description: 'Le sentier côtier de Cat Co 3 serpente le long de parois rocheuses et d’estrans naturels. Pente modérée mais glissante au lever du jour.',
+          warnings: [
+            'Fortes vagues et marée haute en hiver (novembre à février)',
+            'Parois glissantes ; chaussures de randonnée indispensables',
+            'Aucun poste de secours permanent le long du tracé',
+          ],
+        },
+      },
       posts: [
         {
           postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e10',
@@ -201,7 +274,9 @@ export class VentloreMockAdapter {
       description: 'Hồ sơ cũ được lập trước đợt chuẩn hóa địa danh. Dữ liệu và các bài đánh giá đã được chuyển tiếp sang địa điểm chuẩn.',
       warnings: ['Hồ sơ đã sáp nhập, vui lòng tra cứu và đóng góp tại địa điểm chuẩn.'],
       activities: ['Trekking'],
+      imageUrl: '/destinations/hang-mua.svg',
       postsCount: 0,
+      coordinates: { lat: 20.7183, lng: 107.0514 },
       posts: [],
     },
     {
@@ -219,7 +294,9 @@ export class VentloreMockAdapter {
         'Có nguy cơ lũ quét cục bộ không báo trước',
       ],
       activities: ['Khám phá rừng', 'Lội suối'],
+      imageUrl: '/destinations/hero-coastal.svg',
       postsCount: 1,
+      coordinates: { lat: 14.3541, lng: 107.9842 },
       posts: [],
     },
     {
@@ -237,8 +314,66 @@ export class VentloreMockAdapter {
         'Theo dõi kỹ lịch thủy triều của trạm khí tượng thủy văn đảo Cô Tô',
       ],
       activities: ['Đi bộ ngắm cảnh', 'Nghiên cứu địa chất'],
+      imageUrl: '/destinations/co-to.svg',
       postsCount: 1,
       coordinates: { lat: 20.9782, lng: 107.7554 },
+      translations: {
+        en: {
+          locale: 'en',
+          name: 'Dragon Claw Cliffs - Co To Island',
+          regionName: 'Quang Ninh / Co To Island',
+          summary: 'A dramatic coastal geological wonder with multi-layered sedimentary slate formations.',
+          description: 'Dragon Claw Cliff is an ancient geological highlight of Co To Island. Hikers can traverse the wave-cut platform at low tide to admire millions of years of layered rock.',
+          warnings: [
+            'Sharp slate edges; sturdy hiking boots and gloves are highly recommended',
+            'Monitor the daily tide schedule from Co To maritime station closely',
+          ],
+        },
+        ja: {
+          locale: 'ja',
+          name: 'モングロン龍爪断崖 コト島',
+          regionName: 'クアンニン / コト島',
+          summary: '幾重にも重なる堆積岩の層が龍の爪のように海へ突き出る圧巻の奇観。',
+          description: 'モングロン断崖はコト島の代表的な地質学的遺産です。干潮時には波食棚を歩いて数百〜数千万年前の地層の連なりを間近で観察できます。',
+          warnings: [
+            '鋭利な岩肌に注意。つま先の硬い登山靴と手袋の着用を推奨',
+            'コト島気象観測所の潮汐表を必ず事前に確認してください',
+          ],
+        },
+        'zh-Hans': {
+          locale: 'zh-Hans',
+          name: '姑苏岛龙爪岩壁',
+          regionName: '广宁 / 姑苏岛',
+          summary: '千层板岩沉积地层如巨龙利爪般延伸入海，壮观无比的天然地质奇观。',
+          description: '龙爪岩壁是姑苏岛著名的自然地质景观。退潮时分，徒步者可沿海蚀平台穿行，近距离欣赏亿万年地层沉淀褶皱。',
+          warnings: [
+            '页岩层边缘锐利，建议穿着防穿刺徒步鞋并佩戴防滑手套',
+            '请务必提前查阅姑苏岛水文气象站发布的潮汐时刻表',
+          ],
+        },
+        ko: {
+          locale: 'ko',
+          name: '꼬또섬 용발톱 해안절벽',
+          regionName: '꽝닌 / 꼬또섬',
+          summary: '용의 발톱처럼 바다로 뻗어나간 장엄한 퇴적 편암 지층의 자연 지질 명소입니다.',
+          description: '용발톱 절벽은 꼬또섬의 대표적인 지질 경관입니다. 썰물 때 바닷가 암반을 따라 걸으며 수천만 년에 걸쳐 형성된 지층을 감상할 수 있습니다.',
+          warnings: [
+            '날카로운 편암 모서리 주의. 앞코가 단단한 등산화와 장갑 착용 필수',
+            '꼬또섬 해양기상 관측소의 조석표를 반드시 사전에 확인하십시오',
+          ],
+        },
+        fr: {
+          locale: 'fr',
+          name: 'Falaises de Mong Rong - Île de Co To',
+          regionName: 'Quang Ninh / Île de Co To',
+          summary: 'Splendide merveille géologique aux parois sédimentaires en schiste taillées en forme de griffes de dragon.',
+          description: 'Les falaises de Mong Rong sont un chef-d’œuvre naturel de l’île de Co To. À marée basse, les randonneurs peuvent longer la plateforme d’érosion marine.',
+          warnings: [
+            'Arêtes rocheuses coupantes ; chaussures de marche robustes et gants fortement conseillés',
+            'Consulter impérativement l’annuaire des marées de la station de Co To',
+          ],
+        },
+      },
       posts: [
         {
           postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e20',
@@ -276,8 +411,71 @@ export class VentloreMockAdapter {
         'Hồ sơ kiểm định thực địa đã hết hạn, cần đoàn thẩm định mới rà soát',
       ],
       activities: ['Leo núi cao', 'Cắm trại trong rừng'],
+      imageUrl: '/destinations/tay-con-linh.svg',
       postsCount: 1,
       coordinates: { lat: 22.8094, lng: 104.8117 },
+      translations: {
+        en: {
+          locale: 'en',
+          name: 'Tay Con Linh Peak - Hoang Su Phi',
+          regionName: 'Ha Giang / Hoang Su Phi',
+          summary: 'The roof of North-Eastern Vietnam at 2,427m, trekking through ancient Shan Tuyet tea forests and alpine ecology.',
+          description: 'Ascending Tay Con Linh requires strong endurance and accredited local trail guides. The ridgeline traverses mossy old-growth forests and steep mud paths.',
+          warnings: [
+            'Jungle leeches present year-round, particularly following rain showers',
+            'Dense mountain fog severely reduces visibility after 15:00',
+            'Field verification certificate is currently expired; new audit required',
+          ],
+        },
+        ja: {
+          locale: 'ja',
+          name: 'タイコンリン山頂 ホアンスーフィー',
+          regionName: 'ハザン省 / ホアンスーフィー',
+          summary: '標高2,427m、東北地方の最高峰。樹齢数百年の古樹茶園と苔むす原生林を抜けるトレッキング。',
+          description: 'タイコンリン山頂への登頂には高い体力と現地を熟知したガイドが不可欠です。急峻で滑りやすい泥道や霧の稜線を歩きます。',
+          warnings: [
+            '雨上がりを中心に年間を通じてヒルに注意',
+            '15時以降は濃い霧で視界が急激に悪化します',
+            '本スポットの現地検証レポートは期限切れのため再審査待ちです',
+          ],
+        },
+        'zh-Hans': {
+          locale: 'zh-Hans',
+          name: '西昆岭峰 黄树皮县',
+          regionName: '河江省 / 黄树皮',
+          summary: '东北部屋脊海拔2427米，穿越百年古树雪茶林与独特的温带高山植被。',
+          description: '登顶西昆岭需要极佳的体能与经验丰富的当地向导。路线穿过长满苔藓的原始古树森林与陡峭湿滑的泥泞山脊。',
+          warnings: [
+            '热带山地旱蚂蟥常年多发，雨后尤甚',
+            '午后15:00后常有浓密山雾笼罩，能见度骤降',
+            '实地核实报告当前已过期，正等待新一轮专家审核',
+          ],
+        },
+        ko: {
+          locale: 'ko',
+          name: '떠이꼰린 봉우리 황수피',
+          regionName: '하지앙 / 황수피',
+          summary: '해발 2,427m 베트남 동북부 최고봉. 백년 고목 산설차 숲과 원시 이끼 숲을 통과하는 트레킹.',
+          description: '떠이꼰린 등반은 강한 체력과 현지 사정에 밝은 가이드가 필수적입니다. 이끼 낀 원시림과 가파른 산길을 통과해야 합니다.',
+          warnings: [
+            '연중 산거머리 주의, 특히 비 온 뒤 습한 날씨에 급증',
+            '오후 15시 이후 짙은 안개로 가시거리 급격히 저하',
+            '현장 검증 보고서가 만료된 상태이므로 재검토 대기 중',
+          ],
+        },
+        fr: {
+          locale: 'fr',
+          name: 'Pic de Tay Con Linh - Hoang Su Phi',
+          regionName: 'Ha Giang / Hoang Su Phi',
+          summary: 'Toit du Nord-Est à 2 427 m d’altitude, traversant des forêts de théiers ancestraux Shan Tuyet.',
+          description: 'L’ascension du Tay Con Linh exige une excellente condition physique et un guide local accrédité. Le sentier grimpe à travers forêts moussues et crêtes abruptes.',
+          warnings: [
+            'Sangsues présentes toute l’année, particulièrement après les pluies',
+            'Brouillard épais réduisant fortement la visibilité après 15h00',
+            'Rapport de vérification expiré ; en attente de nouvel audit terrain',
+          ],
+        },
+      },
       posts: [
         {
           postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e30',
@@ -380,6 +578,99 @@ Nên bắt đầu di chuyển từ 06:30 đến 08:30 sáng khi nắng chưa g�
           status: TipRouteStatus.ACTIVE,
           beneficiaryAddress: '0x88F...42C1',
         },
+        coverImageUrl: '/destinations/cat-co-3.svg',
+        translations: {
+          en: {
+            locale: 'en',
+            title: 'Practical Guide to Traversing Cat Co 3 Coastal Cliffs in Dry Season (Verified)',
+            content: `The Cat Co 3 coastal trail is one of the most magnificent coastal trekking experiences on Cat Ba Island. The route spans approximately 2.8 km hugging granite cliff edges directly overlooking Lan Ha Bay.
+
+### 1. Optimal Starting Time
+Begin hiking between 06:30 and 08:30 AM before the heat intensifies and as low tide begins. Do not set out after 16:00 PM; rock surfaces darken rapidly at dusk and afternoon high tides can submerge the base trail.
+
+### 2. Mandatory Minimum Gear
+- Sturdy hiking boots or wading shoes with high-traction rubber lugs (Vibram or equivalent).
+- At least 1.5 liters of drinking water and energy rations.
+- Dry bag for mobile phone and personal credentials.
+- Standard first-aid kit with medical gauze and wound disinfectant.
+
+### 3. Field Safety Caveats
+- At the rocky outcrop near Km 1.4, submerged rock surfaces become slippery with algae as the tide ebbs. Proceed slowly maintaining 3 points of contact.
+- **Safety notice:** No destination is "absolutely safe". Every trekker is responsible for their own navigation decisions and situational awareness.`,
+          },
+          ja: {
+            locale: 'ja',
+            title: '乾季におけるカットコー3海岸断崖の安全横断ガイド（検証済み）',
+            content: `カットコー3海岸トレイルは、カットバ島で最も息をのむような絶景を誇るトレッキングルートの一つです。花崗岩の崖沿いに約2.8km続き、ランハ湾のエメラルドの海を見渡せます。
+
+### 1. 推奨される出発時間
+気温が上がる前、かつ干潮が始まる午前06:30〜08:30の出発が最適です。日没後は足元が急速に暗くなり、夕方の満潮で足元のルートが水没する危険があるため、16:00以降の出発は避けてください。
+
+### 2. 必須の標準装備
+- グリップ力の高いビブラムソール等の登山靴またはウォーターシューズ。
+- 最低1.5Lの飲料水と行動食。
+- 携帯電話や貴重品用の防水ドライバッグ。
+- 擦り傷や切り傷に対応できる基本的なファーストエイドキット。
+
+### 3. 現地の安全に関する注意点
+- Km 1.4付近の岩礁では、干潮時に露出する海苔や苔により足元が滑りやすくなります。3点支持を保ち慎重に進んでください。
+- **安全に関する注意事項：**「絶対に安全な場所」は存在しません。すべての登山者は自己の責任において判断し行動してください。`,
+          },
+          'zh-Hans': {
+            locale: 'zh-Hans',
+            title: '旱季安全穿越吉古3号湾沿海岩壁实地指南（已核实）',
+            content: `吉古3号湾沿海步道是吉婆岛最具探险魅力的海岸徒步线路之一。全程约2.8公里，依附于花岗岩峭壁之上，直面壮丽的兰哈湾。
+
+### 1. 最佳启程时间
+建议在早晨06:30至08:30之间出发，此时气温凉爽且正值退潮开始阶段。切勿在下午16:00之后出发，日落后岩壁视线受阻极快，且傍晚涨潮会淹没崖底通道。
+
+### 2. 必备基础装备
+- 具有良好防滑抓地力的登山鞋或溯溪鞋（推荐Vibram大底或同级防滑底）。
+- 至少1.5升饮用水及高能便携食品。
+- 保护通讯设备与随身证件的防水密封袋。
+- 基础急救包（包含医用纱布及消毒杀菌药剂）。
+
+### 3. 实地安全预警
+- Km 1.4处突出的海蚀岩角在退潮时附着湿滑海苔，通过该路段时请放慢脚步并保持三点接触。
+- **特别声明：** 任何自然环境均不存在所谓“绝对安全”。每位徒步者均须对自身的路线选择及实地观察承担最终责任。`,
+          },
+          ko: {
+            locale: 'ko',
+            title: '건기 깟꼬 3 해안 절벽 안전 횡단 실전 가이드 (검증 완료)',
+            content: `깟꼬 3 해안로는 깟바섬에서 가장 장엄한 풍경을 자랑하는 해안 트레킹 코스 중 하나입니다. 약 2.8km 길이의 화강암 절벽을 따라 란하만을 한눈에 굽어볼 수 있습니다.
+
+### 1. 권장 출발 시간
+기온이 오르기 전이자 썰물이 시작되는 오전 06:30 ~ 08:30 사이에 출발하는 것이 가장 좋습니다. 일몰 후에는 바위가 급격히 어두워지고 만조 시 바위 아래 트레일이 잠길 수 있으므로 오후 16:00 이후 출발은 삼가십시오.
+
+### 2. 필수 기본 장비
+- 바위 접지력이 우수한 등산화 또는 계곡 트레킹화 (비브람 솔 권장).
+- 최소 1.5리터 이상의 식수와 비상 행동식.
+- 휴대전화 및 귀중품을 보호할 수 있는 방수팩.
+- 거즈와 소독약이 포함된 기본 응급처치 키트.
+
+### 3. 현장 안전 주의사항
+- Km 1.4 지점의 암초는 썰물 때 이끼로 인해 매우 미끄럽습니다. 세 지점 지지(3-point contact)를 유지하며 천천히 이동하십시오.
+- **안전 주의사항:** 세상에 "절대적으로 안전한 장소"는 존재하지 않습니다. 모든 탐방객은 자신의 안전과 이동 판단에 스스로 책임을 집니다.`,
+          },
+          fr: {
+            locale: 'fr',
+            title: 'Guide pratique pour franchir les falaises côtières de Cat Co 3 en saison sèche (Vérifié)',
+            content: `Le sentier côtier de Cat Co 3 offre l’une des randonnées les plus spectaculaires de l’île de Cat Ba. Le tracé d’environ 2,8 km serpente à flanc de falaises de granit surplombant la baie de Lan Ha.
+
+### 1. Horaires de départ recommandés
+Prenez le départ entre 06h30 et 08h30 avant les fortes chaleurs et au début de la marée descendante. Évitez tout départ après 16h00 : la roche s’assombrit très vite au crépuscule et la marée montante peut submerger le sentier au pied de la falaise.
+
+### 2. Équipement obligatoire recommandé
+- Chaussures de marche ou de canyoning à semelle crantée adhérente (type Vibram).
+- Au moins 1,5 litre d’eau potable et des en-cas énergétiques.
+- Sac étanche pour protéger téléphone et documents personnels.
+- Trousse de premiers secours avec pansements et désinfectant.
+
+### 3. Avertissements terrain essentiels
+- Au niveau de l’éperon rocheux du km 1,4, des algues glissantes recouvrent la roche mouillée à marée descendante. Ralentissez et maintenez trois points d’appui.
+- **Avis de sécurité :** Aucun itinéraire sauvage n’est « absolument sûr ». Chaque randonneur demeure pleinement responsable de ses choix et de son observation sur le terrain.`,
+          },
+        },
       },
       revisionsList: [
         {
@@ -464,6 +755,7 @@ Nên bắt đầu di chuyển từ 06:30 đến 08:30 sáng khi nắng chưa g�
           { title: 'Ảnh chụp cá nhân có định vị GPS ngày 02/06/2026' },
         ],
         tipRoute: null,
+        coverImageUrl: '/destinations/co-to.svg',
       },
       revisionsList: [
         {
@@ -528,6 +820,7 @@ Chứng nhận kiểm định cho bài viết này đã hết hạn vào ngày 3
           { title: 'Báo cáo thẩm định mùa đông 2025 - Tổ Chuyên môn Ventlore' },
         ],
         tipRoute: null,
+        coverImageUrl: '/destinations/tay-con-linh.svg',
       },
       revisionsList: [
         {
@@ -606,6 +899,74 @@ Cửa hang nằm ẩn sau bụi dứa dại cách mép nước 15m. Độ cao n�
           routeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5r02',
           status: TipRouteStatus.ACTIVE,
           beneficiaryAddress: '0x88F...42C1',
+        },
+        coverImageUrl: '/destinations/hero-coastal.svg',
+        translations: {
+          en: {
+            locale: 'en',
+            title: 'Natural Shelter Cave Coordinates Behind Cat Co Bay (VIP)',
+            content: `[EXCLUSIVE VIP EXPLORER CONTENT UNLOCKED]
+
+Exact cave entrance coordinates: 20°43'06.2"N 107°03'05.1"E.
+The cavern entrance lies concealed behind wild pandanus bushes 15 meters from the high-tide line. The cave floor sits 3.5m above historic storm surge levels, remaining completely dry even during Gale Force 8 tropical storms.
+
+### Emergency Access Waypoints:
+- From Dolphin Headland, turn 45 degrees left following the limestone fissure.
+- Emergency first-aid supplies and bottled potable water are replenished monthly by accredited local trail guides.
+- Viettel cellular signal reaches 2 bars directly at the shelter mouth.`,
+          },
+          ja: {
+            locale: 'ja',
+            title: 'カットコー湾背後の天然避難洞窟の座標（VIP限定）',
+            content: `【VIP会員限定コンテンツ（閲覧権限確認済み）】
+
+洞窟入口の正確なGNSS座標：北緯20°43'06.2" 東経107°03'05.1"。
+洞窟の開口部は、波打ち際から15m離れた野生のアダン（タコノキ）の茂みの背後に隠れています。洞窟の床面は過去最高潮位より3.5m高く、風速20m超の暴風雨時でも完全に乾燥しています。
+
+### 緊急避難ルート：
+- ドルフィン岬から石灰岩の亀裂に沿って左へ45度進む。
+- 現地ガイドにより毎月点検・補充される非常用救急キットと飲料水が備蓄されています。
+- 洞窟入口でベトナム国内通信キャリア（Viettel）の電波が2本確認できます。`,
+          },
+          'zh-Hans': {
+            locale: 'zh-Hans',
+            title: '吉古湾后山天然避风洞穴精细坐标（VIP专属）',
+            content: `【VIP探险会员专属内容（已解锁）】
+
+洞口高精度GNSS坐标：北纬 20°43'06.2"，东经 107°03'05.1"。
+洞穴入口隐蔽在距高潮线15米处的野菠萝灌木丛后。洞底基岩高出历史最高潮位3.5米，即便遭遇8级热带风暴仍可保持绝对干燥。
+
+### 应急避险路径：
+- 从“海豚岬”沿石灰岩裂隙向左偏转45度行进。
+- 洞内常备应急急救物资与瓶装饮用水，由当地向导协会每月定期巡检补给。
+- 洞口处Viettel移动网络信号可达2格。`,
+          },
+          ko: {
+            locale: 'ko',
+            title: '깟꼬 베이 후면 자연 대피 동굴 정밀 좌표 (VIP 전용)',
+            content: `[VIP 탐험 회원 전용 콘텐츠 (잠금 해제됨)]
+
+동굴 입구 정밀 GNSS 좌표: 북위 20°43'06.2", 동경 107°03'05.1".
+동굴 입구는 해안선에서 15m 떨어진 야생 판다누스 덤불 뒤에 숨겨져 있습니다. 동굴 바닥면은 역대 최고 만조 수위보다 3.5m 높아 시속 70km급 태풍 시에도 완전히 건조한 상태를 유지합니다.
+
+### 비상 대피 경로:
+- 돌고래 곶(Dolphin Headland)에서 석회암 균열을 따라 좌측 45도 방향으로 진행.
+- 현지 공인 가이드들이 매월 정기 보충하는 비상 응급 키트와 생수가 비치되어 있습니다.
+- 동굴 입구에서 이동통신(Viettel) 신호가 2칸 감지됩니다.`,
+          },
+          fr: {
+            locale: 'fr',
+            title: 'Coordonnées de l’abri naturel derrière la baie de Cat Co (VIP)',
+            content: `[CONTENU EXCLUSIF MEMBRES EXPLORATEURS VIP DÉBLOQUÉ]
+
+Coordonnées GNSS exactes de l’entrée de la grotte : 20°43'06.2"N 107°03'05.1"E.
+L’ouverture est dissimulée derrière des buissons de pandanus sauvages à 15 mètres de la ligne de marée haute. Le sol de la cavité s’élève à 3,5 mètres au-dessus du niveau record des marées, restant parfaitement au sec même par tempête de force 8.
+
+### Tracé d’accès d’urgence :
+- Depuis le promontoire du Dauphin, obliquer à 45 degrés sur la gauche en suivant la fissure calcaire.
+- Trousse de secours d’urgence et réserve d’eau scellée approvisionnées mensuellement par les guides locaux.
+- Réseau mobile Viettel capté à 2 barres à l’entrée de l’abri.`,
+          },
         },
       },
       revisionsList: [
@@ -841,6 +1202,8 @@ Cửa hang nằm ẩn sau bụi dứa dại cách mép nước 15m. Độ cao n�
     regionId?: string;
     activity?: string;
     cursor?: string;
+    locale?: string;
+    includeMerged?: boolean;
   }): Promise<{ items: PlaceSummaryDTO[]; nextCursor: string | null; total: number }> {
     // PUBLIC explore: filter out CANDIDATE (private candidates only shown to authorized roles)
     const session = await this.getSession();
@@ -855,14 +1218,34 @@ Cửa hang nằm ẩn sau bụi dứa dại cách mép nước 15m. Độ cao n�
       return true;
     });
 
+    // Unless a specific query is provided or includeMerged is true, filter out MERGED places
+    const hasSearchQuery = Boolean(params?.query && params.query.trim().length > 0);
+    if (!hasSearchQuery && !params?.includeMerged) {
+      filtered = filtered.filter(p => p.status !== PlaceStatus.MERGED);
+    }
+
     if (params?.query) {
-      const q = params.query.toLowerCase().trim();
-      filtered = filtered.filter(
-        p =>
-          p.name.toLowerCase().includes(q) ||
-          p.summary.toLowerCase().includes(q) ||
-          p.regionName.toLowerCase().includes(q)
-      );
+      const qNorm = normalizeSearchText(params.query);
+      filtered = filtered.filter(p => {
+        const matchName = normalizeSearchText(p.name).includes(qNorm);
+        const matchSummary = normalizeSearchText(p.summary).includes(qNorm);
+        const matchRegion = normalizeSearchText(p.regionName).includes(qNorm);
+        const matchActivities = p.activities.some(a => normalizeSearchText(a).includes(qNorm));
+        let matchTranslations = false;
+        if (p.translations) {
+          for (const trans of Object.values(p.translations)) {
+            if (
+              normalizeSearchText(trans.name).includes(qNorm) ||
+              normalizeSearchText(trans.summary).includes(qNorm) ||
+              normalizeSearchText(trans.regionName).includes(qNorm)
+            ) {
+              matchTranslations = true;
+              break;
+            }
+          }
+        }
+        return matchName || matchSummary || matchRegion || matchActivities || matchTranslations;
+      });
     }
 
     if (params?.regionId && params.regionId !== 'all') {
@@ -870,24 +1253,45 @@ Cửa hang nằm ẩn sau bụi dứa dại cách mép nước 15m. Độ cao n�
     }
 
     if (params?.activity && params.activity !== 'all') {
+      const actNorm = normalizeSearchText(params.activity);
       filtered = filtered.filter(p =>
-        p.activities.some(a => a.toLowerCase().includes(params.activity!.toLowerCase()))
+        p.activities.some(a => normalizeSearchText(a).includes(actNorm))
       );
     }
 
+    const targetLocale = params?.locale;
+    const items: PlaceSummaryDTO[] = filtered.map(p => {
+      if (targetLocale && p.translations && p.translations[targetLocale]) {
+        const t = p.translations[targetLocale];
+        return {
+          ...p,
+          name: t.name ?? p.name,
+          summary: t.summary ?? p.summary,
+          regionName: t.regionName ?? p.regionName,
+          isTranslated: true,
+          originalLocale: 'vi',
+        };
+      }
+      return {
+        ...p,
+        isTranslated: targetLocale === 'vi' || !targetLocale,
+        originalLocale: 'vi',
+      };
+    });
+
     return {
-      items: filtered,
+      items,
       nextCursor: null,
-      total: filtered.length,
+      total: items.length,
     };
   }
 
-  async getPlace(placeId: string): Promise<PlaceDetailDTO | null> {
-    const place = this.places.find(p => p.placeId === placeId);
-    if (!place) return null;
+  async getPlace(placeId: string, locale?: string): Promise<PlaceDetailDTO | null> {
+    const rawPlace = this.places.find(p => p.placeId === placeId || p.displayCode === placeId);
+    if (!rawPlace) return null;
 
     // Check candidate visibility
-    if (place.status === PlaceStatus.CANDIDATE) {
+    if (rawPlace.status === PlaceStatus.CANDIDATE) {
       const session = await this.getSession();
       const canSee =
         session.capabilities.includes('can_review_tasks') ||
@@ -895,29 +1299,47 @@ Cửa hang nằm ẩn sau bụi dứa dại cách mép nước 15m. Độ cao n�
       if (!canSee) return null;
     }
 
+    const place: PlaceDetailDTO = JSON.parse(JSON.stringify(rawPlace));
+
+    if (locale && place.translations && place.translations[locale]) {
+      const t = place.translations[locale];
+      place.name = t.name ?? place.name;
+      place.summary = t.summary ?? place.summary;
+      place.description = t.description ?? place.description;
+      place.regionName = t.regionName ?? place.regionName;
+      if (t.warnings) {
+        place.warnings = t.warnings;
+      }
+      place.isTranslated = true;
+      place.originalLocale = 'vi';
+    } else {
+      place.isTranslated = locale === 'vi' || !locale;
+      place.originalLocale = 'vi';
+    }
+
     return place;
   }
 
-  async getPost(postId: string, revisionId?: string): Promise<PostDetailDTO | null> {
-    const post = this.posts[postId];
-    if (!post) return null;
+  async getPost(postId: string, revisionId?: string, locale?: string): Promise<PostDetailDTO | null> {
+    const postEntry = Object.values(this.posts).find(p => p.postId === postId || p.displayCode === postId);
+    if (!postEntry) return null;
 
     const session = await this.getSession();
     const isVipUser = session.membership?.isActive === true;
 
     // Deep clone to safely manipulate revision data without mutating source fixture
-    const result: PostDetailDTO = JSON.parse(JSON.stringify(post));
+    const result: PostDetailDTO = JSON.parse(JSON.stringify(postEntry));
 
     // If specific revision requested, load that revision
-    if (revisionId && revisionId !== post.currentRevisionId) {
+    if (revisionId && revisionId !== postEntry.currentRevisionId) {
       // Find revision from fixtures or generate specific revision data
-      if (postId === '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e10') {
-        if (revisionId === '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e11') {
+      if (result.postId === '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e10') {
+        if (revisionId === '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e11' || revisionId === 'REV-000001') {
           // Revision 1: UNVERIFIED
           result.revision = {
             revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e11',
             displayCode: 'REV-000001',
-            postId,
+            postId: result.postId,
             parentRevisionId: null,
             versionNumber: 1,
             title: 'Kinh nghiệm vượt ghềnh Cát Cò 3 (Bản nháp ban đầu)',
@@ -940,12 +1362,12 @@ Cửa hang nằm ẩn sau bụi dứa dại cách mép nước 15m. Độ cao n�
             sources: [{ title: 'Ghi chép tự do của tác giả' }],
             tipRoute: null, // Note: UNVERIFIED has NO tip route!
           };
-        } else if (revisionId === '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e13') {
+        } else if (revisionId === '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e13' || revisionId === 'REV-000003') {
           // Revision 3: NEEDS_CHANGES
           result.revision = {
             revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e13',
             displayCode: 'REV-000003',
-            postId,
+            postId: result.postId,
             parentRevisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e12',
             versionNumber: 3,
             title: 'Cập nhật sạt lở mùa mưa tại vách Cát Cò 3 (Yêu cầu chỉnh sửa)',
@@ -972,11 +1394,30 @@ Cửa hang nằm ẩn sau bụi dứa dại cách mép nước 15m. Độ cao n�
       }
     }
 
+    // Translate post content if translation exists for target locale
+    if (locale && result.revision.translations && result.revision.translations[locale]) {
+      const t = result.revision.translations[locale];
+      result.revision.title = t.title ?? result.revision.title;
+      result.revision.content = t.content ?? result.revision.content;
+      result.revision.isTranslated = true;
+      result.revision.originalLocale = 'vi';
+    } else {
+      result.revision.isTranslated = locale === 'vi' || !locale;
+      result.revision.originalLocale = 'vi';
+    }
+
     // Security invariant: If post is VIP and user does not have active VIP membership,
     // REDACT content at the adapter level! DO NOT SEND VIP CONTENT TO CLIENT DOM!
     if (result.revision.accessTier === AccessTier.VIP && !isVipUser) {
-      result.revision.content =
-        'Nội dung chi tiết bao gồm tọa độ GNSS chính xác, bản đồ hốc trú bão 3D và dữ liệu cứu hộ ngoại tuyến là đặc quyền dành riêng cho Hội viên VIP. Vui lòng đăng nhập bằng tài khoản có gói VIP hoặc nâng cấp hội viên để mở khóa.';
+      const redactMessages: Record<string, string> = {
+        vi: 'Nội dung chi tiết bao gồm tọa độ GNSS chính xác, bản đồ hốc trú bão 3D và dữ liệu cứu hộ ngoại tuyến là đặc quyền dành riêng cho Hội viên VIP. Vui lòng đăng nhập bằng tài khoản có gói VIP hoặc nâng cấp hội viên để mở khóa.',
+        en: 'Detailed coordinates, 3D storm shelter topography, and offline rescue data are strictly reserved for VIP Members. Please sign in with an active VIP account or upgrade membership to unlock.',
+        ja: '高精度GNSS座標、3D避難所地形データ、オフライン救助情報はVIP会員限定のコンテンツです。VIPアカウントでログインするか、会員プランをアップグレードしてください。',
+        'zh-Hans': '高精度GNSS坐标、3D避风洞穴地形与离线救援数据为VIP会员专属特权。请使用有效VIP账号登录或升级会员以解锁。',
+        ko: '정밀 GNSS 좌표, 3D 대피 동굴 지형 및 오프라인 구조 데이터는 VIP 회원 전용 특권입니다. 활성화된 VIP 계정으로 로그인하거나 멤버십을 업그레이드하여 잠금을 해제하세요.',
+        fr: 'Les coordonnées GNSS exactes, les données topographiques 3D et le cache de secours hors ligne sont réservés aux membres VIP. Veuillez vous connecter avec un compte VIP ou mettre à niveau votre adhésion.',
+      };
+      result.revision.content = (locale ? redactMessages[locale] : undefined) ?? redactMessages.vi ?? '';
       result.revision.isContentRedacted = true;
       result.revision.redactedReason = 'VIP_REQUIRED';
     }

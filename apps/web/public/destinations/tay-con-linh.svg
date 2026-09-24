@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="tclSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#193830" />
+      <stop offset="50%" stop-color="#4F7A6C" />
+      <stop offset="85%" stop-color="#C5DBCB" />
+      <stop offset="100%" stop-color="#F5F1E8" />
+    </linearGradient>
+    <linearGradient id="tclFar" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#557C70" />
+      <stop offset="100%" stop-color="#2D5247" />
+    </linearGradient>
+    <linearGradient id="tclMid" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2D5247" />
+      <stop offset="100%" stop-color="#18362D" />
+    </linearGradient>
+    <linearGradient id="tclNear" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1E4338" />
+      <stop offset="100%" stop-color="#0E211B" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="800" height="500" fill="url(#tclSky)" />
+
+  <!-- Distant High Peaks (Tây Côn Lĩnh 2428m) -->
+  <path d="M 120 280 L 260 140 L 410 270 L 560 170 L 720 290 L 800 250 L 800 500 L 0 500 L 0 260 Z" fill="url(#tclFar)" opacity="0.6" />
+
+  <!-- Mountain Mist / Sea of Clouds Layer -->
+  <path d="M 0 310 Q 180 270 380 320 T 780 290 L 800 320 L 800 420 L 0 420 Z" fill="#EBF4EE" opacity="0.45" />
+
+  <!-- Mid-range Ridges with ancient Shan Tuyet tea forests -->
+  <path d="M 0 320 L 160 220 L 340 310 L 480 240 L 680 350 L 800 310 L 800 500 L 0 500 Z" fill="url(#tclMid)" />
+
+  <!-- Pine and tea tree silhouettes on ridge -->
+  <path d="M 140 225 L 145 210 L 150 225 Z M 155 220 L 160 205 L 165 220 Z M 170 225 L 175 212 L 180 225 Z" fill="#132B24" />
+  <path d="M 460 245 L 465 230 L 470 245 Z M 475 240 L 480 225 L 485 240 Z" fill="#132B24" />
+
+  <!-- Fore-ridge Trail and slope -->
+  <path d="M 0 420 Q 200 340 420 380 T 800 410 L 800 500 L 0 500 Z" fill="url(#tclNear)" />
+
+  <!-- High Elevation Trekking Trail -->
+  <path d="M 40 470 Q 220 410 420 440 T 760 460" stroke="#F0A44B" stroke-width="3" stroke-dasharray="6 4" fill="none" opacity="0.9" />
+
+  <!-- Waypoint Indicator at Peak Trail -->
+  <circle cx="260" cy="140" r="10" fill="#F0A44B" stroke="#FFFFFF" stroke-width="2.5" />
+</svg>

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="100%" height="100%">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2C7563" />
+      <stop offset="40%" stop-color="#729E8C" />
+      <stop offset="70%" stop-color="#DCE8DA" />
+      <stop offset="100%" stop-color="#F5F1E8" />
+    </linearGradient>
+    <linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCEFD2" stop-opacity="0.9" />
+      <stop offset="60%" stop-color="#F0A44B" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#F0A44B" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="seaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2C7563" stop-opacity="0.8" />
+      <stop offset="40%" stop-color="#1E5246" />
+      <stop offset="100%" stop-color="#173F35" />
+    </linearGradient>
+    <linearGradient id="mountainFar" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#608678" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#3D6456" stop-opacity="0.9" />
+    </linearGradient>
+    <linearGradient id="mountainMid" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2C7563" />
+      <stop offset="100%" stop-color="#1B463B" />
+    </linearGradient>
+    <linearGradient id="cliffNear" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1B463B" />
+      <stop offset="100%" stop-color="#122E27" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="1200" height="630" fill="url(#skyGrad)" />
+
+  <!-- Morning Sun -->
+  <circle cx="820" cy="220" r="140" fill="url(#sunGrad)" />
+
+  <!-- Far Distant Karst Mountains -->
+  <path d="M 0 380 Q 150 280 320 340 T 650 310 T 950 350 T 1200 320 L 1200 630 L 0 630 Z" fill="url(#mountainFar)" />
+
+  <!-- Mid-distance Limestone Peaks -->
+  <path d="M 120 420 Q 260 250 420 360 T 780 290 T 1080 380 L 1200 420 L 1200 630 L 0 630 L 0 450 Z" fill="url(#mountainMid)" opacity="0.9" />
+
+  <!-- Emerald Sea / Lagoon -->
+  <path d="M 0 420 Q 300 400 600 430 T 1200 410 L 1200 630 L 0 630 Z" fill="url(#seaGrad)" />
+
+  <!-- Wave lines -->
+  <path d="M 50 470 Q 250 460 450 480 T 850 465 T 1150 475" stroke="#DCE8DA" stroke-width="2" stroke-opacity="0.4" fill="none" />
+  <path d="M 100 520 Q 350 505 600 525 T 1050 510" stroke="#DCE8DA" stroke-width="2" stroke-opacity="0.3" fill="none" />
+  <path d="M 0 570 Q 300 550 650 575 T 1200 560" stroke="#F5F1E8" stroke-width="3" stroke-opacity="0.35" fill="none" />
+
+  <!-- Near Cliff & Coastal Trail (Left) -->
+  <path d="M 0 310 Q 90 320 160 380 T 240 490 T 320 630 L 0 630 Z" fill="url(#cliffNear)" />
+
+  <!-- Trail highlight on cliff -->
+  <path d="M 20 380 Q 90 420 140 480 T 210 560 T 260 630" stroke="#F0A44B" stroke-width="4" stroke-dasharray="8 6" fill="none" opacity="0.9" />
+
+  <!-- Waypoint Pin on Trail -->
+  <circle cx="140" cy="480" r="14" fill="#F0A44B" stroke="#FFFFFF" stroke-width="3" />
+  <circle cx="140" cy="480" r="5" fill="#173F35" />
+
+  <!-- Vegetation accents -->
+  <path d="M 80 360 Q 100 340 120 365" stroke="#729E8C" stroke-width="4" fill="none" />
+  <path d="M 180 470 Q 200 445 225 475" stroke="#729E8C" stroke-width="5" fill="none" />
+</svg>

@@ -1,28 +1,20 @@
-'use client';
-
-import React, { Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import React from 'react';
 import { AppShell } from '@/components/AppShell';
 import { SocialLogin } from '@/components/SocialLogin';
-import { LoadingSpinner } from '@/components/AsyncState';
 
-function LoginContent() {
-  const searchParams = useSearchParams();
-  const returnTo = searchParams?.get('returnTo') || '/explore';
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ returnTo?: string }>;
+}) {
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const returnTo = resolvedSearchParams?.returnTo || '/explore';
 
-  return (
-    <div className="py-6 sm:py-12 flex flex-col items-center justify-center">
-      <SocialLogin returnTo={returnTo} />
-    </div>
-  );
-}
-
-export default function LoginPage() {
   return (
     <AppShell>
-      <Suspense fallback={<LoadingSpinner label="Đang chuẩn bị xác thực..." />}>
-        <LoginContent />
-      </Suspense>
+      <div className="py-6 sm:py-12 flex flex-col items-center justify-center">
+        <SocialLogin returnTo={returnTo} />
+      </div>
     </AppShell>
   );
 }

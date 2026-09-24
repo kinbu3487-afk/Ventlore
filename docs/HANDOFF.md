@@ -1,13 +1,12 @@
 # Tài Liệu Bàn Giao (HANDOFF)
 
-**Chặng hoàn thành gần nhất:** FE-01 — Front-end nền tảng và trải nghiệm người đọc (S01–S05, S21, S34)  
-**Nhiệm vụ tiếp theo:** Nghiệm thu FE-01 từ Bin → Chuyển sang Chặng 02 (BE-01: Backend API và quản lý danh tính)  
-**Thời điểm bàn giao:** 24/09/2026 11:35 UTC+7  
+**Chặng hoàn thành gần nhất:** FE-01 v2 — Tái thiết kế giao diện & Hoàn thiện đa ngôn ngữ 6 locales (S01–S05, S21, S34)  
+**Nhiệm vụ tiếp theo:** Nghiệm thu FE-01 v2 từ Bin → Chuyển sang Chặng 02 (FE-02: Đóng góp, chuyên gia và vận hành)  
+**Thời điểm bàn giao:** 24/09/2026 18:05 UTC+7  
 **Nhánh làm việc:** `feat/fe-01-reader-flow`  
-**Commit SHA:** `72e999d`  
 **Pull Request:** https://github.com/kinbu3487-afk/Ventlore/pull/3  
-**GitHub Actions CI:** https://github.com/kinbu3487-afk/Ventlore/actions/runs/35957395779 (Status: PASS / SUCCESS, Job: `Lint, Typecheck & Verification`)  
-**Báo cáo chi tiết:** `docs/loops/reports/FE-01-reader-flow.md`
+**Báo cáo chi tiết:** `docs/loops/reports/TASK-FE-01-V2.md`  
+**Tài liệu liên quan:** `docs/UI_REDESIGN_V2.md`, `docs/I18N.md`, `docs/QA_PROMPT_01_V2.md`
 
 ---
 

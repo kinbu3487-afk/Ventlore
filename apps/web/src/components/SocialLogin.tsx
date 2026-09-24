@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from './SessionContext';
+import { useI18n } from '../lib/i18n';
 import { DemoPersona } from '@ventlore/api-client';
 import { CheckIcon } from './Icons';
 
@@ -12,7 +13,8 @@ interface SocialLoginProps {
 
 export function SocialLogin({ returnTo = '/explore' }: SocialLoginProps) {
   const router = useRouter();
-  const { setPersona, persona } = useSession();
+  const { setPersona } = useSession();
+  const { t, getLocalizedPath } = useI18n();
   const [selectedPersona, setSelectedPersona] = useState<DemoPersona>('member');
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -27,7 +29,7 @@ export function SocialLogin({ returnTo = '/explore' }: SocialLoginProps) {
     setPersona(personaChoice);
     setTimeout(() => {
       setIsProcessing(false);
-      router.push(safeReturnTo);
+      router.push(getLocalizedPath(safeReturnTo));
     }, 400);
   };
 
@@ -66,9 +68,9 @@ export function SocialLogin({ returnTo = '/explore' }: SocialLoginProps) {
   return (
     <div className="rounded-card border border-sage bg-surface-card p-6 sm:p-8 max-w-md w-full mx-auto shadow-sm">
       <div className="text-center mb-6">
-        <h2 className="text-xl font-bold text-ink">Đăng nhập vào Ventlore</h2>
+        <h2 className="text-xl font-bold text-ink">{t('auth.title')}</h2>
         <p className="mt-1 text-xs text-ink-secondary">
-          Hệ thống xác thực một tài khoản duy nhất cho mọi vai trò
+          {t('auth.subtitle')}
         </p>
       </div>
 
@@ -98,7 +100,7 @@ export function SocialLogin({ returnTo = '/explore' }: SocialLoginProps) {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
             />
           </svg>
-          <span>{isProcessing ? 'Đang xác thực...' : 'Tiếp tục với Google'}</span>
+          <span>{isProcessing ? t('common.loading') : t('auth.continueGoogle')}</span>
         </button>
 
         <div className="relative my-5">
@@ -106,8 +108,8 @@ export function SocialLogin({ returnTo = '/explore' }: SocialLoginProps) {
             <div className="w-full border-t border-sage/60" />
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="bg-surface-card px-3 text-ink-muted">
-              HOẶC CHỌN TÀI KHOẢN MÔ PHỎNG (DEMO)
+            <span className="bg-surface-card px-3 text-ink-muted uppercase">
+              {t('auth.orDemoRole')}
             </span>
           </div>
         </div>
@@ -147,7 +149,7 @@ export function SocialLogin({ returnTo = '/explore' }: SocialLoginProps) {
           onClick={() => handleLogin(selectedPersona)}
           className="w-full min-h-control mt-3 px-5 py-3 rounded-control font-semibold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm"
         >
-          {isProcessing ? 'Đang chuyển hướng...' : `Đăng nhập với vai trò đã chọn`}
+          {isProcessing ? t('common.loading') : `${t('auth.loginAsSelectedRole')}`}
         </button>
       </div>
 

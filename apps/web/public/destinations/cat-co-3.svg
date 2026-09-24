@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="catcoSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2C7563" />
+      <stop offset="50%" stop-color="#9BBFB3" />
+      <stop offset="100%" stop-color="#F5F1E8" />
+    </linearGradient>
+    <linearGradient id="catcoSea" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2C7563" />
+      <stop offset="60%" stop-color="#1E5246" />
+      <stop offset="100%" stop-color="#173F35" />
+    </linearGradient>
+    <linearGradient id="catcoCliff" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#225345" />
+      <stop offset="100%" stop-color="#122A23" />
+    </linearGradient>
+    <linearGradient id="catcoSand" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#EEDCB9" />
+      <stop offset="100%" stop-color="#D9C199" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="800" height="500" fill="url(#catcoSky)" />
+
+  <!-- Sun -->
+  <circle cx="580" cy="140" r="70" fill="#F0A44B" opacity="0.4" />
+
+  <!-- Far Karst Island -->
+  <path d="M 420 280 Q 480 200 550 250 T 640 280 Z" fill="#4C786B" opacity="0.7" />
+  <path d="M 600 290 Q 660 220 720 270 T 780 290 Z" fill="#3B6357" opacity="0.6" />
+
+  <!-- Emerald Sea -->
+  <rect y="270" width="800" height="230" fill="url(#catcoSea)" />
+
+  <!-- Waves -->
+  <path d="M 0 310 Q 200 295 400 315 T 800 305" stroke="#DCE8DA" stroke-width="2" stroke-opacity="0.4" fill="none" />
+  <path d="M 0 360 Q 250 345 500 365 T 800 350" stroke="#DCE8DA" stroke-width="2" stroke-opacity="0.3" fill="none" />
+
+  <!-- Curved Golden Beach (Cát Cò) -->
+  <path d="M 120 500 Q 300 410 520 440 T 800 430 L 800 500 Z" fill="url(#catcoSand)" />
+
+  <!-- Promontory / Cliff Headland with Trail -->
+  <path d="M 0 220 Q 120 230 180 290 T 260 410 T 320 500 L 0 500 Z" fill="url(#catcoCliff)" />
+
+  <!-- Trail on Cliff edge -->
+  <path d="M 40 280 Q 120 320 170 380 T 220 470" stroke="#F0A44B" stroke-width="3.5" stroke-dasharray="6 4" fill="none" />
+
+  <!-- Waypoint Indicator -->
+  <circle cx="170" cy="380" r="10" fill="#F0A44B" stroke="#FFFFFF" stroke-width="2.5" />
+
+  <!-- Vegetation on rock -->
+  <path d="M 60 260 Q 80 235 100 265" stroke="#729E8C" stroke-width="4" fill="none" />
+  <path d="M 110 320 Q 130 295 150 325" stroke="#729E8C" stroke-width="4" fill="none" />
+</svg>
