@@ -169,11 +169,15 @@ export function PostReader({ post }: PostReaderProps) {
               <span>
                 {revision.verificationStatus === VerificationStatus.VERIFIED
                   ? t('post.verifiedClaimsTitle', { count: revision.claims.length })
+                  : revision.verificationStatus === VerificationStatus.EXPIRED
+                  ? t('post.expiredClaimsTitle', { count: revision.claims.length })
                   : t('post.unverifiedClaimsTitle', { count: revision.claims.length })}
               </span>
               <span className="text-xs font-normal text-ink-muted">
                 {revision.verificationStatus === VerificationStatus.VERIFIED
                   ? t('post.claimsAttachedToRevision')
+                  : revision.verificationStatus === VerificationStatus.EXPIRED
+                  ? t('post.expiredClaimsSubtitle')
                   : t('post.unverifiedClaimsSubtitle')}
               </span>
             </h3>
@@ -186,6 +190,8 @@ export function PostReader({ post }: PostReaderProps) {
                 >
                   {revision.verificationStatus === VerificationStatus.VERIFIED ? (
                     <CheckIcon className="w-4 h-4 text-forest shrink-0 mt-0.5" />
+                  ) : revision.verificationStatus === VerificationStatus.EXPIRED ? (
+                    <ClockIcon className="w-4 h-4 text-amber shrink-0 mt-0.5" />
                   ) : (
                     <span className="w-2 h-2 rounded-full bg-ink-muted/50 shrink-0 mt-1.5 ml-1 mr-1" />
                   )}

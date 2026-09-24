@@ -190,7 +190,7 @@ export function PlaceSummary({ place }: PlaceSummaryProps) {
                   </div>
 
                   <div className="flex items-center gap-1 text-forest font-semibold">
-                    <span>{t('explore.viewPlace')}</span>
+                    <span>{t('post.readArticle')}</span>
                     <ChevronRightIcon className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                   </div>
                 </div>

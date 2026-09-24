@@ -213,11 +213,13 @@ export function VerificationPanel({
             </div>
           )}
 
-          {/* Bottom disclaimer: only VERIFIED gets affirmative statement, noAbsoluteSafety is global */}
+          {/* Bottom disclaimer: only VERIFIED gets affirmative statement, EXPIRED gets warning notice, noAbsoluteSafety is global */}
           <div className="pt-2 text-[11px] text-ink-muted border-t border-sage/40 flex flex-wrap items-center justify-between gap-2">
             <span>
               {status === VerificationStatus.VERIFIED
                 ? t('post.independentVerificationDesc')
+                : status === VerificationStatus.EXPIRED
+                ? t('post.expiredNotice')
                 : t('post.unverifiedDesc')}
             </span>
             <span className="font-medium text-amber-700">{t('place.noAbsoluteSafety')}</span>

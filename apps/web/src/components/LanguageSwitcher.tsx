@@ -10,7 +10,7 @@ interface LanguageSwitcherProps {
 }
 
 export function LanguageSwitcher({ className = '', variant = 'dark' }: LanguageSwitcherProps) {
-  const { locale, setLocale } = useI18n();
+  const { locale, setLocale, t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +54,7 @@ export function LanguageSwitcher({ className = '', variant = 'dark' }: LanguageS
         onClick={() => setIsOpen(!isOpen)}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        aria-label="Chọn ngôn ngữ giao diện (Select interface language)"
+        aria-label={t('common.languageSelectAria')}
         className={`min-h-control flex items-center gap-2 px-3 py-1.5 rounded-control border text-xs font-semibold transition-all shadow-xs focus:outline-none focus:ring-2 focus:ring-waypoint ${buttonStyle}`}
       >
         <GlobeIcon className="w-4 h-4 shrink-0 opacity-80" aria-hidden="true" />

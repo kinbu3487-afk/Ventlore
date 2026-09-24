@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useSession } from './SessionContext';
 import { useI18n } from '../lib/i18n';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { MissionDialog } from './MissionDialog';
 import { DemoPersona } from '@ventlore/api-client';
 import {
   CompassIcon,
@@ -29,13 +30,14 @@ export function AppShell({ children }: AppShellProps) {
   const { t, getLocalizedPath } = useI18n();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [personaDropdownOpen, setPersonaDropdownOpen] = useState(false);
+  const [isMissionOpen, setIsMissionOpen] = useState(false);
 
   const navLinks = [
-    { href: '/', label: t('nav.home'), icon: <HomeIcon className="w-5 h-5" /> },
-    { href: '/explore', label: t('nav.explore'), icon: <CompassIcon className="w-5 h-5" /> },
-    { href: '/#mission', label: t('nav.mission'), icon: <TargetIcon className="w-5 h-5" /> },
-    { href: '/transparency', label: t('nav.transparency'), icon: <ShieldCheckIcon className="w-5 h-5" /> },
-    { href: '/vip', label: t('nav.vip'), icon: <SparklesIcon className="w-5 h-5" /> },
+    { href: '/', label: t('nav.home'), icon: <HomeIcon className="w-5 h-5 shrink-0" /> },
+    { href: '/explore', label: t('nav.explore'), icon: <CompassIcon className="w-5 h-5 shrink-0" /> },
+    { href: '#mission', label: t('nav.mission'), icon: <TargetIcon className="w-5 h-5 shrink-0" /> },
+    { href: '/transparency', label: t('nav.transparency'), icon: <ShieldCheckIcon className="w-5 h-5 shrink-0" /> },
+    { href: '/vip', label: t('nav.vip'), icon: <SparklesIcon className="w-5 h-5 shrink-0" /> },
   ];
 
   const personas: Array<{ id: DemoPersona; name: string; tag: string }> = [
@@ -47,7 +49,7 @@ export function AppShell({ children }: AppShellProps) {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-surface-canvas text-ink">
+    <div className="min-h-screen flex flex-col bg-surface-canvas text-ink overflow-x-hidden">
       {/* 1. Global Demo Notification Banner */}
       <aside
         aria-label="Demo environment announcement"
@@ -62,12 +64,12 @@ export function AppShell({ children }: AppShellProps) {
       {/* 2. Top Header Navigation (Forest Green #173F35 with Ivory Logo) */}
       <header className="sticky top-0 z-40 bg-[#173F35] text-ivory border-b border-[#1f4e42] shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 sm:h-20">
+          <div className="flex items-center justify-between h-16 sm:h-20 gap-3 sm:gap-4">
             {/* Left: Brand Logo & Wordmark */}
-            <div className="flex items-center gap-6 lg:gap-8">
+            <div className="flex items-center gap-4 lg:gap-8 min-w-0">
               <Link
                 href={getLocalizedPath('/')}
-                className="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber rounded-control"
+                className="flex items-center gap-3 shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber rounded-control"
               >
                 <img
                   src="/brand/Ventlore_Logo_Ivory.png"
@@ -77,29 +79,49 @@ export function AppShell({ children }: AppShellProps) {
               </Link>
 
               {/* Desktop Nav Links */}
-              <nav className="hidden md:flex items-center space-x-1" aria-label="Main Navigation">
+              <nav className="hidden md:flex items-center space-x-1 shrink-0" aria-label="Main Navigation">
                 {navLinks.map((link) => {
+                  if (link.href === '#mission') {
+                    return (
+                      <button
+                        key={link.label}
+                        type="button"
+                        onClick={() => setIsMissionOpen(true)}
+                        className="min-h-control flex items-center gap-2 px-3 py-2 rounded-control text-sm font-medium transition-colors text-ivory/80 hover:text-ivory hover:bg-white/10 whitespace-nowrap"
+                      >
+                        {link.icon}
+                        <span>{link.label}</span>
+                      </button>
+                    );
+                  }
+
                   const localizedHref = getLocalizedPath(link.href);
                   let isActive = false;
                   if (link.href === '/') {
-                    isActive = pathname === localizedHref || pathname === localizedHref.replace(/\/$/, '');
-                  } else if (link.href.startsWith('/#')) {
-                    isActive = false;
+                    const cleanPath = pathname.replace(/\/$/, '');
+                    const cleanHome = localizedHref.replace(/\/$/, '');
+                    isActive = cleanPath === cleanHome || cleanPath === '';
+                  } else if (link.href === '/explore') {
+                    isActive =
+                      pathname.includes('/explore') ||
+                      pathname.includes('/places') ||
+                      pathname.includes('/posts');
                   } else {
                     isActive = pathname === localizedHref || pathname.startsWith(`${localizedHref}/`);
                   }
+
                   return (
                     <Link
                       key={link.href}
                       href={localizedHref}
-                      className={`min-h-control flex items-center gap-2 px-3 py-2 rounded-control text-sm font-medium transition-colors ${
+                      className={`min-h-control flex items-center gap-2 px-3 py-2 rounded-control text-sm font-medium transition-colors whitespace-nowrap ${
                         isActive
                           ? 'bg-white/15 text-ivory font-bold shadow-xs'
                           : 'text-ivory/80 hover:text-ivory hover:bg-white/10'
                       }`}
                     >
                       {link.icon}
-                      {link.label}
+                      <span>{link.label}</span>
                     </Link>
                   );
                 })}
@@ -107,20 +129,20 @@ export function AppShell({ children }: AppShellProps) {
             </div>
 
             {/* Right: Language Switcher, Persona Switcher & User Account */}
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               {/* Language Switcher */}
               <LanguageSwitcher />
 
               {/* Persona Switcher (Dropdown for testing different permissions) */}
-              <div className="relative">
+              <div className="relative shrink-0">
                 <button
                   type="button"
                   onClick={() => setPersonaDropdownOpen(!personaDropdownOpen)}
-                  className="min-h-control flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-control border border-white/20 bg-white/10 text-xs font-medium text-ivory hover:bg-white/15 transition-colors shadow-xs"
+                  className="min-h-control flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-control border border-white/20 bg-white/10 text-xs font-medium text-ivory hover:bg-white/15 transition-colors shadow-xs whitespace-nowrap shrink-0"
                   aria-label={t('common.switchRole')}
                 >
-                  <span className="hidden xl:inline text-ivory/70">{t('common.role')}:</span>
-                  <span className="font-semibold text-ivory truncate max-w-[90px] sm:max-w-none">
+                  <span className="hidden xl:inline text-ivory/70 whitespace-nowrap">{t('common.role')}:</span>
+                  <span className="font-semibold text-ivory whitespace-nowrap">
                     {personas.find((p) => p.id === persona)?.name}
                   </span>
                   <ChevronDownIcon className="w-3.5 h-3.5 text-ivory/70 shrink-0" />
@@ -146,9 +168,9 @@ export function AppShell({ children }: AppShellProps) {
                               : 'text-ink hover:bg-surface-canvas'
                           }`}
                         >
-                          <span>{p.name}</span>
+                          <span className="whitespace-nowrap">{p.name}</span>
                           <span
-                            className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${
+                            className={`text-[10px] font-mono px-1.5 py-0.2 rounded whitespace-nowrap ${
                               persona === p.id ? 'bg-white/20 text-white' : 'bg-sage/60 text-ink-secondary'
                             }`}
                           >
@@ -165,14 +187,14 @@ export function AppShell({ children }: AppShellProps) {
               {persona === 'guest' ? (
                 <Link
                   href={getLocalizedPath(`/login?returnTo=${encodeURIComponent(pathname)}`)}
-                  className="min-h-control inline-flex items-center justify-center px-3.5 py-2 rounded-control text-xs font-semibold text-forest bg-ivory hover:bg-white transition-colors shadow-sm"
+                  className="min-h-control inline-flex items-center justify-center px-3.5 py-2 rounded-control text-xs font-semibold text-forest bg-ivory hover:bg-white transition-colors shadow-sm whitespace-nowrap shrink-0"
                 >
                   {t('nav.login')}
                 </Link>
               ) : (
                 <Link
                   href={getLocalizedPath(session?.handle ? `/people/${session.handle}` : '/explore')}
-                  className="min-h-control flex items-center gap-2 p-1.5 sm:px-3 rounded-control border border-white/20 bg-white/10 hover:bg-white/20 text-xs font-medium text-ivory transition-colors"
+                  className="min-h-control flex items-center gap-2 p-1.5 sm:px-3 rounded-control border border-white/20 bg-white/10 hover:bg-white/20 text-xs font-medium text-ivory transition-colors whitespace-nowrap shrink-0"
                 >
                   <div className="w-7 h-7 rounded-full bg-ivory text-forest flex items-center justify-center font-bold text-xs shrink-0 overflow-hidden">
                     {session?.avatarUrl ? (
@@ -185,7 +207,7 @@ export function AppShell({ children }: AppShellProps) {
                       <UserIcon className="w-4 h-4" />
                     )}
                   </div>
-                  <span className="hidden sm:inline font-semibold">{session?.displayName}</span>
+                  <span className="hidden sm:inline font-semibold whitespace-nowrap">{session?.displayName}</span>
                 </Link>
               )}
 
@@ -206,15 +228,38 @@ export function AppShell({ children }: AppShellProps) {
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-[#1f4e42] bg-[#173F35] px-4 pt-3 pb-6 space-y-2">
             {navLinks.map((link) => {
+              if (link.href === '#mission') {
+                return (
+                  <button
+                    key={link.label}
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setIsMissionOpen(true);
+                    }}
+                    className="w-full min-h-control flex items-center gap-3 px-4 py-3 rounded-control text-base font-semibold transition-colors text-ivory/80 hover:bg-white/10 text-ivory"
+                  >
+                    {link.icon}
+                    <span>{link.label}</span>
+                  </button>
+                );
+              }
+
               const localizedHref = getLocalizedPath(link.href);
               let isActive = false;
               if (link.href === '/') {
-                isActive = pathname === localizedHref || pathname === localizedHref.replace(/\/$/, '');
-              } else if (link.href.startsWith('/#')) {
-                isActive = false;
+                const cleanPath = pathname.replace(/\/$/, '');
+                const cleanHome = localizedHref.replace(/\/$/, '');
+                isActive = cleanPath === cleanHome || cleanPath === '';
+              } else if (link.href === '/explore') {
+                isActive =
+                  pathname.includes('/explore') ||
+                  pathname.includes('/places') ||
+                  pathname.includes('/posts');
               } else {
                 isActive = pathname === localizedHref || pathname.startsWith(`${localizedHref}/`);
               }
+
               return (
                 <Link
                   key={link.href}
@@ -246,15 +291,35 @@ export function AppShell({ children }: AppShellProps) {
         className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-surface-card border-t border-sage shadow-lg flex items-center justify-around h-16 px-2"
       >
         {navLinks.map((link) => {
+          if (link.href === '#mission') {
+            return (
+              <button
+                key={link.label}
+                type="button"
+                onClick={() => setIsMissionOpen(true)}
+                className="flex-1 min-h-[44px] flex flex-col items-center justify-center text-[10px] font-medium transition-colors text-ink-secondary hover:text-ink"
+              >
+                {link.icon}
+                <span className="mt-0.5 truncate max-w-[64px]">{link.label}</span>
+              </button>
+            );
+          }
+
           const localizedHref = getLocalizedPath(link.href);
           let isActive = false;
           if (link.href === '/') {
-            isActive = pathname === localizedHref || pathname === localizedHref.replace(/\/$/, '');
-          } else if (link.href.startsWith('/#')) {
-            isActive = false;
+            const cleanPath = pathname.replace(/\/$/, '');
+            const cleanHome = localizedHref.replace(/\/$/, '');
+            isActive = cleanPath === cleanHome || cleanPath === '';
+          } else if (link.href === '/explore') {
+            isActive =
+              pathname.includes('/explore') ||
+              pathname.includes('/places') ||
+              pathname.includes('/posts');
           } else {
             isActive = pathname === localizedHref || pathname.startsWith(`${localizedHref}/`);
           }
+
           return (
             <Link
               key={link.href}
@@ -283,8 +348,8 @@ export function AppShell({ children }: AppShellProps) {
               : 'text-ink-secondary hover:text-ink'
           }`}
         >
-          <UserIcon className="w-5 h-5" />
-          <span className="mt-0.5">{persona === 'guest' ? t('nav.login') : t('nav.profile')}</span>
+          <UserIcon className="w-5 h-5 shrink-0" />
+          <span className="mt-0.5 truncate max-w-[64px]">{persona === 'guest' ? t('nav.login') : t('nav.profile')}</span>
         </Link>
       </nav>
 
@@ -307,9 +372,13 @@ export function AppShell({ children }: AppShellProps) {
             <Link href={getLocalizedPath('/explore')} className="hover:text-forest">
               {t('nav.explore')}
             </Link>
-            <Link href={getLocalizedPath('/#mission')} className="hover:text-forest">
+            <button
+              type="button"
+              onClick={() => setIsMissionOpen(true)}
+              className="hover:text-forest"
+            >
               {t('nav.mission')}
-            </Link>
+            </button>
             <Link href={getLocalizedPath('/transparency')} className="hover:text-forest">
               {t('nav.transparency')}
             </Link>
@@ -322,6 +391,12 @@ export function AppShell({ children }: AppShellProps) {
           </div>
         </div>
       </footer>
+
+      {/* Mission & Vision Manifesto Dialog */}
+      <MissionDialog
+        isOpen={isMissionOpen}
+        onClose={() => setIsMissionOpen(false)}
+      />
     </div>
   );
 }

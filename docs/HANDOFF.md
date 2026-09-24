@@ -1,12 +1,12 @@
 # Tài Liệu Bàn Giao (HANDOFF)
 
-**Chặng hoàn thành gần nhất:** FE-01 Round 4 — Thêm HomePage Toàn Khối Thiên Tai & Tương Trợ Dã Ngoại (Căn Giữa H1), Sửa Triệt Để Bio/Đa Ngôn Ngữ, Tây Côn Lĩnh 404 & Lỗi VIP Demo  
-**Nhiệm vụ tiếp theo:** Nghiệm thu FE-01 Round 4 từ Bin → Chuyển sang Chặng 02 (FE-02: Đóng góp, chuyên gia và vận hành)  
-**Thời điểm bàn giao:** 24/09/2026 23:15 UTC+7  
-**Nhánh làm việc:** `feat/fe-01-round-4-homepage`  
-**Gói triển khai Netlify Drop:** `dist/ventlore-netlify-drop.zip` (5.5 MB)  
-**Báo cáo chi tiết:** `docs/loops/reports/TASK-FE-01-ROUND-4-HOMEPAGE.md`  
-**Tài liệu liên quan:** `Ventlore_Prompt_01_Round_4_HomePage_i18n.md`, `docs/UI_REDESIGN_V2.md`, `docs/I18N.md`
+**Chặng hoàn thành gần nhất:** FE-01 Round 5 — Thu gọn Single-Hero HomePage, Tích hợp 6-Language Switcher trực tiếp, Sửa Điều hướng Home/Explore, Khắc phục mâu thuẫn kiểm định PST-000003 & Loại bỏ tràn ngang  
+**Nhiệm vụ tiếp theo:** Nghiệm thu FE-01 Round 5 từ Bin → Chuyển sang Chặng 02 (FE-02: Đóng góp, chuyên gia và vận hành)  
+**Thời điểm bàn giao:** 25/09/2026 06:30 UTC+7  
+**Nhánh làm việc:** `feat/fe-01-round-5-single-hero-home`  
+**Gói triển khai Netlify Drop:** `dist/ventlore-netlify-drop.zip` (6.4 MB)  
+**Báo cáo chi tiết:** `docs/loops/reports/TASK-FE-01-ROUND-5-SINGLE-HERO-HOME.md`  
+**Tài liệu liên quan:** `Ventlore_Preview_8_Review_2026-09-24.md`, `docs/UI_REDESIGN_V2.md`, `docs/I18N.md`
 
 ---
 

@@ -23,7 +23,7 @@ fi
 if [ ! -f "$OUT_DIR/_redirects" ]; then
   echo "Adding Netlify _redirects to out directory..."
   cat << 'EOF' > "$OUT_DIR/_redirects"
-/ /explore 307
+/ /vi/ 302
 /* /index.html 200
 EOF
 fi
