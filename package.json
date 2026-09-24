@@ -16,7 +16,9 @@
     "lint": "pnpm -r run lint",
     "typecheck": "pnpm -r run typecheck",
     "validate:foundation": "python3 scripts/validate_foundation.py",
-    "verify": "python3 scripts/validate_foundation.py && pnpm -r run typecheck && pnpm -r run lint && pnpm -r run build"
+    "verify": "python3 scripts/validate_foundation.py && pnpm -r run typecheck && pnpm -r run lint && pnpm -r run build",
+    "build:export": "STATIC_EXPORT=true pnpm --filter @ventlore/web build",
+    "package:netlify": "bash scripts/package_netlify.sh"
   },
   "devDependencies": {
     "typescript": "^5.7.3"

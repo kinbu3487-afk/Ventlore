@@ -84,6 +84,17 @@ Mở trình duyệt tại `http://localhost:3000` và kiểm tra các tính năn
 - **Trang VIP:** Vào `/vip` để xem gói thành viên 1500 USD cents / 12 tháng UTC.
 - **Sổ cái minh bạch:** Vào `/transparency` xem biểu đồ và bảng dòng tiền thu - chi.
 
+### 2.1 Triển khai xem trước trực tiếp trên Netlify (Netlify Drop)
+Để đưa lên Netlify xem ngay trên thiết bị thực tế mà không cần chạy server cục bộ:
+```bash
+# Đóng gói static export và tạo file zip
+pnpm run package:netlify
+```
+- Mở **https://app.netlify.com/drop**
+- Kéo thả file `dist/ventlore-netlify-drop.zip` vào để nhận link xem ngay lập tức!
+- Chi tiết hướng dẫn: xem `docs/NETLIFY_DEPLOYMENT.md`
+- Báo cáo đánh giá UI toàn diện: xem `docs/UI_EVALUATION.md`
+
 ---
 
 ## 3. Các bước tiếp theo
