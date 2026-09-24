@@ -4,13 +4,16 @@
 
 [build]
   base = ""
-  publish = "apps/web/out"
-  command = "STATIC_EXPORT=true pnpm --filter @ventlore/web build"
+  publish = "apps/web/.next"
+  command = "pnpm --filter @ventlore/web build"
 
 [build.environment]
   NODE_VERSION = "20.18.0"
   PNPM_VERSION = "9.15.4"
-  STATIC_EXPORT = "true"
+
+# Next.js Runtime on Netlify handles Next.js 15 App Router natively
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 # Optimized caching headers for immutable fonts & brand assets
 [[headers]]
@@ -27,13 +30,3 @@
   for = "/_next/static/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-
-[[redirects]]
-  from = "/"
-  to = "/vi/explore"
-  status = 307
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
