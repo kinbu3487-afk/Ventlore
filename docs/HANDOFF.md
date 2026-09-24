@@ -4,7 +4,9 @@
 **Nhiệm vụ tiếp theo:** Nghiệm thu FE-01 từ Bin → Chuyển sang Chặng 02 (BE-01: Backend API và quản lý danh tính)  
 **Thời điểm bàn giao:** 24/09/2026 11:35 UTC+7  
 **Nhánh làm việc:** `feat/fe-01-reader-flow`  
-**Pull Request:** (Sẽ cập nhật ngay khi tạo PR)  
+**Commit SHA:** `72e999d`  
+**Pull Request:** https://github.com/kinbu3487-afk/Ventlore/pull/3  
+**GitHub Actions CI:** https://github.com/kinbu3487-afk/Ventlore/actions/runs/35957395779 (Status: PASS / SUCCESS, Job: `Lint, Typecheck & Verification`)  
 **Báo cáo chi tiết:** `docs/loops/reports/FE-01-reader-flow.md`
 
 ---

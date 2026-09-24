@@ -26,9 +26,9 @@
 ## 2. Phiên bản & Môi trường (Environment & Artifacts)
 
 - **Nhánh Git:** `feat/fe-01-reader-flow`
-- **Commit SHA:** Sẽ ghi nhận sau khi commit hoàn tất
-- **Pull Request:** Sẽ tạo và liên kết `Closes #2`
-- **GitHub Actions CI Run:** Theo dõi sau khi mở PR
+- **Commit SHA:** `72e999d`
+- **Pull Request:** https://github.com/kinbu3487-afk/Ventlore/pull/3
+- **GitHub Actions CI Run:** https://github.com/kinbu3487-afk/Ventlore/actions/runs/35957395779 (Status: PASS / SUCCESS, Job: `Lint, Typecheck & Verification`)
 - **Môi trường cục bộ:** Node v24.21.0, pnpm 9.15.4 / 12.5.1, Python 3.13.7, gh 2.101.0
 
 ---
