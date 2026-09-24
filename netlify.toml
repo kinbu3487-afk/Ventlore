@@ -11,6 +11,7 @@
   NODE_VERSION = "20.18.0"
   PNPM_VERSION = "9.15.4"
   STATIC_EXPORT = "true"
+  COREPACK_INTEGRITY_KEYS = "0"
   CI = "false"
 
 # Optimized caching headers for immutable fonts & brand assets
