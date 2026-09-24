@@ -1,26 +1,22 @@
 # Trạng Thái Dự Án Ventlore (PROJECT_STATE)
 
-**Cập nhật lần cuối:** 25/09/2026 (FE-01 Round 5 · Thu gọn Single-Hero HomePage, 6-Language Switcher trực tiếp, Sửa Điều hướng Home/Explore, Khắc phục mâu thuẫn kiểm định PST-000003 & Loại bỏ tràn ngang)  
-**Phiên bản đặc tả cơ sở:** Logic-ID-DB v0.3, Event UI Spec v0.3, Brand Guide v0.1, Prompt 01 Round 5 Single Hero Home & Review deploy-preview-8
+**Cập nhật lần cuối:** 25/09/2026 (Parallel v2 Giai đoạn A · Chốt nền chung, bộ tài liệu docs/parallel/ & Thiết lập 4 Worktree FE, BE, CHAIN, MERGE)  
+**Phiên bản đặc tả cơ sở:** Logic-ID-DB v0.3, Event UI Spec v0.3, Brand Guide v0.1, Prompt 04 Merge Parallel v2 Giai đoạn A
 
 ---
 
-## 1. Mốc hiện tại: Hoàn thành Chặng 01 / FE-01 Round 5 (Single-Hero HomePage · Khắc phục toàn diện sau Review deploy-preview-8)
+## 1. Mốc hiện tại: Hoàn thành Giai đoạn A (Parallel v2 · Chốt nền chung và tạo nơi làm việc 4 Worktrees)
 
 | Chặng | Tên chặng | Trạng thái | Ghi chú |
 |---|---|---|---|
 | **00** | **Đọc nguồn, khóa quy tắc và dựng nền tảng** | **HOÀN THÀNH** | Đọc đủ 6 tài liệu nguồn; dựng cấu trúc workspace pnpm, AGENTS.md, OpenAPI, toàn bộ tài liệu kiến trúc/hợp đồng dữ liệu, ma trận coverage S01-S35 / C01-C50 / U01-U12, thư viện TypeScript và test runner kiểm tra ID. |
 | **LOOP-00** | **Thiết lập quy trình 5 loop & CI baseline** | **HOÀN THÀNH** | Bổ sung `docs/loops/` (POLICY, RUN_TASK, SYSTEM_REVIEW, REPORT_TEMPLATE), mẫu Issue/PR, GitHub Actions `quality.yml`, lệnh `pnpm run verify` đạt 100%, khóa `pnpm-lock.yaml`. |
 | **01 (FE-01 Round 5)** | **Single-Hero HomePage & Hoàn thiện Review Preview 8** | **HOÀN THÀNH** | Hoàn thành cả 8 nhóm: 1. Thu gọn HomePage thành single-viewport hero min-h-[100dvh], bỏ 6 khối bên dưới; 2. LanguageSwitcher 6 ngôn ngữ trực tiếp góc trên phải Home; 3. Sửa điều hướng Home/Explore độc lập; 4. Sứ mệnh mở MissionDialog (không còn anchor chết #mission); 5. ContributeDialog cho CTA đóng góp; 6. Loại bỏ tràn ngang; 7. Sửa mâu thuẫn trạng thái EXPIRED trên PST-000003; 8. Ngữ pháp số nhiều tiếng Anh/Pháp và bản dịch PST-000002/PST-000003. 199/199 static pages export thành công. |
-| 02 | Front-end đóng góp, chuyên gia và vận hành | SẴN SÀNG | Mục tiêu kế tiếp (FE-02): S06-S12, S17-S19, S24-S27, S30, S31, S35. |
-| 03 | Front-end tiền, quyền lợi và bàn giao API | CHƯA BẮT ĐẦU | S13-S16, S20, S22, S23, S28, S29, S32-S34, hoàn thành C01-C50, FE_HANDOFF. |
-| 04 | Back-end dữ liệu, đăng nhập và phân quyền | CHƯA BẮT ĐẦU | Schema PostgreSQL 34 bảng, Supabase Auth, wallet challenge, API foundation. |
-| 05 | Back-end nội dung, review và nghĩa vụ trả công | CHƯA BẮT ĐẦU | Business services, duplicate detection, review lifecycle, budget reserve, BE_HANDOFF. |
-| 06 | Back-end thanh toán, VIP, outbox và indexer | CHƯA BẮT ĐẦU | Worker process, outbox pattern, payment adapter, accounting ledger. |
-| 07 | Smart contract Arbitrum: route, donate và trả công | CHƯA BẮT ĐẦU | Foundry, VentloreRegistry, VentlorePayments, EIP-712 route consent, CONTRACTS_HANDOFF. |
-| 08 | Smart contract SBT và NFT tác giả | CHƯA BẮT ĐẦU | ContributorSBT (ERC-5192), AuthorContributionNFT (ERC-721), token identity. |
-| 09 | Nối ba lớp và chuẩn bị Arbitrum Sepolia | CHƯA BẮT ĐẦU | Local end-to-end integration, Arbitrum Sepolia testnet package. |
-| 10 | Rà soát, sửa lỗi và bàn giao bản chạy được | CHƯA BẮT ĐẦU | QA01-QA25 verification, runbooks, readiness report. |
+| **Parallel v2 - Giai đoạn A** | **Chốt nền chung & Tạo nơi làm việc (4 Worktrees)** | **HOÀN THÀNH** | Kiểm kê Prompt 00–01 PASS 100%, thiết lập bộ tài liệu `docs/parallel/` (BASELINE, CONTRACTS, OWNERSHIP, WORKSPACES, SYNC, ACCEPTANCE, requests/), tạo `.env.example`, khóa base ref cố định `v2-parallel-base`, thiết lập 4 worktree độc lập (FE, BE, CHAIN, MERGE). |
+| Parallel v2 - FE | Front-end song song (FE-A, FE-B, FE-C) | SẴN SÀNG | Worktree `Ventlore-FE`, nhánh `parallel/v2-fe`, port 3001, MockAdapter. |
+| Parallel v2 - BE | Back-end song song (BE-A, BE-B, BE-C) | SẴN SÀNG | Worktree `Ventlore-BE`, nhánh `parallel/v2-be`, port 3002, DB/worker. |
+| Parallel v2 - CHAIN | On-chain song song (CHAIN-A, CHAIN-B, CHAIN-C) | SẴN SÀNG | Worktree `Ventlore-Chain`, nhánh `parallel/v2-chain`, port 8546 Anvil. |
+| Parallel v2 - MERGE | Tích hợp từng mốc & Nghiệm thu (I1, I2, I3) | SẴN SÀNG | Worktree `Ventlore-Merge`, nhánh `parallel/v2-integration`, port 3000. |
 
 ---
 

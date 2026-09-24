@@ -1,12 +1,11 @@
 # Tài Liệu Bàn Giao (HANDOFF)
 
-**Chặng hoàn thành gần nhất:** FE-01 Round 5 — Thu gọn Single-Hero HomePage, Tích hợp 6-Language Switcher trực tiếp, Sửa Điều hướng Home/Explore, Khắc phục mâu thuẫn kiểm định PST-000003 & Loại bỏ tràn ngang  
-**Nhiệm vụ tiếp theo:** Nghiệm thu FE-01 Round 5 từ Bin → Chuyển sang Chặng 02 (FE-02: Đóng góp, chuyên gia và vận hành)  
-**Thời điểm bàn giao:** 25/09/2026 06:30 UTC+7  
-**Nhánh làm việc:** `feat/fe-01-round-5-single-hero-home`  
-**Gói triển khai Netlify Drop:** `dist/ventlore-netlify-drop.zip` (6.4 MB)  
-**Báo cáo chi tiết:** `docs/loops/reports/TASK-FE-01-ROUND-5-SINGLE-HERO-HOME.md`  
-**Tài liệu liên quan:** `Ventlore_Preview_8_Review_2026-09-24.md`, `docs/UI_REDESIGN_V2.md`, `docs/I18N.md`
+**Chặng hoàn thành gần nhất:** Parallel v2 Giai đoạn A — Chốt nền chung, bộ tài liệu `docs/parallel/` & Thiết lập 4 Worktrees (FE, BE, CHAIN, MERGE)  
+**Nhiệm vụ tiếp theo:** Khởi động 3 Agent triển khai song song trong từng Worktree (FE: `Ventlore-FE`, BE: `Ventlore-BE`, CHAIN: `Ventlore-Chain`)  
+**Thời điểm bàn giao:** 25/09/2026 07:00 UTC+7  
+**Base Ref cố định:** `v2-parallel-base` (trỏ vào commit chốt Giai đoạn A)  
+**Tài liệu điều phối:** `docs/prompts/Ventlore_04_Merge_Parallel_v2.md` và `docs/parallel/` (BASELINE, CONTRACTS, OWNERSHIP, WORKSPACES, SYNC, ACCEPTANCE)  
+
 
 ---
 
