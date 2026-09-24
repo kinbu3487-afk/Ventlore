@@ -17,11 +17,26 @@ const SessionContext = createContext<SessionContextType>({
   setPersona: () => {},
 });
 
+const VALID_PERSONAS: DemoPersona[] = ['guest', 'member', 'vip', 'author', 'expert'];
+
 export function SessionProvider({ children }: { children: ReactNode }) {
-  const [persona, setPersonaState] = useState<DemoPersona>('guest');
+  const [persona, setPersonaState] = useState<DemoPersona>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('ventlore_persona') as DemoPersona;
+        if (saved && VALID_PERSONAS.includes(saved)) {
+          mockApiClient.setPersona(saved);
+          return saved;
+        }
+      } catch {}
+    }
+    return 'guest';
+  });
+
   const [session, setSession] = useState<UserSessionDTO | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Sync session whenever persona changes
   useEffect(() => {
     let mounted = true;
     async function load() {
@@ -40,6 +55,13 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   }, [persona]);
 
   const setPersona = (p: DemoPersona) => {
+    // Synchronously update mockApiClient state FIRST before triggering React state update
+    mockApiClient.setPersona(p);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('ventlore_persona', p);
+      } catch {}
+    }
     setPersonaState(p);
   };
 

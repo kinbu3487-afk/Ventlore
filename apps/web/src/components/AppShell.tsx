@@ -15,6 +15,8 @@ import {
   Menu,
   CloseIcon,
   ChevronDownIcon,
+  HomeIcon,
+  TargetIcon,
 } from './Icons';
 
 interface AppShellProps {
@@ -29,9 +31,11 @@ export function AppShell({ children }: AppShellProps) {
   const [personaDropdownOpen, setPersonaDropdownOpen] = useState(false);
 
   const navLinks = [
+    { href: '/', label: t('nav.home'), icon: <HomeIcon className="w-5 h-5" /> },
     { href: '/explore', label: t('nav.explore'), icon: <CompassIcon className="w-5 h-5" /> },
-    { href: '/vip', label: t('nav.vip'), icon: <SparklesIcon className="w-5 h-5" /> },
+    { href: '/#mission', label: t('nav.mission'), icon: <TargetIcon className="w-5 h-5" /> },
     { href: '/transparency', label: t('nav.transparency'), icon: <ShieldCheckIcon className="w-5 h-5" /> },
+    { href: '/vip', label: t('nav.vip'), icon: <SparklesIcon className="w-5 h-5" /> },
   ];
 
   const personas: Array<{ id: DemoPersona; name: string; tag: string }> = [
@@ -62,7 +66,7 @@ export function AppShell({ children }: AppShellProps) {
             {/* Left: Brand Logo & Wordmark */}
             <div className="flex items-center gap-6 lg:gap-8">
               <Link
-                href={getLocalizedPath('/explore')}
+                href={getLocalizedPath('/')}
                 className="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber rounded-control"
               >
                 <img
@@ -76,17 +80,25 @@ export function AppShell({ children }: AppShellProps) {
               <nav className="hidden md:flex items-center space-x-1" aria-label="Main Navigation">
                 {navLinks.map((link) => {
                   const localizedHref = getLocalizedPath(link.href);
-                  const isActive = pathname === localizedHref || pathname.startsWith(`${link.href}/`);
+                  let isActive = false;
+                  if (link.href === '/') {
+                    isActive = pathname === localizedHref || pathname === localizedHref.replace(/\/$/, '');
+                  } else if (link.href.startsWith('/#')) {
+                    isActive = false;
+                  } else {
+                    isActive = pathname === localizedHref || pathname.startsWith(`${localizedHref}/`);
+                  }
                   return (
                     <Link
                       key={link.href}
                       href={localizedHref}
-                      className={`min-h-control flex items-center gap-2 px-3.5 py-2 rounded-control text-sm font-medium transition-colors ${
+                      className={`min-h-control flex items-center gap-2 px-3 py-2 rounded-control text-sm font-medium transition-colors ${
                         isActive
                           ? 'bg-white/15 text-ivory font-bold shadow-xs'
                           : 'text-ivory/80 hover:text-ivory hover:bg-white/10'
                       }`}
                     >
+                      {link.icon}
                       {link.label}
                     </Link>
                   );
@@ -195,7 +207,14 @@ export function AppShell({ children }: AppShellProps) {
           <div className="md:hidden border-t border-[#1f4e42] bg-[#173F35] px-4 pt-3 pb-6 space-y-2">
             {navLinks.map((link) => {
               const localizedHref = getLocalizedPath(link.href);
-              const isActive = pathname === localizedHref || pathname.startsWith(`${link.href}/`);
+              let isActive = false;
+              if (link.href === '/') {
+                isActive = pathname === localizedHref || pathname === localizedHref.replace(/\/$/, '');
+              } else if (link.href.startsWith('/#')) {
+                isActive = false;
+              } else {
+                isActive = pathname === localizedHref || pathname.startsWith(`${localizedHref}/`);
+              }
               return (
                 <Link
                   key={link.href}
@@ -228,17 +247,24 @@ export function AppShell({ children }: AppShellProps) {
       >
         {navLinks.map((link) => {
           const localizedHref = getLocalizedPath(link.href);
-          const isActive = pathname === localizedHref || pathname.startsWith(`${link.href}/`);
+          let isActive = false;
+          if (link.href === '/') {
+            isActive = pathname === localizedHref || pathname === localizedHref.replace(/\/$/, '');
+          } else if (link.href.startsWith('/#')) {
+            isActive = false;
+          } else {
+            isActive = pathname === localizedHref || pathname.startsWith(`${localizedHref}/`);
+          }
           return (
             <Link
               key={link.href}
               href={localizedHref}
-              className={`flex-1 min-h-[44px] flex flex-col items-center justify-center text-[11px] font-medium transition-colors ${
+              className={`flex-1 min-h-[44px] flex flex-col items-center justify-center text-[10px] font-medium transition-colors ${
                 isActive ? 'text-forest font-bold' : 'text-ink-secondary hover:text-ink'
               }`}
             >
               {link.icon}
-              <span className="mt-0.5">{link.label}</span>
+              <span className="mt-0.5 truncate max-w-[64px]">{link.label}</span>
             </Link>
           );
         })}
@@ -275,14 +301,20 @@ export function AppShell({ children }: AppShellProps) {
           </div>
 
           <div className="flex items-center gap-6">
+            <Link href={getLocalizedPath('/')} className="hover:text-forest">
+              {t('nav.home')}
+            </Link>
             <Link href={getLocalizedPath('/explore')} className="hover:text-forest">
               {t('nav.explore')}
             </Link>
-            <Link href={getLocalizedPath('/vip')} className="hover:text-forest">
-              {t('nav.vip')}
+            <Link href={getLocalizedPath('/#mission')} className="hover:text-forest">
+              {t('nav.mission')}
             </Link>
             <Link href={getLocalizedPath('/transparency')} className="hover:text-forest">
               {t('nav.transparency')}
+            </Link>
+            <Link href={getLocalizedPath('/vip')} className="hover:text-forest">
+              {t('nav.vip')}
             </Link>
             <Link href={getLocalizedPath('/login')} className="hover:text-forest">
               {t('nav.login')}

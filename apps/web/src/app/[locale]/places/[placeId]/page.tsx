@@ -13,6 +13,7 @@ export function generateStaticParams() {
     '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e03',
     '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e04',
     '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e08',
+    '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e09',
   ];
 
   const params: Array<{ locale: string; placeId: string }> = [];

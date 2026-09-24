@@ -12,6 +12,7 @@ export function generateStaticParams() {
     { placeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e03' },
     { placeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e04' },
     { placeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e08' },
+    { placeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e09' },
   ];
 }
 

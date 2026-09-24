@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="100%" height="100%">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="60%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#475569"/>
+    </linearGradient>
+    <linearGradient id="mountainFar" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="warmLight" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#0d9488" stop-opacity="0.1"/>
+    </linearGradient>
+    <radialGradient id="sunBreak" cx="50%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.35"/>
+      <stop offset="60%" stop-color="#0ea5e9" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Sky & Weather background -->
+  <rect width="1600" height="900" fill="url(#skyGrad)"/>
+  <rect width="1600" height="900" fill="url(#sunBreak)"/>
+
+  <!-- Distant mountains after storm -->
+  <path d="M-100 650 L200 480 L450 560 L750 420 L1050 540 L1350 430 L1700 650 L1700 900 L-100 900 Z" fill="url(#mountainFar)"/>
+  
+  <!-- Midground rugged trail & slopes -->
+  <path d="M-50 720 L350 580 L650 670 L950 570 L1250 680 L1650 620 L1650 900 L-50 900 Z" fill="#0f172a" opacity="0.95"/>
+
+  <!-- Warm clearing light breaking through clouds -->
+  <polygon points="750,0 900,0 1200,900 600,900" fill="url(#warmLight)"/>
+
+  <!-- Foreground ground -->
+  <ellipse cx="800" cy="880" rx="900" ry="160" fill="#090d16"/>
+
+  <!-- Community solidarity silhouettes helping each other -->
+  <!-- Person 1 extending hand / offering shelter -->
+  <circle cx="580" cy="740" r="14" fill="#38bdf8"/>
+  <path d="M580 755 L580 810 M580 770 L550 785 M580 770 L620 765" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
+  <path d="M580 810 L560 860 M580 810 L600 860" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- Person 2 receiving support / backpacker -->
+  <circle cx="630" cy="745" r="13" fill="#f59e0b"/>
+  <path d="M630 760 L630 815 M630 775 L620 765 M630 775 L655 790" stroke="#f59e0b" stroke-width="6" stroke-linecap="round"/>
+  <path d="M630 815 L620 860 M630 815 L645 860" stroke="#f59e0b" stroke-width="6" stroke-linecap="round"/>
+  <!-- Backpack -->
+  <rect x="635" y="765" width="12" height="20" rx="3" fill="#d97706"/>
+
+  <!-- Person 3 checking map / lantern on right -->
+  <circle cx="1020" cy="735" r="14" fill="#34d399"/>
+  <path d="M1020 750 L1020 805 M1020 765 L1000 780 M1020 765 L1045 775" stroke="#34d399" stroke-width="6" stroke-linecap="round"/>
+  <path d="M1020 805 L1005 855 M1020 805 L1035 855" stroke="#34d399" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- Warm lantern light -->
+  <circle cx="1050" cy="780" r="12" fill="#fef08a" opacity="0.6"/>
+  <circle cx="1050" cy="780" r="5" fill="#fef08a"/>
+</svg>
