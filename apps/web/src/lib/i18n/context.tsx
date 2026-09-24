@@ -139,9 +139,17 @@ export function I18nProvider({
       if (!text && locale !== 'vi') {
         text = getNestedValue(catalogs.vi, key);
       }
-      // 4. Return raw key if completely missing
+      // 4. Handle missing key
       if (!text) {
-        return key;
+        if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
+          console.warn(`[i18n] Missing key "${key}" for locale "${locale}"`);
+        }
+        // Human-readable fallback rather than raw dot-notation string
+        const lastPart = key.split('.').pop() || key;
+        text = lastPart
+          .replace(/([A-Z])/g, ' $1')
+          .replace(/^./, (str) => str.toUpperCase())
+          .trim();
       }
 
       // Interpolation: replace {name} with params.name

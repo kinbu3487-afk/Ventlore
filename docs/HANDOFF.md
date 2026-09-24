@@ -1,12 +1,12 @@
 # Tài Liệu Bàn Giao (HANDOFF)
 
-**Chặng hoàn thành gần nhất:** FE-01 v2 — Tái thiết kế giao diện & Hoàn thiện đa ngôn ngữ 6 locales (S01–S05, S21, S34)  
-**Nhiệm vụ tiếp theo:** Nghiệm thu FE-01 v2 từ Bin → Chuyển sang Chặng 02 (FE-02: Đóng góp, chuyên gia và vận hành)  
-**Thời điểm bàn giao:** 24/09/2026 18:05 UTC+7  
+**Chặng hoàn thành gần nhất:** FE-01 Repair — Khắc phục giao diện & Hoàn thiện đa ngôn ngữ 6 locales (S01–S05, S21, S34)  
+**Nhiệm vụ tiếp theo:** Nghiệm thu FE-01 Repair từ Bin → Chuyển sang Chặng 02 (FE-02: Đóng góp, chuyên gia và vận hành)  
+**Thời điểm bàn giao:** 24/09/2026 19:25 UTC+7  
 **Nhánh làm việc:** `feat/fe-01-reader-flow`  
 **Pull Request:** https://github.com/kinbu3487-afk/Ventlore/pull/3  
-**Báo cáo chi tiết:** `docs/loops/reports/TASK-FE-01-V2.md`  
-**Tài liệu liên quan:** `docs/UI_REDESIGN_V2.md`, `docs/I18N.md`, `docs/QA_PROMPT_01_V2.md`
+**Báo cáo chi tiết:** `docs/loops/reports/TASK-FE-01-REPAIR-UI-I18N.md`  
+**Tài liệu liên quan:** `Ventlore_Prompt_01_Repair_UI_i18n_v1.md`, `docs/UI_REDESIGN_V2.md`, `docs/I18N.md`
 
 ---
 

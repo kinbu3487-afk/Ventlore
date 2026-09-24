@@ -15,7 +15,7 @@ import {
 
 export default function VipPage() {
   const { session, persona, setPersona } = useSession();
-  const { t, formatDate, getLocalizedPath } = useI18n();
+  const { t, formatDate, getLocalizedPath, locale } = useI18n();
   const [plans, setPlans] = useState<VipPlanDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -24,7 +24,7 @@ export default function VipPage() {
     async function loadPlans() {
       setIsLoading(true);
       try {
-        const data = await mockApiClient.getVipPlans();
+        const data = await mockApiClient.getVipPlans(locale);
         if (mounted) {
           setPlans(data);
           setIsLoading(false);
@@ -37,7 +37,7 @@ export default function VipPage() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [locale]);
 
   const isVipActive = session?.membership?.isActive === true;
 
@@ -74,8 +74,7 @@ export default function VipPage() {
                     {t('vip.validUntilDate', {
                       start: formatDate(session.membership.startsAt),
                       end: formatDate(session.membership.endsAt),
-                    })}{' '}
-                    (12 tháng lịch UTC)
+                    })}
                   </p>
                 </div>
               </div>
@@ -107,7 +106,6 @@ export default function VipPage() {
                     <div className="mt-3 flex items-baseline gap-2">
                       <span className="text-4xl font-extrabold text-forest">${priceUsd}</span>
                       <span className="text-sm text-ink-secondary font-medium">{t('vip.term12Months')}</span>
-                      <span className="text-xs text-ink-muted">({plan.priceUsdCents} USD cents)</span>
                     </div>
                   </div>
 

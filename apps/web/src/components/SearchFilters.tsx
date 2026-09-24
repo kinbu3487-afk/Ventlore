@@ -50,7 +50,7 @@ export function SearchFilters({
   const hasFilters = query !== '' || regionId !== 'all' || activity !== 'all';
 
   return (
-    <div className="rounded-card border border-sage bg-surface-card p-4 sm:p-6 shadow-sm space-y-4">
+    <div id="search-bar" className="rounded-card border border-sage bg-surface-card p-4 sm:p-6 shadow-sm space-y-4">
       {/* 1. Large 56px Search Bar */}
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-4 sm:pl-5 flex items-center pointer-events-none text-ink-muted">

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { PlaceSummaryDTO } from '@ventlore/api-client';
 import { PlaceStatus } from '@ventlore/domain';
 import { useI18n } from '../lib/i18n';
+import { PlaceMap } from './PlaceMap';
 import {
   MapPinIcon,
   AlertTriangleIcon,
@@ -12,6 +13,7 @@ import {
   ListIcon,
   CompassIcon,
   ChevronRightIcon,
+  ChevronDownIcon,
 } from './Icons';
 
 interface PlaceResultsProps {
@@ -22,15 +24,26 @@ interface PlaceResultsProps {
 export function PlaceResults({ places, isLoading }: PlaceResultsProps) {
   const { t, getLocalizedPath } = useI18n();
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
+  const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
+  const [expandedWarnings, setExpandedWarnings] = useState<Record<string, boolean>>({});
+
+  const toggleWarning = (placeId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setExpandedWarnings((prev) => ({
+      ...prev,
+      [placeId]: !prev[placeId],
+    }));
+  };
 
   if (isLoading) {
     return (
       <div className="space-y-4">
         <div className="h-6 w-48 bg-sage/40 rounded animate-pulse" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {[1, 2, 3, 4].map((i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3].map((i) => (
             <div key={i} className="rounded-card border border-sage bg-surface-card overflow-hidden animate-pulse">
-              <div className="aspect-[16/10] bg-sage/30 w-full" />
+              <div className="aspect-[16/9] bg-sage/30 w-full" />
               <div className="p-5 space-y-3">
                 <div className="h-5 w-3/4 bg-sage/40 rounded" />
                 <div className="h-4 w-full bg-sage/30 rounded" />
@@ -45,12 +58,12 @@ export function PlaceResults({ places, isLoading }: PlaceResultsProps) {
 
   if (places.length === 0) {
     return (
-      <div className="rounded-card border border-sage bg-surface-card p-12 text-center space-y-3">
+      <div className="rounded-card border border-sage bg-surface-card p-10 sm:p-12 text-center space-y-3 shadow-xs">
         <div className="w-12 h-12 rounded-full bg-sage/40 text-forest flex items-center justify-center mx-auto">
           <CompassIcon className="w-6 h-6" />
         </div>
         <h3 className="text-base font-bold text-ink">{t('explore.noPlacesFound')}</h3>
-        <p className="text-xs text-ink-secondary max-w-md mx-auto">
+        <p className="text-xs text-ink-secondary max-w-md mx-auto leading-relaxed">
           {t('explore.noPlacesHint')}
         </p>
       </div>
@@ -59,7 +72,7 @@ export function PlaceResults({ places, isLoading }: PlaceResultsProps) {
 
   return (
     <div className="space-y-5">
-      {/* View Switcher: List vs Map */}
+      {/* Header: Found count & View Switcher (List vs Map) */}
       <div className="flex items-center justify-between gap-4">
         <span className="text-sm font-semibold text-ink-secondary">
           {t('explore.placesFound', { count: places.length })}
@@ -69,6 +82,7 @@ export function PlaceResults({ places, isLoading }: PlaceResultsProps) {
           <button
             type="button"
             onClick={() => setViewMode('list')}
+            aria-pressed={viewMode === 'list'}
             className={`min-h-[36px] flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-control transition-colors ${
               viewMode === 'list'
                 ? 'bg-forest text-white'
@@ -81,6 +95,7 @@ export function PlaceResults({ places, isLoading }: PlaceResultsProps) {
           <button
             type="button"
             onClick={() => setViewMode('map')}
+            aria-pressed={viewMode === 'map'}
             className={`min-h-[36px] flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-control transition-colors ${
               viewMode === 'map'
                 ? 'bg-forest text-white'
@@ -93,151 +108,183 @@ export function PlaceResults({ places, isLoading }: PlaceResultsProps) {
         </div>
       </div>
 
-      {/* Map Mode (Curated Vector Map Preview with Destination Waypoints) */}
+      {/* Map Mode: Interactive OpenStreetMap with responsive split on desktop */}
       {viewMode === 'map' && (
-        <div className="rounded-card border border-sage overflow-hidden bg-surface-card shadow-sm">
-          <div className="relative h-72 sm:h-96 w-full bg-[#173F35]/10 overflow-hidden">
-            <img
-              src="/destinations/hero-coastal.svg"
-              alt="Ventlore Interactive Topo Map"
-              className="w-full h-full object-cover opacity-80"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-forest/80 via-transparent to-transparent flex items-end p-6">
-              <div className="text-ivory space-y-1">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-amber text-ink text-xs font-bold">
-                  <CompassIcon className="w-3.5 h-3.5" />
-                  {t('explore.mapView')}
-                </span>
-                <p className="text-xs text-ivory/80 max-w-lg">
-                  {t('explore.mapHint')}
-                </p>
-              </div>
-            </div>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* Left Column (Desktop): Compact Places List */}
+          <div className="lg:col-span-5 space-y-3 max-h-[560px] overflow-y-auto pr-1">
+            {places.map((place) => {
+              const isSelected = selectedPlaceId === place.placeId;
+              const coordsStr = place.coordinates
+                ? `${place.coordinates.lat.toFixed(4)}, ${place.coordinates.lng.toFixed(4)}`
+                : '';
 
-          <div className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-surface-canvas border-t border-sage/60">
-            {places.map((p) => {
-              const coordsStr = p.coordinates ? `${p.coordinates.lat.toFixed(4)}, ${p.coordinates.lng.toFixed(4)}` : '20.7250, 107.0520';
               return (
-                <Link
-                  key={p.placeId}
-                  href={getLocalizedPath(`/places/${p.placeId}`)}
-                  className="p-3 rounded-control border border-sage bg-surface-card hover:border-forest/60 transition-colors flex items-center justify-between text-xs"
+                <div
+                  key={place.placeId}
+                  onClick={() => setSelectedPlaceId(place.placeId)}
+                  className={`p-4 rounded-card border transition-all cursor-pointer ${
+                    isSelected
+                      ? 'border-forest bg-forest/5 ring-1 ring-forest shadow-xs'
+                      : 'border-sage/80 bg-surface-card hover:border-forest/50'
+                  }`}
                 >
-                  <div className="truncate mr-2">
-                    <div className="font-bold text-ink truncate">{p.name}</div>
-                    <div className="text-[11px] font-mono text-ink-muted flex items-center gap-1 mt-0.5">
-                      <MapPinIcon className="w-3 h-3 text-forest shrink-0" />
-                      <span>{coordsStr}</span>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="space-y-1 min-w-0">
+                      <div className="font-bold text-sm text-ink truncate hover:text-forest">
+                        {place.name}
+                      </div>
+                      <div className="text-xs text-ink-muted flex items-center gap-1">
+                        <MapPinIcon className="w-3 h-3 text-forest shrink-0" />
+                        <span>{place.regionName}</span>
+                        {coordsStr && <span className="font-mono text-[10px] ml-1">({coordsStr})</span>}
+                      </div>
                     </div>
+
+                    <Link
+                      href={getLocalizedPath(`/places/${place.placeId}`)}
+                      className="inline-flex items-center gap-1 text-xs font-bold text-forest hover:text-forest-hover shrink-0 pt-0.5"
+                    >
+                      <span>{t('explore.viewPlace')}</span>
+                      <ChevronRightIcon className="w-3.5 h-3.5" />
+                    </Link>
                   </div>
-                  <ChevronRightIcon className="w-4 h-4 text-ink-muted shrink-0" />
-                </Link>
+
+                  <p className="mt-2 text-xs text-ink-secondary line-clamp-2 leading-relaxed">
+                    {place.summary}
+                  </p>
+                </div>
               );
             })}
+          </div>
+
+          {/* Right Column (Desktop) / Full Width (Mobile): Interactive Leaflet Map */}
+          <div className="lg:col-span-7 h-[420px] lg:h-[560px]">
+            <PlaceMap
+              places={places}
+              selectedPlaceId={selectedPlaceId}
+              onSelectPlace={setSelectedPlaceId}
+              className="w-full h-full"
+            />
           </div>
         </div>
       )}
 
-      {/* Place Cards 2-Column Grid (16:10 Visual Ratio) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {places.map((place) => {
-          const isMerged = place.status === PlaceStatus.MERGED;
-          const coverImage = place.coverImageUrl || '/destinations/hero-coastal.svg';
+      {/* List Mode: 3 Columns on Wide Desktop, 2 on Tablet, 1 on Mobile */}
+      {viewMode === 'list' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {places.map((place) => {
+            const isMerged = place.status === PlaceStatus.MERGED;
+            const coverImage = place.coverImageUrl || place.imageUrl || '/destinations/hero-coastal.svg';
+            const isWarningExpanded = expandedWarnings[place.placeId] === true;
 
-          return (
-            <div
-              key={place.placeId}
-              className={`rounded-card border transition-all overflow-hidden flex flex-col bg-surface-card hover:shadow-lg ${
-                isMerged
-                  ? 'border-dashed border-sage bg-surface-canvas/60'
-                  : 'border-sage hover:border-forest/50'
-              }`}
-            >
-              {/* Card Cover Image with 16:10 Ratio */}
-              <Link
-                href={getLocalizedPath(`/places/${place.placeId}`)}
-                className="relative block aspect-[16/10] overflow-hidden bg-sage/20 group"
+            return (
+              <article
+                key={place.placeId}
+                className={`rounded-card border transition-all overflow-hidden flex flex-col bg-surface-card hover:shadow-md ${
+                  isMerged
+                    ? 'border-dashed border-sage bg-surface-canvas/60'
+                    : 'border-sage/80 hover:border-forest/50'
+                }`}
               >
-                <img
-                  src={coverImage}
-                  alt={place.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                {/* Card Cover Image with 16:9 Ratio */}
+                <Link
+                  href={getLocalizedPath(`/places/${place.placeId}`)}
+                  className="relative block aspect-[16/9] overflow-hidden bg-sage/20 group"
+                >
+                  <img
+                    src={coverImage}
+                    alt={place.name}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
 
-                {/* Region Badge */}
-                <div className="absolute top-3 left-3">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-control bg-forest/90 text-ivory text-xs font-medium backdrop-blur-sm shadow-xs">
-                    <MapPinIcon className="w-3 h-3 text-amber" />
-                    {place.regionName}
-                  </span>
-                </div>
-
-                {/* Merged Notice Tag */}
-                {isMerged && (
-                  <div className="absolute top-3 right-3">
-                    <span className="px-2 py-0.5 rounded bg-sage text-ink text-[11px] font-semibold border border-sage/80 shadow-xs">
-                      {t('place.mergedNotice')}
+                  {/* Region Badge */}
+                  <div className="absolute top-3 left-3">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-control bg-forest/90 text-ivory text-xs font-medium backdrop-blur-xs shadow-xs">
+                      <MapPinIcon className="w-3 h-3 text-amber" />
+                      {place.regionName}
                     </span>
                   </div>
-                )}
-              </Link>
 
-              {/* Card Content Body */}
-              <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
-                <div>
-                  <h3 className="font-bold text-lg text-ink hover:text-forest transition-colors line-clamp-1">
-                    <Link href={getLocalizedPath(`/places/${place.placeId}`)}>
-                      {place.name}
-                    </Link>
-                  </h3>
-
-                  <p className="mt-2 text-xs sm:text-sm text-ink-secondary line-clamp-2 leading-relaxed">
-                    {place.summary}
-                  </p>
-                </div>
-
-                {/* Warnings preview */}
-                {place.warnings.length > 0 && (
-                  <div className="p-2.5 rounded-control bg-amber/15 border border-amber/30 text-ink text-xs flex items-start gap-2">
-                    <AlertTriangleIcon className="w-4 h-4 shrink-0 mt-0.5 text-amber-600" />
-                    <span className="line-clamp-1">
-                      <strong className="font-semibold">{t('place.warningsTitle')}:</strong> {place.warnings[0]}
-                    </span>
-                  </div>
-                )}
-
-                {/* Tags & Action Row */}
-                <div className="pt-3 border-t border-sage/50 flex items-center justify-between gap-3 text-xs">
-                  <div className="flex flex-wrap gap-1.5 items-center">
-                    {place.activities.slice(0, 2).map((act) => (
-                      <span
-                        key={act}
-                        className="px-2 py-0.5 rounded-full bg-surface-canvas text-ink-secondary text-[11px] border border-sage/40"
-                      >
-                        {act}
+                  {/* Merged Notice Tag */}
+                  {isMerged && (
+                    <div className="absolute top-3 right-3">
+                      <span className="px-2 py-0.5 rounded bg-sage text-ink text-[11px] font-semibold border border-sage/80 shadow-xs">
+                        {t('place.mergedNotice')}
                       </span>
-                    ))}
-                    <span className="text-[11px] text-ink-muted">
-                      {t('place.postsCount', { count: place.postsCount })}
-                    </span>
+                    </div>
+                  )}
+                </Link>
+
+                {/* Card Content Body */}
+                <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                  <div>
+                    <h2 className="font-bold text-base sm:text-lg text-ink hover:text-forest transition-colors line-clamp-1">
+                      <Link href={getLocalizedPath(`/places/${place.placeId}`)}>
+                        {place.name}
+                      </Link>
+                    </h2>
+
+                    <p className="mt-2 text-xs sm:text-sm text-ink-secondary line-clamp-2 leading-relaxed">
+                      {place.summary}
+                    </p>
                   </div>
 
-                  <Link
-                    href={getLocalizedPath(`/places/${place.placeId}`)}
-                    className="inline-flex items-center gap-1 text-xs font-bold text-forest hover:text-forest-hover shrink-0 group"
-                  >
-                    <span>{t('explore.viewPlace')}</span>
-                    <ChevronRightIcon className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-                  </Link>
+                  {/* Safety Warning with Expand/Collapse */}
+                  {place.warnings.length > 0 && (
+                    <div className="p-2.5 rounded-control bg-amber/15 border border-amber/30 text-ink text-xs space-y-1.5">
+                      <div className="flex items-start gap-1.5 font-semibold text-amber-900">
+                        <AlertTriangleIcon className="w-4 h-4 shrink-0 mt-0.5 text-amber-700" />
+                        <span>{t('place.warningsTitle')}</span>
+                      </div>
+                      <p className={`text-xs text-ink-secondary ${isWarningExpanded ? '' : 'line-clamp-1'}`}>
+                        {place.warnings[0]}
+                      </p>
+                      {place.warnings[0] && place.warnings[0].length > 40 && (
+                        <button
+                          type="button"
+                          onClick={(e) => toggleWarning(place.placeId, e)}
+                          className="inline-flex items-center gap-1 text-[11px] font-bold text-forest hover:underline pt-0.5"
+                        >
+                          <span>{isWarningExpanded ? t('explore.closeWarning') : t('explore.readFullWarning')}</span>
+                          <ChevronDownIcon className={`w-3 h-3 transition-transform ${isWarningExpanded ? 'rotate-180' : ''}`} />
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Tags & Action Row */}
+                  <div className="pt-3 border-t border-sage/50 flex items-center justify-between gap-3 text-xs">
+                    <div className="flex flex-wrap gap-1.5 items-center min-w-0">
+                      {place.activities.slice(0, 2).map((act) => (
+                        <span
+                          key={act}
+                          className="px-2 py-0.5 rounded-full bg-surface-canvas text-ink-secondary text-[11px] border border-sage/40 truncate"
+                        >
+                          {act}
+                        </span>
+                      ))}
+                      <span className="text-[11px] text-ink-muted shrink-0">
+                        {t('place.postsCount', { count: place.postsCount })}
+                      </span>
+                    </div>
+
+                    <Link
+                      href={getLocalizedPath(`/places/${place.placeId}`)}
+                      className="inline-flex items-center gap-1 text-xs font-bold text-forest hover:text-forest-hover shrink-0 group"
+                    >
+                      <span>{t('explore.viewPlace')}</span>
+                      <ChevronRightIcon className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
