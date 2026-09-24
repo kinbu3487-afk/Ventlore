@@ -65,7 +65,17 @@ export function PostReader({ post }: PostReaderProps) {
                   {t('post.contentInVietnameseOnly')}
                 </span>
                 <p className="text-[11px] text-ink-muted">
-                  Bản dịch cho ngôn ngữ hiện tại đang được cộng đồng thực địa cập nhật.
+                  {locale === 'en'
+                    ? 'Official translations are progressively curated by local trail communities.'
+                    : locale === 'ja'
+                    ? '公式翻訳は現地のトレイルコミュニティによって順次更新されています。'
+                    : locale === 'zh-Hans'
+                    ? '官方翻译正由本地向导社群逐步完善更新中。'
+                    : locale === 'ko'
+                    ? '공식 번역은 현지 트레일 커뮤니티를 통해 순차적으로 업데이트되고 있습니다.'
+                    : locale === 'fr'
+                    ? 'Les traductions officielles sont progressivement enrichies par les communautés locales.'
+                    : 'Bản dịch cho ngôn ngữ hiện tại đang được cộng đồng thực địa cập nhật.'}
                 </p>
               </div>
             </div>
@@ -135,7 +145,7 @@ export function PostReader({ post }: PostReaderProps) {
               returnTo={`/posts/${post.postId}?revisionId=${revision.revisionId}`}
             />
           ) : (
-            <div className="prose max-w-none text-ink">
+            <div className="prose max-w-[70ch] mx-auto lg:mx-0 text-ink leading-relaxed">
               <MarkdownView content={revision.content} />
             </div>
           )}
@@ -241,6 +251,41 @@ export function PostReader({ post }: PostReaderProps) {
             {t('post.viewAuthorProfile')} →
           </Link>
         </div>
+
+        {/* Collapsible Technical ID Details (Business UUIDv7 & Display Codes) */}
+        <details className="rounded-card border border-sage/60 bg-surface-canvas p-4 text-xs text-ink-secondary">
+          <summary className="font-bold text-ink cursor-pointer hover:text-forest transition-colors select-none">
+            {locale === 'en'
+              ? 'Technical Version Details (IDs)'
+              : locale === 'ja'
+              ? '技術仕様および識別子情報'
+              : locale === 'zh-Hans'
+              ? '技术标识与版本规范'
+              : locale === 'ko'
+              ? '기술 사양 및 식별자 정보'
+              : locale === 'fr'
+              ? 'Spécifications techniques de la révision'
+              : 'Thông tin kỹ thuật phiên bản (ID)'}
+          </summary>
+          <div className="mt-3 space-y-2 font-mono text-[11px] border-t border-sage/40 pt-2.5">
+            <div>
+              <span className="text-ink-muted">Post ID (UUIDv7):</span>
+              <div className="text-ink break-all font-semibold">{post.postId}</div>
+            </div>
+            <div>
+              <span className="text-ink-muted">Display Code:</span>
+              <div className="text-ink font-semibold">{post.displayCode}</div>
+            </div>
+            <div>
+              <span className="text-ink-muted">Revision ID (UUIDv7):</span>
+              <div className="text-ink break-all font-semibold">{revision.revisionId}</div>
+            </div>
+            <div>
+              <span className="text-ink-muted">Revision Display Code:</span>
+              <div className="text-ink font-semibold">{revision.displayCode}</div>
+            </div>
+          </div>
+        </details>
       </div>
     </div>
   );

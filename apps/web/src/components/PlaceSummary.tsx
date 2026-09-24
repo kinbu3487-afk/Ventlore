@@ -21,7 +21,7 @@ interface PlaceSummaryProps {
 export function PlaceSummary({ place }: PlaceSummaryProps) {
   const { t, formatDate, getLocalizedPath } = useI18n();
   const isMerged = place.status === PlaceStatus.MERGED;
-  const coverImage = place.coverImageUrl || '/destinations/hero-coastal.svg';
+  const coverImage = place.coverImageUrl || place.imageUrl || '/destinations/hero-coastal.svg';
 
   const statusLabel =
     place.status === PlaceStatus.ACTIVE

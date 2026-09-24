@@ -90,7 +90,16 @@ export interface LocalizedContentDTO {
   description?: string;
   content?: string;
   warnings?: string[];
+  activities?: string[];
   regionName?: string;
+  scope?: string;
+  inspectorNotes?: string;
+  claims?: Array<{
+    claimId: string;
+    text: string;
+    category?: string;
+    status: string;
+  }>;
 }
 
 export interface PlaceDetailDTO extends PlaceSummaryDTO {

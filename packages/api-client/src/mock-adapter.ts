@@ -154,6 +154,7 @@ export class VentloreMockAdapter {
       ],
       activities: ['Trekking', 'Chèo Kayak', 'Chụp ảnh phong cảnh'],
       imageUrl: '/destinations/cat-co-3.svg',
+      coverImageUrl: '/destinations/cat-co-3.svg',
       postsCount: 2,
       coordinates: { lat: 20.7183, lng: 107.0514 },
       translations: {
@@ -168,6 +169,7 @@ export class VentloreMockAdapter {
             'Slippery rock ledges; never hike barefoot or with flat-soled shoes',
             'No permanent lifeguard station on duty along the trail',
           ],
+          activities: ['Coastal Trekking', 'Sea Kayaking', 'Landscape Photography'],
         },
         ja: {
           locale: 'ja',
@@ -180,6 +182,7 @@ export class VentloreMockAdapter {
             '岩肌が非常に滑りやすいため、平底靴や素足は厳禁',
             '常駐の救助員がいないエリアです',
           ],
+          activities: ['海岸トレッキング', 'シーカヤック', '風景写真撮影'],
         },
         'zh-Hans': {
           locale: 'zh-Hans',
@@ -192,6 +195,7 @@ export class VentloreMockAdapter {
             '岩石湿滑，严禁赤足或穿平底鞋穿行',
             '该区域无常驻专业救援人员',
           ],
+          activities: ['沿海徒步', '皮划艇', '风景摄影'],
         },
         ko: {
           locale: 'ko',
@@ -204,6 +208,7 @@ export class VentloreMockAdapter {
             '바위가 미끄러우므로 슬리퍼나 평평한 신발 착용 절대 금지',
             '상주 안전 요원이 없는 야생 구역입니다',
           ],
+          activities: ['해안 트레킹', '카약', '풍경 사진 촬영'],
         },
         fr: {
           locale: 'fr',
@@ -216,6 +221,7 @@ export class VentloreMockAdapter {
             'Parois glissantes ; chaussures de randonnée indispensables',
             'Aucun poste de secours permanent le long du tracé',
           ],
+          activities: ['Randonnée côtière', 'Kayak de mer', 'Photographie de paysage'],
         },
       },
       posts: [
@@ -315,6 +321,7 @@ export class VentloreMockAdapter {
       ],
       activities: ['Đi bộ ngắm cảnh', 'Nghiên cứu địa chất'],
       imageUrl: '/destinations/co-to.svg',
+      coverImageUrl: '/destinations/co-to.svg',
       postsCount: 1,
       coordinates: { lat: 20.9782, lng: 107.7554 },
       translations: {
@@ -328,6 +335,7 @@ export class VentloreMockAdapter {
             'Sharp slate edges; sturdy hiking boots and gloves are highly recommended',
             'Monitor the daily tide schedule from Co To maritime station closely',
           ],
+          activities: ['Scenic Walking', 'Geological Research'],
         },
         ja: {
           locale: 'ja',
@@ -339,6 +347,7 @@ export class VentloreMockAdapter {
             '鋭利な岩肌に注意。つま先の硬い登山靴と手袋の着用を推奨',
             'コト島気象観測所の潮汐表を必ず事前に確認してください',
           ],
+          activities: ['絶景ウォーキング', '地質調査'],
         },
         'zh-Hans': {
           locale: 'zh-Hans',
@@ -350,6 +359,7 @@ export class VentloreMockAdapter {
             '页岩层边缘锐利，建议穿着防穿刺徒步鞋并佩戴防滑手套',
             '请务必提前查阅姑苏岛水文气象站发布的潮汐时刻表',
           ],
+          activities: ['观景漫步', '地质考察'],
         },
         ko: {
           locale: 'ko',
@@ -361,6 +371,7 @@ export class VentloreMockAdapter {
             '날카로운 편암 모서리 주의. 앞코가 단단한 등산화와 장갑 착용 필수',
             '꼬또섬 해양기상 관측소의 조석표를 반드시 사전에 확인하십시오',
           ],
+          activities: ['경관 산책', '지질 연구'],
         },
         fr: {
           locale: 'fr',
@@ -372,6 +383,7 @@ export class VentloreMockAdapter {
             'Arêtes rocheuses coupantes ; chaussures de marche robustes et gants fortement conseillés',
             'Consulter impérativement l’annuaire des marées de la station de Co To',
           ],
+          activities: ['Balade panoramique', 'Recherche géologique'],
         },
       },
       posts: [
@@ -412,6 +424,7 @@ export class VentloreMockAdapter {
       ],
       activities: ['Leo núi cao', 'Cắm trại trong rừng'],
       imageUrl: '/destinations/tay-con-linh.svg',
+      coverImageUrl: '/destinations/tay-con-linh.svg',
       postsCount: 1,
       coordinates: { lat: 22.8094, lng: 104.8117 },
       translations: {
@@ -426,6 +439,7 @@ export class VentloreMockAdapter {
             'Dense mountain fog severely reduces visibility after 15:00',
             'Field verification certificate is currently expired; new audit required',
           ],
+          activities: ['High-altitude Mountaineering', 'Forest Camping'],
         },
         ja: {
           locale: 'ja',
@@ -438,6 +452,7 @@ export class VentloreMockAdapter {
             '15時以降は濃い霧で視界が急激に悪化します',
             '本スポットの現地検証レポートは期限切れのため再審査待ちです',
           ],
+          activities: ['高山登山', '森林キャンプ'],
         },
         'zh-Hans': {
           locale: 'zh-Hans',
@@ -450,6 +465,7 @@ export class VentloreMockAdapter {
             '午后15:00后常有浓密山雾笼罩，能见度骤降',
             '实地核实报告当前已过期，正等待新一轮专家审核',
           ],
+          activities: ['高山攀登', '森林露营'],
         },
         ko: {
           locale: 'ko',
@@ -462,6 +478,7 @@ export class VentloreMockAdapter {
             '오후 15시 이후 짙은 안개로 가시거리 급격히 저하',
             '현장 검증 보고서가 만료된 상태이므로 재검토 대기 중',
           ],
+          activities: ['고산 등반', '원시림 캠핑'],
         },
         fr: {
           locale: 'fr',
@@ -474,6 +491,7 @@ export class VentloreMockAdapter {
             'Brouillard épais réduisant fortement la visibilité après 15h00',
             'Rapport de vérification expiré ; en attente de nouvel audit terrain',
           ],
+          activities: ['Haute montagne', 'Camping en forêt'],
         },
       },
       posts: [
@@ -597,6 +615,28 @@ Begin hiking between 06:30 and 08:30 AM before the heat intensifies and as low t
 ### 3. Field Safety Caveats
 - At the rocky outcrop near Km 1.4, submerged rock surfaces become slippery with algae as the tide ebbs. Proceed slowly maintaining 3 points of contact.
 - **Safety notice:** No destination is "absolutely safe". Every trekker is responsible for their own navigation decisions and situational awareness.`,
+            scope: 'Field inspection of trail terrain, cliff outcrop at Km 1.4, and fresh water access',
+            inspectorNotes: 'Auditor Hoang Ranger completed on-site review on April 30, 2026. Trail passage confirmed clear; rock algae warning at Km 1.4 is accurate.',
+            claims: [
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c01',
+                text: 'Actual trail distance is 2.8 km from Cat Co 3 beach to Dolphin Headland',
+                category: 'Terrain',
+                status: 'VERIFIED',
+              },
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c02',
+                text: 'Average traversal time is 90 to 120 minutes of steady walking',
+                category: 'Duration',
+                status: 'VERIFIED',
+              },
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c03',
+                text: 'No potable water refill points along trail; must pack sufficient supply',
+                category: 'Supplies',
+                status: 'VERIFIED',
+              },
+            ],
           },
           ja: {
             locale: 'ja',
@@ -615,6 +655,28 @@ Begin hiking between 06:30 and 08:30 AM before the heat intensifies and as low t
 ### 3. 現地の安全に関する注意点
 - Km 1.4付近の岩礁では、干潮時に露出する海苔や苔により足元が滑りやすくなります。3点支持を保ち慎重に進んでください。
 - **安全に関する注意事項：**「絶対に安全な場所」は存在しません。すべての登山者は自己の責任において判断し行動してください。`,
+            scope: 'トレイルの地形、Km 1.4地点の断崖、および飲料水アクセスの現地確認',
+            inspectorNotes: 'ホアン検査官が2026年4月30日に実地審査を実施。ルートの通行可能性を確認し、Km 1.4の苔に関する注意喚起は妥当と判定。',
+            claims: [
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c01',
+                text: 'カットコー3ビーチからドルフィン岬までの実測距離は約2.8km',
+                category: '地形',
+                status: 'VERIFIED',
+              },
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c02',
+                text: '平均所要時間は継続的な歩行で90〜120分程度',
+                category: '所要時間',
+                status: 'VERIFIED',
+              },
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c03',
+                text: '道中に給水ポイントなし。出発前に十分な飲料水の携行が必要',
+                category: '補給',
+                status: 'VERIFIED',
+              },
+            ],
           },
           'zh-Hans': {
             locale: 'zh-Hans',
@@ -633,6 +695,28 @@ Begin hiking between 06:30 and 08:30 AM before the heat intensifies and as low t
 ### 3. 实地安全预警
 - Km 1.4处突出的海蚀岩角在退潮时附着湿滑海苔，通过该路段时请放慢脚步并保持三点接触。
 - **特别声明：** 任何自然环境均不存在所谓“绝对安全”。每位徒步者均须对自身的路线选择及实地观察承担最终责任。`,
+            scope: '实地核验沿海步道地形、Km 1.4断崖通行状况及淡水补给可行性',
+            inspectorNotes: '实地专家黄护林员于2026年4月30日完成现场审查。步道基本畅通，Km 1.4处海苔湿滑风险警示准确有效。',
+            claims: [
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c01',
+                text: '从吉古3号沙滩至海豚岬的实测全长约为2.8公里',
+                category: '地形',
+                status: 'VERIFIED',
+              },
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c02',
+                text: '匀速徒步平均耗时约为90至120分钟',
+                category: '时间',
+                status: 'VERIFIED',
+              },
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c03',
+                text: '沿途无可用淡水补给点，出发前必须携带充足饮用水',
+                category: '补给',
+                status: 'VERIFIED',
+              },
+            ],
           },
           ko: {
             locale: 'ko',
@@ -651,6 +735,28 @@ Begin hiking between 06:30 and 08:30 AM before the heat intensifies and as low t
 ### 3. 현장 안전 주의사항
 - Km 1.4 지점의 암초는 썰물 때 이끼로 인해 매우 미끄럽습니다. 세 지점 지지(3-point contact)를 유지하며 천천히 이동하십시오.
 - **안전 주의사항:** 세상에 "절대적으로 안전한 장소"는 존재하지 않습니다. 모든 탐방객은 자신의 안전과 이동 판단에 스스로 책임을 집니다.`,
+            scope: '트레일 지형, Km 1.4 암벽 노두 및 식수 확보 가능 여부 현장 실사',
+            inspectorNotes: '황 삼림관이 2026년 4월 30일 현장 실사를 완료했습니다. 트레일 통행이 양호하며 Km 1.4의 이끼 주의 경고가 타당함을 확인했습니다.',
+            claims: [
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c01',
+                text: '깟꼬 3 해변부터 돌고래 곶까지의 실제 거리는 약 2.8km',
+                category: '지형',
+                status: 'VERIFIED',
+              },
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c02',
+                text: '일정한 속보 기준 평균 소요 시간은 90분 ~ 120분',
+                category: '소요시간',
+                status: 'VERIFIED',
+              },
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c03',
+                text: '트레일 중간에 식수 보급처가 없으므로 출발 전 충분한 지참 필수',
+                category: '보급',
+                status: 'VERIFIED',
+              },
+            ],
           },
           fr: {
             locale: 'fr',
@@ -669,6 +775,28 @@ Prenez le départ entre 06h30 et 08h30 avant les fortes chaleurs et au début de
 ### 3. Avertissements terrain essentiels
 - Au niveau de l’éperon rocheux du km 1,4, des algues glissantes recouvrent la roche mouillée à marée descendante. Ralentissez et maintenez trois points d’appui.
 - **Avis de sécurité :** Aucun itinéraire sauvage n’est « absolument sûr ». Chaque randonneur demeure pleinement responsable de ses choix et de son observation sur le terrain.`,
+            scope: 'Inspection de terrain du sentier, de l’éperon rocheux au km 1,4 et de l’accès à l’eau potable',
+            inspectorNotes: 'L’auditeur Hoang Ranger a validé le terrain le 30 avril 2026. Passage praticable et mise en garde sur les algues au km 1,4 confirmée.',
+            claims: [
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c01',
+                text: 'Longueur réelle de 2,8 km de la plage de Cat Co 3 au Cap du Dauphin',
+                category: 'Terrain',
+                status: 'VERIFIED',
+              },
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c02',
+                text: 'Temps de marche moyen estimé entre 90 et 120 minutes sans interruption',
+                category: 'Durée',
+                status: 'VERIFIED',
+              },
+              {
+                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c03',
+                text: 'Aucun point d’eau douce sur l’itinéraire ; autonomie requise dès le départ',
+                category: 'Ravitaillement',
+                status: 'VERIFIED',
+              },
+            ],
           },
         },
       },
@@ -1096,18 +1224,76 @@ L’ouverture est dissimulée derrière des buissons de pandanus sauvages à 15 
     },
   };
 
+  // VIP plan multi-lingual translations
+  private vipPlanTranslations: Record<string, { name: string; benefits: string[] }> = {
+    vi: {
+      name: 'Gói Hội Viên Khám Phá Thường Niên (12 Tháng)',
+      benefits: [
+        'Truy cập các báo cáo khảo sát trắc địa chuyên sâu, lịch sử địa chất và phân tích thực địa nâng cao',
+        'Tài liệu hướng dẫn thực địa chi tiết và các phân tích địa hình được chuyên gia chuẩn hóa',
+        'Huy hiệu Hội viên VIP hỗ trợ quỹ thẩm định an toàn cộng đồng',
+        'Thời hạn 12 tháng lịch UTC tính từ lúc kích hoạt; gia hạn chủ động, không tự động trừ tiền',
+      ],
+    },
+    en: {
+      name: 'Annual Wilderness Explorer Membership (12 Months)',
+      benefits: [
+        'Full access to advanced geodetic surveys, geological formations, and specialized field reports',
+        'Curated field documentation and terrain analysis standardized by accredited guides',
+        'Exclusive VIP Member badge supporting independent community safety audits',
+        'Valid for 12 UTC calendar months from activation; proactive manual renewal with zero auto-charge',
+      ],
+    },
+    ja: {
+      name: '年間探検家メンバーシップ（12ヶ月）',
+      benefits: [
+        '詳細な測地測量レポート、地質構造履歴、および高度な現地実地分析へのアクセス',
+        '認定現地ガイドが標準化した詳細な現地ガイド資料と地形分析',
+        'コミュニティの独立安全検証基金を支えるVIP会員バッジ',
+        '有効化から12ヶ月間のUTC暦年有効。自動引き落としなしの手動更新ポリシー',
+      ],
+    },
+    'zh-Hans': {
+      name: '年度荒野探险者会员计划（12个月）',
+      benefits: [
+        '完整查阅高精度大地测量报告、地层地质历史及高级实地考察手记',
+        '经过持证专家标准化的精细实地指导文档与地形分析',
+        '专属 VIP 会员徽章，全额支持社区独立安全审核储备基金',
+        '自激活起生效 12 个 UTC 自然月；到期由用户自主续费，绝无自动扣款',
+      ],
+    },
+    ko: {
+      name: '연간 황야 탐험가 멤버십 (12개월)',
+      benefits: [
+        '정밀 측지 측량 보고서, 지층 형성사 및 심층 현장 조사 기록 열람',
+        '공인 현지 가이드가 표준화한 상세 현장 안내 문서 및 지형 분석 자료',
+        '커뮤니티 독립 안전 검증 기금을 지원하는 전용 VIP 회원 뱃지',
+        '활성화 시점부터 12개월 UTC 달력 기준 유효; 자동 결제 없는 수동 갱신',
+      ],
+    },
+    fr: {
+      name: 'Adhésion Annuelle Explorateur Sauvage (12 Mois)',
+      benefits: [
+        'Accès complet aux relevés géodésiques approfondis, formations géologiques et analyses terrain avancées',
+        'Documentation de terrain détaillée et analyses topographiques standardisées par des guides agréés',
+        'Badge exclusif de membre VIP soutenant le fonds d’audit indépendant de sécurité communautaire',
+        'Valable 12 mois civils UTC à compter de l’activation ; renouvellement manuel proactif sans prélèvement automatique',
+      ],
+    },
+  };
+
   // VIP plans fixture
   private vipPlans: VipPlanDTO[] = [
     {
       planCode: 'VIP_ANNUAL',
-      name: 'Gói Hội Viên Thám Hiểm Thường Niên (12 Tháng)',
+      name: 'Gói Hội Viên Khám Phá Thường Niên (12 Tháng)',
       priceUsdCents: 1500, // 15 USD = 1500 USD cents
       termMonths: 12,
       benefits: [
-        'Truy cập toàn bộ tọa độ khẩn cấp, bản đồ 3D và hốc trú ẩn chuyên sâu',
-        'Tải về dữ liệu ngoại tuyến (Offline GPS tracks & GPX) không giới hạn',
+        'Truy cập các báo cáo khảo sát trắc địa chuyên sâu, lịch sử địa chất và phân tích thực địa nâng cao',
+        'Tài liệu hướng dẫn thực địa chi tiết và các phân tích địa hình được chuyên gia chuẩn hóa',
         'Huy hiệu Hội viên VIP hỗ trợ quỹ thẩm định an toàn cộng đồng',
-        'Thời hạn 12 tháng lịch UTC tính từ lúc kích hoạt; gia hạn chủ động, không tự động trừ thẻ',
+        'Thời hạn 12 tháng lịch UTC tính từ lúc kích hoạt; gia hạn chủ động, không tự động trừ tiền',
       ],
       status: 'AVAILABLE',
     },
@@ -1218,9 +1404,9 @@ L’ouverture est dissimulée derrière des buissons de pandanus sauvages à 15 
       return true;
     });
 
-    // Unless a specific query is provided or includeMerged is true, filter out MERGED places
-    const hasSearchQuery = Boolean(params?.query && params.query.trim().length > 0);
-    if (!hasSearchQuery && !params?.includeMerged) {
+    // Invariant: MERGED places are never displayed as standalone primary destination cards in listPlaces,
+    // even when a search query matches them.
+    if (!params?.includeMerged) {
       filtered = filtered.filter(p => p.status !== PlaceStatus.MERGED);
     }
 
@@ -1261,6 +1447,7 @@ L’ouverture est dissimulée derrière des buissons de pandanus sauvages à 15 
 
     const targetLocale = params?.locale;
     const items: PlaceSummaryDTO[] = filtered.map(p => {
+      const cover = p.coverImageUrl || (p as any).imageUrl || '/destinations/hero-coastal.svg';
       if (targetLocale && p.translations && p.translations[targetLocale]) {
         const t = p.translations[targetLocale];
         return {
@@ -1268,12 +1455,18 @@ L’ouverture est dissimulée derrière des buissons de pandanus sauvages à 15 
           name: t.name ?? p.name,
           summary: t.summary ?? p.summary,
           regionName: t.regionName ?? p.regionName,
+          warnings: t.warnings ?? p.warnings,
+          activities: t.activities ?? p.activities,
+          coverImageUrl: cover,
+          imageUrl: cover,
           isTranslated: true,
           originalLocale: 'vi',
         };
       }
       return {
         ...p,
+        coverImageUrl: cover,
+        imageUrl: cover,
         isTranslated: targetLocale === 'vi' || !targetLocale,
         originalLocale: 'vi',
       };
@@ -1300,6 +1493,9 @@ L’ouverture est dissimulée derrière des buissons de pandanus sauvages à 15 
     }
 
     const place: PlaceDetailDTO = JSON.parse(JSON.stringify(rawPlace));
+    const cover = place.coverImageUrl || (place as any).imageUrl || '/destinations/hero-coastal.svg';
+    place.coverImageUrl = cover;
+    place.imageUrl = cover;
 
     if (locale && place.translations && place.translations[locale]) {
       const t = place.translations[locale];
@@ -1309,6 +1505,9 @@ L’ouverture est dissimulée derrière des buissons de pandanus sauvages à 15 
       place.regionName = t.regionName ?? place.regionName;
       if (t.warnings) {
         place.warnings = t.warnings;
+      }
+      if (t.activities) {
+        place.activities = t.activities;
       }
       place.isTranslated = true;
       place.originalLocale = 'vi';
@@ -1399,6 +1598,9 @@ L’ouverture est dissimulée derrière des buissons de pandanus sauvages à 15 
       const t = result.revision.translations[locale];
       result.revision.title = t.title ?? result.revision.title;
       result.revision.content = t.content ?? result.revision.content;
+      if (t.scope) result.revision.scope = t.scope;
+      if (t.inspectorNotes) result.revision.inspectorNotes = t.inspectorNotes;
+      if (t.claims) result.revision.claims = t.claims;
       result.revision.isTranslated = true;
       result.revision.originalLocale = 'vi';
     } else {
@@ -1410,12 +1612,12 @@ L’ouverture est dissimulée derrière des buissons de pandanus sauvages à 15 
     // REDACT content at the adapter level! DO NOT SEND VIP CONTENT TO CLIENT DOM!
     if (result.revision.accessTier === AccessTier.VIP && !isVipUser) {
       const redactMessages: Record<string, string> = {
-        vi: 'Nội dung chi tiết bao gồm tọa độ GNSS chính xác, bản đồ hốc trú bão 3D và dữ liệu cứu hộ ngoại tuyến là đặc quyền dành riêng cho Hội viên VIP. Vui lòng đăng nhập bằng tài khoản có gói VIP hoặc nâng cấp hội viên để mở khóa.',
-        en: 'Detailed coordinates, 3D storm shelter topography, and offline rescue data are strictly reserved for VIP Members. Please sign in with an active VIP account or upgrade membership to unlock.',
-        ja: '高精度GNSS座標、3D避難所地形データ、オフライン救助情報はVIP会員限定のコンテンツです。VIPアカウントでログインするか、会員プランをアップグレードしてください。',
-        'zh-Hans': '高精度GNSS坐标、3D避风洞穴地形与离线救援数据为VIP会员专属特权。请使用有效VIP账号登录或升级会员以解锁。',
-        ko: '정밀 GNSS 좌표, 3D 대피 동굴 지형 및 오프라인 구조 데이터는 VIP 회원 전용 특권입니다. 활성화된 VIP 계정으로 로그인하거나 멤버십을 업그레이드하여 잠금을 해제하세요.',
-        fr: 'Les coordonnées GNSS exactes, les données topographiques 3D et le cache de secours hors ligne sont réservés aux membres VIP. Veuillez vous connecter avec un compte VIP ou mettre à niveau votre adhésion.',
+        vi: 'Nội dung trắc địa chuyên sâu, phân tích địa tầng và tài liệu thực địa chi tiết là đặc quyền dành riêng cho Hội viên VIP. Vui lòng đăng nhập bằng tài khoản có gói VIP hoặc nâng cấp hội viên để mở khóa.',
+        en: 'In-depth geodetic surveys, stratigraphic analyses, and specialized field reports are strictly reserved for VIP Members. Please sign in with an active VIP account or upgrade membership to unlock.',
+        ja: '詳細な測地測量データ、地層地質分析、および高度な現地調査記録はVIP会員限定のコンテンツです。VIPアカウントでログインするか、会員プランをアップグレードしてください。',
+        'zh-Hans': '深度大地测量数据、地层地质分析与高级实地考察手记为VIP会员专属特权。请使用有效VIP账号登录或升级会员以解锁。',
+        ko: '정밀 측지 측량 데이터, 지층 지질 분석 및 전문 현장 조사 기록은 VIP 회원 전용 특권입니다. 활성화된 VIP 계정으로 로그인하거나 멤버십을 업그레이드하여 잠금을 해제하세요.',
+        fr: 'Les relevés géodésiques approfondis, les analyses stratigraphiques et les rapports de terrain spécialisés sont réservés aux membres VIP. Veuillez vous connecter avec un compte VIP ou mettre à niveau votre adhésion.',
       };
       result.revision.content = (locale ? redactMessages[locale] : undefined) ?? redactMessages.vi ?? '';
       result.revision.isContentRedacted = true;
@@ -1432,8 +1634,14 @@ L’ouverture est dissimulée derrière des buissons de pandanus sauvages à 15 
     return profile || null;
   }
 
-  async getVipPlans(): Promise<VipPlanDTO[]> {
-    return this.vipPlans;
+  async getVipPlans(locale?: string): Promise<VipPlanDTO[]> {
+    const targetLocale = locale || 'vi';
+    const trans = this.vipPlanTranslations[targetLocale] ?? this.vipPlanTranslations.vi;
+    return this.vipPlans.map(plan => ({
+      ...plan,
+      name: trans?.name ?? plan.name,
+      benefits: trans?.benefits ?? plan.benefits,
+    }));
   }
 
   async getTransparencySummary(year?: number): Promise<TransparencySummaryDTO> {

@@ -25,17 +25,13 @@ export function generateStaticParams() {
 
 export default async function LocalizedPostDetailPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ locale: string; postId: string }>;
-  searchParams?: Promise<{ revisionId?: string }>;
 }) {
   const resolvedParams = await params;
-  const resolvedSearchParams = searchParams ? await searchParams : undefined;
   return (
     <PostDetailView
       initialPostId={resolvedParams.postId}
-      initialRevisionId={resolvedSearchParams?.revisionId}
     />
   );
 }
