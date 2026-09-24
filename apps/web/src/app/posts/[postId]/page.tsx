@@ -16,17 +16,13 @@ export function generateStaticParams() {
 
 export default async function PostDetailPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ postId: string }>;
-  searchParams?: Promise<{ revisionId?: string }>;
 }) {
   const resolvedParams = await params;
-  const resolvedSearchParams = searchParams ? await searchParams : undefined;
   return (
     <PostDetailView
       initialPostId={resolvedParams.postId}
-      initialRevisionId={resolvedSearchParams?.revisionId}
     />
   );
 }

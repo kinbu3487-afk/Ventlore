@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from './SessionContext';
 import { useI18n } from '../lib/i18n';
@@ -11,17 +11,27 @@ interface SocialLoginProps {
   returnTo?: string;
 }
 
-export function SocialLogin({ returnTo = '/explore' }: SocialLoginProps) {
+export function SocialLogin({ returnTo: initialReturnTo }: SocialLoginProps) {
   const router = useRouter();
   const { setPersona } = useSession();
   const { t, getLocalizedPath } = useI18n();
   const [selectedPersona, setSelectedPersona] = useState<DemoPersona>('member');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [targetReturnTo, setTargetReturnTo] = useState<string>(initialReturnTo || '/explore');
+
+  useEffect(() => {
+    if (!initialReturnTo && typeof window !== 'undefined') {
+      const q = new URLSearchParams(window.location.search).get('returnTo');
+      if (q && q.startsWith('/') && !q.startsWith('//')) {
+        setTargetReturnTo(q);
+      }
+    }
+  }, [initialReturnTo]);
 
   // Validate returnTo to prevent open redirects
   const safeReturnTo =
-    returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//')
-      ? returnTo
+    targetReturnTo && targetReturnTo.startsWith('/') && !targetReturnTo.startsWith('//')
+      ? targetReturnTo
       : '/explore';
 
   const handleLogin = (personaChoice: DemoPersona) => {
