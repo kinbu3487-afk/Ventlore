@@ -5,7 +5,7 @@
 [build]
   base = ""
   publish = "apps/web/out"
-  command = "pnpm --filter @ventlore/web build"
+  command = "npm install -g pnpm@9.15.4 && pnpm --filter @ventlore/web build"
 
 [build.environment]
   NODE_VERSION = "20.18.0"
