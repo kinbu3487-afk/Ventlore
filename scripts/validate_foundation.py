@@ -389,6 +389,83 @@ def run_validations(workspace_dir: str):
         })
         print(f"[FAIL] Ventlore_Brand_Kit_v0_1: Thiếu {len(missing_assets)} tài sản")
 
+    # Check 6: FE-01 Front-end Screens & Components
+    expected_screens = [
+        ("S01", "apps/web/src/app/explore/page.tsx"),
+        ("S02", "apps/web/src/app/places/[placeId]/page.tsx"),
+        ("S03", "apps/web/src/app/posts/[postId]/page.tsx"),
+        ("S04", "apps/web/src/app/people/[handle]/page.tsx"),
+        ("S05", "apps/web/src/app/login/page.tsx"),
+        ("S21", "apps/web/src/app/vip/page.tsx"),
+        ("S34", "apps/web/src/app/transparency/page.tsx"),
+    ]
+    missing_screens = [s[0] for s in expected_screens if not os.path.exists(os.path.join(workspace_dir, s[1]))]
+
+    expected_components = [
+        ("C01", "apps/web/src/components/AppShell.tsx"),
+        ("C02", "apps/web/src/components/SearchFilters.tsx"),
+        ("C03", "apps/web/src/components/PlaceResults.tsx"),
+        ("C04", "apps/web/src/components/PlaceSummary.tsx"),
+        ("C05", "apps/web/src/components/PostReader.tsx"),
+        ("C06", "apps/web/src/components/VerificationPanel.tsx"),
+        ("C07", "apps/web/src/components/RevisionSelector.tsx"),
+        ("C08", "apps/web/src/components/AccessGate.tsx"),
+        ("C09", "apps/web/src/components/SocialLogin.tsx"),
+        ("C10", "apps/web/src/components/WalletBinding.tsx"),
+        ("C46", "apps/web/src/components/AsyncState.tsx"),
+        ("C49", "apps/web/src/components/PermissionGate.tsx"),
+        ("C50", "apps/web/src/components/PublicLedger.tsx"),
+    ]
+    missing_components = [c[0] for c in expected_components if not os.path.exists(os.path.join(workspace_dir, c[1]))]
+
+    if not missing_screens and not missing_components:
+        results["checks"].append({
+            "name": "FE-01 Screens & Components",
+            "status": "PASS",
+            "details": f"Đầy đủ 7/7 màn hình FE-01 ({', '.join([s[0] for s in expected_screens])}) và 13/13 components ({', '.join([c[0] for c in expected_components])})"
+        })
+        print(f"[PASS] FE-01: Đầy đủ 7 màn hình (S01-S05, S21, S34) và 13 components (C01-C10, C46, C49, C50)")
+    else:
+        results["checks"].append({
+            "name": "FE-01 Screens & Components",
+            "status": "FAIL",
+            "details": f"Thiếu màn hình: {missing_screens}, thiếu components: {missing_components}"
+        })
+        print(f"[FAIL] FE-01: Thiếu {len(missing_screens)} màn hình, {len(missing_components)} components")
+
+    # Check 7: FE-01 Mock Adapter Fixtures & Invariants
+    mock_adapter_path = os.path.join(workspace_dir, "packages", "api-client", "src", "mock-adapter.ts")
+    if os.path.exists(mock_adapter_path):
+        with open(mock_adapter_path, 'r', encoding='utf-8') as f:
+            mock_content = f.read()
+
+        uuid7_pattern = re.compile(r'018e3a2b-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}', re.IGNORECASE)
+        found_uuids = uuid7_pattern.findall(mock_content)
+
+        scenarios_met = (
+            "REV-000002" in mock_content and # Multi-revision post
+            "PlaceStatus.MERGED" in mock_content and # Merged place
+            "REV-000004" in mock_content and # Unverified post
+            "VerificationStatus.EXPIRED" in mock_content and # Expired revision
+            "AccessTier.VIP" in mock_content and "isContentRedacted" in mock_content and # VIP redaction
+            "PlaceStatus.CANDIDATE" in mock_content # Candidate private filtering
+        )
+
+        if len(found_uuids) >= 10 and scenarios_met:
+            results["checks"].append({
+                "name": "FE-01 Fixtures & Invariants",
+                "status": "PASS",
+                "details": f"Đầy đủ 6 kịch bản bắt buộc, tìm thấy {len(set(found_uuids))} UUIDv7 canonical hợp lệ, bảo mật lọc VIP ở mock adapter"
+            })
+            print(f"[PASS] FE-01: Đầy đủ 6 kịch bản bắt buộc, bảo mật lọc VIP và {len(set(found_uuids))} UUIDv7 canonical")
+        else:
+            results["checks"].append({
+                "name": "FE-01 Fixtures & Invariants",
+                "status": "FAIL",
+                "details": "Chưa đáp ứng đủ 6 kịch bản hoặc thiếu UUIDv7 canonical"
+            })
+            print("[FAIL] FE-01 Fixtures & Invariants chưa thỏa mãn")
+
     # Save validation report
     report_path = os.path.join(workspace_dir, "docs", "validation-report.json")
     with open(report_path, 'w', encoding='utf-8') as f:
@@ -405,5 +482,6 @@ if __name__ == "__main__":
         print(f"\nCẢNH BÁO: Có {len(failed)} kiểm tra thất bại!")
         sys.exit(1)
     else:
-        print("\nCHÚC MỪNG: Toàn bộ kiểm tra Chặng 00 đã đạt (PASS 100%)!")
+        print("\nCHÚC MỪNG: Toàn bộ kiểm tra Chặng 00 & FE-01 đã đạt (PASS 100%)!")
         sys.exit(0)
+

@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { SessionProvider } from '@/components/SessionContext';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Ventlore - Hiểu nơi đến. Vững bước đi.',
@@ -13,7 +15,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi">
-      <body>{children}</body>
+      <body className="min-h-screen bg-surface-canvas text-ink antialiased">
+        <SessionProvider>{children}</SessionProvider>
+      </body>
     </html>
   );
 }

@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  src: url('/fonts/BeVietnamPro-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  src: url('/fonts/BeVietnamPro-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  src: url('/fonts/BeVietnamPro-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  src: url('/fonts/BeVietnamPro-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --vl-forest: #173F35;
+  --vl-forest-hover: #102E27;
+  --vl-jade: #2C7563;
+  --vl-sage: #DCE8DA;
+  --vl-ivory: #F5F1E8;
+  --vl-amber: #F0A44B;
+  --vl-ink: #182522;
+  --vl-ink-secondary: #52645C;
+
+  --vl-surface-canvas: #F5F1E8;
+  --vl-surface-card: #FFFFFF;
+  --vl-surface-subtle: #DCE8DA;
+
+  --vl-text-primary: #182522;
+  --vl-text-secondary: #52645C;
+  --vl-text-on-brand: #F5F1E8;
+
+  --vl-action-primary: #173F35;
+  --vl-action-primary-hover: #102E27;
+  --vl-action-on-primary: #FFFFFF;
+  --vl-action-focus: #225A91;
+
+  --vl-status-review: #225A91;
+  --vl-status-review-bg: #EAF2FB;
+  --vl-status-pending: #805400;
+  --vl-status-pending-bg: #FFF1D6;
+  --vl-status-danger: #AD3C32;
+  --vl-status-danger-bg: #FCEDEA;
+  --vl-status-success: #21654B;
+  --vl-status-success-bg: #E7F3EA;
+  --vl-status-neutral: #52645C;
+  --vl-status-neutral-bg: #EDF0ED;
+  --vl-status-vip: #70502A;
+  --vl-status-vip-bg: #F4EBDD;
+
+  --vl-font: 'Be Vietnam Pro', system-ui, sans-serif;
+  --vl-radius-card: 16px;
+  --vl-radius-control: 12px;
+  --vl-radius-input: 10px;
+  --vl-control-height: 48px;
+  --vl-touch-target: 44px;
+}
+
+body {
+  background-color: var(--vl-surface-canvas);
+  color: var(--vl-text-primary);
+  font-family: var(--vl-font);
+  font-size: 16px;
+  line-height: 1.625;
+  -webkit-font-smoothing: antialiased;
+}
+
+*:focus-visible {
+  outline: 3px solid var(--vl-action-focus);
+  outline-offset: 2px;
+}

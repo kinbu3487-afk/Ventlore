@@ -1,90 +1,93 @@
 # Tài Liệu Bàn Giao (HANDOFF)
 
-**Chặng hoàn thành gần nhất:** LOOP-00 — Thiết lập quy trình 5 loop, CI baseline và bộ kiểm tra tổng hợp  
-**Nhiệm vụ tiếp theo:** Nghiệm thu FE-01 — Khám phá → Địa điểm → Bài viết (Mục 5 trong hướng dẫn)  
-**Thời điểm bàn giao:** 24/09/2026 10:20 UTC+7  
-**Nhánh làm việc:** `chore/loop-setup`  
-**Commit SHA:** `327b921`  
-**Pull Request:** https://github.com/kinbu3487-afk/Ventlore/pull/1  
-**GitHub Actions CI:** https://github.com/kinbu3487-afk/Ventlore/actions/runs/35950828551 (Status: PASS / SUCCESS, Job: `Lint, Typecheck & Verification`)  
-**Báo cáo chi tiết:** `docs/loops/reports/LOOP-00-setup.md`
+**Chặng hoàn thành gần nhất:** FE-01 — Front-end nền tảng và trải nghiệm người đọc (S01–S05, S21, S34)  
+**Nhiệm vụ tiếp theo:** Nghiệm thu FE-01 từ Bin → Chuyển sang Chặng 02 (BE-01: Backend API và quản lý danh tính)  
+**Thời điểm bàn giao:** 24/09/2026 11:35 UTC+7  
+**Nhánh làm việc:** `feat/fe-01-reader-flow`  
+**Pull Request:** (Sẽ cập nhật ngay khi tạo PR)  
+**Báo cáo chi tiết:** `docs/loops/reports/FE-01-reader-flow.md`
 
 ---
 
-## 1. Kết quả đạt được tại LOOP-00
+## 1. Kết quả đạt được tại FE-01
 
-1. **Khóa quy trình vận hành 5 Loop:**
-   - Cập nhật [AGENTS.md](AGENTS.md) bổ sung Mục 0 trỏ đến toàn bộ tài liệu quy trình.
-   - Hoàn thành bộ 4 tài liệu tại `docs/loops/`:
-     - [POLICY.md](loops/POLICY.md): Chính sách 1 issue tại 1 thời điểm (`ready`), 1 PR tương ứng, tối đa 3 vòng sửa lỗi (Task loop), dừng ở `review` để Bin nghiệm thu, không hạ gate kiểm thử, dùng UUIDv7 theo ID Contract.
-     - [RUN_TASK.md](loops/RUN_TASK.md): Hướng dẫn từng bước từ nhận việc, code, verify cục bộ, push nhánh, mở PR và theo dõi CI.
-     - [SYSTEM_REVIEW.md](loops/SYSTEM_REVIEW.md): Hướng dẫn đánh giá hệ thống định kỳ sau mỗi cụm ~5 nhiệm vụ.
-     - [REPORT_TEMPLATE.md](loops/REPORT_TEMPLATE.md): Mẫu báo cáo nhiệm vụ chuẩn.
-   - Thư mục `docs/loops/reports/` lưu trữ báo cáo thực tế, khởi đầu với `LOOP-00-setup.md`.
+1. **Brand System & Design Tokens:**
+   - Cài đặt đầy đủ các màu sắc chuẩn Brand Guide v0.1: Forest `#173F35`, Jade `#2C7563`, Sage `#DCE8DA`, Ivory `#F5F1E8`, Waypoint `#F0A44B`, Ink `#182522`.
+   - Cài đặt phông chữ nội bộ Be Vietnam Pro (400, 500, 600, 700) tại `apps/web/public/fonts/` và khai báo qua `@font-face` trong `apps/web/src/app/globals.css`.
+   - Chiều cao điều khiển tối thiểu 48px, vùng chạm di động >= 44px, bo góc thẻ 16px, bo góc nút bấm 12px, focus outline `#225A91`.
 
-2. **Chuẩn hóa mẫu GitHub Issue và Pull Request:**
-   - `.github/ISSUE_TEMPLATE/task.md`: Mẫu Issue gồm 6 mục (Mục tiêu, Trong/Ngoài phạm vi, Tài liệu nguồn, Phụ thuộc, Tiêu chí nghiệm thu, Cách kiểm tra).
-   - `.github/ISSUE_TEMPLATE/config.yml`: Cấu hình Issue forms trỏ về tài liệu policy.
-   - `.github/pull_request_template.md`: Mẫu PR chuẩn gồm liên kết Issue (`Closes #...`), tóm tắt thay đổi, ma trận tiêu chí, bằng chứng kiểm tra, caveats và hướng dẫn chạy thử.
+2. **13 UI Components Cốt Lõi:**
+   - C01 (`AppShell`): Khung điều hướng responsive (desktop header, mobile bottom nav >= 44px) tích hợp Persona Switcher.
+   - C02 (`SearchFilters`): Bộ lọc từ khóa, vùng miền, hoạt động, xử lý từ chối GPS không chặn thao tác.
+   - C03 (`PlaceResults`): Danh sách thẻ địa điểm kèm cảnh báo rủi ro, chuyển đổi danh sách/bản đồ với placeholder provider.
+   - C04 (`PlaceSummary`): Chi tiết địa điểm, cảnh báo an toàn, hiển thị banner điều hướng với địa điểm đã sáp nhập (MERGED).
+   - C05 (`PostReader`): Trình đọc bài viết gắn liền với revisionId bất biến, thông tin tác giả, claims, tỷ lệ tip 80/20, cam kết không dùng nhãn "an toàn tuyệt đối".
+   - C06 (`VerificationPanel`): Bảng huy hiệu kiểm định 8 trạng thái (kèm icon và text rõ ràng), hiển thị scope claims, ngày kiểm tra và thời hạn.
+   - C07 (`RevisionSelector`): Chuyển đổi giữa các phiên bản bài viết qua query param `?revisionId=`.
+   - C08 (`AccessGate`): Chặn truy cập nội dung VIP hoặc yêu cầu đăng nhập, hỗ trợ chuyển persona ngay trên gate.
+   - C09 (`SocialLogin`): Luồng đăng nhập demo với xác thực allowlist URL chuyển hướng cùng origin.
+   - C10 (`WalletBinding`): Mô phỏng trạng thái ví Web3 (chưa liên kết, đã kết nối, đã xác thực).
+   - C46 (`AsyncState`): Xử lý trạng thái tải dữ liệu, rỗng, lỗi 401–429, timeout, offline. Số dư chưa tải hiển thị skeleton thay vì hiển thị 0.
+   - C49 (`PermissionGate`): Kiểm soát hiển thị tính năng dựa trên capability của session người dùng.
+   - C50 (`PublicLedger`): Sổ cái công khai số dư khả dụng/cam kết/đã chi, cơ cấu nguồn thu và giải ngân minh bạch.
 
-3. **Thiết lập lệnh kiểm tra tổng hợp (`pnpm run verify`):**
-   - Lệnh `pnpm run verify` kiểm tra thực tế 4 lớp và đạt **PASS 100%**:
-     1. `python3 scripts/validate_foundation.py`: Xác thực 34/34 ID Registry, Keccak-256 ABI encode, UUIDv7, Brand Kit 14/14 assets, 35 màn hình, 50 components, 72 sự kiện.
-     2. `pnpm -r run typecheck`: Typecheck nghiêm ngặt trên toàn bộ 6 workspace projects (không có lỗi TS).
-     3. `pnpm -r run lint`: Lint ứng dụng Next.js với cấu hình ESLint 8 / next-lint ổn định.
-     4. `pnpm -r run build`: Build Next.js production và Worker TypeScript ra `dist/`.
+3. **7 Màn hình App Router & Điều Hướng:**
+   - S01: `/explore` — Khám phá địa điểm và bài viết mới nhất.
+   - S02: `/places/[placeId]` — Chi tiết địa điểm (hỗ trợ hiển thị điểm đã sáp nhập).
+   - S03: `/posts/[postId]` — Đọc bài viết theo phiên bản (hỗ trợ chuyển đổi revision).
+   - S04: `/people/[handle]` — Trang hồ sơ cá nhân và đóng góp của tác giả.
+   - S05: `/login` — Đăng nhập và liên kết tài khoản.
+   - S21: `/vip` — Đăng ký/gia hạn gói VIP (1500 USD cents / 12 tháng UTC).
+   - S34: `/transparency` — Sổ cái tài chính cộng đồng công khai.
+   - Route gốc `/` chuyển hướng HTTP 307 về `/explore`.
 
-4. **Workflow CI GitHub Actions (`.github/workflows/quality.yml`):**
-   - Kích hoạt khi có PR vào `main` hoặc push trực tiếp vào `main`.
-   - Cơ chế concurrency hủy lượt chạy cũ khi có commit mới trên cùng PR (`cancel-in-progress: true`).
-   - Timeout 15 phút, cài Node 20.x, pnpm 9.15.4 theo `pnpm-lock.yaml`, Python 3.13, và chạy `pnpm run verify`.
+4. **Fixture Mock Adapter Đạt 6 Kịch Bản Bắt Buộc:**
+   - Kịch bản 1: Bài viết nhiều revision (`PST-000001` có `REV-000001` và `REV-000002`).
+   - Kịch bản 2: Địa điểm đã sáp nhập (`PLC-000002` sáp nhập vào `PLC-000001`).
+   - Kịch bản 3: Bài viết chưa kiểm định (`PST-000003` - `UNVERIFIED`).
+   - Kịch bản 4: Phiên bản hết hạn kiểm định (`PST-000001` xem `REV-000001` - `EXPIRED`).
+   - Kịch bản 5: Bài viết có nội dung VIP (`PST-000004` - nội dung bí mật được redact tại server, DOM không rò rỉ tọa độ).
+   - Kịch bản 6: Điểm đề xuất ứng viên (`PLC-000004` - `CANDIDATE` chỉ hiển thị cho Author hoặc Expert, ẩn với Khách).
+   - Toàn bộ 38 định danh mẫu đều tuân thủ 100% định dạng canonical UUIDv7 hợp lệ.
 
-5. **Sửa lỗi thực tế phát sinh (Task Loop):**
-   - Sửa lỗi TypeScript TS1470 trong `@ventlore/worker` bằng cách thêm `"type": "module"`.
-   - Tạo root layout chuẩn `apps/web/src/app/layout.tsx` cho Next.js 15 App Router.
-   - Cài đặt cấu hình ESLint tương thích cho Next.js web application.
-
----
-
-## 2. Hướng dẫn thiết lập bảo vệ nhánh `main` (Branch Protection)
-
-Sau khi PR của nhánh `chore/loop-setup` được tạo và kiểm tra CI chạy lần đầu trên GitHub, Bin thực hiện cấu hình bảo vệ nhánh `main` theo các bước:
-
-1. Mở trang quản trị repository trên trình duyệt:  
-   `https://github.com/kinbu3487-afk/Ventlore/settings/branches` (hoặc `Rules > Rulesets`).
-2. Nhấn **Add rule** (hoặc **New ruleset**) với tên `Protect Main`.
-3. Áp dụng cho target branch: `main` (hoặc `fnmatch: main`).
-4. Bật tùy chọn: **Require a pull request before merging** (Yêu cầu thay đổi phải đi qua PR).
-5. Bật tùy chọn: **Require status checks to pass before merging** (Yêu cầu kiểm tra CI phải đạt trước khi merge).
-6. Trong danh sách status checks, chọn đúng tên check do workflow `quality.yml` báo:
-   - **`Lint, Typecheck & Verification`** (tên job trong `quality.yml`).
-7. Bật tùy chọn: **Require branches to be up to date before merging**.
-8. Với mô hình phát triển cá nhân một người, không cần bật "Require approvals" từ người khác. Bin là người trực tiếp đọc PR, kiểm tra kết quả và quyết định nhấn merge.
+5. **Bộ Kiểm Tra Tổng Hợp (`pnpm run verify`):**
+   - Vượt qua cả 7 bước kiểm tra hợp quy trong `scripts/validate_foundation.py`.
+   - Vượt qua 100% typecheck và lint trên toàn bộ các gói trong monorepo.
+   - Build thành công ứng dụng Next.js với 8/8 routes tĩnh và động.
 
 ---
 
-## 3. Hướng dẫn kích hoạt nhiệm vụ tiếp theo (FE-01)
+## 2. Hướng dẫn nghiệm thu dành cho Bin
 
-Sau khi Bin nghiệm thu và merge PR `chore/loop-setup` vào `main`:
+Bin có thể chạy thử ứng dụng cục bộ để kiểm tra giao diện và tính năng theo các bước sau:
 
-1. Tạo một GitHub Issue mới bằng mẫu **Nhiệm vụ phát triển (Task)** với tiêu đề:
-   `[FE-01]: Nghiệm thu FE-01: Khám phá → Địa điểm → Bài viết`
-   và gắn nhãn `ready`.
-2. Hoặc dán prompt sau vào Antigravity để tiếp tục:
+```bash
+# 1. Chuyển sang nhánh FE-01 (nếu đang ở nhánh khác)
+git checkout feat/fe-01-reader-flow
 
-```text
-Đọc AGENTS.md, docs/loops/POLICY.md, RUN_TASK.md, PROJECT_STATE.md và HANDOFF.md.
+# 2. Chạy lệnh kiểm tra tổng hợp
+pnpm run verify
 
-Thực hiện một chu kỳ Product loop trên kinbu3487-afk/Ventlore:
-- Ưu tiên tiếp tục Issue/PR đang làm dở nếu đúng nhiệm vụ và chưa có agent khác xử lý.
-- Nếu không có việc đang làm, chọn đúng một Issue ready theo ưu tiên Bin đã chốt và đã đủ phụ thuộc. Không có việc phù hợp thì dừng.
-- Xác nhận Issue, tiêu chí nghiệm thu và nhánh sẽ dùng; cập nhật in-progress.
-- Đọc các tài liệu nghiệp vụ liên quan; thực hiện phần code cần thiết.
-- Chạy kiểm tra local và đối chiếu từng tiêu chí.
-- Push nhánh, tạo/cập nhật PR liên kết Issue và đọc kết quả GitHub Actions.
-- Nếu lỗi, đọc log, sửa nguyên nhân và kiểm tra lại. Tổng tối đa ba vòng sửa sau lần triển khai đầu.
-- Nếu hết giới hạn, thiếu đầu vào hoặc không tiến triển, cập nhật blocked, lưu tiến độ và nêu điều cần quyết định.
-- Nếu đạt, cập nhật review; ghi báo cáo, PROJECT_STATE và HANDOFF; đưa link PR, CI và cách mở bản thử.
-
-Tôi cho phép sửa code trong phạm vi Issue, chạy kiểm tra, commit/push nhánh, tạo/cập nhật Issue và PR. Dừng để tôi nghiệm thu trước merge và trước khi lấy Issue tiếp theo.
+# 3. Khởi chạy ứng dụng Web
+pnpm --filter @ventlore/web dev
 ```
+
+Mở trình duyệt tại `http://localhost:3000` và kiểm tra các tính năng:
+- **Khám phá:** Duyệt danh sách địa điểm, tìm kiếm theo từ khóa, lọc theo vùng miền tại `/explore`.
+- **Xem bài viết & Đổi phiên bản:** Vào `/posts/PST-000001`, chọn đổi giữa phiên bản v2 (Hiệu lực) và v1 (Hết hạn).
+- **Địa điểm sáp nhập:** Vào `/places/PLC-000002` để xem banner thông báo địa điểm đã sáp nhập vào Hang Múa (`PLC-000001`).
+- **Bảo mật nội dung VIP:**
+  - Ở persona mặc định là "Khách", vào `/posts/PST-000004`, nội dung bí mật bị khóa và hiển thị hộp thoại `AccessGate`.
+  - Bấm vào thanh điều hướng trên cùng, chọn Persona "VIP Member", bài viết sẽ mở khóa hiển thị đầy đủ tọa độ và ghi chú bí mật.
+- **Trang VIP:** Vào `/vip` để xem gói thành viên 1500 USD cents / 12 tháng UTC.
+- **Sổ cái minh bạch:** Vào `/transparency` xem biểu đồ và bảng dòng tiền thu - chi.
+
+---
+
+## 3. Các bước tiếp theo
+
+1. Agent mở Pull Request hướng về `main` với tiêu đề `[FE-01] Front-end nền tảng và trải nghiệm người đọc (S01-S05, S21, S34)`.
+2. Agent theo dõi trạng thái GitHub Actions CI trên PR.
+3. Cập nhật nhãn Issue #2 từ `in-progress` sang `review`.
+4. Agent dừng lại, nhường quyền cho Bin trực tiếp kiểm tra và nhấn nút Merge PR trên GitHub.
+5. Sau khi Bin merge PR, sẽ tiếp tục kích hoạt Chặng 02 (Prompt 02 / BE-01).

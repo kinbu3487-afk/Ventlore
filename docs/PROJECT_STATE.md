@@ -5,14 +5,14 @@
 
 ---
 
-## 1. Mốc hiện tại: Hoàn thành LOOP-00 (Quy trình 5 loop & CI baseline)
+## 1. Mốc hiện tại: Hoàn thành Chặng 01 / FE-01 (Front-end nền tảng và trải nghiệm người đọc)
 
 | Chặng | Tên chặng | Trạng thái | Ghi chú |
 |---|---|---|---|
 | **00** | **Đọc nguồn, khóa quy tắc và dựng nền tảng** | **HOÀN THÀNH** | Đọc đủ 6 tài liệu nguồn; dựng cấu trúc workspace pnpm, AGENTS.md, OpenAPI, toàn bộ tài liệu kiến trúc/hợp đồng dữ liệu, ma trận coverage S01-S35 / C01-C50 / U01-U12, thư viện TypeScript và test runner kiểm tra ID. |
 | **LOOP-00** | **Thiết lập quy trình 5 loop & CI baseline** | **HOÀN THÀNH** | Bổ sung `docs/loops/` (POLICY, RUN_TASK, SYSTEM_REVIEW, REPORT_TEMPLATE), mẫu Issue/PR, GitHub Actions `quality.yml`, lệnh `pnpm run verify` đạt 100%, khóa `pnpm-lock.yaml`. |
-| 01 | Front-end nền tảng và trải nghiệm người đọc | SẴN SÀNG | Mục tiêu kế tiếp (FE-01): design tokens từ Brand Guide, S01-S05, S21, S34, mock adapter. |
-| 02 | Front-end đóng góp, chuyên gia và vận hành | CHƯA BẮT ĐẦU | S06-S12, S17-S19, S24-S27, S30, S31, S35. |
+| **01 (FE-01)** | **Front-end nền tảng và trải nghiệm người đọc** | **HOÀN THÀNH** | Design tokens Brand Guide v0.1 (màu, font Be Vietnam Pro, radii, touch targets >= 44px), C01-C10, C46, C49, C50, 7 màn hình S01-S05, S21, S34, mock adapter 6 kịch bản bắt buộc, bảo mật lọc VIP ở server, verify PASS 100%. |
+| 02 | Front-end đóng góp, chuyên gia và vận hành | SẴN SÀNG | Mục tiêu kế tiếp (FE-02): S06-S12, S17-S19, S24-S27, S30, S31, S35. |
 | 03 | Front-end tiền, quyền lợi và bàn giao API | CHƯA BẮT ĐẦU | S13-S16, S20, S22, S23, S28, S29, S32-S34, hoàn thành C01-C50, FE_HANDOFF. |
 | 04 | Back-end dữ liệu, đăng nhập và phân quyền | CHƯA BẮT ĐẦU | Schema PostgreSQL 34 bảng, Supabase Auth, wallet challenge, API foundation. |
 | 05 | Back-end nội dung, review và nghĩa vụ trả công | CHƯA BẮT ĐẦU | Business services, duplicate detection, review lifecycle, budget reserve, BE_HANDOFF. |

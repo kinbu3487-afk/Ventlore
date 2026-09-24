@@ -4,11 +4,11 @@ Tài liệu này theo dõi tình trạng triển khai của toàn bộ 35 màn h
 
 | Mã | Loại | Tên màn hình / Route | Actor | Dữ liệu đầu vào (Input) | IDs liên quan | Endpoint đề xuất | Components chính | Implementation | Test | Trạng thái Chặng 00 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| **S01** | page | Khám phá (`/explore`) | PUBLIC | query, regionId, filters | placeId, regionId | `GET /places` | C01, C02, C03, C06, C46 | Mock/Spec | Contract/Vector | SPECIFIED |
-| **S02** | page | Chi tiết địa điểm (`/places/{placeId}`) | PUBLIC / Entitled | placeId | placeId, revisionId | `GET /places/{placeId}` | C03, C04, C06, C08, C46 | Mock/Spec | Contract/Vector | SPECIFIED |
-| **S03** | page | Bài và phiên bản (`/posts/{postId}?revisionId=`) | PUBLIC / Entitled | postId, revisionId | postId, revisionId, decisionId | `GET /posts/{postId}` | C05, C06, C07, C08, C31, C40, C46, C49 | Mock/Spec | Contract/Vector | SPECIFIED |
-| **S04** | page | Hồ sơ đóng góp (`/people/{handle}`) | PUBLIC / SELF | handle | userId, postId | `GET /people/{handle}` | C01, C06, C16, C28, C49 | Mock/Spec | Contract/Vector | SPECIFIED |
-| **S05** | page | Đăng nhập (`/login?returnTo=`) | GUEST | provider, returnTo | userId, session | `POST /auth/social/callback` | C08, C09, C46 | Mock/Spec | Contract/Vector | SPECIFIED |
+| **S01** | page | Khám phá (`/explore`) | PUBLIC | query, regionId, filters | placeId, regionId | `GET /places` | C01, C02, C03, C06, C46 | `apps/web/src/app/explore/page.tsx` | verify / smoke | **IMPLEMENTED (Mock)** |
+| **S02** | page | Chi tiết địa điểm (`/places/{placeId}`) | PUBLIC / Entitled | placeId | placeId, revisionId | `GET /places/{placeId}` | C03, C04, C06, C08, C46 | `apps/web/src/app/places/[placeId]/page.tsx` | verify / smoke | **IMPLEMENTED (Mock)** |
+| **S03** | page | Bài và phiên bản (`/posts/{postId}?revisionId=`) | PUBLIC / Entitled | postId, revisionId | postId, revisionId, decisionId | `GET /posts/{postId}` | C05, C06, C07, C08, C31, C40, C46, C49 | `apps/web/src/app/posts/[postId]/page.tsx` | verify / smoke | **IMPLEMENTED (Mock)** |
+| **S04** | page | Hồ sơ đóng góp (`/people/{handle}`) | PUBLIC / SELF | handle | userId, postId | `GET /people/{handle}` | C01, C06, C16, C28, C49 | `apps/web/src/app/people/[handle]/page.tsx` | verify / smoke | **IMPLEMENTED (Mock)** |
+| **S05** | page | Đăng nhập (`/login?returnTo=`) | GUEST | provider, returnTo | userId, session | `POST /auth/social/callback` | C08, C09, C46 | `apps/web/src/app/login/page.tsx` | verify / smoke | **IMPLEMENTED (Mock)** |
 | **S06** | page | Soạn và sửa bài (`/contribute/new`, `/contribute/{postId}/edit`) | AUTHOR | title, content, observedAt, claims, media | postId, placeId, revisionId | `POST /posts`, `PATCH /posts/{id}/draft` | C04, C11, C12, C13, C15, C17, C46, C49 | Mock/Spec | Contract/Vector | SPECIFIED |
 | **S07** | panel | Xem trước và gửi (trong S06/S17) | AUTHOR | snapshot data, consent | postId, placeId, revisionId | `POST /contributions/validate` | C06, C08, C15, C46 | Mock/Spec | Contract/Vector | SPECIFIED |
 | **S08** | page | Đóng góp của tôi (`/account/contributions`) | SELF | - | userId, postId, revisionId | `GET /account/contributions` | C16, C17, C28, C47 | Mock/Spec | Contract/Vector | SPECIFIED |
@@ -24,7 +24,7 @@ Tài liệu này theo dõi tình trạng triển khai của toàn bộ 35 màn h
 | **S18** | dialog | So sánh điểm trùng (trong S17/S09) | AUTHOR / OPERATOR | candidate fields | placeId | `POST /places/duplicate-check` | C04, C14 | Mock/Spec | Contract/Vector | SPECIFIED |
 | **S19** | panel | Tiến trình và phản hồi (trong S08) | AUTHOR | reviewCaseId | postId, revisionId, reviewCaseId, decisionId | `GET /posts/{id}/timeline` | C07, C16, C17, C31 | Mock/Spec | Contract/Vector | SPECIFIED |
 | **S20** | page | Ví liên kết (`/account/wallet`) | SELF | signature, address | userId, walletBindingId | `POST /wallet-bindings` | C10, C31, C46 | Mock/Spec | Contract/Vector | SPECIFIED |
-| **S21** | page | Gói VIP (`/vip`) | PUBLIC / MEMBER | planCode | membershipId | `GET /vip/plans` | C08, C09, C36, C37 | Mock/Spec | Contract/Vector | SPECIFIED |
+| **S21** | page | Gói VIP (`/vip`) | PUBLIC / MEMBER | planCode | membershipId | `GET /vip/plans` | C08, C09, C36, C37 | `apps/web/src/app/vip/page.tsx` | verify / smoke | **IMPLEMENTED (Mock)** |
 | **S22** | page | Thanh toán VIP (`/account/vip/payments/{paymentId}`) | PAYER | paymentId, channel | paymentId, membershipId, actionId | `POST /vip/payments/{id}/checkout` | C34, C37, C46 | Mock/Spec | Contract/Vector | SPECIFIED |
 | **S23** | page | VIP của tôi (`/account/membership`) | SELF | - | membershipId, paymentId | `GET /me/membership` | C08, C36, C37, C38, C47 | Mock/Spec | Contract/Vector | SPECIFIED |
 | **S24** | panel | Lời mời chuyên gia (`/account/expert-invitation`) | INVITED_USER | roleAssignmentId | userId, roleAssignmentId, regionId | `POST /role-assignments/{id}/response` | C48, C49 | Mock/Spec | Contract/Vector | SPECIFIED |
@@ -37,5 +37,5 @@ Tài liệu này theo dõi tình trạng triển khai của toàn bộ 35 màn h
 | **S31** | tab | Xử lý báo sai (`/admin/reports`) | OPERATOR | hold, action | reportId, revisionId, reasonId, reviewCaseId | `POST /revisions/{id}/hold` | C06, C19, C27, C31, C41 | Mock/Spec | Contract/Vector | SPECIFIED |
 | **S32** | page | Thao tác contract (`/admin/contracts`) | OPS_SIGNER / ADMIN | actionId, calldata | deploymentId, actionId, routeId | `POST /actions/{id}/attempts` | C28, C29, C31, C34, C41, C44, C47, C49 | Mock/Spec | Contract/Vector | SPECIFIED |
 | **S33** | drawer | Tra cứu ID và lịch sử | AUTHORIZED_STAFF | query ID/code | requestTraceId, actionId, business IDs | `GET /admin/entity-lookup` | C44, C45 | Mock/Spec | Contract/Vector | SPECIFIED |
-| **S34** | page | Minh bạch quỹ (`/transparency`) | PUBLIC | asset, year | - | `GET /transparency/summary` | C50 | Mock/Spec | Contract/Vector | SPECIFIED |
+| **S34** | page | Minh bạch quỹ (`/transparency`) | PUBLIC | asset, year | - | `GET /transparency/summary` | C50 | `apps/web/src/app/transparency/page.tsx` | verify / smoke | **IMPLEMENTED (Mock)** |
 | **S35** | panel | Tuyển chọn nội dung VIP (trong S12) | OPERATOR | postId, consent | postId, revisionId, decisionId | `POST /decisions/{id}/publication` | C06, C15, C39 | Mock/Spec | Contract/Vector | SPECIFIED |
