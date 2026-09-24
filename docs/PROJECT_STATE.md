@@ -1,17 +1,17 @@
 # Trạng Thái Dự Án Ventlore (PROJECT_STATE)
 
-**Cập nhật lần cuối:** 24/09/2026 (FE-01 Round 3 Refinement · Tinh chỉnh toàn diện 8 nhóm việc UI & i18n)  
-**Phiên bản đặc tả cơ sở:** Logic-ID-DB v0.3, Event UI Spec v0.3, Brand Guide v0.1, Prompt 01 Round 3 Combined
+**Cập nhật lần cuối:** 24/09/2026 (FE-01 Round 4 · Thêm HomePage Thiên tai & Tương trợ, Căn giữa H1, Sửa triệt để Bio/i18n & Tây Côn Lĩnh 404)  
+**Phiên bản đặc tả cơ sở:** Logic-ID-DB v0.3, Event UI Spec v0.3, Brand Guide v0.1, Prompt 01 Round 4 HomePage & i18n
 
 ---
 
-## 1. Mốc hiện tại: Hoàn thành Chặng 01 / FE-01 Round 3 (Tinh Chỉnh Toàn Diện Giao Diện & Đa Ngôn Ngữ 6 Locales)
+## 1. Mốc hiện tại: Hoàn thành Chặng 01 / FE-01 Round 4 (HomePage Thiên tai & Tương trợ · Tinh chỉnh Bio & Sửa Lỗi Điều Hướng/404)
 
 | Chặng | Tên chặng | Trạng thái | Ghi chú |
 |---|---|---|---|
 | **00** | **Đọc nguồn, khóa quy tắc và dựng nền tảng** | **HOÀN THÀNH** | Đọc đủ 6 tài liệu nguồn; dựng cấu trúc workspace pnpm, AGENTS.md, OpenAPI, toàn bộ tài liệu kiến trúc/hợp đồng dữ liệu, ma trận coverage S01-S35 / C01-C50 / U01-U12, thư viện TypeScript và test runner kiểm tra ID. |
 | **LOOP-00** | **Thiết lập quy trình 5 loop & CI baseline** | **HOÀN THÀNH** | Bổ sung `docs/loops/` (POLICY, RUN_TASK, SYSTEM_REVIEW, REPORT_TEMPLATE), mẫu Issue/PR, GitHub Actions `quality.yml`, lệnh `pnpm run verify` đạt 100%, khóa `pnpm-lock.yaml`. |
-| **01 (FE-01 Round 3)** | **Tinh chỉnh UI & Đa ngôn ngữ 8 nhóm** | **HOÀN THÀNH** | Hoàn thành 8/8 nhóm việc: 1-P0 Kiểm định trung thực; 2-P1 Giữ bộ lọc URL/reload/popstate; 3-P1 Xóa dấu :: lặp, sửa 16:00 và số nhiều; 4-P1 Trang cá nhân S04 100% i18n & thông báo bản gốc; 5-P2 Ảnh thật Unsplash & fallback SVG; 6-P2 Hero gọn above-the-fold y<750px; 7-P2 Khám phá sâu hơn & PST-000004 VIP Vịnh Lan Hạ; 8-P2 Lịch sử phiên bản thu gọn; Verify 192 static pages PASS 100%. |
+| **01 (FE-01 Round 4)** | **Thêm HomePage & Hoàn thiện Đa ngôn ngữ 6 Locales** | **HOÀN THÀNH** | Hoàn thành cả 3 nhóm: 1. HomePage toàn khối bão lũ & tương trợ dã ngoại, H1 căn chính giữa ảnh, 6 sections; 2. Sửa bio 6 ngôn ngữ 5 demo profiles, tên ngôn ngữ bản địa, sửa 404 Tây Côn Lĩnh UUID, sửa race condition VIP demo; 3. Navbar 5 mục (Trang chủ, Khám phá, Sứ mệnh, Minh bạch, VIP), 199/199 static pages export thành công 100%, 0 raw translation key leaks. |
 | 02 | Front-end đóng góp, chuyên gia và vận hành | SẴN SÀNG | Mục tiêu kế tiếp (FE-02): S06-S12, S17-S19, S24-S27, S30, S31, S35. |
 | 03 | Front-end tiền, quyền lợi và bàn giao API | CHƯA BẮT ĐẦU | S13-S16, S20, S22, S23, S28, S29, S32-S34, hoàn thành C01-C50, FE_HANDOFF. |
 | 04 | Back-end dữ liệu, đăng nhập và phân quyền | CHƯA BẮT ĐẦU | Schema PostgreSQL 34 bảng, Supabase Auth, wallet challenge, API foundation. |

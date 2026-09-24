@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@/lib/i18n';
 
-export default async function HomePage() {
+export default async function RootPage() {
   let targetLocale = DEFAULT_LOCALE;
 
   if (process.env.STATIC_EXPORT !== 'true') {
@@ -17,5 +17,5 @@ export default async function HomePage() {
     }
   }
 
-  redirect(`/${targetLocale}/explore`);
+  redirect(`/${targetLocale}/`);
 }

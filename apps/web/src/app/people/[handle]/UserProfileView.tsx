@@ -112,7 +112,19 @@ export function UserProfileView({ initialHandle }: UserProfileViewProps) {
                     {profile.isOriginalBio && locale !== 'vi' && (
                       <div className="mt-1.5 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-surface-canvas text-[11px] text-ink-muted border border-sage/60">
                         <GlobeIcon className="w-3.5 h-3.5 text-forest shrink-0" />
-                        <span>{t('profile.originalBioNotice', { language: profile.originalBioLanguage || 'Tiếng Việt' })}</span>
+                        <span>
+                          {t('profile.originalBioNotice', {
+                            language:
+                              {
+                                vi: 'Tiếng Việt',
+                                en: 'Vietnamese',
+                                ja: 'ベトナム語',
+                                'zh-Hans': '越南语',
+                                ko: '베트남어',
+                                fr: 'vietnamien',
+                              }[locale] || 'Vietnamese',
+                          })}
+                        </span>
                       </div>
                     )}
 

@@ -1657,6 +1657,34 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
         ko: '베트남 동북부 지역에서 8년 이상의 현장 경험을 보유한 해안 및 절벽 내비게이션 전문가.',
         fr: 'Guide de terrain littoral et falaises avec plus de 8 ans d’expérience dans le nord-est du Vietnam.',
       },
+      bin_traveler: {
+        en: 'Island and coastal wilderness enthusiast, dedicated to documenting 50 remote offshore islands.',
+        ja: '島嶼と手つかずの自然を愛する旅人。沿岸50島の踏破・記録を目指して活動中。',
+        'zh-Hans': '海岛与野外荒野探险爱好者，正致力于记录50座近岸离岛的真实生态与地貌。',
+        ko: '섬과 야생 자연을 사랑하는 탐험가. 50개 연안 섬의 기록을 목표로 활동하고 있습니다.',
+        fr: 'Passionné d’îles et de nature sauvage, engagé dans la documentation de 50 îles côtières isolées.',
+      },
+      hoang_ranger: {
+        en: 'Forest ranger in charge of terrain safety and natural trails in the Northeast. 12 years of specialized conservation management and field verification.',
+        ja: '北東部の地形安全および自然遊歩道を管轄する森林警備隊員。12年の特別林管理および実地検証経験。',
+        'zh-Hans': '负责东北部地形安全与自然步道的森林巡护员，具备12年特种林区保护管理与实地核验经验。',
+        ko: '동북부 지형 안전 및 자연 트레일을 담당하는 산림 레인저. 12년간의 특수 산림 보호구역 관리 및 현장 검증 경력.',
+        fr: 'Garde forestier responsable de la sécurité des terrains et sentiers naturels du Nord-Est. 12 ans d’expérience en gestion forestière et vérification terrain.',
+      },
+      an_vip_explorer: {
+        en: 'Annual supporting member of the Ventlore exploration and conservation fund. Passionate about alpine trekking and speleological surveys.',
+        ja: 'Ventlore探検・保全基金の年間支援メンバー。アドベンチャートレッキングや洞窟探査に情熱を注ぐ。',
+        'zh-Hans': 'Ventlore探险与保护基金年度资助会员，热衷于高难度徒步越野与洞穴地貌勘测。',
+        ko: 'Ventlore 탐험 및 보존 기금의 연간 후원 회원. 고난도 트레킹과 동굴 지형 조사에 열정을 쏟고 있습니다.',
+        fr: 'Membre bienfaiteur annuel du fonds d’exploration et de conservation Ventlore. Passionné de trekking d’aventure et de spéléologie.',
+      },
+      guest_reader: {
+        en: 'Independent reader exploring community verified destinations and field reports on Ventlore.',
+        ja: 'Ventloreプラットフォームで検証済みスポットや現地レポートを閲覧する一般読者。',
+        'zh-Hans': '在Ventlore平台上探索核验目的地与实地考察手记的自由读者。',
+        ko: 'Ventlore 플랫폼에서 검증된 여행지와 현장 보고서를 탐색하는 일반 독자.',
+        fr: 'Lecteur indépendant découvrant les destinations vérifiées et rapports de terrain sur Ventlore.',
+      },
     };
 
     if (targetLocale !== 'vi') {
@@ -1677,6 +1705,13 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
           ko: '골드 현장 검증 뱃지 (기여자 SBT)',
           fr: 'Insigne d’or de vérification terrain (SBT Contributeur)',
         },
+        '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e72': {
+          en: 'Accredited Field Reviewer Certificate (Expert Reviewer)',
+          ja: '認定実地検証スペシャリスト証明（エキスパートレビュアー）',
+          'zh-Hans': '特聘实地核验专家认证（专业审核员）',
+          ko: '공인 현장 검증 전문가 자격 (전문 검토자)',
+          fr: 'Certificat d’Évaluateur de Terrain Agréé (Réviseur Expert)',
+        },
       };
 
       profile.credentials = profile.credentials.map(cred => {
@@ -1686,6 +1721,23 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
           title: transTitle ?? cred.title,
         };
       });
+
+      const postTitleTranslations: Record<string, Record<string, string>> = {
+        '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e20': {
+          en: 'Sunrise Experience at Dragon Claw Cliffs, Co To Island',
+          ja: 'コトー島・ドラゴンクロー断崖での日の出体験',
+          'zh-Hans': '姑苏岛龙爪绝壁日出观赏实地体验',
+          ko: '꼬또섬 드래곤 클로 절벽 일출 감상 실측 기록',
+          fr: 'Expérience du lever de soleil sur les falaises de la Griffe du Dragon à Cô Tô',
+        },
+        '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e30': {
+          en: 'Winter Ascent along Tay Con Linh Trails (Expired Audit)',
+          ja: '冬季タイコンリン稜線越えトレイル（検証期限切れ）',
+          'zh-Hans': '西昆岭冬季穿越路线考察手记（核验已过期）',
+          ko: '겨울철 떠이꼰린 능선 횡단 여정 (검증 기한 만료)',
+          fr: 'Traversée hivernale des crêtes de Tay Con Linh (Vérification expirée)',
+        },
+      };
 
       profile.publishedPosts = profile.publishedPosts.map(postItem => {
         const postEntry = this.posts[postItem.postId];
@@ -1701,7 +1753,23 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
 
         if (postEntry?.revision?.translations?.[targetLocale]?.title) {
           translatedTitle = postEntry.revision.translations[targetLocale].title;
+          if (postItem.title.includes('Thẩm định viên')) {
+            const roleNotes: Record<string, string> = {
+              en: ' (Reviewer notes)',
+              ja: '（検証員記録）',
+              'zh-Hans': '（审核员手记）',
+              ko: ' (검토자 노트)',
+              fr: ' (Notes d’évaluateur)',
+            };
+            translatedTitle += roleNotes[targetLocale] || '';
+          }
           isUntranslated = false;
+        } else if (postTitleTranslations[postItem.postId]?.[targetLocale]) {
+          const match = postTitleTranslations[postItem.postId]?.[targetLocale];
+          if (match) {
+            translatedTitle = match;
+            isUntranslated = false;
+          }
         }
 
         return {
