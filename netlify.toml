@@ -5,12 +5,12 @@
 [build]
   base = ""
   publish = "apps/web/out"
-  command = "STATIC_EXPORT=true pnpm --filter @ventlore/web build"
+  command = "npx --yes pnpm@9.15.4 install && npx --yes pnpm@9.15.4 --filter @ventlore/web build"
 
 [build.environment]
-  NODE_VERSION = "20.18.0"
-  PNPM_VERSION = "9.15.4"
+  NODE_VERSION = "22"
   STATIC_EXPORT = "true"
+  CI = "false"
 
 # Optimized caching headers for immutable fonts & brand assets
 [[headers]]
