@@ -5,13 +5,11 @@
 [build]
   base = ""
   publish = "apps/web/out"
-  command = "corepack enable && pnpm --filter @ventlore/web build"
+  command = "npx --yes pnpm@9.15.4 install && npx --yes pnpm@9.15.4 --filter @ventlore/web build"
 
 [build.environment]
   NODE_VERSION = "22"
-  PNPM_VERSION = "9.15.4"
   STATIC_EXPORT = "true"
-  COREPACK_INTEGRITY_KEYS = "0"
   CI = "false"
 
 # Optimized caching headers for immutable fonts & brand assets
