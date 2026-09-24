@@ -686,6 +686,53 @@ Cửa hang nằm ẩn sau bụi dứa dại cách mép nước 15m. Độ cao n�
         },
       ],
     },
+    hoang_ranger: {
+      userId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e07',
+      handle: 'hoang_ranger',
+      displayName: 'Hoàng Kiểm Lâm Viên',
+      avatarUrl: '/brand/Ventlore_Avatar_Forest.png',
+      bio: 'Kiểm lâm viên phụ trách an toàn địa hình và đường mòn tự nhiên vùng Đông Bắc. 12 năm kinh nghiệm quản lý tuyến rừng đặc dụng và thẩm định thực địa.',
+      joinedAt: '2023-08-10T00:00:00Z',
+      credentials: [
+        {
+          credentialId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e72',
+          title: 'Chứng nhận Chuyên Gia Thẩm Định Thực Địa (Expert Reviewer)',
+          badgeType: 'CONTRIBUTOR_SBT',
+          issuedAt: '2024-05-12T10:00:00Z',
+          tokenId: '5829104819204913',
+        },
+      ],
+      publishedPosts: [
+        {
+          postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e10',
+          displayCode: 'PST-000001',
+          placeName: 'Vịnh Cát Cò 3 - Hải Trình Ven Đảo',
+          title: 'Kinh nghiệm vượt ghềnh Cát Cò 3 an toàn mùa nắng (Thẩm định viên)',
+          verificationStatus: VerificationStatus.VERIFIED,
+          observedAt: '2026-04-15T08:00:00Z',
+        },
+      ],
+    },
+    an_vip_explorer: {
+      userId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e06',
+      handle: 'an_vip_explorer',
+      displayName: 'An Thám Hiểm VIP',
+      avatarUrl: '/brand/Ventlore_Avatar_Forest.png',
+      bio: 'Thành viên đóng góp thường niên cho quỹ khám phá và bảo tồn Ventlore. Đam mê trekking mạo hiểm và khảo sát hang động.',
+      joinedAt: '2025-01-01T00:00:00Z',
+      credentials: [],
+      publishedPosts: [],
+    },
+    guest_reader: {
+      userId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e00',
+      handle: 'guest_reader',
+      displayName: 'Khách Khám Phá',
+      avatarUrl: '/brand/Ventlore_Avatar_Forest.png',
+      bio: 'Độc giả tự do tìm hiểu thông tin địa điểm và bài viết trên nền tảng Ventlore.',
+      joinedAt: '2026-09-01T00:00:00Z',
+      credentials: [],
+      publishedPosts: [],
+    },
   };
 
   // VIP plans fixture
