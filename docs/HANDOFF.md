@@ -2,8 +2,11 @@
 
 **Chặng hoàn thành gần nhất:** LOOP-00 — Thiết lập quy trình 5 loop, CI baseline và bộ kiểm tra tổng hợp  
 **Nhiệm vụ tiếp theo:** Nghiệm thu FE-01 — Khám phá → Địa điểm → Bài viết (Mục 5 trong hướng dẫn)  
-**Thời điểm bàn giao:** 24/09/2026 10:15 UTC+7  
+**Thời điểm bàn giao:** 24/09/2026 10:20 UTC+7  
 **Nhánh làm việc:** `chore/loop-setup`  
+**Commit SHA:** `327b921`  
+**Pull Request:** https://github.com/kinbu3487-afk/Ventlore/pull/1  
+**GitHub Actions CI:** https://github.com/kinbu3487-afk/Ventlore/actions/runs/35950828551 (Status: PASS / SUCCESS, Job: `Lint, Typecheck & Verification`)  
 **Báo cáo chi tiết:** `docs/loops/reports/LOOP-00-setup.md`
 
 ---

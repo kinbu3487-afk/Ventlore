@@ -25,6 +25,9 @@
 ## 2. Phiên bản & Môi trường (Environment & Artifacts)
 
 - **Nhánh Git:** `chore/loop-setup`
+- **Commit SHA:** `327b921`
+- **Pull Request:** `https://github.com/kinbu3487-afk/Ventlore/pull/1`
+- **GitHub Actions CI Run:** `https://github.com/kinbu3487-afk/Ventlore/actions/runs/35950828551` (Status: SUCCESS, Elapsed: 54s, Job: `Lint, Typecheck & Verification`)
 - **Môi trường cục bộ:**
   - Node.js: `v24.21.0`
   - pnpm: `9.15.4` (cài đặt qua Homebrew)
