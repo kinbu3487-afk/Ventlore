@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { PostDetailDTO } from '@ventlore/api-client';
-import { TipRouteStatus } from '@ventlore/domain';
+import { TipRouteStatus, VerificationStatus } from '@ventlore/domain';
 import { useI18n } from '../lib/i18n';
 import { VerificationPanel } from './VerificationPanel';
 import { RevisionSelector } from './RevisionSelector';
@@ -165,10 +165,16 @@ export function PostReader({ post }: PostReaderProps) {
         {/* Claims Checklist (Nhận định thực địa gắn với revision) */}
         {revision.claims.length > 0 && (
           <div className="rounded-card border border-sage bg-surface-card p-6 shadow-sm">
-            <h3 className="font-bold text-base text-ink mb-3 flex items-center justify-between">
-              <span>{t('post.claimsTitle', { count: revision.claims.length })}</span>
+            <h3 className="font-bold text-base text-ink mb-3 flex flex-wrap items-center justify-between gap-2">
+              <span>
+                {revision.verificationStatus === VerificationStatus.VERIFIED
+                  ? t('post.verifiedClaimsTitle', { count: revision.claims.length })
+                  : t('post.unverifiedClaimsTitle', { count: revision.claims.length })}
+              </span>
               <span className="text-xs font-normal text-ink-muted">
-                {t('post.claimsAttachedToRevision')}
+                {revision.verificationStatus === VerificationStatus.VERIFIED
+                  ? t('post.claimsAttachedToRevision')
+                  : t('post.unverifiedClaimsSubtitle')}
               </span>
             </h3>
 
@@ -178,7 +184,11 @@ export function PostReader({ post }: PostReaderProps) {
                   key={claim.claimId}
                   className="p-3 rounded-control border border-sage/60 bg-surface-canvas text-xs flex items-start gap-2.5"
                 >
-                  <CheckIcon className="w-4 h-4 text-forest shrink-0 mt-0.5" />
+                  {revision.verificationStatus === VerificationStatus.VERIFIED ? (
+                    <CheckIcon className="w-4 h-4 text-forest shrink-0 mt-0.5" />
+                  ) : (
+                    <span className="w-2 h-2 rounded-full bg-ink-muted/50 shrink-0 mt-1.5 ml-1 mr-1" />
+                  )}
                   <div className="flex-1">
                     <span className="font-medium text-ink">{claim.text}</span>
                     {claim.category && (

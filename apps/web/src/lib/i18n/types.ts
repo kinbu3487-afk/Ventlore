@@ -32,6 +32,13 @@ export interface TranslationCatalog {
     viewDetails: string;
     date: string;
     status: string;
+    guestPersona: string;
+    memberPersona: string;
+    vipPersona: string;
+    authorPersona: string;
+    expertPersona: string;
+    fieldPostSingular: string;
+    fieldPostPlural: string;
   };
   nav: {
     explore: string;
@@ -63,9 +70,14 @@ export interface TranslationCatalog {
     activityFilter: string;
     allRegions: string;
     allActivities: string;
+    actTrekking: string;
+    actKayaking: string;
+    actMountaineering: string;
+    actForest: string;
     nearMe: string;
     gpsSimulated: string;
     filterCount: string;
+    activeFilterCount: string;
     placesFound: string;
     listView: string;
     mapView: string;
@@ -80,6 +92,7 @@ export interface TranslationCatalog {
     noPlacesFound: string;
     noPlacesHint: string;
     mergedNoticePrefix: string;
+    imageAttribution: string;
   };
   place: {
     mergedTitle: string;
@@ -111,18 +124,28 @@ export interface TranslationCatalog {
     validUntil: string;
     verificationScope: string;
     unverifiedDesc: string;
+    inReviewDesc: string;
+    needsChangesDesc: string;
+    inconclusiveDesc: string;
+    rejectedDesc: string;
     expiredDesc: string;
+    suspendedDesc: string;
     inspectorNotes: string;
     checkedAt: string;
     independentVerificationDesc: string;
     contentInVietnameseOnly: string;
     claimsTitle: string;
+    verifiedClaimsTitle: string;
+    unverifiedClaimsTitle: string;
+    unverifiedClaimsSubtitle: string;
     claimsAttachedToRevision: string;
     tipRouteTitle: string;
     tipSplitRatio: string;
     tipRouteActive: string;
     beneficiaryAddress: string;
     revisionHistory: string;
+    viewVersionHistory: string;
+    hideVersionHistory: string;
     immutableSnapshot: string;
     immutableExplanation: string;
     version: string;
@@ -134,6 +157,25 @@ export interface TranslationCatalog {
     backToPlace: string;
     loadingPost: string;
     safetyDisclaimer: string;
+    technicalDetailsTitle: string;
+  };
+  profile: {
+    joined: string;
+    userId: string;
+    postsAndContributions: string;
+    readArticle: string;
+    noPosts: string;
+    noPublicContributions: string;
+    loading: string;
+    notFound: string;
+    unableToLoad: string;
+    retry: string;
+    sbtCredentials: string;
+    issuedAt: string;
+    tokenId: string;
+    originalBioNotice: string;
+    originalContentNotice: string;
+    translationNotAvailable: string;
   };
   vip: {
     badge: string;

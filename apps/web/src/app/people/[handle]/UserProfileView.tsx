@@ -14,6 +14,7 @@ import {
   SparklesIcon,
   ChevronRightIcon,
   ArrowLeftIcon,
+  GlobeIcon,
 } from '@/components/Icons';
 
 interface UserProfileViewProps {
@@ -23,7 +24,7 @@ interface UserProfileViewProps {
 export function UserProfileView({ initialHandle }: UserProfileViewProps) {
   const params = useParams();
   const handle = initialHandle || (params?.handle as string);
-  const { t, formatDate, getLocalizedPath } = useI18n();
+  const { t, locale, formatDate, getLocalizedPath } = useI18n();
 
   const [profile, setProfile] = useState<UserProfileDTO | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +37,7 @@ export function UserProfileView({ initialHandle }: UserProfileViewProps) {
       setIsLoading(true);
       setNotFound(false);
       try {
-        const data = await mockApiClient.getUserProfile(handle);
+        const data = await mockApiClient.getUserProfile(handle, locale);
         if (mounted) {
           if (!data) {
             setNotFound(true);
@@ -56,7 +57,7 @@ export function UserProfileView({ initialHandle }: UserProfileViewProps) {
     return () => {
       mounted = false;
     };
-  }, [handle]);
+  }, [handle, locale]);
 
   return (
     <AppShell>
@@ -73,8 +74,10 @@ export function UserProfileView({ initialHandle }: UserProfileViewProps) {
 
         <AsyncState
           isLoading={isLoading}
+          loadingLabel={t('profile.loading')}
           errorCode={notFound ? 404 : null}
-          errorMessage={t('errors.notFoundMessage')}
+          emptyMessage={t('profile.noPublicContributions')}
+          errorMessage={t('profile.unableToLoad')}
         >
           {profile && (
             <div className="space-y-6">
@@ -105,10 +108,18 @@ export function UserProfileView({ initialHandle }: UserProfileViewProps) {
                       {profile.bio}
                     </p>
 
-                    <div className="pt-2 flex items-center gap-4 text-xs text-ink-muted">
-                      <span>Tham gia: {formatDate(profile.joinedAt)}</span>
+                    {/* Notice if bio is displayed in original Vietnamese on non-vi locale */}
+                    {profile.isOriginalBio && locale !== 'vi' && (
+                      <div className="mt-1.5 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-surface-canvas text-[11px] text-ink-muted border border-sage/60">
+                        <GlobeIcon className="w-3.5 h-3.5 text-forest shrink-0" />
+                        <span>{t('profile.originalBioNotice', { language: profile.originalBioLanguage || 'Tiếng Việt' })}</span>
+                      </div>
+                    )}
+
+                    <div className="pt-2 flex flex-wrap items-center gap-4 text-xs text-ink-muted">
+                      <span>{t('profile.joined')}: {formatDate(profile.joinedAt)}</span>
                       <span>•</span>
-                      <span>Mã định danh: <code className="font-mono">{profile.userId.slice(0, 18)}...</code></span>
+                      <span>{t('profile.userId')}: <code className="font-mono text-ink-secondary">{profile.userId.slice(0, 18)}...</code></span>
                     </div>
                   </div>
                 </div>
@@ -118,7 +129,7 @@ export function UserProfileView({ initialHandle }: UserProfileViewProps) {
                   <div className="mt-6 pt-5 border-t border-sage/60">
                     <h3 className="text-xs font-bold uppercase tracking-wider text-ink-secondary mb-3 flex items-center gap-1.5">
                       <SparklesIcon className="w-4 h-4 text-forest" />
-                      <span>Chứng chỉ Soulbound Token (SBT) Onchain</span>
+                      <span>{t('profile.sbtCredentials')}</span>
                     </h3>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -131,11 +142,11 @@ export function UserProfileView({ initialHandle }: UserProfileViewProps) {
                           <div>
                             <div className="font-bold text-xs text-ink">{cred.title}</div>
                             <div className="text-[11px] text-ink-secondary mt-0.5">
-                              Cấp ngày: {formatDate(cred.issuedAt)}
+                              {t('profile.issuedAt')}: {formatDate(cred.issuedAt)}
                             </div>
                             {cred.tokenId && (
                               <div className="text-[10px] font-mono text-forest mt-1">
-                                Token ID: {cred.tokenId} (ERC-5192)
+                                {t('profile.tokenId')}: {cred.tokenId} (ERC-5192)
                               </div>
                             )}
                           </div>
@@ -149,42 +160,53 @@ export function UserProfileView({ initialHandle }: UserProfileViewProps) {
               {/* Published Posts List */}
               <div className="space-y-3">
                 <h2 className="text-lg font-bold text-ink">
-                  Các bài viết & Đóng góp thực địa ({profile.publishedPosts.length})
+                  {t('profile.postsAndContributions', { count: profile.publishedPosts.length })}
                 </h2>
 
-                <div className="space-y-3">
-                  {profile.publishedPosts.map((post) => (
-                    <Link
-                      key={post.postId}
-                      href={getLocalizedPath(`/posts/${post.postId}`)}
-                      className="block p-4 sm:p-5 rounded-card border border-sage bg-surface-card hover:border-forest transition-all"
-                    >
-                      <div className="flex flex-wrap items-start justify-between gap-2 mb-1.5">
-                        <div>
-                          <span className="text-xs font-mono text-ink-muted mr-2">
-                            {post.displayCode}
-                          </span>
-                          <span className="text-xs font-semibold text-forest">
-                            {post.placeName}
-                          </span>
-                          <h3 className="font-bold text-base text-ink mt-0.5 hover:text-forest transition-colors">
-                            {post.title}
-                          </h3>
+                {profile.publishedPosts.length === 0 ? (
+                  <div className="p-8 text-center bg-surface-card rounded-card border border-sage text-sm text-ink-muted">
+                    {t('profile.noPosts')}
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {profile.publishedPosts.map((post) => (
+                      <Link
+                        key={post.postId}
+                        href={getLocalizedPath(`/posts/${post.postId}`)}
+                        className="block p-4 sm:p-5 rounded-card border border-sage bg-surface-card hover:border-forest transition-all"
+                      >
+                        <div className="flex flex-wrap items-start justify-between gap-2 mb-1.5">
+                          <div>
+                            <span className="text-xs font-mono text-ink-muted mr-2">
+                              {post.displayCode}
+                            </span>
+                            <span className="text-xs font-semibold text-forest">
+                              {post.placeName}
+                            </span>
+                            <h3 className="font-bold text-base text-ink mt-0.5 hover:text-forest transition-colors flex flex-wrap items-center gap-2">
+                              <span>{post.title}</span>
+                              {post.isUntranslated && locale !== 'vi' && (
+                                <span className="text-[10px] font-medium text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
+                                  {t('profile.originalContentNotice', { language: 'Tiếng Việt' })}
+                                </span>
+                              )}
+                            </h3>
+                          </div>
+                          <VerificationBadge status={post.verificationStatus} size="sm" />
                         </div>
-                        <VerificationBadge status={post.verificationStatus} size="sm" />
-                      </div>
 
-                      <div className="flex items-center justify-between text-xs text-ink-muted pt-2 border-t border-sage/40">
-                        <span>
-                          {t('place.observedAt')}: {formatDate(post.observedAt)}
-                        </span>
-                        <span className="text-forest font-semibold flex items-center gap-1">
-                          Đọc bài viết <ChevronRightIcon className="w-3.5 h-3.5" />
-                        </span>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
+                        <div className="flex items-center justify-between text-xs text-ink-muted pt-2 border-t border-sage/40">
+                          <span>
+                            {t('place.observedAt')}: {formatDate(post.observedAt)}
+                          </span>
+                          <span className="text-forest font-semibold flex items-center gap-1">
+                            {t('profile.readArticle')} <ChevronRightIcon className="w-3.5 h-3.5" />
+                          </span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           )}

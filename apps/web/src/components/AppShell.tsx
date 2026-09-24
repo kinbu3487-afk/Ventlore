@@ -35,7 +35,7 @@ export function AppShell({ children }: AppShellProps) {
   ];
 
   const personas: Array<{ id: DemoPersona; name: string; tag: string }> = [
-    { id: 'guest', name: 'Khách (Guest)', tag: 'PUBLIC_READ' },
+    { id: 'guest', name: t('common.guestPersona'), tag: 'PUBLIC_READ' },
     { id: 'member', name: 'Bin Khám Phá', tag: 'MEMBER' },
     { id: 'vip', name: 'An Thám Hiểm VIP', tag: 'VIP_ACTIVE' },
     { id: 'author', name: 'Minh Hướng Dẫn Viên', tag: 'AUTHOR' },

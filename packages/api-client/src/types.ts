@@ -198,6 +198,8 @@ export interface UserProfileDTO {
   displayName: string;
   avatarUrl?: string;
   bio: string;
+  isOriginalBio?: boolean;
+  originalBioLanguage?: string;
   joinedAt: string;
   credentials: Array<{
     credentialId: string;
@@ -213,6 +215,7 @@ export interface UserProfileDTO {
     title: string;
     verificationStatus: VerificationStatus;
     observedAt: string;
+    isUntranslated?: boolean;
   }>;
 }
 

@@ -65,7 +65,20 @@ export function PlaceSummary({ place }: PlaceSummaryProps) {
             src={coverImage}
             alt={place.name}
             className="w-full h-full object-cover"
+            onError={(e) => {
+              const fallback = place.displayCode === 'PLC-000004'
+                ? '/destinations/co-to.svg'
+                : place.displayCode === 'PLC-000005'
+                ? '/destinations/tay-con-linh.svg'
+                : '/destinations/cat-co-3.svg';
+              (e.currentTarget as HTMLImageElement).src = fallback;
+            }}
           />
+          <div className="absolute top-4 right-4 z-10">
+            <span className="px-2 py-1 rounded bg-black/60 backdrop-blur-md text-[11px] text-white/90 font-medium">
+              {t('explore.imageAttribution')}
+            </span>
+          </div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent flex flex-col justify-end p-6 sm:p-8">
             <div className="flex flex-wrap items-center gap-2 mb-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-control bg-white/20 text-ivory text-xs font-semibold backdrop-blur-md">

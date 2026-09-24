@@ -12,10 +12,13 @@ export type AsyncErrorCode =
   | 'offline'
   | 'unknown';
 
+import { useI18n } from '../lib/i18n';
+
 interface AsyncStateProps {
   isLoading?: boolean;
   isEmpty?: boolean;
   errorCode?: AsyncErrorCode | null;
+  loadingLabel?: string;
   emptyMessage?: string;
   errorMessage?: string;
   onRetry?: () => void;
@@ -23,24 +26,28 @@ interface AsyncStateProps {
 }
 
 export function LoadingSpinner({
-  label = 'Đang tải dữ liệu...',
+  label,
   className = '',
 }: {
   label?: string;
   className?: string;
 }) {
+  const { t } = useI18n();
+  const displayLabel = label || t('common.loading');
+
   return (
     <div className={`flex flex-col items-center justify-center p-8 text-ink-secondary ${className}`}>
       <div className="w-8 h-8 border-3 border-sage border-t-forest rounded-full animate-spin mb-3" />
-      <span className="text-sm">{label}</span>
+      <span className="text-sm">{displayLabel}</span>
     </div>
   );
 }
 
 export function AmountLoadingPlaceholder() {
+  const { t } = useI18n();
   return (
     <span className="inline-block animate-pulse bg-sage/80 rounded px-2 py-0.5 text-xs text-ink-muted">
-      Đang tải số dư...
+      {t('common.loading')}
     </span>
   );
 }
@@ -49,13 +56,17 @@ export function AsyncState({
   isLoading,
   isEmpty,
   errorCode,
-  emptyMessage = 'Không tìm thấy dữ liệu phù hợp.',
+  loadingLabel,
+  emptyMessage,
   errorMessage,
   onRetry,
   children,
 }: AsyncStateProps) {
+  const { t } = useI18n();
+  const finalEmptyMessage = emptyMessage || t('common.empty');
+
   if (isLoading) {
-    return <LoadingSpinner />;
+    return <LoadingSpinner label={loadingLabel || t('common.loading')} />;
   }
 
   if (errorCode) {

@@ -154,7 +154,7 @@ export class VentloreMockAdapter {
       ],
       activities: ['Trekking', 'Chèo Kayak', 'Chụp ảnh phong cảnh'],
       imageUrl: '/destinations/cat-co-3.svg',
-      coverImageUrl: '/destinations/cat-co-3.svg',
+      coverImageUrl: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=900&q=80',
       postsCount: 2,
       coordinates: { lat: 20.7183, lng: 107.0514 },
       translations: {
@@ -255,7 +255,7 @@ export class VentloreMockAdapter {
           currentRevision: {
             revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e41',
             displayCode: 'REV-000006',
-            title: 'Tọa độ hốc trú bão tự nhiên phía sau Vịnh Cát Cò (VIP)',
+            title: 'Khảo sát luồng lạch & điểm neo thuyền hoang sơ vịnh Lan Hạ (VIP)',
             observedAt: '2026-05-10T14:30:00Z',
             verificationStatus: VerificationStatus.VERIFIED,
             accessTier: AccessTier.VIP,
@@ -321,7 +321,7 @@ export class VentloreMockAdapter {
       ],
       activities: ['Đi bộ ngắm cảnh', 'Nghiên cứu địa chất'],
       imageUrl: '/destinations/co-to.svg',
-      coverImageUrl: '/destinations/co-to.svg',
+      coverImageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80',
       postsCount: 1,
       coordinates: { lat: 20.9782, lng: 107.7554 },
       translations: {
@@ -424,7 +424,7 @@ export class VentloreMockAdapter {
       ],
       activities: ['Leo núi cao', 'Cắm trại trong rừng'],
       imageUrl: '/destinations/tay-con-linh.svg',
-      coverImageUrl: '/destinations/tay-con-linh.svg',
+      coverImageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80',
       postsCount: 1,
       coordinates: { lat: 22.8094, lng: 104.8117 },
       translations: {
@@ -604,7 +604,7 @@ Nên bắt đầu di chuyển từ 06:30 đến 08:30 sáng khi nắng chưa g�
             content: `The Cat Co 3 coastal trail is one of the most magnificent coastal trekking experiences on Cat Ba Island. The route spans approximately 2.8 km hugging granite cliff edges directly overlooking Lan Ha Bay.
 
 ### 1. Optimal Starting Time
-Begin hiking between 06:30 and 08:30 AM before the heat intensifies and as low tide begins. Do not set out after 16:00 PM; rock surfaces darken rapidly at dusk and afternoon high tides can submerge the base trail.
+Begin hiking between 06:30 and 08:30 AM before the heat intensifies and as low tide begins. Do not set out after 16:00; rock surfaces darken rapidly at dusk and afternoon high tides can submerge the base trail.
 
 ### 2. Mandatory Minimum Gear
 - Sturdy hiking boots or wading shoes with high-traction rubber lugs (Vibram or equivalent).
@@ -989,39 +989,39 @@ Chứng nhận kiểm định cho bài viết này đã hết hạn vào ngày 3
         postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e40',
         parentRevisionId: null,
         versionNumber: 1,
-        title: 'Tọa độ hốc trú bão tự nhiên phía sau Vịnh Cát Cò (VIP)',
+        title: 'Khảo sát luồng lạch & điểm neo thuyền hoang sơ vịnh Lan Hạ (VIP)',
         content: `[NỘI DUNG ĐẶC QUYỀN VIP ĐÃ MỞ KHÓA CHO HỘI VIÊN]
 
-Tọa độ chính xác cửa hang: 20°43'06.2"N 107°03'05.1"E.
-Cửa hang nằm ẩn sau bụi dứa dại cách mép nước 15m. Độ cao nền hang cao hơn mực nước triều cường kỷ lục 3.5m, hoàn toàn khô ráo ngay cả khi giông bão cấp 8.
+Tọa độ chính xác điểm neo thuyền kín gió: 20°43'06.2"N 107°03'05.1"E.
+Khu vực vụng kín nằm phía sau cụm đảo đá vôi, được che chắn hoàn toàn khỏi gió mùa đông bắc và sóng lớn.
 
-### Bản đồ tiếp cận khẩn cấp:
-- Từ mũi Cá Heo rẽ trái 45 độ theo khe nứt đá vôi.
-- Có túi sơ cứu dự phòng và nước sạch đóng chai được các hướng dẫn viên địa phương tiếp tế định kỳ hàng tháng.
-- Sóng điện thoại Viettel đạt 2 vạch tại cửa hốc.`,
+### Hướng dẫn tiếp cận luồng lạch:
+- Từ phao số 0 Vịnh Lan Hạ, bẻ lái hướng 115 độ, giữ khoảng cách tối thiểu 40m với vách đá ngầm phía đông.
+- Luồng lạch có độ sâu đáy bùn cát từ 3.2m đến 6.5m khi triều kiệt, thích hợp cho thuyền buồm và kayak thám hiểm thả neo an toàn.
+- Có nguồn nước ngọt rỉ tự nhiên từ khe đá tại vách phía tây.`,
         observedAt: '2026-05-10T14:30:00Z',
         accessTier: AccessTier.VIP,
         verificationStatus: VerificationStatus.VERIFIED,
         checkedAt: '2026-05-20T10:00:00Z',
         validUntil: '2027-05-20T23:59:59Z',
-        scope: 'Khảo sát địa chất hốc trú ẩn và kiểm tra an toàn trong điều kiện mưa bão',
-        inspectorNotes: 'Đã xác nhận hốc đá chịu lực vững chắc, không có hiện tượng nứt vỡ trần hang.',
+        scope: 'Khảo sát độ sâu luồng lạch và độ an toàn của điểm neo thuyền hoang sơ',
+        inspectorNotes: 'Đã đối chiếu hải đồ độ sâu và kiểm tra độ khuất gió của vụng trong điều kiện thực địa.',
         claims: [
           {
             claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c30',
-            text: 'Nền hang cao hơn triều dâng kỷ lục 3.5 mét',
-            category: 'Độ cao an toàn',
+            text: 'Độ sâu luồng lạch duy trì tối thiểu 3.2m khi triều kiệt',
+            category: 'Độ sâu an toàn',
             status: 'VERIFIED',
           },
           {
             claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c31',
-            text: 'Có sóng viễn thông khẩn cấp tại miệng hang',
-            category: 'Liên lạc',
+            text: 'Điểm neo khuất gió đông bắc và sóng cồn quanh năm',
+            category: 'Điều kiện neo đậu',
             status: 'VERIFIED',
           },
         ],
         sources: [
-          { title: 'Tọa độ đo đạc GNSS độ chính xác cao - Minh Trailguide (10/05/2026)' },
+          { title: 'Hải đồ và khảo sát trắc địa đáy biển - Minh Trailguide (10/05/2026)' },
         ],
         tipRoute: {
           routeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5r02',
@@ -1032,68 +1032,73 @@ Cửa hang nằm ẩn sau bụi dứa dại cách mép nước 15m. Độ cao n�
         translations: {
           en: {
             locale: 'en',
-            title: 'Natural Shelter Cave Coordinates Behind Cat Co Bay (VIP)',
+            title: 'Channel Survey & Secluded Anchorage in Lan Ha Bay (VIP)',
             content: `[EXCLUSIVE VIP EXPLORER CONTENT UNLOCKED]
 
-Exact cave entrance coordinates: 20°43'06.2"N 107°03'05.1"E.
-The cavern entrance lies concealed behind wild pandanus bushes 15 meters from the high-tide line. The cave floor sits 3.5m above historic storm surge levels, remaining completely dry even during Gale Force 8 tropical storms.
+Exact coordinates for sheltered anchorage: 20°43'06.2"N 107°03'05.1"E.
+This secluded cove is tucked behind limestone karsts, completely protected from northeast monsoons and ocean swells.
 
-### Emergency Access Waypoints:
-- From Dolphin Headland, turn 45 degrees left following the limestone fissure.
-- Emergency first-aid supplies and bottled potable water are replenished monthly by accredited local trail guides.
-- Viettel cellular signal reaches 2 bars directly at the shelter mouth.`,
+### Channel Navigation Waypoints:
+- From Lan Ha Bay Buoy 0, steer bearing 115 degrees, maintaining at least 40m clearance from the submerged eastern reef.
+- The channel maintains sandy-mud depths between 3.2m and 6.5m at low tide, ideal for safe anchoring of sailboats and exploration kayaks.
+- Natural fresh water seep found along the western cliff face.`,
+            scope: 'Navigational depth survey and anchorage safety verification for secluded waters',
           },
           ja: {
             locale: 'ja',
-            title: 'カットコー湾背後の天然避難洞窟の座標（VIP限定）',
+            title: 'ランハ湾の未開航路および停泊ポイント調査（VIP限定）',
             content: `【VIP会員限定コンテンツ（閲覧権限確認済み）】
 
-洞窟入口の正確なGNSS座標：北緯20°43'06.2" 東経107°03'05.1"。
-洞窟の開口部は、波打ち際から15m離れた野生のアダン（タコノキ）の茂みの背後に隠れています。洞窟の床面は過去最高潮位より3.5m高く、風速20m超の暴風雨時でも完全に乾燥しています。
+遮蔽停泊ポイントの正確なGNSS座標：北緯20°43'06.2" 東経107°03'05.1"。
+石灰岩カルストの背後に位置する隠れ入り江で、北東モンスーンや高波から完全に遮断されています。
 
-### 緊急避難ルート：
-- ドルフィン岬から石灰岩の亀裂に沿って左へ45度進む。
-- 現地ガイドにより毎月点検・補充される非常用救急キットと飲料水が備蓄されています。
-- 洞窟入口でベトナム国内通信キャリア（Viettel）の電波が2本確認できます。`,
+### 航路進入ガイド：
+- ランハ湾ブイ0番から方位115度へ操舵し、東側の暗礁から最低40mの距離を確保してください。
+- 干潮時でも水深3.2m〜6.5m（砂泥底）を維持し、ヨットやシーカヤックの安全な停泊に適しています。
+- 西側の崖の裂け目から自然の淡水が湧出しています。`,
+            scope: '未開水域の航路水深測量および停泊地安全性の検証',
           },
           'zh-Hans': {
             locale: 'zh-Hans',
-            title: '吉古湾后山天然避风洞穴精细坐标（VIP专属）',
+            title: '兰哈湾隐秘航道与避风锚泊点考察（VIP专属）',
             content: `【VIP探险会员专属内容（已解锁）】
 
-洞口高精度GNSS坐标：北纬 20°43'06.2"，东经 107°03'05.1"。
-洞穴入口隐蔽在距高潮线15米处的野菠萝灌木丛后。洞底基岩高出历史最高潮位3.5米，即便遭遇8级热带风暴仍可保持绝对干燥。
+避风锚泊点精细GNSS坐标：北纬 20°43'06.2"，东经 107°03'05.1"。
+该隐秘小湾隐蔽于喀斯特石灰岩群峰之后，完全免受东北季风和巨浪侵袭。
 
-### 应急避险路径：
-- 从“海豚岬”沿石灰岩裂隙向左偏转45度行进。
-- 洞内常备应急急救物资与瓶装饮用水，由当地向导协会每月定期巡检补给。
-- 洞口处Viettel移动网络信号可达2格。`,
+### 进港航道导引：
+- 从兰哈湾0号航标取航向115度进发，与东侧暗礁保持至少40米安全间距。
+- 航道在退潮时泥沙底深度保持在3.2米至6.5米之间，非常适合帆船与探险皮划艇安全抛锚。
+- 西侧绝壁裂隙处有天然淡水渗出点。`,
+            scope: '隐秘水域通航水深测绘与锚地安全性核验',
           },
           ko: {
             locale: 'ko',
-            title: '깟꼬 베이 후면 자연 대피 동굴 정밀 좌표 (VIP 전용)',
+            title: '란하베이 미개척 수로 및 은밀한 정박지 실사 (VIP 전용)',
             content: `[VIP 탐험 회원 전용 콘텐츠 (잠금 해제됨)]
 
-동굴 입구 정밀 GNSS 좌표: 북위 20°43'06.2", 동경 107°03'05.1".
-동굴 입구는 해안선에서 15m 떨어진 야생 판다누스 덤불 뒤에 숨겨져 있습니다. 동굴 바닥면은 역대 최고 만조 수위보다 3.5m 높아 시속 70km급 태풍 시에도 완전히 건조한 상태를 유지합니다.
+안전 정박지 정밀 GNSS 좌표: 북위 20°43'06.2", 동경 107°03'05.1".
+석회암 카르스트 뒤편에 숨겨진 만으로, 북동 계절풍과 거친 파도로부터 완벽히 보호됩니다.
 
-### 비상 대피 경로:
-- 돌고래 곶(Dolphin Headland)에서 석회암 균열을 따라 좌측 45도 방향으로 진행.
-- 현지 공인 가이드들이 매월 정기 보충하는 비상 응급 키트와 생수가 비치되어 있습니다.
-- 동굴 입구에서 이동통신(Viettel) 신호가 2칸 감지됩니다.`,
+### 진입 수로 가이드:
+- 란하베이 0번 부표에서 115도 방위각으로 조타하며, 동쪽 암초로부터 최소 40m 안전 거리를 유지하십시오.
+- 썰물 시에도 3.2m ~ 6.5m의 사질점토 수심을 유지하여 요트 및 탐험 카약의 안전한 정박에 적합합니다.
+- 서쪽 암벽 틈새에서 천연 담수가 용출됩니다.`,
+            scope: '은밀 수역 항로 수심 측량 및 정박지 안전성 검증',
           },
           fr: {
             locale: 'fr',
-            title: 'Coordonnées de l’abri naturel derrière la baie de Cat Co (VIP)',
+            title: 'Relevé des chenaux et mouillage sauvage de la baie de Lan Ha (VIP)',
             content: `[CONTENU EXCLUSIF MEMBRES EXPLORATEURS VIP DÉBLOQUÉ]
 
-Coordonnées GNSS exactes de l’entrée de la grotte : 20°43'06.2"N 107°03'05.1"E.
-L’ouverture est dissimulée derrière des buissons de pandanus sauvages à 15 mètres de la ligne de marée haute. Le sol de la cavité s’élève à 3,5 mètres au-dessus du niveau record des marées, restant parfaitement au sec même par tempête de force 8.
+Coordonnées GNSS exactes du mouillage abrité : 20°43'06.2"N 107°03'05.1"E.
+Cette crique isolée est abritée derrière des pitons karstiques, totalement protégée de la mousson du nord-est et de la houle.
 
-### Tracé d’accès d’urgence :
-- Depuis le promontoire du Dauphin, obliquer à 45 degrés sur la gauche en suivant la fissure calcaire.
-- Trousse de secours d’urgence et réserve d’eau scellée approvisionnées mensuellement par les guides locaux.
-- Réseau mobile Viettel capté à 2 barres à l’entrée de l’abri.`,
+### Instructions de navigation dans le chenal :
+- Depuis la bouée 0 de la baie de Lan Ha, cap au 115°, maintenir une distance minimale de 40 m du récif oriental immergé.
+- Le chenal présente des fonds sableux et vaseux de 3,2 m à 6,5 m à marée basse, idéal pour le mouillage sécurisé de voiliers et kayaks.
+- Résurgence naturelle d'eau douce située le long de la falaise ouest.`,
+            scope: 'Sondage bathymétrique et vérification de sécurité du mouillage en zone isolée',
           },
         },
       },
@@ -1102,7 +1107,7 @@ L’ouverture est dissimulée derrière des buissons de pandanus sauvages à 15 
           revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e41',
           displayCode: 'REV-000006',
           versionNumber: 1,
-          title: 'Tọa độ hốc trú bão tự nhiên phía sau Vịnh Cát Cò (VIP)',
+          title: 'Khảo sát luồng lạch & điểm neo thuyền hoang sơ vịnh Lan Hạ (VIP)',
           createdAt: '2026-05-12T16:00:00Z',
           verificationStatus: VerificationStatus.VERIFIED,
           accessTier: AccessTier.VIP,
@@ -1150,7 +1155,7 @@ L’ouverture est dissimulée derrière des buissons de pandanus sauvages à 15 
           postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e40',
           displayCode: 'PST-000004',
           placeName: 'Vịnh Cát Cò 3 - Hải Trình Ven Đảo',
-          title: 'Tọa độ hốc trú bão tự nhiên phía sau Vịnh Cát Cò (VIP)',
+          title: 'Khảo sát luồng lạch & điểm neo thuyền hoang sơ vịnh Lan Hạ (VIP)',
           verificationStatus: VerificationStatus.VERIFIED,
           observedAt: '2026-05-10T14:30:00Z',
         },
@@ -1608,6 +1613,14 @@ L’ouverture est dissimulée derrière des buissons de pandanus sauvages à 15 
       result.revision.originalLocale = 'vi';
     }
 
+    // Translate place details if available
+    const rawPlace = this.places.find(p => p.placeId === result.placeId);
+    if (rawPlace && locale && rawPlace.translations && rawPlace.translations[locale]) {
+      const placeTrans = rawPlace.translations[locale];
+      result.place.name = placeTrans.name ?? result.place.name;
+      result.place.regionName = placeTrans.regionName ?? result.place.regionName;
+    }
+
     // Security invariant: If post is VIP and user does not have active VIP membership,
     // REDACT content at the adapter level! DO NOT SEND VIP CONTENT TO CLIENT DOM!
     if (result.revision.accessTier === AccessTier.VIP && !isVipUser) {
@@ -1627,11 +1640,86 @@ L’ouverture est dissimulée derrière des buissons de pandanus sauvages à 15 
     return result;
   }
 
-  async getUserProfile(handleOrUserId: string): Promise<UserProfileDTO | null> {
-    const profile = Object.values(this.userProfiles).find(
+  async getUserProfile(handleOrUserId: string, locale?: string): Promise<UserProfileDTO | null> {
+    const rawProfile = Object.values(this.userProfiles).find(
       p => p.handle === handleOrUserId || p.userId === handleOrUserId
     );
-    return profile || null;
+    if (!rawProfile) return null;
+
+    const profile: UserProfileDTO = JSON.parse(JSON.stringify(rawProfile));
+    const targetLocale = locale || 'vi';
+
+    const bioTranslations: Record<string, Record<string, string>> = {
+      minh_trailguide: {
+        en: 'Coastal and cliff navigation guide with over 8 years of fieldwork experience across Northeast Vietnam.',
+        ja: 'ベトナム北東部で8年以上の現場実務経験を持つ、沿岸および断崖ルート案内スペシャリスト。',
+        'zh-Hans': '越南东北部海岸与悬崖越野领队，具备8年以上实地探险考察与安全向导经验。',
+        ko: '베트남 동북부 지역에서 8년 이상의 현장 경험을 보유한 해안 및 절벽 내비게이션 전문가.',
+        fr: 'Guide de terrain littoral et falaises avec plus de 8 ans d’expérience dans le nord-est du Vietnam.',
+      },
+    };
+
+    if (targetLocale !== 'vi') {
+      const translatedBio = bioTranslations[profile.handle]?.[targetLocale];
+      if (translatedBio) {
+        profile.bio = translatedBio;
+        profile.isOriginalBio = false;
+      } else {
+        profile.isOriginalBio = true;
+        profile.originalBioLanguage = 'vi';
+      }
+
+      const credentialTitles: Record<string, Record<string, string>> = {
+        '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e71': {
+          en: 'Gold Field Verification Badge (Contributor SBT)',
+          ja: 'ゴールド実地検証バッジ（貢献者SBT）',
+          'zh-Hans': '黄金实地核验徽章（贡献者SBT）',
+          ko: '골드 현장 검증 뱃지 (기여자 SBT)',
+          fr: 'Insigne d’or de vérification terrain (SBT Contributeur)',
+        },
+      };
+
+      profile.credentials = profile.credentials.map(cred => {
+        const transTitle = credentialTitles[cred.credentialId]?.[targetLocale];
+        return {
+          ...cred,
+          title: transTitle ?? cred.title,
+        };
+      });
+
+      profile.publishedPosts = profile.publishedPosts.map(postItem => {
+        const postEntry = this.posts[postItem.postId];
+        const rawPlace = this.places.find(p => p.name === postItem.placeName || p.placeId === postEntry?.placeId);
+
+        let translatedPlaceName = postItem.placeName;
+        if (rawPlace?.translations?.[targetLocale]?.name) {
+          translatedPlaceName = rawPlace.translations[targetLocale].name;
+        }
+
+        let translatedTitle = postItem.title;
+        let isUntranslated = true;
+
+        if (postEntry?.revision?.translations?.[targetLocale]?.title) {
+          translatedTitle = postEntry.revision.translations[targetLocale].title;
+          isUntranslated = false;
+        }
+
+        return {
+          ...postItem,
+          placeName: translatedPlaceName,
+          title: translatedTitle,
+          isUntranslated,
+        };
+      });
+    } else {
+      profile.isOriginalBio = false;
+      profile.publishedPosts = profile.publishedPosts.map(postItem => ({
+        ...postItem,
+        isUntranslated: false,
+      }));
+    }
+
+    return profile;
   }
 
   async getVipPlans(locale?: string): Promise<VipPlanDTO[]> {
