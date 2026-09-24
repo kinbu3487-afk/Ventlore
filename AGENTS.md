@@ -4,6 +4,16 @@ Tài liệu này chứa các quy tắc xuyên suốt cho mọi lượt làm vi�
 
 ---
 
+## 0. Quy trình vận hành 5 Loop (Execution, Task, Product, System, Oversight)
+
+Mọi hoạt động phát triển của AI Agent trên repository Ventlore phải tuân thủ nghiêm ngặt bộ tài liệu quy trình tại `docs/loops/`:
+- [Chính sách vận hành (POLICY.md)](docs/loops/POLICY.md): Quy định 1 Issue tại 1 thời điểm (nhãn `ready`), 1 nhánh/PR tương ứng, tối đa 3 vòng sửa lỗi (Task loop), dừng ở `review` để Bin nghiệm thu, không hạ gate kiểm thử, dùng UUIDv7 theo ID Contract.
+- [Hướng dẫn thực hiện nhiệm vụ (RUN_TASK.md)](docs/loops/RUN_TASK.md): Chu trình các bước từ nhận việc, code, verify cục bộ (`pnpm run verify`), push nhánh, mở PR và theo dõi CI.
+- [Đánh giá hệ thống (SYSTEM_REVIEW.md)](docs/loops/SYSTEM_REVIEW.md): Vận hành System loop định kỳ sau mỗi cụm ~5 nhiệm vụ có báo cáo.
+- [Mẫu báo cáo nhiệm vụ (REPORT_TEMPLATE.md)](docs/loops/REPORT_TEMPLATE.md): Mẫu báo cáo bắt buộc lưu tại thư mục `docs/loops/reports/<MÃ-TASK>.md`.
+
+---
+
 ## 1. Quy trình làm việc bắt buộc cho mỗi chặng
 
 1. **Khởi động:**

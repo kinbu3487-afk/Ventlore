@@ -15,7 +15,8 @@
     "test": "pnpm -r run test",
     "lint": "pnpm -r run lint",
     "typecheck": "pnpm -r run typecheck",
-    "validate:foundation": "python3 scripts/validate_foundation.py"
+    "validate:foundation": "python3 scripts/validate_foundation.py",
+    "verify": "python3 scripts/validate_foundation.py && pnpm -r run typecheck && pnpm -r run lint && pnpm -r run build"
   },
   "devDependencies": {
     "typescript": "^5.7.3"
