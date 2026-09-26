@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { usePayment } from './PaymentContext';
 import { useSession } from './SessionContext';
 import { useI18n } from '../lib/i18n';
@@ -13,15 +14,16 @@ import {
   CheckCircleIcon,
   ChevronDownIcon,
   UserIcon,
+  AlertTriangleIcon,
 } from './Icons';
 
 type SimChainId = '42161' | '421614' | '1'; // 42161 Arbitrum, 421614 Arb Sepolia, 1 Mainnet (wrong network)
 type PaymentState = 'IDLE' | 'REVIEW' | 'SUBMITTED' | 'OBSERVED' | 'FINALIZED' | 'ERROR';
 
 export function PaymentModal() {
-  const { isOpen, mode, initialData, openPayment, closePayment } = usePayment();
+  const { isOpen, mode, initialData, closePayment } = usePayment();
   const { persona, session } = useSession();
-  const { t } = useI18n();
+  const { t, getLocalizedPath } = useI18n();
   const modalRef = useRef<HTMLDivElement>(null);
 
   // Form State
@@ -36,7 +38,7 @@ export function PaymentModal() {
   const [receipt, setReceipt] = useState<PaymentIntentDTO | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Synchronize mode from context when modal opens
+  // Synchronize mode and context data strictly from the opener (P1-04)
   useEffect(() => {
     if (isOpen) {
       setActiveMode(mode);
@@ -66,18 +68,6 @@ export function PaymentModal() {
 
   if (!isOpen) return null;
 
-  // Mode switching clears incompatible data
-  const handleModeChange = (newMode: PaymentMode) => {
-    setActiveMode(newMode);
-    setPaymentState('IDLE');
-    setErrorMsg(null);
-    if (newMode === 'MEMBERSHIP') {
-      setAmount('15');
-    } else {
-      setAmount('20');
-    }
-  };
-
   // Atomic Units Calculation
   const parsedAmount = parseFloat(amount) || 0;
   const amountAtomicUnits = BigInt(Math.floor(parsedAmount * 1_000_000)); // USDC 6 decimals
@@ -106,6 +96,13 @@ export function PaymentModal() {
   // Execute Simulated Payment
   const handleSimulatePayment = async () => {
     if (isSubmitting) return;
+
+    // Invariant: Guest can NEVER purchase VIP (P0-02)
+    if (activeMode === 'MEMBERSHIP' && (persona === 'guest' || !session || session.handle === 'guest_reader')) {
+      setErrorMsg('Khách đọc công khai chưa đăng nhập không thể mua gói VIP. Vui lòng đăng nhập tài khoản.');
+      return;
+    }
+
     if (isWrongNetwork) {
       setErrorMsg('Mạng blockchain không hỗ trợ. Vui lòng chuyển sang Arbitrum One.');
       return;
@@ -115,7 +112,7 @@ export function PaymentModal() {
       return;
     }
     if (activeMode === 'POST_TIP' && initialData && initialData.isEligibleForTip === false) {
-      setErrorMsg('Bài viết chưa đủ điều kiện nhận tip theo quy chế.');
+      setErrorMsg(initialData.ineligibleReason || 'Bài viết chưa đủ điều kiện nhận tip theo quy chế.');
       return;
     }
 
@@ -125,15 +122,15 @@ export function PaymentModal() {
 
     try {
       // 1. Submitted state
-      await new Promise((r) => setTimeout(r, 600));
+      await new Promise((r) => setTimeout(r, 500));
       setPaymentState('SUBMITTED');
 
       // 2. Observed state
-      await new Promise((r) => setTimeout(r, 800));
+      await new Promise((r) => setTimeout(r, 600));
       setPaymentState('OBSERVED');
 
       // 3. Finalized demo state
-      await new Promise((r) => setTimeout(r, 800));
+      await new Promise((r) => setTimeout(r, 600));
 
       const recorded = await mockApiClient.recordPayment({
         id: '',
@@ -149,6 +146,8 @@ export function PaymentModal() {
         authorHandle: initialData?.authorHandle,
         authorDisplayName: initialData?.authorDisplayName,
         authorWalletAddress: initialData?.authorWalletAddress,
+        payerUserId: session?.userId,
+        targetUserId: activeMode === 'MEMBERSHIP' ? session?.userId : undefined,
         amountAtomic: amountAtomicUnits.toString(),
         amountFormatted: `${parsedAmount} ${selectedAsset}`,
         asset: selectedAsset,
@@ -186,12 +185,16 @@ export function PaymentModal() {
         ref={modalRef}
         className="relative w-full max-w-xl max-h-[92vh] overflow-y-auto rounded-2xl border border-sage/80 bg-surface-card p-5 sm:p-7 shadow-2xl text-ink space-y-5 animate-in zoom-in-95 duration-200"
       >
-        {/* Header with Title and Mode Switcher */}
+        {/* Header with Title */}
         <div className="flex items-start justify-between gap-3 border-b border-sage/60 pb-3">
           <div>
             <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-forest/10 text-forest text-[11px] font-bold uppercase tracking-wider">
               <SparklesIcon className="w-3.5 h-3.5 text-amber" />
-              <span>Cổng Thanh Toán / Quyên Góp Demo</span>
+              <span>
+                {activeMode === 'PROJECT' && 'Ủng Hộ Quỹ Dự Án (100% Vào Quỹ)'}
+                {activeMode === 'POST_TIP' && 'Ủng Hộ Tác Giả Bài Viết (80% Tác Giả / 20% Quỹ)'}
+                {activeMode === 'MEMBERSHIP' && 'Đăng Ký / Gia Hạn Hội Viên VIP'}
+              </span>
             </div>
             <h2 id="payment-modal-title" className="text-xl sm:text-2xl font-bold text-ink mt-1">
               {activeMode === 'PROJECT' && 'Ủng Hộ Quỹ Ventlore'}
@@ -211,45 +214,6 @@ export function PaymentModal() {
           </button>
         </div>
 
-        {/* Mode Selector Tabs (Bốn điểm mở, 1 component) */}
-        {paymentState !== 'FINALIZED' && (
-          <div className="flex rounded-xl bg-surface-canvas p-1 border border-sage/60 text-xs font-semibold">
-            <button
-              type="button"
-              onClick={() => handleModeChange('PROJECT')}
-              className={`flex-1 py-2 px-3 rounded-lg text-center transition-all ${
-                activeMode === 'PROJECT'
-                  ? 'bg-forest text-white shadow-xs'
-                  : 'text-ink-secondary hover:text-ink'
-              }`}
-            >
-              Ủng Hộ Quỹ (100%)
-            </button>
-            <button
-              type="button"
-              onClick={() => handleModeChange('POST_TIP')}
-              className={`flex-1 py-2 px-3 rounded-lg text-center transition-all ${
-                activeMode === 'POST_TIP'
-                  ? 'bg-forest text-white shadow-xs'
-                  : 'text-ink-secondary hover:text-ink'
-              }`}
-            >
-              Tip Bài Viết (80/20)
-            </button>
-            <button
-              type="button"
-              onClick={() => handleModeChange('MEMBERSHIP')}
-              className={`flex-1 py-2 px-3 rounded-lg text-center transition-all ${
-                activeMode === 'MEMBERSHIP'
-                  ? 'bg-forest text-white shadow-xs'
-                  : 'text-ink-secondary hover:text-ink'
-              }`}
-            >
-              Gói VIP (15 USD)
-            </button>
-          </div>
-        )}
-
         {/* Success View */}
         {paymentState === 'FINALIZED' && receipt ? (
           <div className="space-y-5 py-4 animate-in fade-in">
@@ -268,7 +232,7 @@ export function PaymentModal() {
             {/* Receipt Summary */}
             <div className="rounded-xl border border-sage/80 bg-surface-canvas p-4 text-xs space-y-2.5">
               <div className="flex justify-between border-b border-sage/40 pb-2">
-                <span className="text-ink-muted">Mã chứng nhận (Receipt ID):</span>
+                <span className="text-ink-muted">Mã đối soát mô phỏng (Demo ID):</span>
                 <span className="font-mono font-bold text-ink">{receipt.id}</span>
               </div>
               <div className="flex justify-between border-b border-sage/40 pb-2">
@@ -300,13 +264,13 @@ export function PaymentModal() {
               {receipt.mode === 'MEMBERSHIP' && (
                 <div className="flex justify-between text-forest border-b border-sage/40 pb-2">
                   <span>Quyền lợi kích hoạt:</span>
-                  <span className="font-bold">Đã mở khóa VIP 12 tháng UTC (demo)</span>
+                  <span className="font-bold">Đã mở khóa VIP 12 tháng UTC cho @{session?.handle}</span>
                 </div>
               )}
 
               <div className="flex justify-between pt-1">
-                <span className="text-ink-muted">Mô phỏng TxHash:</span>
-                <span className="font-mono text-ink-muted">{receipt.txHashDemo}</span>
+                <span className="text-ink-muted">Trạng thái blockchain:</span>
+                <span className="font-semibold text-ink-secondary">Mô phỏng off-chain (Chưa có giao dịch on-chain thật)</span>
               </div>
             </div>
 
@@ -360,185 +324,217 @@ export function PaymentModal() {
 
               {activeMode === 'MEMBERSHIP' && (
                 <div>
-                  <div className="font-bold text-sm text-ink flex items-center gap-1.5">
-                    <UserIcon className="w-3.5 h-3.5 text-forest" />
-                    <span>{session?.displayName || 'Tài khoản người dùng'} ({session?.handle || 'bin_traveler'})</span>
-                  </div>
-                  <div className="text-ink-secondary text-[11px] mt-0.5">
-                    Định mức niêm yết: <strong>1.500 USD cents</strong> (15 USD/năm). Thời hạn 12 tháng lịch UTC tính từ lúc kích hoạt.
-                  </div>
+                  {persona === 'guest' ? (
+                    <div className="text-ink-secondary text-xs">
+                      Tài khoản: <strong>Chưa đăng nhập</strong> (Cần đăng nhập tài khoản để gắn quyền VIP)
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="font-bold text-sm text-ink flex items-center gap-1.5">
+                        <UserIcon className="w-3.5 h-3.5 text-forest" />
+                        <span>{session?.displayName} (@{session?.handle})</span>
+                      </div>
+                      <div className="text-ink-secondary text-[11px] mt-0.5">
+                        Định mức niêm yết: <strong>1.500 USD cents</strong> (15 USD/năm). Thời hạn 12 tháng lịch UTC tính từ lúc kích hoạt.
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
 
-            {/* Amount Selection */}
-            {activeMode !== 'MEMBERSHIP' ? (
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-ink">
-                  Số tiền ủng hộ ({selectedAsset}):
-                </label>
-                <div className="grid grid-cols-4 gap-2">
-                  {['5', '10', '20', '50'].map((preset) => (
-                    <button
-                      key={preset}
-                      type="button"
-                      onClick={() => setAmount(preset)}
-                      className={`min-h-[38px] py-1.5 rounded-lg border text-xs font-bold transition-all ${
-                        amount === preset
-                          ? 'border-forest bg-forest text-white'
-                          : 'border-sage/80 bg-surface-canvas text-ink hover:border-forest'
-                      }`}
-                    >
-                      {preset} {selectedAsset}
-                    </button>
-                  ))}
+            {/* If Guest in MEMBERSHIP Mode: Show Login Gate (P0-02) */}
+            {activeMode === 'MEMBERSHIP' && persona === 'guest' ? (
+              <div className="p-4 sm:p-5 rounded-xl bg-amber-50 border border-amber-200 text-ink space-y-3">
+                <div className="flex items-center gap-2 font-bold text-amber-900 text-sm">
+                  <AlertTriangleIcon className="w-4 h-4 text-amber-700 shrink-0" />
+                  <span>Cần đăng nhập tài khoản để nhận quyền VIP</span>
                 </div>
-                <div className="relative mt-2">
-                  <input
-                    type="number"
-                    min="1"
-                    step="1"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    className="w-full min-h-control px-3 py-2 rounded-xl border border-sage text-sm font-bold bg-surface-canvas text-ink focus:outline-none focus:ring-2 focus:ring-forest"
-                    placeholder="Nhập số tiền khác..."
-                  />
-                  <div className="absolute right-3 top-2.5 text-xs font-bold text-ink-muted">
-                    {selectedAsset}
-                  </div>
+                <p className="text-xs text-amber-800 leading-relaxed">
+                  Gói Hội viên VIP gắn liền với tài khoản người dùng cá nhân (userId) để đồng bộ trên mọi thiết bị. Tài khoản Khách (Guest) không thể kích hoạt gói thành viên.
+                </p>
+                <div className="pt-1">
+                  <Link
+                    href={getLocalizedPath('/login?returnTo=/vip')}
+                    onClick={closePayment}
+                    className="w-full min-h-control inline-flex items-center justify-center gap-2 py-3 rounded-control font-bold text-sm text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
+                  >
+                    <span>Đăng nhập để đăng ký VIP ($15/năm)</span>
+                  </Link>
                 </div>
               </div>
             ) : (
-              <div className="p-3.5 rounded-xl border border-sage/80 bg-surface-canvas flex justify-between items-center text-xs">
-                <div>
-                  <div className="font-bold text-sm text-ink">15 USD / 12 Tháng</div>
-                  <div className="text-ink-muted text-[11px]">Quy đổi: 15 USDC theo tỷ giá neo</div>
-                </div>
-                <span className="px-2 py-1 rounded bg-forest/10 text-forest font-bold text-xs">
-                  Gói Chuẩn
-                </span>
-              </div>
-            )}
-
-            {/* Split Breakdown for Tip */}
-            {activeMode === 'POST_TIP' && (
-              <div className="p-3 rounded-xl border border-forest/20 bg-forest/5 text-xs space-y-1">
-                <div className="flex justify-between font-medium">
-                  <span className="text-ink">Tác giả nhận (80%):</span>
-                  <span className="font-bold text-forest">{authorShareFormatted} {selectedAsset}</span>
-                </div>
-                <div className="flex justify-between text-ink-muted">
-                  <span>Quỹ bảo tồn nhận (20%):</span>
-                  <span>{treasuryShareFormatted} {selectedAsset}</span>
-                </div>
-                <div className="text-[10px] text-ink-muted pt-1 border-t border-forest/10">
-                  Phân bổ theo công thức nguyên tử on-chain: <code>floor(amount / 5)</code> vào quỹ, phần còn lại chuyển cho tác giả.
-                </div>
-              </div>
-            )}
-
-            {/* Client Wallet State & Simulation Controls */}
-            <div className="rounded-xl border border-sage/70 bg-surface-canvas p-3.5 text-xs space-y-2.5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold text-ink">Ví kết nối:</span>
-                  {isWalletConnected ? (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      Đã kết nối
+              <>
+                {/* Amount Selection */}
+                {activeMode !== 'MEMBERSHIP' ? (
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-semibold text-ink">
+                      Số tiền ủng hộ ({selectedAsset}):
+                    </label>
+                    <div className="grid grid-cols-4 gap-2">
+                      {['5', '10', '20', '50'].map((preset) => (
+                        <button
+                          key={preset}
+                          type="button"
+                          onClick={() => setAmount(preset)}
+                          className={`min-h-[38px] py-1.5 rounded-lg border text-xs font-bold transition-all ${
+                            amount === preset
+                              ? 'border-forest bg-forest text-white'
+                              : 'border-sage/80 bg-surface-canvas text-ink hover:border-forest'
+                          }`}
+                        >
+                          {preset} {selectedAsset}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="relative mt-2">
+                      <input
+                        type="number"
+                        min="1"
+                        step="1"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        className="w-full min-h-control px-3 py-2 rounded-xl border border-sage text-sm font-bold bg-surface-canvas text-ink focus:outline-none focus:ring-2 focus:ring-forest"
+                        placeholder="Nhập số tiền khác..."
+                      />
+                      <div className="absolute right-3 top-2.5 text-xs font-bold text-ink-muted">
+                        {selectedAsset}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-3.5 rounded-xl border border-sage/80 bg-surface-canvas flex justify-between items-center text-xs">
+                    <div>
+                      <div className="font-bold text-sm text-ink">15 USD / 12 Tháng</div>
+                      <div className="text-ink-muted text-[11px]">Quy đổi: 15 USDC theo tỷ giá neo</div>
+                    </div>
+                    <span className="px-2 py-1 rounded bg-forest/10 text-forest font-bold text-xs">
+                      Gói Chuẩn
                     </span>
-                  ) : (
-                    <span className="px-2 py-0.5 rounded-full bg-red-100 text-red-800 text-[10px] font-bold">
-                      Chưa kết nối
-                    </span>
+                  </div>
+                )}
+
+                {/* Split Breakdown for Tip */}
+                {activeMode === 'POST_TIP' && (
+                  <div className="p-3 rounded-xl border border-forest/20 bg-forest/5 text-xs space-y-1">
+                    <div className="flex justify-between font-medium">
+                      <span className="text-ink">Tác giả nhận (80%):</span>
+                      <span className="font-bold text-forest">{authorShareFormatted} {selectedAsset}</span>
+                    </div>
+                    <div className="flex justify-between text-ink-muted">
+                      <span>Quỹ bảo tồn nhận (20%):</span>
+                      <span>{treasuryShareFormatted} {selectedAsset}</span>
+                    </div>
+                    <div className="text-[10px] text-ink-muted pt-1 border-t border-forest/10">
+                      Phân bổ theo công thức nguyên tử on-chain: <code>floor(amount / 5)</code> vào quỹ, phần còn lại chuyển cho tác giả.
+                    </div>
+                  </div>
+                )}
+
+                {/* Client Wallet State & Simulation Controls */}
+                <div className="rounded-xl border border-sage/70 bg-surface-canvas p-3.5 text-xs space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-ink">Ví kết nối:</span>
+                      {isWalletConnected ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          Đã kết nối
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded-full bg-red-100 text-red-800 text-[10px] font-bold">
+                          Chưa kết nối
+                        </span>
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsWalletConnected(!isWalletConnected)}
+                      className="text-xs text-forest hover:underline font-semibold"
+                    >
+                      {isWalletConnected ? 'Ngắt kết nối' : 'Kết nối ví demo'}
+                    </button>
+                  </div>
+
+                  {isWalletConnected && (
+                    <div className="grid grid-cols-2 gap-2 pt-1 border-t border-sage/40 text-[11px]">
+                      <div>
+                        <span className="text-ink-muted block">Địa chỉ ví:</span>
+                        <span className="font-mono font-bold text-ink">{walletAddress}</span>
+                      </div>
+                      <div>
+                        <span className="text-ink-muted block">Số dư khả dụng:</span>
+                        <span className="font-bold text-forest">250.00 USDC</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Network Selector */}
+                  <div className="pt-2 border-t border-sage/40 flex items-center justify-between">
+                    <span className="text-ink-muted text-[11px]">Mạng lưới:</span>
+                    <select
+                      value={simChain}
+                      onChange={(e) => setSimChain(e.target.value as SimChainId)}
+                      className="px-2 py-1 rounded border border-sage bg-surface-card text-ink font-semibold text-xs focus:outline-none"
+                    >
+                      <option value="42161">Arbitrum One (Khuyến nghị)</option>
+                      <option value="421614">Arbitrum Sepolia Testnet</option>
+                      <option value="1">Ethereum Mainnet (Sai mạng demo)</option>
+                    </select>
+                  </div>
+
+                  {isWrongNetwork && (
+                    <div className="p-2 rounded bg-red-50 text-red-700 border border-red-200 text-[11px] font-medium">
+                      ⚠️ Sai mạng lưới! Vui lòng chọn Arbitrum One hoặc Arbitrum Sepolia.
+                    </div>
                   )}
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => setIsWalletConnected(!isWalletConnected)}
-                  className="text-xs text-forest hover:underline font-semibold"
-                >
-                  {isWalletConnected ? 'Ngắt kết nối' : 'Kết nối ví demo'}
-                </button>
-              </div>
-
-              {isWalletConnected && (
-                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-sage/40 text-[11px]">
-                  <div>
-                    <span className="text-ink-muted block">Địa chỉ ví:</span>
-                    <span className="font-mono font-bold text-ink">{walletAddress}</span>
+                {/* Error Message */}
+                {errorMsg && (
+                  <div className="p-2.5 rounded-xl bg-red-50 text-red-800 border border-red-200 text-xs font-medium">
+                    {errorMsg}
                   </div>
-                  <div>
-                    <span className="text-ink-muted block">Số dư khả dụng:</span>
-                    <span className="font-bold text-forest">250.00 USDC</span>
-                  </div>
-                </div>
-              )}
-
-              {/* Network Selector */}
-              <div className="pt-2 border-t border-sage/40 flex items-center justify-between">
-                <span className="text-ink-muted text-[11px]">Mạng lưới:</span>
-                <select
-                  value={simChain}
-                  onChange={(e) => setSimChain(e.target.value as SimChainId)}
-                  className="px-2 py-1 rounded border border-sage bg-surface-card text-ink font-semibold text-xs focus:outline-none"
-                >
-                  <option value="42161">Arbitrum One (Khuyến nghị)</option>
-                  <option value="421614">Arbitrum Sepolia Testnet</option>
-                  <option value="1">Ethereum Mainnet (Sai mạng demo)</option>
-                </select>
-              </div>
-
-              {isWrongNetwork && (
-                <div className="p-2 rounded bg-red-50 text-red-700 border border-red-200 text-[11px] font-medium">
-                  ⚠️ Sai mạng lưới! Vui lòng chọn Arbitrum One hoặc Arbitrum Sepolia.
-                </div>
-              )}
-            </div>
-
-            {/* Error Message */}
-            {errorMsg && (
-              <div className="p-2.5 rounded-xl bg-red-50 text-red-800 border border-red-200 text-xs font-medium">
-                {errorMsg}
-              </div>
-            )}
-
-            {/* Submission Progress Indicator */}
-            {isSubmitting && (
-              <div className="p-3 rounded-xl bg-forest/5 border border-forest/20 text-xs space-y-1.5">
-                <div className="flex items-center justify-between font-bold text-forest">
-                  <span>Tiến trình mô phỏng: {paymentState}</span>
-                  <div className="w-4 h-4 rounded-full border-2 border-forest border-t-transparent animate-spin" />
-                </div>
-                <div className="text-[11px] text-ink-secondary">
-                  Đang ghi nhận ý định thanh toán demo vào store chia sẻ...
-                </div>
-              </div>
-            )}
-
-            {/* Action Buttons */}
-            <div className="pt-2 space-y-2">
-              <button
-                type="button"
-                onClick={handleSimulatePayment}
-                disabled={isSubmitting || isWrongNetwork || !isWalletConnected}
-                className="w-full min-h-control py-3 rounded-control font-bold text-sm text-white bg-forest hover:bg-forest-hover transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                {isSubmitting ? (
-                  <span>Đang xử lý mô phỏng...</span>
-                ) : (
-                  <>
-                    <SparklesIcon className="w-4 h-4 text-amber" />
-                    <span>Thử thanh toán (demo)</span>
-                  </>
                 )}
-              </button>
 
-              <div className="text-center text-[10px] text-ink-muted">
-                Ventlore FE Demo • Tuyệt đối không yêu cầu ký seed phrase hay giao dịch on-chain thật.
-              </div>
-            </div>
+                {/* Submission Progress Indicator */}
+                {isSubmitting && (
+                  <div className="p-3 rounded-xl bg-forest/5 border border-forest/20 text-xs space-y-1.5">
+                    <div className="flex items-center justify-between font-bold text-forest">
+                      <span>Tiến trình mô phỏng: {paymentState}</span>
+                      <div className="w-4 h-4 rounded-full border-2 border-forest border-t-transparent animate-spin" />
+                    </div>
+                    <div className="text-[11px] text-ink-secondary">
+                      Đang ghi nhận ý định thanh toán demo vào store chia sẻ...
+                    </div>
+                  </div>
+                )}
+
+                {/* Action Buttons */}
+                <div className="pt-2 space-y-2">
+                  <button
+                    type="button"
+                    onClick={handleSimulatePayment}
+                    disabled={isSubmitting || isWrongNetwork || !isWalletConnected}
+                    className="w-full min-h-control py-3 rounded-control font-bold text-sm text-white bg-forest hover:bg-forest-hover transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {isSubmitting ? (
+                      <span>Đang xử lý mô phỏng...</span>
+                    ) : (
+                      <>
+                        <SparklesIcon className="w-4 h-4 text-amber" />
+                        <span>Thử thanh toán (demo)</span>
+                      </>
+                    )}
+                  </button>
+
+                  <div className="text-center text-[10px] text-ink-muted">
+                    Ventlore FE Demo • Tuyệt đối không yêu cầu ký seed phrase hay giao dịch on-chain thật.
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>

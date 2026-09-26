@@ -44,6 +44,13 @@ export function AccountView() {
   const initialTab = (searchParams.get('tab') as AccountTab) || 'profile';
   const [activeTab, setActiveTab] = useState<AccountTab>(initialTab);
 
+  const urlTab = searchParams.get('tab') as AccountTab | null;
+  useEffect(() => {
+    if (urlTab && ['profile', 'contributions', 'benefits', 'settings'].includes(urlTab)) {
+      setActiveTab(urlTab);
+    }
+  }, [urlTab]);
+
   // Contributions state
   const [contributions, setContributions] = useState<ContributionItemDTO[]>([]);
   const [isLoadingContribs, setIsLoadingContribs] = useState(true);
@@ -53,6 +60,19 @@ export function AccountView() {
   const [isLoadingBenefits, setIsLoadingBenefits] = useState(true);
   const [isClaimingSbt, setIsClaimingSbt] = useState(false);
   const [isClaimingNft, setIsClaimingNft] = useState(false);
+
+  // Profile Editor state
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [profileDisplayName, setProfileDisplayName] = useState(session?.displayName || '');
+  const [profileBio, setProfileBio] = useState('Đam mê khảo sát các cung đường mòn và bảo tồn thiên nhiên hoang dã.');
+  const [profileSavedNotice, setProfileSavedNotice] = useState(false);
+
+  // Sync profile display name when session changes
+  useEffect(() => {
+    if (session?.displayName) {
+      setProfileDisplayName(session.displayName);
+    }
+  }, [session?.displayName]);
 
   // New Revision inline modal
   const [editingPost, setEditingPost] = useState<ContributionItemDTO | null>(null);
@@ -345,23 +365,100 @@ export function AccountView() {
       {activeTab === 'profile' && (
         <div className="space-y-6">
           <div className="p-6 rounded-card border border-sage bg-surface-card space-y-4">
-            <h2 className="text-sm font-extrabold uppercase tracking-wider text-ink">
-              Thông tin Tài khoản (Canonical User)
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-              <div>
-                <label className="text-ink-muted block mb-1">Mã định danh duy nhất (UUIDv7):</label>
-                <div className="p-2 rounded-control bg-surface-canvas border border-sage font-mono text-ink">
-                  {session.userId}
-                </div>
-              </div>
-              <div>
-                <label className="text-ink-muted block mb-1">Tên hiển thị & Handle:</label>
-                <div className="p-2 rounded-control bg-surface-canvas border border-sage font-mono text-ink">
-                  {session.displayName} (@{session.handle})
-                </div>
-              </div>
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-extrabold uppercase tracking-wider text-ink">
+                Thông tin Tài khoản (Canonical User)
+              </h2>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsEditingProfile(!isEditingProfile);
+                  setProfileSavedNotice(false);
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control border border-sage hover:bg-surface-canvas text-xs font-semibold text-ink transition-colors"
+              >
+                <EditIcon className="w-3.5 h-3.5 text-forest" />
+                <span>{isEditingProfile ? 'Đóng chỉnh sửa' : 'Chỉnh sửa hồ sơ'}</span>
+              </button>
             </div>
+
+            {profileSavedNotice && (
+              <div className="p-3 rounded-control bg-status-success-bg text-status-success text-xs font-semibold flex items-center gap-2">
+                <CheckCircleIcon className="w-4 h-4 shrink-0" />
+                <span>Đã cập nhật thông tin hồ sơ thành công (Demo)!</span>
+              </div>
+            )}
+
+            {isEditingProfile ? (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (session) {
+                    session.displayName = profileDisplayName;
+                  }
+                  setIsEditingProfile(false);
+                  setProfileSavedNotice(true);
+                  setTimeout(() => setProfileSavedNotice(false), 3000);
+                }}
+                className="space-y-3 p-4 rounded-control bg-surface-canvas border border-sage"
+              >
+                <div>
+                  <label className="text-xs font-bold text-ink block mb-1">Tên hiển thị công khai:</label>
+                  <input
+                    type="text"
+                    value={profileDisplayName}
+                    onChange={(e) => setProfileDisplayName(e.target.value)}
+                    className="w-full px-3 py-2 rounded-control border border-sage bg-white text-ink text-xs focus:ring-2 focus:ring-forest"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-ink block mb-1">Giới thiệu ngắn (Bio):</label>
+                  <textarea
+                    value={profileBio}
+                    onChange={(e) => setProfileBio(e.target.value)}
+                    rows={3}
+                    className="w-full px-3 py-2 rounded-control border border-sage bg-white text-ink text-xs focus:ring-2 focus:ring-forest"
+                  />
+                </div>
+                <div className="flex items-center justify-end gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => setIsEditingProfile(false)}
+                    className="px-3 py-1.5 rounded-control border border-sage text-ink text-xs font-medium"
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-1.5 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover"
+                  >
+                    Lưu thay đổi (Demo)
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div>
+                  <label className="text-ink-muted block mb-1">Mã định danh duy nhất (UUIDv7):</label>
+                  <div className="p-2 rounded-control bg-surface-canvas border border-sage font-mono text-ink">
+                    {session.userId}
+                  </div>
+                </div>
+                <div>
+                  <label className="text-ink-muted block mb-1">Tên hiển thị & Handle:</label>
+                  <div className="p-2 rounded-control bg-surface-canvas border border-sage font-mono text-ink">
+                    {session.displayName} (@{session.handle})
+                  </div>
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="text-ink-muted block mb-1">Giới thiệu ngắn:</label>
+                  <div className="p-2 rounded-control bg-surface-canvas border border-sage text-ink-secondary">
+                    {profileBio}
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="p-3.5 rounded-control bg-surface-canvas border border-sage/60 text-xs text-ink-secondary">
               <strong className="text-ink">Bất biến kiến trúc: </strong>
@@ -715,9 +812,31 @@ export function AccountView() {
               Bốn Nhánh Quyền Lợi Sau Phê Duyệt (Independent Post-Approval Benefits)
             </h2>
             <p className="text-xs text-ink-secondary">
-              Khi một bài viết được APPROVED, 4 quyền lợi sau được kích hoạt hoàn toàn độc lập và không phụ thuộc vào nhau.
+              Khi một bài viết được chuyên gia thẩm định phê duyệt (APPROVED / VERIFIED), 4 quyền lợi sau được kích hoạt hoàn toàn độc lập và không phụ thuộc vào nhau.
             </p>
           </div>
+
+          {/* If 0 verified posts, show clear explanatory banner and disabled states */}
+          {(benefits?.verifiedContentCount ?? 0) === 0 && (
+            <div className="p-4 rounded-card border-2 border-amber/40 bg-status-caution-bg text-ink space-y-2 shadow-xs">
+              <div className="flex items-center gap-2 font-bold text-xs text-amber-dark">
+                <InfoIcon className="w-4 h-4 text-amber shrink-0" />
+                <span>CHƯA CÓ BÀI VIẾT NÀO HOÀN TẤT KIỂM ĐỊNH THỰC ĐỊA (0 BÀI VERIFIED)</span>
+              </div>
+              <p className="text-xs text-ink-secondary leading-relaxed">
+                Tài khoản của bạn hiện chưa có bài viết nào được chuyên gia thực địa hoàn thành thẩm định độc lập. Cả 4 quyền lợi dưới đây (Nhãn kiểm định, Contributor SBT, Author NFT và Tuyến nhận tip 80/20) chỉ mở khóa cho các tác giả có bài viết đã được xác thực chính thức trên thực địa.
+              </p>
+              <div className="pt-1">
+                <Link
+                  href={getLocalizedPath('/contribute')}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover shadow-xs"
+                >
+                  <PlusCircleIcon className="w-3.5 h-3.5" />
+                  <span>Đóng góp bài khảo sát ngay</span>
+                </Link>
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Block 1: Verified Content Label */}
@@ -755,11 +874,18 @@ export function AccountView() {
                 </span>
               </div>
               <p className="text-xs text-ink-secondary leading-relaxed">
-                Huy hiệu danh dự gắn liền với ví Web3 của tác giả. Không thể chuyển nhượng hay mua bán. Tác giả chủ động claim bằng ví đã liên kết.
+                Huy hiệu danh dự vĩnh viễn gắn liền với tác giả. Không thể chuyển nhượng hay mua bán. Tác giả chủ động nhận (claim) bằng ví Web3 đã liên kết.
               </p>
               <div className="space-y-2">
                 <div className="p-3 rounded-control bg-surface-canvas border border-sage/60 text-xs space-y-1 font-mono">
-                  <div>Trạng thái: <strong>{benefits?.sbt.status}</strong></div>
+                  <div>
+                    Trạng thái:{' '}
+                    <strong>
+                      {(benefits?.verifiedContentCount ?? 0) === 0
+                        ? 'CHƯA ĐỦ ĐIỀU KIỆN'
+                        : benefits?.sbt.status}
+                    </strong>
+                  </div>
                   {benefits?.sbt.tokenId && (
                     <div className="text-[11px] text-ink-muted">
                       Token ID: {benefits.sbt.tokenId}
@@ -767,7 +893,15 @@ export function AccountView() {
                   )}
                 </div>
 
-                {benefits?.sbt.status !== 'ISSUED_DEMO' ? (
+                {(benefits?.verifiedContentCount ?? 0) === 0 ? (
+                  <button
+                    type="button"
+                    disabled
+                    className="w-full py-2 px-3 rounded-control bg-sage/40 text-ink-muted text-xs font-bold cursor-not-allowed opacity-60"
+                  >
+                    Chưa đủ điều kiện nhận SBT
+                  </button>
+                ) : benefits?.sbt.status !== 'ISSUED_DEMO' ? (
                   <button
                     type="button"
                     onClick={handleClaimSbt}
@@ -796,12 +930,19 @@ export function AccountView() {
                 </span>
               </div>
               <p className="text-xs text-ink-secondary leading-relaxed">
-                Vật phẩm lưu niệm số đại diện cho bài viết đầu tiên được thẩm định thành công. Tối đa 1 NFT cho mỗi bài viết.
+                Vật phẩm lưu niệm số đại diện cho bài viết đầu tiên được thẩm định thành công. Tối đa 1 NFT cho mỗi bài viết được duyệt.
               </p>
               <div className="space-y-2">
                 <div className="p-3 rounded-control bg-surface-canvas border border-sage/60 text-xs space-y-1 font-mono">
                   <div>Tiêu đề: {benefits?.nft.postTitle}</div>
-                  <div>Trạng thái: <strong>{benefits?.nft.status}</strong></div>
+                  <div>
+                    Trạng thái:{' '}
+                    <strong>
+                      {(benefits?.verifiedContentCount ?? 0) === 0
+                        ? 'CHƯA ĐỦ ĐIỀU KIỆN'
+                        : benefits?.nft.status}
+                    </strong>
+                  </div>
                   {benefits?.nft.tokenId && (
                     <div className="text-[11px] text-ink-muted">
                       Token ID: {benefits.nft.tokenId}
@@ -809,7 +950,15 @@ export function AccountView() {
                   )}
                 </div>
 
-                {benefits?.nft.status !== 'ISSUED_DEMO' ? (
+                {(benefits?.verifiedContentCount ?? 0) === 0 ? (
+                  <button
+                    type="button"
+                    disabled
+                    className="w-full py-2 px-3 rounded-control bg-sage/40 text-ink-muted text-xs font-bold cursor-not-allowed opacity-60"
+                  >
+                    Chưa đủ điều kiện nhận NFT
+                  </button>
+                ) : benefits?.nft.status !== 'ISSUED_DEMO' ? (
                   <button
                     type="button"
                     onClick={handleClaimNft}
@@ -831,7 +980,7 @@ export function AccountView() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 font-bold text-sm text-ink">
                   <CheckCircleIcon className="w-4 h-4 text-forest" />
-                  <span>4. Tuyến nhận tip onchain (80/20)</span>
+                  <span>4. Tuyến chia sẻ tiền tip (80/20)</span>
                 </div>
                 <span className="px-2 py-0.5 rounded-full bg-waypoint/20 text-waypoint font-bold text-[10px]">
                   SPLITTER
@@ -842,20 +991,37 @@ export function AccountView() {
               </p>
               <div className="space-y-2">
                 <div className="p-3 rounded-control bg-surface-canvas border border-sage/60 text-xs space-y-1 font-mono">
-                  <div>Tỷ lệ: 80% Tác giả &bull; 20% Quỹ Ventlore</div>
-                  <div>Trạng thái Route: <strong>{benefits?.tipRoute.status}</strong></div>
+                  <div>Tỷ lệ: 80% Tác giả &bull; 20% Quỹ cộng đồng Ventlore</div>
+                  <div>
+                    Trạng thái Tuyến tip:{' '}
+                    <strong>
+                      {(benefits?.verifiedContentCount ?? 0) === 0
+                        ? 'CHƯA KÍCH HOẠT'
+                        : benefits?.tipRoute.status}
+                    </strong>
+                  </div>
                   <div>Đồng ý nhận tiền (Consent): {benefits?.tipRoute.consentGiven ? 'ĐÃ ĐỒNG Ý' : 'CHƯA ĐỒNG Ý'}</div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={handleToggleTipConsent}
-                  className="w-full py-2 px-3 rounded-control border border-forest text-forest text-xs font-bold hover:bg-forest/10 transition-colors"
-                >
-                  {benefits?.tipRoute.consentGiven
-                    ? 'Tạm dừng nhận tip onchain'
-                    : 'Ký xác nhận đồng ý nhận tip onchain (80/20)'}
-                </button>
+                {(benefits?.verifiedContentCount ?? 0) === 0 ? (
+                  <button
+                    type="button"
+                    disabled
+                    className="w-full py-2 px-3 rounded-control bg-sage/40 text-ink-muted text-xs font-bold cursor-not-allowed opacity-60"
+                  >
+                    Chưa đủ điều kiện mở tuyến tip
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleToggleTipConsent}
+                    className="w-full py-2 px-3 rounded-control border border-forest text-forest text-xs font-bold hover:bg-forest/10 transition-colors"
+                  >
+                    {benefits?.tipRoute.consentGiven
+                      ? 'Tạm dừng nhận tip onchain'
+                      : 'Ký xác nhận đồng ý nhận tip onchain (80/20)'}
+                  </button>
+                )}
               </div>
             </div>
           </div>

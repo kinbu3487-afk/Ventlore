@@ -135,6 +135,70 @@ export function ExpertWorkspaceView() {
     return true;
   });
 
+  // Gate for Guest / Non-Expert Personas
+  if (persona !== 'expert' && persona !== 'admin') {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 text-center space-y-6">
+        <div className="w-16 h-16 rounded-full bg-waypoint/15 text-waypoint mx-auto flex items-center justify-center shadow-sm">
+          <ShieldCheckIcon className="w-8 h-8" />
+        </div>
+        <div className="space-y-2">
+          <span className="inline-block px-3 py-1 rounded-full bg-waypoint/15 text-waypoint text-xs font-bold uppercase tracking-wider">
+            Khu vực Thẩm định viên Độc lập
+          </span>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-ink tracking-tight">
+            Không Gian Chuyên Gia Thẩm Định Thực Địa
+          </h1>
+          <p className="text-sm text-ink-secondary leading-relaxed">
+            Đây là khu vực nghiệp vụ nội bộ dành cho các chuyên gia kiểm lâm, cứu hộ và người dẫn đường dã ngoại độc lập. Các chuyên gia tiến hành khảo sát thực địa, đối chiếu tọa độ và lập biên bản kiểm định độc lập để bảo vệ an toàn cho cộng đồng.
+          </p>
+        </div>
+
+        <div className="p-6 rounded-card border border-sage bg-surface-card text-left space-y-3">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-ink">
+            Tiêu chuẩn Thẩm định viên Ventlore:
+          </h2>
+          <ul className="text-xs text-ink-secondary space-y-2 list-disc list-inside">
+            <li>
+              <strong>Kiểm định độc lập:</strong> Chuyên gia không được thẩm định bài viết do chính mình làm tác giả; hai tài khoản thuộc cùng một cá nhân không được coi là độc lập.
+            </li>
+            <li>
+              <strong>Khảo sát thực tế:</strong> Phải có kinh nghiệm thực tế tại địa bàn khảo sát và cung cấp bằng chứng GPS, hình ảnh đối chứng cụ thể.
+            </li>
+            <li>
+              <strong>Thù lao độc lập:</strong> Chuyên gia thực hiện đúng quy trình khảo sát vẫn được nghiệm thu và nhận tiền công đầy đủ ngay cả khi bài viết bị từ chối phê duyệt.
+            </li>
+          </ul>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+          <button
+            type="button"
+            onClick={() => setPersona('expert')}
+            className="w-full sm:w-auto px-6 py-2.5 rounded-control font-bold text-white bg-waypoint hover:opacity-90 transition-opacity shadow-sm text-xs"
+          >
+            Trải nghiệm vai trò Chuyên gia (Hoàng Kiểm Lâm)
+          </button>
+          {persona === 'guest' ? (
+            <Link
+              href={getLocalizedPath(`/login?returnTo=${encodeURIComponent('/expert')}`)}
+              className="w-full sm:w-auto px-5 py-2.5 rounded-control border border-sage text-ink text-xs font-semibold hover:bg-surface-canvas transition-colors"
+            >
+              Đăng nhập với tài khoản Chuyên gia
+            </Link>
+          ) : (
+            <Link
+              href={getLocalizedPath('/explore')}
+              className="w-full sm:w-auto px-5 py-2.5 rounded-control border border-sage text-ink text-xs font-semibold hover:bg-surface-canvas transition-colors"
+            >
+              Quay lại Khám phá
+            </Link>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-5xl mx-auto space-y-8">
       {/* Header */}

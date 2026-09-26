@@ -123,6 +123,34 @@ export function ContributeView() {
     };
   }, []);
 
+  const currentUserId = session?.userId || 'guest';
+  const draftKeyTab1 = `ventlore_draft_${currentUserId}_existing`;
+  const draftKeyTab2 = `ventlore_draft_${currentUserId}_candidate`;
+
+  // Sync activeTab with URL searchParams (?tab=existing | ?tab=candidate | ?preset=catco)
+  useEffect(() => {
+    const tabQuery = searchParams.get('tab');
+    if (tabQuery === 'candidate' && activeTab !== 'candidate') {
+      setActiveTab('candidate');
+    } else if (tabQuery === 'existing' && activeTab !== 'existing') {
+      setActiveTab('existing');
+    }
+    if (searchParams.get('preset') === 'catco') {
+      setPlaceName('Cát Cò');
+      if (activeTab !== 'candidate') {
+        setActiveTab('candidate');
+      }
+    }
+  }, [searchParams, activeTab]);
+
+  const handleSwitchTab = (tab: ContributeTab) => {
+    setActiveTab(tab);
+    setSubmitSuccess(null);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('tab', tab);
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
+
   // Duplicate place detector on Tab 2
   useEffect(() => {
     if (!placeName || dismissDuplicate || places.length === 0) {
@@ -147,13 +175,13 @@ export function ContributeView() {
     }
   }, [placeName, places, dismissDuplicate]);
 
-  // Draft auto-save to localStorage
+  // Tab 1: Draft auto-save to localStorage
   useEffect(() => {
     if (postTitle || postContent) {
       const timer = setTimeout(() => {
         try {
           localStorage.setItem(
-            'ventlore_contribute_draft',
+            draftKeyTab1,
             JSON.stringify({
               selectedPlaceId,
               postTitle,
@@ -161,6 +189,7 @@ export function ContributeView() {
               observedAt,
               postContent,
               claims,
+              sources,
               savedAt: new Date().toLocaleTimeString(),
             })
           );
@@ -171,23 +200,90 @@ export function ContributeView() {
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [selectedPlaceId, postTitle, contributionType, observedAt, postContent, claims]);
+  }, [draftKeyTab1, selectedPlaceId, postTitle, contributionType, observedAt, postContent, claims, sources]);
 
-  // Restore draft on mount
+  // Tab 2: Draft auto-save to localStorage
+  useEffect(() => {
+    if (placeName || placeSummary || candidatePostTitle || candidatePostContent) {
+      const timer = setTimeout(() => {
+        try {
+          localStorage.setItem(
+            draftKeyTab2,
+            JSON.stringify({
+              placeName,
+              selectedRegion,
+              lat,
+              lng,
+              placeSummary,
+              placeDescription,
+              warnings,
+              activities,
+              candidatePostTitle,
+              candidatePostContent,
+              candidateClaims,
+              savedAt: new Date().toLocaleTimeString(),
+            })
+          );
+          setDraftSavedAt(new Date().toLocaleTimeString());
+        } catch {
+          // ignore
+        }
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [
+    draftKeyTab2,
+    placeName,
+    selectedRegion,
+    lat,
+    lng,
+    placeSummary,
+    placeDescription,
+    warnings,
+    activities,
+    candidatePostTitle,
+    candidatePostContent,
+    candidateClaims,
+  ]);
+
+  // Restore drafts on mount and on user switch
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('ventlore_contribute_draft');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed.postTitle && !postTitle) setPostTitle(parsed.postTitle);
-        if (parsed.postContent && !postContent) setPostContent(parsed.postContent);
+      // Restore Tab 1
+      const savedTab1 = localStorage.getItem(draftKeyTab1) || localStorage.getItem('ventlore_contribute_draft');
+      if (savedTab1) {
+        const parsed = JSON.parse(savedTab1);
+        if (parsed.selectedPlaceId) setSelectedPlaceId(parsed.selectedPlaceId);
+        if (parsed.postTitle) setPostTitle(parsed.postTitle);
+        if (parsed.postContent) setPostContent(parsed.postContent);
+        if (parsed.contributionType) setContributionType(parsed.contributionType);
+        if (parsed.observedAt) setObservedAt(parsed.observedAt);
         if (parsed.claims && parsed.claims.length > 0) setClaims(parsed.claims);
+        if (parsed.sources && parsed.sources.length > 0) setSources(parsed.sources);
         if (parsed.savedAt) setDraftSavedAt(parsed.savedAt);
+      }
+
+      // Restore Tab 2
+      const savedTab2 = localStorage.getItem(draftKeyTab2);
+      if (savedTab2) {
+        const parsed2 = JSON.parse(savedTab2);
+        if (parsed2.placeName) setPlaceName(parsed2.placeName);
+        if (parsed2.selectedRegion) setSelectedRegion(parsed2.selectedRegion);
+        if (parsed2.lat) setLat(parsed2.lat);
+        if (parsed2.lng) setLng(parsed2.lng);
+        if (parsed2.placeSummary) setPlaceSummary(parsed2.placeSummary);
+        if (parsed2.placeDescription) setPlaceDescription(parsed2.placeDescription);
+        if (parsed2.warnings && parsed2.warnings.length > 0) setWarnings(parsed2.warnings);
+        if (parsed2.activities && parsed2.activities.length > 0) setActivities(parsed2.activities);
+        if (parsed2.candidatePostTitle) setCandidatePostTitle(parsed2.candidatePostTitle);
+        if (parsed2.candidatePostContent) setCandidatePostContent(parsed2.candidatePostContent);
+        if (parsed2.candidateClaims && parsed2.candidateClaims.length > 0) setCandidateClaims(parsed2.candidateClaims);
+        if (parsed2.savedAt && !savedTab1) setDraftSavedAt(parsed2.savedAt);
       }
     } catch {
       // ignore
     }
-  }, []);
+  }, [draftKeyTab1, draftKeyTab2]);
 
   // Handlers for Tab 1
   const handleAddClaim = () => setClaims([...claims, '']);
@@ -255,7 +351,8 @@ export function ContributeView() {
         session.handle
       );
 
-      // clear draft
+      // Clear Tab 1 draft only
+      localStorage.removeItem(draftKeyTab1);
       localStorage.removeItem('ventlore_contribute_draft');
       setSubmitSuccess({
         postId: res.postId,
@@ -310,6 +407,8 @@ export function ContributeView() {
         session.handle
       );
 
+      // Clear Tab 2 draft only
+      localStorage.removeItem(draftKeyTab2);
       setSubmitSuccess({
         postId: res.post.postId,
         displayCode: res.post.displayCode,
@@ -332,10 +431,10 @@ export function ContributeView() {
           <span>Đóng góp dữ liệu dã ngoại</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-ink tracking-tight">
-          Soạn thảo và Gửi Đóng Góp
+          Chia Sẻ Trải Nghiệm Khảo Sát Thực Địa
         </h1>
         <p className="text-sm sm:text-base text-ink-secondary leading-relaxed">
-          Đóng góp bài khảo sát thực địa cho địa điểm đã biết hoặc đề xuất tọa độ mới chưa có trong hệ thống Ventlore.
+          Chia sẻ bài viết cho một địa điểm bạn đã trực tiếp đến hoặc đề xuất một tọa độ mới chưa có trên bản đồ Ventlore.
         </p>
       </div>
 
@@ -349,7 +448,7 @@ export function ContributeView() {
                 Phiên khách vãng lai (Guest)
               </p>
               <p className="text-xs text-ink-secondary">
-                Bạn có thể soạn thảo và lưu nháp cục bộ. Để gửi bài lên hệ thống và nhận quyền tác giả, vui lòng đăng nhập hoặc chuyển sang tài khoản thành viên demo.
+                Bạn có thể tự do soạn thảo và lưu bản nháp trên máy. Để xuất bản bài viết và nhận chứng nhận tác giả, vui lòng đăng nhập hoặc chuyển sang tài khoản thành viên demo.
               </p>
             </div>
           </div>
@@ -362,7 +461,7 @@ export function ContributeView() {
               Chọn Persona Tác Giả (Minh)
             </button>
             <Link
-              href={getLocalizedPath(`/login?returnTo=${encodeURIComponent('/contribute')}`)}
+              href={getLocalizedPath(`/login?returnTo=${encodeURIComponent(`/contribute?tab=${activeTab}`)}`)}
               className="px-3 py-1.5 rounded-control text-xs font-bold text-ink border border-sage hover:bg-surface-canvas transition-colors whitespace-nowrap"
             >
               Đăng nhập
@@ -380,7 +479,7 @@ export function ContributeView() {
               <h3 className="font-extrabold text-lg">
                 {submitSuccess.isCandidate
                   ? 'Đề xuất điểm mới đã gửi thành công!'
-                  : 'Bài viết thực địa đã được xuất bản!'}
+                  : 'Bài viết khảo sát đã được xuất bản!'}
               </h3>
               <p className="text-xs text-ink-secondary">
                 Mã định danh hệ thống: <strong className="font-mono text-ink">{submitSuccess.displayCode}</strong>
@@ -390,8 +489,8 @@ export function ContributeView() {
 
           <p className="text-sm leading-relaxed text-ink-secondary">
             {submitSuccess.isCandidate
-              ? 'Hồ sơ đã được lưu trữ an toàn và chuyển vào hàng đợi Tiếp nhận (Admin Intake) ở trạng thái CHỜ DUYỆT (REVIEW_ONLY). Điểm này sẽ không hiển thị trên bản đồ công cộng cho đến khi có chuyên gia kiểm định thực địa xác nhận an toàn.'
-              : 'Bài viết của bạn đã được đưa vào kho dữ liệu ở trạng thái CHƯA KIỂM ĐỊNH (PUBLISHED + UNVERIFIED) theo quy chuẩn kiến trúc Ventlore. Bạn có thể theo dõi tiến trình thẩm định trong mục Đóng góp của tôi.'}
+              ? 'Hồ sơ địa điểm và bài viết khám phá ban đầu đã được chuyển vào hàng đợi Tiếp nhận (Admin Intake) ở trạng thái Chờ kiểm định thực địa. Điểm này sẽ không hiển thị trên bản đồ công cộng cho đến khi có chuyên gia khảo sát độc lập xác thực tính chính xác và an toàn.'
+              : 'Bài viết của bạn đã được lưu vào kho dữ liệu ở trạng thái Chưa kiểm định độc lập. Bạn có thể theo dõi tiến trình thẩm định trong mục Đóng góp của tôi. Khi được chuyên gia xác thực, nhãn kiểm định và quyền nhận tip sẽ được kích hoạt.'}
           </p>
 
           <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -424,10 +523,7 @@ export function ContributeView() {
       <div className="flex border-b border-sage">
         <button
           type="button"
-          onClick={() => {
-            setActiveTab('existing');
-            setSubmitSuccess(null);
-          }}
+          onClick={() => handleSwitchTab('existing')}
           className={`flex-1 sm:flex-none flex items-center justify-center gap-2 py-3 px-6 text-sm font-bold border-b-2 transition-colors ${
             activeTab === 'existing'
               ? 'border-forest text-forest bg-surface-card rounded-t-card'
@@ -440,10 +536,7 @@ export function ContributeView() {
 
         <button
           type="button"
-          onClick={() => {
-            setActiveTab('candidate');
-            setSubmitSuccess(null);
-          }}
+          onClick={() => handleSwitchTab('candidate')}
           className={`flex-1 sm:flex-none flex items-center justify-center gap-2 py-3 px-6 text-sm font-bold border-b-2 transition-colors ${
             activeTab === 'candidate'
               ? 'border-forest text-forest bg-surface-card rounded-t-card'
@@ -451,7 +544,7 @@ export function ContributeView() {
           }`}
         >
           <MapPinIcon className="w-4 h-4" />
-          <span>2. Đề xuất điểm mới (Candidate Place)</span>
+          <span>2. Đề xuất điểm dã ngoại mới</span>
         </button>
       </div>
 
@@ -463,14 +556,14 @@ export function ContributeView() {
             <ShieldCheckIcon className="w-4 h-4 text-forest shrink-0 mt-0.5" />
             <div>
               <strong className="text-ink font-semibold">Quy chuẩn kiểm định: </strong>
-              Bài viết về điểm có sẵn có thể xuất bản ngay ở trạng thái <span className="font-mono text-ink font-bold">UNVERIFIED</span> (Chưa kiểm định). Khi chuyên gia thực địa hoàn thành thẩm định, bài viết sẽ được gắn nhãn kiểm định độc lập và mở các quyền lợi tác giả.
+              Bài viết về địa điểm có sẵn có thể xuất bản ngay để cộng đồng tham khảo. Khi chuyên gia thực địa hoàn thành thẩm định độc lập, bài viết sẽ được gắn nhãn kiểm định chính thức và mở các quyền lợi tác giả (chứng nhận SBT, vật phẩm NFT và tuyến chia sẻ tiền tip 80/20).
             </div>
           </div>
 
           {/* Place Selection */}
           <div className="space-y-2">
             <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-              Địa điểm khảo sát <span className="text-status-danger">*</span>
+              Địa điểm bạn đã đến <span className="text-status-danger">*</span>
             </label>
             {isLoadingPlaces ? (
               <div className="h-10 bg-sage/30 animate-pulse rounded-control" />
@@ -492,7 +585,7 @@ export function ContributeView() {
               Không tìm thấy địa điểm trong danh sách? Chuyển sang tab{' '}
               <button
                 type="button"
-                onClick={() => setActiveTab('candidate')}
+                onClick={() => handleSwitchTab('candidate')}
                 className="text-forest underline font-semibold"
               >
                 Đề xuất điểm mới
@@ -785,7 +878,7 @@ export function ContributeView() {
             <ShieldCheckIcon className="w-4 h-4 text-status-pending shrink-0 mt-0.5" />
             <div>
               <strong className="text-ink font-semibold">Quy chuẩn Đề xuất điểm mới: </strong>
-              Tạo đồng thời <span className="font-mono font-bold text-ink">placeId (CANDIDATE)</span> + <span className="font-mono font-bold text-ink">postId (DISCOVERY)</span> + <span className="font-mono font-bold text-ink">revisionId</span> trong một giao dịch. Điểm ở trạng thái <span className="font-mono text-ink font-bold">REVIEW_ONLY</span> trước khi được Ban Điều Hành và Chuyên gia nghiệm thu độc lập.
+              Tạo đồng thời địa điểm đề xuất mới và bài viết khám phá ban đầu. Để đảm bảo an toàn cho cộng đồng dã ngoại, thông tin sẽ ở trạng thái <span className="font-semibold text-ink">Chờ kiểm định thực địa</span> và chỉ hiển thị công khai trên bản đồ sau khi có chuyên gia thẩm định xác nhận an toàn.
             </div>
           </div>
 
@@ -821,7 +914,7 @@ export function ContributeView() {
                   <button
                     type="button"
                     onClick={() => {
-                      setActiveTab('existing');
+                      handleSwitchTab('existing');
                       setSelectedPlaceId(duplicateWarning.placeId);
                     }}
                     className="px-3 py-1.5 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover transition-colors shadow-xs"

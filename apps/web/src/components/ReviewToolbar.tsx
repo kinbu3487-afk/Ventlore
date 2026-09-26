@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useSession } from '@/components/SessionContext';
@@ -17,6 +17,7 @@ import {
   AlertTriangleIcon,
   TableIcon,
   DownloadIcon,
+  RefreshCwIcon,
 } from '@/components/Icons';
 
 interface ScenarioItem {
@@ -35,7 +36,7 @@ const SCENARIOS: ScenarioItem[] = [
     number: 1,
     title: 'Người đọc mới (Read journeys)',
     persona: 'guest',
-    targetPath: '/',
+    targetPath: '/explore',
     description: 'Trải nghiệm đọc công khai từ Home → Khám phá Explore → Địa điểm → Đọc bài viết → Lịch sử revision → Hồ sơ người dùng. Không yêu cầu đăng nhập hay kết nối ví.',
   },
   {
@@ -44,7 +45,7 @@ const SCENARIOS: ScenarioItem[] = [
     title: 'Không có dữ liệu / Lỗi (Empty & Error)',
     persona: 'guest',
     targetPath: '/explore?q=khong_tim_thay_dia_diem_xyz',
-    description: 'Trạng thái tìm kiếm không có kết quả, gợi ý hành động tiếp theo rõ ràng thay vì trang trắng.',
+    description: 'Trạng thái tìm kiếm không có kết quả, tự động cập nhật ô tìm kiếm và hiển thị gợi ý hành động thay vì trang trắng.',
   },
   {
     id: 's03',
@@ -59,8 +60,8 @@ const SCENARIOS: ScenarioItem[] = [
     number: 4,
     title: 'Phát hiện điểm trùng (Duplicate place)',
     persona: 'author',
-    targetPath: '/contribute?tab=candidate',
-    description: 'Nhập thử "Cát Cò" trong Đề xuất điểm mới để thấy cảnh báo trùng lặp thông minh và nút chuyển sang viết bài cho điểm đã có.',
+    targetPath: '/contribute?tab=candidate&preset=catco',
+    description: 'Tự động điền "Cát Cò" trong Đề xuất điểm mới để kích hoạt cảnh báo trùng lặp thông minh và nút chuyển sang viết bài cho điểm đã có.',
   },
   {
     id: 's05',
@@ -68,7 +69,7 @@ const SCENARIOS: ScenarioItem[] = [
     title: 'Ủng hộ Quỹ Ventlore (Project donate)',
     persona: 'guest',
     targetPath: '/',
-    description: 'Mở PaymentModal chế độ PROJECT từ nút Donate trên thanh điều hướng hoặc Home. 100% tiền chuyển vào Quỹ dự án.',
+    description: 'Mở PaymentModal chế độ PROJECT với phân bổ 100% tiền chuyển vào Quỹ bảo tồn & thẩm định dự án.',
     actionHint: 'open_project_payment',
   },
   {
@@ -77,7 +78,7 @@ const SCENARIOS: ScenarioItem[] = [
     title: 'Ủng hộ tác giả bài viết (80/20 Post tip)',
     persona: 'vip',
     targetPath: '/posts/018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e10',
-    description: 'Bấm "Tip tác giả" trong bài viết để mở PaymentModal chế độ POST_TIP với phân bổ 80% tác giả / 20% Quỹ tính bằng số nguyên atomic.',
+    description: 'Xem bài viết Cát Cò 3 đã duyệt, bấm "Tip tác giả" để mở PaymentModal chế độ POST_TIP phân bổ 80% tác giả / 20% Quỹ (số nguyên atomic).',
   },
   {
     id: 's07',
@@ -93,7 +94,7 @@ const SCENARIOS: ScenarioItem[] = [
     title: 'Ví Web3 & Ngoại lệ (Wallet exceptions)',
     persona: 'guest',
     targetPath: '/transparency',
-    description: 'PaymentModal mô phỏng đầy đủ: chuyển mạng Arbitrum One / Sepolia, cảnh báo sai mạng, giao dịch pending và hoàn tất.',
+    description: 'PaymentModal mô phỏng chuyển mạng Arbitrum One / Sepolia, cảnh báo sai mạng, giao dịch pending và hoàn tất.',
     actionHint: 'open_project_payment',
   },
   {
@@ -117,16 +118,16 @@ const SCENARIOS: ScenarioItem[] = [
     number: 11,
     title: 'Công đạt, bài không đạt (Mandatory test)',
     persona: 'admin',
-    targetPath: '/admin',
-    description: 'Bấm nút "Chạy thử: Công Đạt & Bài Bác" trong khu Admin để thấy rõ 2 quyết định độc lập: Chuyên gia vẫn nhận thù lao dù bài bị REJECTED!',
+    targetPath: '/admin?tab=review_cases',
+    description: 'Mở tab Hồ sơ Thẩm định. Bấm "Chạy thử: Công Đạt & Bài Bác" để thấy rõ 2 quyết định độc lập: Chuyên gia vẫn nhận thù lao dù bài bị REJECTED!',
   },
   {
     id: 's12',
     number: 12,
     title: 'Khiếu nại & App Hold khẩn cấp',
     persona: 'admin',
-    targetPath: '/admin',
-    description: 'Xem khiếu nại trong Tiếp nhận và cơ chế bật/tắt App Hold tức thời trên ứng dụng mà không phụ thuộc vào trạng thái mạng onchain.',
+    targetPath: '/admin?tab=app_hold',
+    description: 'Xem tab App Hold khẩn cấp trên ứng dụng và thao tác bật/tắt tức thời mà không phụ thuộc vào trạng thái mạng onchain.',
   },
   {
     id: 's13',
@@ -154,58 +155,136 @@ export function ReviewToolbar() {
   const { getLocalizedPath } = useI18n();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedScenario, setSelectedScenario] = useState<ScenarioItem | null>(null);
+  const [navigatingId, setNavigatingId] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  const handleSelectScenario = (sc: ScenarioItem) => {
+  // Restore active scenario from sessionStorage
+  const [selectedScenario, setSelectedScenario] = useState<ScenarioItem | null>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const savedId = sessionStorage.getItem('ventlore_active_scenario');
+        if (savedId) {
+          return SCENARIOS.find((s) => s.id === savedId) || null;
+        }
+      } catch {}
+    }
+    return null;
+  });
+
+  const handleSelectScenario = (sc: ScenarioItem, autoMinimize = false) => {
+    setNavigatingId(sc.id);
     setSelectedScenario(sc);
+    try {
+      sessionStorage.setItem('ventlore_active_scenario', sc.id);
+    } catch {}
+
+    // 1. Sync persona synchronously
     if (persona !== sc.persona) {
       setPersona(sc.persona);
     }
-    const fullPath = getLocalizedPath(sc.targetPath);
-    router.push(fullPath);
 
+    // 2. Action hint handler (PaymentModal)
     if (sc.actionHint === 'open_project_payment') {
+      setIsOpen(false);
+      setToastMessage(`Đã kích hoạt Kịch bản #${sc.number}: Mở PaymentModal`);
       setTimeout(() => {
         openPayment('PROJECT', {
           targetTitle: 'Quỹ phát triển cộng đồng dã ngoại Ventlore',
         });
-      }, 300);
+        setNavigatingId(null);
+        setTimeout(() => setToastMessage(null), 3000);
+      }, 150);
+      return;
+    }
+
+    // 3. Navigation handler
+    const fullPath = getLocalizedPath(sc.targetPath);
+    const currentFull = typeof window !== 'undefined'
+      ? window.location.pathname + window.location.search
+      : '';
+
+    setToastMessage(`Đang chuyển sang Kịch bản #${sc.number}: ${sc.title}`);
+    setTimeout(() => setToastMessage(null), 3500);
+
+    if (currentFull === fullPath) {
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      setTimeout(() => {
+        setNavigatingId(null);
+      }, 200);
+    } else {
+      router.push(fullPath);
+      setTimeout(() => {
+        setNavigatingId(null);
+      }, 500);
+    }
+
+    if (autoMinimize) {
+      setIsOpen(false);
     }
   };
 
   return (
-    <aside aria-label="Review Toolbar" className="fixed bottom-4 right-4 z-scenario-picker font-sans">
+    <aside
+      aria-label="Review Toolbar"
+      className="fixed bottom-16 sm:bottom-4 right-3 sm:right-4 z-[9999] font-sans pointer-events-auto"
+    >
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="absolute bottom-full right-0 mb-2 px-3 py-2 rounded-control bg-forest text-white text-xs font-semibold shadow-xl border border-white/20 whitespace-nowrap animate-in fade-in slide-in-from-bottom-2 flex items-center gap-2">
+          <CheckCircleIcon className="w-4 h-4 text-status-vip" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
       {/* Collapsed Pill Button */}
       {!isOpen ? (
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-forest text-white shadow-xl hover:bg-forest-hover border border-white/20 transition-transform hover:scale-105"
+          className="flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-forest text-white shadow-2xl hover:bg-forest-hover border border-white/30 transition-transform hover:scale-105 active:scale-95 cursor-pointer"
         >
-          <SparklesIcon className="w-4 h-4 text-status-vip" />
-          <span className="text-xs font-bold tracking-tight">Review Toolbar (14 Scenarios)</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-white/20 text-[10px] font-mono uppercase">
+          <SparklesIcon className="w-4 h-4 text-status-vip animate-pulse" />
+          <span className="text-xs font-bold tracking-tight">
+            {selectedScenario
+              ? `#${selectedScenario.number}: ${selectedScenario.title.slice(0, 24)}...`
+              : 'Review Toolbar (14 Scenarios)'}
+          </span>
+          <span className="px-1.5 py-0.2 rounded-full bg-white/20 text-[10px] font-mono uppercase font-bold">
             {persona}
           </span>
+          <ChevronDownIcon className="w-3.5 h-3.5 text-white/80" />
         </button>
       ) : (
         /* Expanded Panel */
-        <div className="bg-surface-card border-2 border-forest rounded-card shadow-2xl w-[92vw] sm:w-[420px] max-h-[85vh] flex flex-col overflow-hidden animate-fadeIn">
+        <div className="bg-surface-card border-2 border-forest rounded-card shadow-2xl w-[94vw] sm:w-[440px] max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
           {/* Header */}
           <div className="p-3.5 bg-forest text-white flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
               <SparklesIcon className="w-4 h-4 text-status-vip" />
               <span className="text-xs font-bold uppercase tracking-wider">
-                Bộ Nghiệm Thu Ventlore (Bin Review)
+                Bộ Nghiệm Thu (Bin Review 14 Scenarios)
               </span>
             </div>
-            <button
-              type="button"
-              onClick={() => setIsOpen(false)}
-              className="p-1 text-white/80 hover:text-white rounded"
-            >
-              <CloseIcon className="w-4 h-4" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="px-2 py-0.5 text-[11px] font-medium text-white/80 hover:text-white rounded bg-white/10 hover:bg-white/20 transition-colors cursor-pointer"
+                title="Thu nhỏ để xem màn hình"
+              >
+                Thu nhỏ ⤓
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="p-1 text-white/80 hover:text-white rounded hover:bg-white/10 transition-colors cursor-pointer"
+                aria-label="Đóng"
+              >
+                <CloseIcon className="w-4 h-4" />
+              </button>
+            </div>
           </div>
 
           <div className="p-4 space-y-4 overflow-y-auto flex-1 text-xs">
@@ -214,16 +293,16 @@ export function ReviewToolbar() {
               <div className="text-[11px] font-bold uppercase tracking-wider text-ink-muted">
                 1. Chọn Persona thử nghiệm:
               </div>
-              <div className="grid grid-cols-3 gap-1.5 font-mono text-[11px]">
-                {(['guest', 'author', 'vip', 'expert', 'admin'] as const).map(p => (
+              <div className="grid grid-cols-5 gap-1 font-mono text-[11px]">
+                {(['guest', 'author', 'vip', 'expert', 'admin'] as const).map((p) => (
                   <button
                     key={p}
                     type="button"
                     onClick={() => setPersona(p)}
-                    className={`py-1 px-2 rounded-control font-bold uppercase text-center transition-colors ${
+                    className={`py-1.5 px-1 rounded-control font-bold uppercase text-center transition-all cursor-pointer active:scale-95 ${
                       persona === p
-                        ? 'bg-forest text-white shadow-xs'
-                        : 'bg-surface-canvas border border-sage text-ink hover:bg-sage/40'
+                        ? 'bg-forest text-white shadow-xs ring-1 ring-forest-light'
+                        : 'bg-surface-canvas border border-sage text-ink hover:bg-sage/50'
                     }`}
                   >
                     {p}
@@ -234,50 +313,100 @@ export function ReviewToolbar() {
 
             {/* Scenario Picker List */}
             <div className="space-y-1.5">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-ink-muted">
-                2. Chọn 1 trong 14 Kịch bản kiểm thử:
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-ink-muted">
+                  2. Chọn 1 trong 14 Kịch bản kiểm thử:
+                </span>
+                <span className="text-[10px] text-ink-muted italic">Click để chuyển ngay</span>
               </div>
-              <div className="space-y-1 max-h-[220px] overflow-y-auto border border-sage rounded-control p-1.5 bg-surface-canvas">
-                {SCENARIOS.map(sc => {
+              <div className="space-y-1.5 max-h-[240px] overflow-y-auto border border-sage rounded-control p-1.5 bg-surface-canvas">
+                {SCENARIOS.map((sc) => {
                   const isCurrent = selectedScenario?.id === sc.id;
+                  const isBusy = navigatingId === sc.id;
+
                   return (
                     <button
                       key={sc.id}
                       type="button"
-                      onClick={() => handleSelectScenario(sc)}
-                      className={`w-full text-left p-2 rounded-control transition-colors flex items-center justify-between gap-2 ${
+                      onClick={() => handleSelectScenario(sc, false)}
+                      className={`w-full text-left p-2.5 rounded-control transition-all flex items-center justify-between gap-2 cursor-pointer touch-manipulation active:scale-[0.99] select-none ${
                         isCurrent
-                          ? 'bg-forest text-white'
-                          : 'hover:bg-white text-ink'
+                          ? 'bg-forest text-white shadow-sm ring-1 ring-forest-light font-semibold'
+                          : 'hover:bg-white text-ink bg-surface-card/70 border border-transparent hover:border-sage'
                       }`}
                     >
-                      <div className="truncate">
-                        <strong className="font-mono mr-1.5">#{sc.number}</strong>
-                        <span>{sc.title}</span>
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span
+                          className={`font-mono text-xs px-1.5 py-0.5 rounded font-bold shrink-0 ${
+                            isCurrent ? 'bg-white/20 text-white' : 'bg-sage text-forest'
+                          }`}
+                        >
+                          #{sc.number}
+                        </span>
+                        <span className="text-xs truncate">{sc.title}</span>
                       </div>
-                      <span
-                        className={`text-[9px] px-1.5 py-0.5 rounded uppercase font-mono shrink-0 ${
-                          isCurrent ? 'bg-white/20 text-white' : 'bg-sage text-forest'
-                        }`}
-                      >
-                        {sc.persona}
-                      </span>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <span
+                          className={`text-[9px] px-1.5 py-0.5 rounded uppercase font-mono font-bold ${
+                            isCurrent
+                              ? 'bg-white/20 text-white'
+                              : 'bg-surface-canvas text-ink-secondary border border-sage'
+                          }`}
+                        >
+                          {sc.persona}
+                        </span>
+                        {isBusy ? (
+                          <RefreshCwIcon className="w-3.5 h-3.5 animate-spin text-amber" />
+                        ) : (
+                          <ArrowRightIcon
+                            className={`w-3.5 h-3.5 transition-transform ${
+                              isCurrent ? 'text-amber translate-x-0.5' : 'text-ink-muted'
+                            }`}
+                          />
+                        )}
+                      </div>
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* Scenario Active Guide */}
+            {/* Scenario Active Guide Box */}
             {selectedScenario && (
-              <div className="p-3 rounded-control bg-status-vip-bg/50 border border-status-vip/40 space-y-1.5 text-ink">
-                <div className="flex items-center gap-1.5 font-bold text-xs text-status-vip">
-                  <CheckCircleIcon className="w-4 h-4" />
-                  <span>Kịch bản đang chọn: #{selectedScenario.number} - {selectedScenario.title}</span>
+              <div className="p-3 rounded-control bg-status-vip-bg/50 border border-status-vip/40 space-y-2 text-ink animate-in fade-in duration-150">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 font-bold text-xs text-status-vip">
+                    <CheckCircleIcon className="w-4 h-4 shrink-0" />
+                    <span>
+                      Kịch bản #{selectedScenario.number}: {selectedScenario.title}
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-forest text-white shrink-0">
+                    {selectedScenario.persona}
+                  </span>
                 </div>
+
                 <p className="text-[11px] text-ink-secondary leading-relaxed">
                   {selectedScenario.description}
                 </p>
+
+                <div className="flex items-center gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => handleSelectScenario(selectedScenario, true)}
+                    className="flex-1 py-1.5 px-3 rounded-control bg-forest text-white font-bold text-xs hover:bg-forest-hover transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                  >
+                    <span>👉 Đi tới màn hình & Thu nhỏ</span>
+                    <ArrowRightIcon className="w-3.5 h-3.5 text-amber" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsOpen(false)}
+                    className="py-1.5 px-2.5 rounded-control bg-surface-card border border-sage text-ink text-xs font-semibold hover:bg-sage/40 transition-colors cursor-pointer"
+                  >
+                    Thu nhỏ
+                  </button>
+                </div>
               </div>
             )}
 
@@ -290,31 +419,34 @@ export function ReviewToolbar() {
                 <button
                   type="button"
                   onClick={() => {
+                    setIsOpen(false);
                     openPayment('PROJECT', {
                       targetTitle: 'Quỹ phát triển cộng đồng Ventlore',
                     });
                   }}
-                  className="py-1.5 px-2 rounded-control bg-forest/10 text-forest hover:bg-forest/20"
+                  className="py-1.5 px-2 rounded-control bg-forest/10 text-forest hover:bg-forest/20 transition-colors cursor-pointer"
                 >
                   Mở PaymentModal
                 </button>
                 <Link
                   href={getLocalizedPath('/account')}
-                  className="py-1.5 px-2 rounded-control bg-surface-canvas border border-sage text-ink hover:bg-sage/30"
+                  onClick={() => setIsOpen(false)}
+                  className="py-1.5 px-2 rounded-control bg-surface-canvas border border-sage text-ink hover:bg-sage/40 transition-colors cursor-pointer"
                 >
-                  Vào Dashboard Cá nhân
+                  Dashboard Cá nhân
                 </Link>
                 <Link
                   href={getLocalizedPath('/data-map')}
-                  className="py-1.5 px-2 rounded-control bg-amber/20 text-ink hover:bg-amber/30 border border-amber/30 flex items-center justify-center gap-1"
+                  onClick={() => setIsOpen(false)}
+                  className="py-1.5 px-2 rounded-control bg-amber/20 text-ink hover:bg-amber/30 border border-amber/30 flex items-center justify-center gap-1 transition-colors cursor-pointer"
                 >
                   <TableIcon className="w-3.5 h-3.5 text-forest" />
-                  <span>Xem Data Map (16 cột)</span>
+                  <span>Data Map (16 cột)</span>
                 </Link>
                 <a
                   href="/docs/FE_DATA_MAP.md"
                   download="FE_DATA_MAP.md"
-                  className="py-1.5 px-2 rounded-control bg-forest text-white hover:bg-forest-hover flex items-center justify-center gap-1"
+                  className="py-1.5 px-2 rounded-control bg-forest text-white hover:bg-forest-hover flex items-center justify-center gap-1 transition-colors cursor-pointer"
                   title="Tải trực tiếp file docs/FE_DATA_MAP.md"
                 >
                   <DownloadIcon className="w-3.5 h-3.5 text-amber" />

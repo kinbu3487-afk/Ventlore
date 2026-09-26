@@ -246,32 +246,60 @@ export function PostReader({ post }: PostReaderProps) {
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={() => {
-                const isEligible =
-                  revision.tipRoute?.status === TipRouteStatus.ACTIVE &&
-                  revision.verificationStatus === VerificationStatus.VERIFIED;
-                openPayment('POST_TIP', {
-                  targetTitle: revision.title,
-                  targetId: post.postId,
-                  revisionId: revision.revisionId,
-                  authorHandle: author.handle,
-                  authorDisplayName: author.displayName,
-                  authorWalletAddress: revision.tipRoute?.beneficiaryAddress || '0x88F...42C1',
-                  isEligibleForTip: isEligible,
-                  ineligibleReason: !isEligible
-                    ? revision.verificationStatus === VerificationStatus.EXPIRED
-                      ? 'Phiên bản này đã hết hạn kiểm định. Lộ trình tip tạm dừng để đảm bảo tính an toàn dữ liệu.'
-                      : 'Phiên bản này chưa được thẩm định đạt chuẩn hoặc chưa hoàn tất đăng ký route on-chain.'
-                    : undefined,
-                });
-              }}
-              className="min-h-control inline-flex items-center gap-2 px-4 py-2 rounded-control font-bold text-xs text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
-            >
-              <WalletIcon className="w-4 h-4 text-amber" />
-              <span>Ủng Hộ Tác Giả (Tip)</span>
-            </button>
+            {(() => {
+              const isEligible =
+                revision.tipRoute?.status === TipRouteStatus.ACTIVE &&
+                revision.verificationStatus === VerificationStatus.VERIFIED;
+
+              let ineligibleReason = 'Phiên bản này chưa được thẩm định đạt chuẩn hoặc chưa hoàn tất đăng ký route on-chain.';
+              if (revision.verificationStatus === VerificationStatus.NEEDS_CHANGES) {
+                ineligibleReason = 'Phiên bản này đang ở trạng thái Cần chỉnh sửa, chưa hoàn tất kiểm định thực địa.';
+              } else if (revision.verificationStatus === VerificationStatus.UNVERIFIED) {
+                ineligibleReason = 'Phiên bản này chưa được kiểm định độc lập nên chưa thể nhận tip.';
+              } else if (revision.verificationStatus === VerificationStatus.EXPIRED) {
+                ineligibleReason = 'Phiên bản này đã hết hạn kiểm định. Lộ trình tip tạm dừng để đảm bảo an toàn.';
+              }
+
+              if (isEligible) {
+                return (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      openPayment('POST_TIP', {
+                        targetTitle: revision.title,
+                        targetId: post.postId,
+                        revisionId: revision.revisionId,
+                        authorHandle: author.handle,
+                        authorDisplayName: author.displayName,
+                        authorWalletAddress: revision.tipRoute?.beneficiaryAddress || '0x88F...42C1',
+                        isEligibleForTip: true,
+                      });
+                    }}
+                    className="min-h-control inline-flex items-center gap-2 px-4 py-2 rounded-control font-bold text-xs text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
+                  >
+                    <WalletIcon className="w-4 h-4 text-amber" />
+                    <span>Ủng Hộ Tác Giả (Tip)</span>
+                  </button>
+                );
+              }
+
+              return (
+                <div className="flex flex-col items-end gap-1">
+                  <button
+                    type="button"
+                    disabled
+                    className="min-h-control inline-flex items-center gap-2 px-4 py-2 rounded-control font-semibold text-xs text-ink-muted bg-surface-canvas border border-sage/80 cursor-not-allowed shadow-none opacity-80"
+                    title={ineligibleReason}
+                  >
+                    <WalletIcon className="w-4 h-4 text-ink-muted" />
+                    <span>Chưa Thể Nhận Tip</span>
+                  </button>
+                  <span className="text-[10px] text-amber-800 font-medium text-right max-w-xs">
+                    {ineligibleReason}
+                  </span>
+                </div>
+              );
+            })()}
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-forest/20 text-xs">

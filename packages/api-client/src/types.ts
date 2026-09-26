@@ -287,6 +287,8 @@ export interface PaymentIntentDTO {
   treasuryAmountFormatted?: string;
   status: 'PENDING' | 'SIMULATED_SUCCESS' | 'FAILED';
   txHashDemo?: string;
+  payerUserId?: string;
+  targetUserId?: string;
   timestamp: string;
   idempotencyKey?: string;
 }
@@ -364,7 +366,7 @@ export interface BenefitsDTO {
     collectibleId: string;
     title: string;
     postTitle: string;
-    status: 'OFFERED' | 'CLAIMED_DEMO' | 'ISSUED_DEMO';
+    status: 'NOT_ELIGIBLE' | 'OFFERED' | 'CLAIMED_DEMO' | 'ISSUED_DEMO';
     tokenId?: string;
     imageUrl?: string;
   };

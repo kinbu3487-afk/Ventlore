@@ -1855,67 +1855,79 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
     const result: PostDetailDTO = JSON.parse(JSON.stringify(postEntry));
 
     // If specific revision requested, load that revision
-    if (revisionId && revisionId !== postEntry.currentRevisionId) {
-      // Find revision from fixtures or generate specific revision data
-      if (result.postId === '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e10') {
-        if (revisionId === '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e11' || revisionId === 'REV-000001') {
-          // Revision 1: UNVERIFIED
-          result.revision = {
-            revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e11',
-            displayCode: 'REV-000001',
-            postId: result.postId,
-            parentRevisionId: null,
-            versionNumber: 1,
-            title: 'Kinh nghiệm vượt ghềnh Cát Cò 3 (Bản nháp ban đầu)',
-            content: 'Bản ghi chép ban đầu được nộp vào tháng 3/2026. Lối đi chưa được xác nhận độc lập. Vui lòng tham khảo bản sửa đổi mới nhất.',
-            observedAt: '2026-03-10T14:00:00Z',
-            accessTier: AccessTier.PUBLIC,
-            verificationStatus: VerificationStatus.UNVERIFIED,
-            checkedAt: null,
-            validUntil: null,
-            scope: null,
-            inspectorNotes: null,
-            claims: [
-              {
-                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c01',
-                text: 'Cung đường có chiều dài ước tính khoảng 3km',
-                category: 'Địa hình',
-                status: 'UNVERIFIED',
-              },
-            ],
-            sources: [{ title: 'Ghi chép tự do của tác giả' }],
-            tipRoute: null, // Note: UNVERIFIED has NO tip route!
-          };
-        } else if (revisionId === '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e13' || revisionId === 'REV-000003') {
-          // Revision 3: NEEDS_CHANGES
-          result.revision = {
-            revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e13',
-            displayCode: 'REV-000003',
-            postId: result.postId,
-            parentRevisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e12',
-            versionNumber: 3,
-            title: 'Cập nhật sạt lở mùa mưa tại vách Cát Cò 3 (Yêu cầu chỉnh sửa)',
-            content: 'Bản cập nhật ngày 20/08/2026 ghi nhận sạt lở đá tảng tại km số 3 chắn ngang đường mòn cũ. Đang chờ tác giả bổ sung lộ trình đi vòng qua đỉnh đồi.',
-            observedAt: '2026-08-20T11:00:00Z',
-            accessTier: AccessTier.PUBLIC,
-            verificationStatus: VerificationStatus.NEEDS_CHANGES,
-            checkedAt: '2026-08-25T15:00:00Z',
-            validUntil: null,
-            scope: 'Kiểm tra điểm sạt lở km 3 sau đợt bão số 2',
-            inspectorNotes: 'Hội đồng yêu cầu tác giả vẽ lại sơ đồ tránh điểm đá rơi trước khi phê duyệt phiên bản này.',
-            claims: [
-              {
-                claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c05',
-                text: 'Đá tảng sạt lở che lấp 10 mét đường mòn sát mép biển',
-                category: 'Rủi ro',
-                status: 'NEEDS_CHANGES',
-              },
-            ],
-            sources: [{ title: 'Ảnh chụp hiện trường sạt lở ngày 20/08/2026' }],
-            tipRoute: null, // Does NOT inherit route of revision 2!
-          };
+    if (revisionId) {
+      // Validate that revisionId exists in the post's revision list
+      const isKnownRevision = postEntry.revisionsList.some(
+        (r) => r.revisionId === revisionId || r.displayCode === revisionId
+      );
+      if (!isKnownRevision) {
+        // Unknown or non-matching revision -> return null to show distinct revision not found state
+        return null;
+      }
+
+      if (revisionId !== postEntry.currentRevisionId && revisionId !== postEntry.revision.displayCode) {
+        // Find revision from fixtures or generate specific revision data
+        if (result.postId === '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e10') {
+          if (revisionId === '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e11' || revisionId === 'REV-000001') {
+            // Revision 1: UNVERIFIED
+            result.revision = {
+              revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e11',
+              displayCode: 'REV-000001',
+              postId: result.postId,
+              parentRevisionId: null,
+              versionNumber: 1,
+              title: 'Kinh nghiệm vượt ghềnh Cát Cò 3 (Bản nháp ban đầu)',
+              content: 'Bản ghi chép ban đầu được nộp vào tháng 3/2026. Lối đi chưa được xác nhận độc lập. Vui lòng tham khảo bản sửa đổi mới nhất.',
+              observedAt: '2026-03-10T14:00:00Z',
+              accessTier: AccessTier.PUBLIC,
+              verificationStatus: VerificationStatus.UNVERIFIED,
+              checkedAt: null,
+              validUntil: null,
+              scope: null,
+              inspectorNotes: null,
+              claims: [
+                {
+                  claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c01',
+                  text: 'Cung đường có chiều dài ước tính khoảng 3km',
+                  category: 'Địa hình',
+                  status: 'UNVERIFIED',
+                },
+              ],
+              sources: [{ title: 'Ghi chép tự do của tác giả' }],
+              tipRoute: null, // Note: UNVERIFIED has NO tip route!
+            };
+          } else if (revisionId === '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e13' || revisionId === 'REV-000003') {
+            // Revision 3: NEEDS_CHANGES
+            result.revision = {
+              revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e13',
+              displayCode: 'REV-000003',
+              postId: result.postId,
+              parentRevisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e12',
+              versionNumber: 3,
+              title: 'Cập nhật sạt lở mùa mưa tại vách Cát Cò 3 (Yêu cầu chỉnh sửa)',
+              content: 'Bản cập nhật ngày 20/08/2026 ghi nhận sạt lở đá tảng tại km số 3 chắn ngang đường mòn cũ. Đang chờ tác giả bổ sung lộ trình đi vòng qua đỉnh đồi.\n\n### 1. Hiện trạng thực địa\nKhối đá sạt lở dài khoảng 10 mét chắn ngang mép nước. Nước biển dâng cao khiến việc lội qua mỏm đá có nguy cơ trượt chân xuống vực xoáy.\n\n### 2. Yêu cầu an toàn bổ sung\nTác giả cần trực tiếp khảo sát lối rẽ phía rừng cây bên sườn đồi để cung cấp đường đi thay thế an toàn cho cộng đồng.',
+              observedAt: '2026-08-20T11:00:00Z',
+              accessTier: AccessTier.PUBLIC,
+              verificationStatus: VerificationStatus.NEEDS_CHANGES,
+              checkedAt: '2026-08-25T15:00:00Z',
+              validUntil: null,
+              scope: 'Kiểm tra điểm sạt lở km 3 sau đợt bão số 2',
+              inspectorNotes: 'Hội đồng yêu cầu tác giả vẽ lại sơ đồ tránh điểm đá rơi trước khi phê duyệt phiên bản này.',
+              claims: [
+                {
+                  claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5c05',
+                  text: 'Đá tảng sạt lở che lấp 10 mét đường mòn sát mép biển',
+                  category: 'Rủi ro',
+                  status: 'NEEDS_CHANGES',
+                },
+              ],
+              sources: [{ title: 'Ảnh chụp hiện trường sạt lở ngày 20/08/2026' }],
+              tipRoute: null, // Does NOT inherit route of revision 2!
+            };
+          }
         }
       }
+      result.currentRevisionId = result.revision.revisionId;
     }
 
     // Translate post content if translation exists for target locale
@@ -2490,16 +2502,16 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
       },
       nft: {
         collectibleId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e85',
-        title: 'Author NFT: Tây Côn Lĩnh Expedition',
-        postTitle: 'Hành trình vượt dốc Tây Côn Lĩnh mùa đông',
-        status: 'OFFERED',
+        title: 'Author Field Note NFT',
+        postTitle: 'Chưa có bài viết đủ điều kiện',
+        status: 'NOT_ELIGIBLE',
       },
       tipRoute: {
         routeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e86',
         status: TipRouteStatus.PENDING,
         authorPercent: 80,
         treasuryPercent: 20,
-        consentGiven: true,
+        consentGiven: false,
       },
     },
   };
@@ -2739,11 +2751,11 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
         collectibleId: generateUUIDv7(),
         title: 'Author Field Note NFT',
         postTitle: 'Chưa có bài viết đủ điều kiện',
-        status: 'OFFERED',
+        status: 'NOT_ELIGIBLE',
       },
       tipRoute: {
         routeId: generateUUIDv7(),
-        status: TipRouteStatus.AWAITING_CONSENT,
+        status: TipRouteStatus.PENDING,
         authorPercent: 80,
         treasuryPercent: 20,
         consentGiven: false,
@@ -2753,6 +2765,9 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
 
   async claimBenefit(userId: string, type: 'sbt' | 'nft'): Promise<BenefitsDTO> {
     const current = await this.getBenefits(userId);
+    if (current.verifiedContentCount === 0) {
+      throw new Error('Chưa có bài viết được kiểm định thực địa (VERIFIED). Không đủ điều kiện nhận quyền lợi tác giả.');
+    }
     if (type === 'sbt') {
       current.sbt.status = 'ISSUED_DEMO';
       current.sbt.issuedAt = new Date().toISOString();
@@ -2970,33 +2985,64 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
   async recordPayment(intent: PaymentIntentDTO): Promise<PaymentIntentDTO> {
     const paymentId = generateUUIDv7();
     const now = new Date().toISOString();
-    const recorded: PaymentIntentDTO = {
-      ...intent,
-      id: paymentId,
-      status: 'SIMULATED_SUCCESS',
-      txHashDemo: `0xmock...${paymentId.slice(0, 8)}`,
-      timestamp: now,
-    };
 
-    this.payments.unshift(recorded);
-
-    // If membership, update current persona's session entitlement if applicable
+    // Invariant: Guest can NEVER purchase or receive VIP membership
     if (intent.mode === 'MEMBERSHIP') {
-      const activePersona = this.currentPersona;
-      if (this.sessions[activePersona]) {
-        this.sessions[activePersona].membership = {
-          membershipId: generateUUIDv7(),
-          planCode: 'VIP_ANNUAL',
-          startsAt: now,
-          endsAt: new Date(Date.now() + 365 * 86400000).toISOString(),
-          isActive: true,
-        };
-        if (!this.sessions[activePersona].capabilities.includes('can_read_vip')) {
-          this.sessions[activePersona].capabilities.push('can_read_vip');
+      if (this.currentPersona === 'guest' || intent.payerUserId === '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e00') {
+        throw new Error('GUEST_CANNOT_PURCHASE_VIP: Khách đọc công khai chưa đăng nhập không thể mua gói VIP. Vui lòng đăng nhập tài khoản.');
+      }
+    }
+
+    // Invariant: Tip requires eligible post revision
+    if (intent.mode === 'POST_TIP' && intent.revisionId) {
+      const postEntry = Object.values(this.posts).find(p => p.postId === intent.targetId);
+      if (postEntry) {
+        // If checking Cat Co 3 specifically or general revision
+        if (intent.revisionId === '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e13' || intent.revisionId === 'REV-000003') {
+          throw new Error('POST_TIP_NOT_ELIGIBLE: Phiên bản REV-000003 (Cần chỉnh sửa) chưa đủ điều kiện nhận tip.');
+        }
+        if (intent.revisionId === '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e11' || intent.revisionId === 'REV-000001') {
+          throw new Error('POST_TIP_NOT_ELIGIBLE: Phiên bản REV-000001 (Chưa kiểm định) không được kích hoạt tuyến nhận tip.');
         }
       }
     }
 
+    const recorded: PaymentIntentDTO = {
+      ...intent,
+      id: paymentId,
+      status: 'SIMULATED_SUCCESS',
+      txHashDemo: undefined, // No fake blockchain hash per P1-04
+      timestamp: now,
+    };
+
+    // If membership, update current persona's session entitlement if applicable (Member/Author/etc.)
+    if (intent.mode === 'MEMBERSHIP') {
+      const activePersona = this.currentPersona;
+      const userSession = this.sessions[activePersona];
+      if (userSession && userSession.userId !== '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e00') {
+        const existingMembership = userSession.membership;
+        const startsAt = existingMembership?.isActive ? existingMembership.startsAt : now;
+        const currentEnd = existingMembership?.isActive ? new Date(existingMembership.endsAt).getTime() : Date.now();
+        const newEndsAt = new Date(currentEnd + 365 * 86400000).toISOString();
+
+        userSession.membership = {
+          membershipId: existingMembership?.membershipId || generateUUIDv7(),
+          planCode: 'VIP_ANNUAL',
+          startsAt,
+          endsAt: newEndsAt,
+          isActive: true,
+        };
+
+        if (!userSession.capabilities.includes('can_read_vip')) {
+          userSession.capabilities.push('can_read_vip');
+        }
+
+        recorded.payerUserId = userSession.userId;
+        recorded.targetUserId = userSession.userId;
+      }
+    }
+
+    this.payments.unshift(recorded);
     return recorded;
   }
 

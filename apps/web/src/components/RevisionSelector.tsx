@@ -88,6 +88,7 @@ export function RevisionSelector({
               <Link
                 key={rev.revisionId}
                 href={getLocalizedPath(`/posts/${postId}?revisionId=${rev.revisionId}`)}
+                scroll={false}
                 className={`block p-3 rounded-control border transition-all text-left ${
                   isSelected
                     ? 'border-forest bg-forest/5 ring-1 ring-forest shadow-xs'
