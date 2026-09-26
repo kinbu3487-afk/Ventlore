@@ -167,9 +167,7 @@ function ExploreViewInner() {
   const handleOriginChange = (newOrigin: Origin | null) => {
     setOrigin(newOrigin);
     setPage(1);
-    if (newOrigin && (radiusKm === null || radiusKm === undefined)) {
-      setRadiusKm(50); // Default to 50 km per Section 6
-    } else if (!newOrigin) {
+    if (!newOrigin) {
       setRadiusKm(null);
     }
   };

@@ -63,9 +63,9 @@
      - Gõ `"Mỹ Khê"`: ra đúng 2 bãi biển Mỹ Khê riêng biệt (Quảng Ngãi và Đà Nẵng).
      - Chọn Hoạt động `"Đi bộ đường dài"` hoặc `"Vùng núi"`: danh sách lọc chuẩn xác.
    - **Thử nghiệm "Gần tôi":**
-     - Nhấn nút **"Gần tôi"** trên thanh tìm kiếm $\to$ Chọn **"Dùng vị trí của tôi"**.
+     - Nhấn nút **"Gần tôi"** trên thanh tìm kiếm.
      - Nếu trình duyệt hỏi quyền vị trí:
-       - **Đồng ý:** Thanh điều khiển vị trí hiện ra với bán kính mặc định 50 km, các thẻ điểm hiển thị huy hiệu `≈ X km`, sắp xếp từ gần đến xa. Thử chuyển đổi các mốc bán kính (5, 25, 50, 100, 200 km, Tất cả). Thử bấm "Cập nhật vị trí" hoặc "Tắt vị trí".
+       - **Đồng ý:** Nút "Gần tôi" chuyển sang trạng thái kích hoạt hiển thị `[ 📍 Gần tôi · Không giới hạn ⌄ ]` (hoặc `[ 📍 Gần tôi ⌄ ]` trên mobile), mặc định bán kính **Không giới hạn** để giữ toàn bộ 100 điểm đến được sắp xếp từ gần đến xa nhất kèm huy hiệu khoảng cách `≈ X km`. Bấm vào nút để mở popover chọn bán kính mong muốn (5, 25, 50, 100, 200 km, Không giới hạn), bấm "Cập nhật vị trí" hoặc "Xóa vị trí".
        - **Từ chối / Chặn:** Hiển thị thông báo nhẹ nhàng giải thích quyền đã bị chặn kèm nút "Chọn khu vực khác" (không bị crash hay chặn trang).
      - **Kiểm tra URL:** Tọa độ GPS không bao giờ xuất hiện trên URL `?q=...&province=...`.
    - **Chuyển đổi Bản đồ / Danh sách:** Chế độ **Bản đồ** (Map view) được ưu tiên hiển thị mặc định khi truy cập `/explore`. Bộ nút chuyển đổi hiển thị thứ tự `[ Bản đồ ] [ Danh sách ]`. OpenStreetMap hiển thị ghim/chấm mật độ thích ứng và đồng bộ tự động cuộn danh sách thẻ bên cạnh khi bấm marker. Khi bấm chuyển sang "Danh sách", URL đồng bộ `?view=list`.
