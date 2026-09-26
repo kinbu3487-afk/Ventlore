@@ -1,13 +1,27 @@
 # Tài Liệu Bàn Giao (HANDOFF)
 
-**Chặng hoàn thành gần nhất:** FE-First v1.0 — Hoàn thiện Toàn diện Front-End, 14 Kịch bản Nghiệm thu & Bản đồ Dữ liệu `docs/FE_DATA_MAP.md`  
-**Nhiệm vụ tiếp theo:** Bin trực tiếp trải nghiệm và nghiệm thu qua `Review Toolbar`; Chốt danh sách quyết định kỹ thuật để khởi động Backend (BE-01)  
-**Thời điểm bàn giao:** 26/09/2026 10:25 UTC+7  
-**Tài liệu kèm theo:** `docs/FE_DATA_MAP.md`, `docs/FE_COVERAGE.md`, `docs/FE_REVIEW.md`, `docs/FE_HANDOFF.md`, `docs/FE_QA.md`  
+**Chặng hoàn thành gần nhất:** FE-Fix v1.1 — Sửa lỗi P0 (Revision reactive & Chặn Guest mua VIP), Header/i18n, Phân lập Tab/Drafts, Phân quyền Demo & Quyền lợi tác giả  
+**Nhiệm vụ tiếp theo:** Bin trực tiếp trải nghiệm và nghiệm thu cục bộ trên `http://localhost:3000`; Chốt các quyết định kỹ thuật trong `docs/FE_DATA_MAP.md` trước khi sang Backend  
+**Thời điểm bàn giao:** 26/09/2026 12:00 UTC+7  
+**Tài liệu kèm theo:** `docs/FE_QA.md`, `docs/FE_DATA_MAP.md`, `docs/FE_COVERAGE.md`, `docs/FE_REVIEW.md`, `docs/FE_HANDOFF.md`  
 
 ---
 
-## 1. Kết quả đạt được tại Chặng FE-First v1.0 (FE-00 đến FE-06)
+## 1. Kết quả đạt được tại Chặng Sửa Lỗi FE-Fix v1.1
+
+1. **Sửa dứt điểm 2 lỗi P0:**
+   - **P0-01 (Revision Switching Reactive):** Chuyển đổi giữa các phiên bản bài viết (`/posts/[postId]?revisionId=...`) tức thời, không cần tải lại trang F5 (dùng `<Suspense>` boundary và `useSearchParams()` phản ứng). Nút Tip tự động khóa đối với phiên bản chưa hoàn tất kiểm định thực địa. Bổ sung thẻ thông báo lỗi rõ ràng nếu `revisionId` không tồn tại.
+   - **P0-02 (Chặn Guest Mua VIP Demo):** Khách vãng lai (Guest) tuyệt đối không thể tạo đơn hay thanh toán mua VIP demo (mở Gate yêu cầu đăng nhập tài khoản). Với Member, gia hạn giữ nguyên `membershipId` và cộng dồn 365 ngày UTC. Đã loại bỏ chuỗi mã giao dịch giả lập `txHashDemo: 0xmock...`.
+
+2. **Hoàn thiện các hạng mục P1 & P2:**
+   - **P1-01 (Bố cục Header chuẩn mực):** Bỏ persona dropdown thừa khỏi header (dùng ReviewToolbar góc phải dưới), không đè chữ ở mọi kích thước (1440px, 1366px, 430px, 390px). Tên hiển thị truncate max 130px.
+   - **P1-02 (Đa ngôn ngữ 6 Locales):** Bảo toàn search query params khi đổi ngôn ngữ, dịch chuẩn toàn bộ các trạng thái và nhãn giao diện.
+   - **P1-03 (Hai luồng đóng góp & Phân lập bản nháp):** Đồng bộ 2 chiều giữa URL query `?tab=existing|candidate` và giao diện. Nháp lưu riêng biệt theo người dùng và theo tab trong `localStorage` (`ventlore_draft_${userId}_${tab}`).
+   - **P1-04 (Ngữ cảnh thanh toán & Quyền lợi trung thực):** Khóa chức năng đổi mode trong `PaymentModal` để tôn trọng đúng ngữ cảnh gọi (Home $\to$ PROJECT; Post $\to$ POST_TIP; VIP $\to$ MEMBERSHIP). Tài khoản có 0 bài viết được duyệt không còn hiển thị fake `OFFERED` hay nút Claim; chỉ tác giả Minh có bài duyệt mới mở 4 khối quyền lợi. Bổ sung chức năng sửa thông tin Profile demo.
+   - **P1-05 (Phân quyền Demo Chuyên gia & Quản trị):** Thêm màn hình Gate giới thiệu chuyên môn khi Guest/Member vào `/expert` hoặc `/admin`, có nút chuyển vai trò 1-click hoặc đăng nhập.
+   - **P1-06 (Single-Hero Trang chủ & Nâng cấp ReviewToolbar 14 Kịch bản):** Gỡ bỏ toàn bộ nhãn kỹ thuật nội bộ (Data Map 16 cột, Xem Data Map, Tải .md) khỏi Header và Hero trang chủ, giữ đúng 2 CTA trải nghiệm du lịch dã ngoại. Nâng cấp `ReviewToolbar` lên `z-[9999]`, phản hồi click tức thời 0ms kèm thông báo Toast, tự động ghi nhớ kịch bản qua `sessionStorage`, bổ sung nút Thu nhỏ thông minh (`Clear view`) và đồng bộ chuẩn xác toàn bộ 14 kịch bản (Explore, Preset Cát Cò, Admin tabs, Benefits, PaymentModal).
+   - **P2 (Từ ngữ thân thiện):** Loại bỏ toàn bộ từ ngữ kỹ thuật `placeId`, `CANDIDATE`, `REVIEW_ONLY`, `UUIDv7`, `409 Conflict`, thay bằng từ ngữ gần gũi với người dùng dã ngoại.
+   - **Kiểm thử toàn diện:** `pnpm run verify` đạt 100% PASS (234 trang static export). Không có lỗi typecheck hay lint.
 
 1. **Brand System & Design Tokens:**
    - Cài đặt đầy đủ các màu sắc chuẩn Brand Guide v0.1: Forest `#173F35`, Jade `#2C7563`, Sage `#DCE8DA`, Ivory `#F5F1E8`, Waypoint `#F0A44B`, Ink `#182522`.
@@ -79,6 +93,10 @@ Mở trình duyệt tại `http://localhost:3000` và kiểm tra các tính năn
   - Bấm vào thanh điều hướng trên cùng, chọn Persona "VIP Member", bài viết sẽ mở khóa hiển thị đầy đủ tọa độ và ghi chú bí mật.
 - **Trang VIP:** Vào `/vip` để xem gói thành viên 1500 USD cents / 12 tháng UTC.
 - **Sổ cái minh bạch:** Vào `/transparency` xem biểu đồ và bảng dòng tiền thu - chi.
+- **Bản đồ dữ liệu FE (Data Map):**
+  - Truy cập trực tiếp `/data-map` (hoặc `/vi/data-map`) để xem ma trận 16 cột tương tác có tìm kiếm, lọc theo nguồn dữ liệu đích và xem 5 quyết định cần chốt.
+  - Bấm nút **"Tải .md"** trên thanh header, dưới 2 nút CTA ở trang chủ, trên thanh menu điều hướng, ở chân trang (footer), hoặc trong Review Toolbar để tải file `FE_DATA_MAP.md` về máy.
+  - Đường dẫn file tĩnh tải trực tiếp: `/docs/FE_DATA_MAP.md`.
 
 ### 2.1 Triển khai xem trước trực tiếp trên Netlify (Netlify Drop)
 Để đưa lên Netlify xem ngay trên thiết bị thực tế mà không cần chạy server cục bộ:

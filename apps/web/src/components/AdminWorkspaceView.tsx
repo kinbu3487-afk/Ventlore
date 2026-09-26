@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import {
   mockApiClient,
   AdminIntakeItemDTO,
@@ -33,7 +34,18 @@ export function AdminWorkspaceView() {
   const { session, persona, setPersona } = useSession();
   const { t, formatDate, getLocalizedPath } = useI18n();
 
-  const [activeTab, setActiveTab] = useState<AdminTab>('intake');
+  const searchParams = useSearchParams();
+  const urlTab = searchParams.get('tab') as AdminTab | null;
+  const [activeTab, setActiveTab] = useState<AdminTab>(
+    urlTab && ['intake', 'review_cases', 'app_hold'].includes(urlTab) ? urlTab : 'intake'
+  );
+
+  useEffect(() => {
+    if (urlTab && ['intake', 'review_cases', 'app_hold'].includes(urlTab)) {
+      setActiveTab(urlTab);
+    }
+  }, [urlTab]);
+
   const [intakeList, setIntakeList] = useState<AdminIntakeItemDTO[]>([]);
   const [reviewCases, setReviewCases] = useState<AdminReviewCaseDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -179,6 +191,61 @@ export function AdminWorkspaceView() {
       alert(`Lỗi: ${err?.message}`);
     }
   };
+
+  // Gate for Non-Admin Personas
+  if (persona !== 'admin') {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 text-center space-y-6">
+        <div className="w-16 h-16 rounded-full bg-forest/15 text-forest mx-auto flex items-center justify-center shadow-sm">
+          <LockIcon className="w-8 h-8" />
+        </div>
+        <div className="space-y-2">
+          <span className="inline-block px-3 py-1 rounded-full bg-forest/15 text-forest text-xs font-bold uppercase tracking-wider">
+            Khu vực Giới hạn Ban Quản Trị
+          </span>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-ink tracking-tight">
+            Không Gian Quản Trị Hệ Thống (Admin & Operator)
+          </h1>
+          <p className="text-sm text-ink-secondary leading-relaxed">
+            Khu vực này chỉ dành cho Ban Điều Hành và Quản Trị Viên hệ thống. Nơi tiếp nhận hồ sơ đề xuất điểm mới, phát hiện trùng lặp, phân công nhiệm vụ khảo sát cho chuyên gia, nghiệm thu công việc và đối soát ngân quỹ minh bạch.
+          </p>
+        </div>
+
+        <div className="p-6 rounded-card border border-sage bg-surface-card text-left space-y-3">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-ink">
+            Thẩm quyền của Ban Quản trị:
+          </h2>
+          <ul className="text-xs text-ink-secondary space-y-2 list-disc list-inside">
+            <li>
+              <strong>Tiếp nhận hồ sơ (Intake):</strong> Thẩm tra ban đầu các đề xuất điểm mới, phát hiện trùng lặp địa lý với dữ liệu sẵn có.
+            </li>
+            <li>
+              <strong>Giao việc & Nghiệm thu:</strong> Phân công chuyên gia độc lập, nghiệm thu chất lượng khảo sát thực địa để sinh công nợ chi trả.
+            </li>
+            <li>
+              <strong>Quyết định phê duyệt:</strong> Ban hành quyết định xuất bản chính thức (APPROVED) hoặc từ chối (REJECTED) theo kết quả đối chứng.
+            </li>
+          </ul>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+          <button
+            type="button"
+            onClick={() => setPersona('admin')}
+            className="w-full sm:w-auto px-6 py-2.5 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-xs"
+          >
+            Trải nghiệm vai trò Quản trị viên (Linh Admin)
+          </button>
+          <Link
+            href={getLocalizedPath('/')}
+            className="w-full sm:w-auto px-5 py-2.5 rounded-control border border-sage text-ink text-xs font-semibold hover:bg-surface-canvas transition-colors"
+          >
+            Quay về Trang chủ
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">

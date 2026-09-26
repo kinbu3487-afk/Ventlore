@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useI18n } from '../lib/i18n';
-import { CompassIcon, ArrowRightIcon } from './Icons';
+import { CompassIcon, ArrowRightIcon, TableIcon, DownloadIcon } from './Icons';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { ContributeDialog } from './ContributeDialog';
 
@@ -27,7 +27,7 @@ export function HomePageView() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/45 to-black/85 pointer-events-none" />
       </div>
 
-      {/* Top Header Bar: Logo (left) and 6-Language Switcher (right) */}
+      {/* Top Header Bar: Logo (left), Data Map link and 6-Language Switcher (right) */}
       <header className="relative z-10 w-full flex items-center justify-between px-4 sm:px-8 py-5">
         <Link
           href={getLocalizedPath('/')}
@@ -42,8 +42,8 @@ export function HomePageView() {
           </span>
         </Link>
 
-        {/* 6-Language Switcher */}
-        <div className="flex items-center gap-3">
+        {/* Right side: 6-Language Switcher */}
+        <div className="flex items-center gap-2 sm:gap-3">
           <LanguageSwitcher variant="dark" />
         </div>
       </header>
@@ -60,7 +60,7 @@ export function HomePageView() {
           {t('home.heroSubtitle')}
         </p>
 
-        {/* 2 Centered CTA Buttons */}
+        {/* Exactly 2 Centered CTA Buttons */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4 w-full sm:w-auto">
           <Link
             href={getLocalizedPath('/explore')}

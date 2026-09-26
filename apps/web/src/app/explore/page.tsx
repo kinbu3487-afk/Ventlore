@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { AppShell } from '@/components/AppShell';
 import { SearchFilters } from '@/components/SearchFilters';
 import { PlaceResults } from '@/components/PlaceResults';
@@ -11,9 +12,11 @@ import { useSession } from '@/components/SessionContext';
 import { useI18n } from '@/lib/i18n';
 import { CompassIcon, ShieldCheckIcon, SparklesIcon, ArrowRightIcon } from '@/components/Icons';
 
-export default function ExplorePage() {
+function ExploreViewInner() {
   const { persona } = useSession();
   const { t, locale, getLocalizedPath } = useI18n();
+  const searchParams = useSearchParams();
+
   const [query, setQuery] = useState('');
   const [regionId, setRegionId] = useState('all');
   const [activity, setActivity] = useState('all');
@@ -22,21 +25,18 @@ export default function ExplorePage() {
   const [places, setPlaces] = useState<PlaceSummaryDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 1. Initialize state from URL search params on mount
+  // 1. Initialize and sync state from URL search params
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const p = new URLSearchParams(window.location.search);
-      const q = p.get('q') || '';
-      const r = p.get('region') || 'all';
-      const a = p.get('activity') || 'all';
-      const v = p.get('view') === 'map' ? 'map' : 'list';
-      setQuery(q);
-      setRegionId(r);
-      setActivity(a);
-      setViewMode(v);
-      setIsUrlInitialized(true);
-    }
-  }, []);
+    const q = searchParams.get('q') || '';
+    const r = searchParams.get('region') || 'all';
+    const a = searchParams.get('activity') || 'all';
+    const v = searchParams.get('view') === 'map' ? 'map' : 'list';
+    setQuery(q);
+    setRegionId(r);
+    setActivity(a);
+    setViewMode(v);
+    setIsUrlInitialized(true);
+  }, [searchParams]);
 
   // 2. Handle browser Back/Forward navigation (popstate)
   useEffect(() => {
@@ -180,5 +180,13 @@ export default function ExplorePage() {
         </div>
       </div>
     </AppShell>
+  );
+}
+
+export default function ExplorePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-surface-canvas flex items-center justify-center text-ink-muted">Đang tải...</div>}>
+      <ExploreViewInner />
+    </Suspense>
   );
 }
