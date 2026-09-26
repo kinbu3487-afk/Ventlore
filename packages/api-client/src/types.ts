@@ -45,12 +45,31 @@ export interface UserSessionDTO {
   capabilities: string[];
 }
 
+export interface ProvinceDTO {
+  code: string;
+  name: string;
+  searchAliases: string[];
+  seedCount: number;
+}
+
+export interface ActivityDTO {
+  id: string;
+  label: string;
+}
+
 export interface PlaceSummaryDTO {
   placeId: string;
   displayCode: string;
   name: string;
   regionId?: string;
   regionName: string;
+  provinceCode?: string;
+  provinceName?: string;
+  areaLabel?: string;
+  seedKey?: string;
+  slug?: string;
+  searchAliases?: string[];
+  activityIds?: string[];
   status: PlaceStatus;
   canonicalPlaceId?: string | null;
   summary: string;
@@ -65,6 +84,22 @@ export interface PlaceSummaryDTO {
   coordinates?: {
     lat: number;
     lng: number;
+  };
+  location?: {
+    latitude: number;
+    longitude: number;
+    coordinateKind?: string;
+    accuracyMeters?: number | null;
+  };
+  distanceKm?: number | null;
+  catalogOrder?: number;
+  provenance?: {
+    dataKind?: string;
+    coordinateSource?: string;
+    sourceUrl?: string | null;
+    independentlyVerified?: boolean;
+    preparedAt?: string;
+    note?: string;
   };
 }
 

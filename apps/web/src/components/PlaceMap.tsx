@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { PlaceSummaryDTO } from '@ventlore/api-client';
 import { useI18n } from '../lib/i18n';
-import { MapPinIcon, CompassIcon, AlertTriangleIcon } from './Icons';
+import { MapPinIcon, CompassIcon, AlertTriangleIcon, RefreshCwIcon } from './Icons';
+import { Origin } from '@/lib/nearby';
 
 interface PlaceMapProps {
   places: PlaceSummaryDTO[];
+  origin?: Origin | null;
   selectedPlaceId?: string | null;
   onSelectPlace?: (placeId: string) => void;
   className?: string;
@@ -18,18 +20,26 @@ declare global {
   }
 }
 
-export function PlaceMap({ places, selectedPlaceId, onSelectPlace, className = '' }: PlaceMapProps) {
+export function PlaceMap({
+  places,
+  origin = null,
+  selectedPlaceId,
+  onSelectPlace,
+  className = '',
+}: PlaceMapProps) {
   const { t, getLocalizedPath } = useI18n();
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const markersRef = useRef<Record<string, any>>({});
+  const originMarkerRef = useRef<any>(null);
+  const originCircleRef = useRef<any>(null);
   const [mapStatus, setMapStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const initialFitRef = useRef<boolean>(false);
 
   // Load Leaflet CSS and JS dynamically if not already present
   useEffect(() => {
     let isMounted = true;
 
-    // Check if Leaflet is already loaded
     if (typeof window !== 'undefined' && window.L) {
       if (isMounted) setMapStatus('ready');
       return;
@@ -57,7 +67,6 @@ export function PlaceMap({ places, selectedPlaceId, onSelectPlace, className = '
 
       const timer = setTimeout(() => {
         if (isMounted && !window.L) {
-          // Timeout after 5s if CDN is blocked / offline
           setMapStatus('error');
         }
       }, 5000);
@@ -84,24 +93,49 @@ export function PlaceMap({ places, selectedPlaceId, onSelectPlace, className = '
     };
   }, []);
 
+  // Fit bounds helper
+  const fitAllBounds = useCallback(() => {
+    if (!mapInstanceRef.current || !window.L) return;
+    const L = window.L;
+    const bounds = L.latLngBounds([]);
+    let count = 0;
+
+    places.forEach((p) => {
+      const lat = p.coordinates?.lat ?? p.location?.latitude;
+      const lng = p.coordinates?.lng ?? p.location?.longitude;
+      if (typeof lat === 'number' && typeof lng === 'number') {
+        bounds.extend([lat, lng]);
+        count++;
+      }
+    });
+
+    if (origin && typeof origin.latitude === 'number' && typeof origin.longitude === 'number') {
+      bounds.extend([origin.latitude, origin.longitude]);
+      count++;
+    }
+
+    if (count > 0) {
+      mapInstanceRef.current.fitBounds(bounds, { padding: [50, 50], maxZoom: 13 });
+    }
+  }, [places, origin]);
+
   // Initialize and update Map when Leaflet is ready
   useEffect(() => {
     if (mapStatus !== 'ready' || !mapContainerRef.current || !window.L) return;
 
     const L = window.L;
 
-    // Avoid re-creating existing map instance
+    // Create map instance once
     if (!mapInstanceRef.current) {
-      // Default center: Northern Vietnam (around Cat Ba / Ha Long coords)
-      const defaultCenter = [20.85, 107.2];
+      // Default center: Central Vietnam (around Da Nang coords) for national overview
+      const defaultCenter = [16.05, 108.2];
       const map = L.map(mapContainerRef.current, {
         center: defaultCenter,
-        zoom: 8,
+        zoom: 6,
         zoomControl: true,
         scrollWheelZoom: false,
       });
 
-      // Standard OpenStreetMap Tile Layer
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors | Ventlore GIS',
@@ -113,58 +147,136 @@ export function PlaceMap({ places, selectedPlaceId, onSelectPlace, className = '
 
     const map = mapInstanceRef.current;
 
-    // Clear previous markers
+    // Clear previous destination markers
     Object.values(markersRef.current).forEach((m: any) => m.remove());
     markersRef.current = {};
 
-    // Custom Ventlore Pine Green SVG Marker Icon
-    const customIcon = L.divIcon({
-      className: 'ventlore-map-pin',
-      html: `
-        <div style="
-          width: 32px;
-          height: 32px;
-          background: #173F35;
-          color: #F0A44B;
-          border-radius: 50% 50% 50% 0;
-          transform: rotate(-45deg);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-          border: 2px solid #F5F1E8;
-        ">
-          <div style="transform: rotate(45deg); font-size: 14px; font-weight: bold; line-height: 1;">
-            📍
-          </div>
-        </div>
-      `,
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
-      popupAnchor: [0, -32],
-    });
+    // Clear previous origin marker & circle
+    if (originMarkerRef.current) {
+      originMarkerRef.current.remove();
+      originMarkerRef.current = null;
+    }
+    if (originCircleRef.current) {
+      originCircleRef.current.remove();
+      originCircleRef.current = null;
+    }
 
+    // 1. Render User Origin Marker if available
+    if (origin && typeof origin.latitude === 'number' && typeof origin.longitude === 'number') {
+      const originIcon = L.divIcon({
+        className: 'ventlore-origin-pin',
+        html: `
+          <div style="
+            width: 20px;
+            height: 20px;
+            background: #2563eb;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(37,99,235,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          ">
+            <div style="width: 6px; height: 6px; background: #ffffff; border-radius: 50%;"></div>
+          </div>
+        `,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+      });
+
+      const oMarker = L.marker([origin.latitude, origin.longitude], {
+        icon: originIcon,
+        title: 'Vị trí của bạn',
+      }).addTo(map);
+
+      const oAccuracyStr = origin.accuracyMeters
+        ? `Độ chính xác: ±${Math.round(origin.accuracyMeters)}m`
+        : 'Vị trí thiết bị';
+
+      oMarker.bindPopup(`
+        <div style="font-family: inherit; font-size: 12px; line-height: 1.4; padding: 2px;">
+          <strong style="color: #2563eb;">📍 Vị trí của bạn</strong>
+          <div style="color: #666; font-size: 11px; margin-top: 2px;">${oAccuracyStr}</div>
+        </div>
+      `);
+
+      originMarkerRef.current = oMarker;
+
+      if (origin.accuracyMeters && origin.accuracyMeters > 0) {
+        const oCircle = L.circle([origin.latitude, origin.longitude], {
+          radius: origin.accuracyMeters,
+          color: '#2563eb',
+          weight: 1,
+          opacity: 0.5,
+          fillColor: '#2563eb',
+          fillOpacity: 0.1,
+        }).addTo(map);
+        originCircleRef.current = oCircle;
+      }
+    }
+
+    // 2. Render Destination Markers
     const bounds = L.latLngBounds([]);
     let validCoordsCount = 0;
 
     places.forEach((place) => {
-      if (!place.coordinates || typeof place.coordinates.lat !== 'number' || typeof place.coordinates.lng !== 'number') {
+      const lat = place.coordinates?.lat ?? place.location?.latitude;
+      const lng = place.coordinates?.lng ?? place.location?.longitude;
+      if (typeof lat !== 'number' || typeof lng !== 'number') {
         return;
       }
 
-      const { lat, lng } = place.coordinates;
       bounds.extend([lat, lng]);
       validCoordsCount++;
 
+      const isSelected = selectedPlaceId === place.placeId;
+      const pinColor = isSelected ? '#F0A44B' : '#173F35';
+      const iconText = isSelected ? '★' : '📍';
+
+      const customIcon = L.divIcon({
+        className: `ventlore-map-pin ${isSelected ? 'ventlore-pin-selected' : ''}`,
+        html: `
+          <div style="
+            width: 30px;
+            height: 30px;
+            background: ${pinColor};
+            color: #F5F1E8;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 2px solid #F5F1E8;
+            cursor: pointer;
+          " aria-label="Xem ${place.name} — ${place.regionName}">
+            <div style="transform: rotate(45deg); font-size: 13px; font-weight: bold; line-height: 1;">
+              ${iconText}
+            </div>
+          </div>
+        `,
+        iconSize: [30, 30],
+        iconAnchor: [15, 30],
+        popupAnchor: [0, -30],
+      });
+
       const placeUrl = getLocalizedPath(`/places/${place.placeId}`);
+      const distanceBadge =
+        place.distanceKm !== null && place.distanceKm !== undefined
+          ? `<div style="display: inline-block; background: #e0ece4; color: #173F35; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-bottom: 4px;">
+               ≈ ${place.distanceKm < 1 ? '< 1' : place.distanceKm.toFixed(1)} km (đường thẳng)
+             </div>`
+          : '';
+
       const popupHtml = `
-        <div style="font-family: inherit; font-size: 13px; line-height: 1.4; min-width: 180px; max-width: 240px; padding: 2px;">
-          <div style="color: #173F35; font-weight: 700; font-size: 14px; margin-bottom: 3px;">
+        <div style="font-family: inherit; font-size: 13px; line-height: 1.4; min-width: 190px; max-width: 250px; padding: 2px;">
+          <div style="color: #173F35; font-weight: 700; font-size: 14px; margin-bottom: 2px;">
             ${place.name}
           </div>
-          <div style="color: #666; font-size: 11px; margin-bottom: 6px;">
+          <div style="color: #666; font-size: 11px; margin-bottom: 4px;">
             📍 ${place.regionName}
           </div>
+          ${distanceBadge}
           <p style="color: #333; font-size: 11px; margin: 0 0 8px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
             ${place.summary}
           </p>
@@ -186,7 +298,10 @@ export function PlaceMap({ places, selectedPlaceId, onSelectPlace, className = '
         </div>
       `;
 
-      const marker = L.marker([lat, lng], { icon: customIcon })
+      const marker = L.marker([lat, lng], {
+        icon: customIcon,
+        title: `Xem ${place.name} — ${place.regionName}`,
+      })
         .addTo(map)
         .bindPopup(popupHtml);
 
@@ -199,11 +314,16 @@ export function PlaceMap({ places, selectedPlaceId, onSelectPlace, className = '
       markersRef.current[place.placeId] = marker;
     });
 
-    if (validCoordsCount > 0) {
+    // Fit bounds initially or when filter changes
+    if (!initialFitRef.current && validCoordsCount > 0) {
+      if (origin && typeof origin.latitude === 'number') {
+        bounds.extend([origin.latitude, origin.longitude]);
+      }
       map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
+      initialFitRef.current = true;
     }
 
-    // Handle map resize when layout settles
+    // Invalidate size when layout settles
     const resizeTimer = setTimeout(() => {
       if (mapInstanceRef.current) {
         mapInstanceRef.current.invalidateSize();
@@ -213,7 +333,14 @@ export function PlaceMap({ places, selectedPlaceId, onSelectPlace, className = '
     return () => {
       clearTimeout(resizeTimer);
     };
-  }, [places, mapStatus, getLocalizedPath, t, onSelectPlace]);
+  }, [places, origin, mapStatus, getLocalizedPath, t, onSelectPlace, selectedPlaceId]);
+
+  // Synchronize selectedPlaceId with popup
+  useEffect(() => {
+    if (!selectedPlaceId || !markersRef.current[selectedPlaceId]) return;
+    const marker = markersRef.current[selectedPlaceId];
+    marker.openPopup();
+  }, [selectedPlaceId]);
 
   // Clean up on unmount
   useEffect(() => {
@@ -260,12 +387,22 @@ export function PlaceMap({ places, selectedPlaceId, onSelectPlace, className = '
 
       {/* 4. Map View Hints & Pin Counter */}
       {mapStatus === 'ready' && (
-        <div className="absolute top-3 left-3 z-10 pointer-events-none">
+        <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-forest/90 text-ivory text-xs font-semibold backdrop-blur-xs shadow-md">
             <CompassIcon className="w-3.5 h-3.5 text-amber" />
             <span>OpenStreetMap</span>
             <span className="text-[10px] opacity-75 font-mono">({places.length} ghim)</span>
           </span>
+
+          <button
+            type="button"
+            onClick={fitAllBounds}
+            title="Xem toàn bộ ghim trên bản đồ"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/90 text-ink text-[11px] font-semibold backdrop-blur-xs border border-sage hover:bg-white shadow-xs transition-colors"
+          >
+            <RefreshCwIcon className="w-3 h-3 text-forest" />
+            <span>Xem toàn bộ</span>
+          </button>
         </div>
       )}
     </div>

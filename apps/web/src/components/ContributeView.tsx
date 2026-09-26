@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
@@ -9,6 +9,7 @@ import {
   ContributionType,
   AccessTier,
   generateUUIDv7,
+  normalizeSearch,
 } from '@ventlore/api-client';
 import { useSession } from '@/components/SessionContext';
 import { useI18n } from '@/lib/i18n';
@@ -53,6 +54,24 @@ export function ContributeView() {
 
   // Tab 1: Existing Place Form State
   const [selectedPlaceId, setSelectedPlaceId] = useState<string>(preselectedPlaceId);
+  const [placeSearchText, setPlaceSearchText] = useState('');
+
+  const filteredPlaces = useMemo(() => {
+    if (!placeSearchText) return places;
+    const q = normalizeSearch(placeSearchText);
+    const tokens = q.split(' ').filter(Boolean);
+    return places.filter(p => {
+      const text = normalizeSearch([
+        p.name,
+        p.regionName,
+        p.provinceName,
+        p.areaLabel,
+        ...(p.searchAliases ?? []),
+        p.displayCode,
+      ].join(' '));
+      return tokens.every(token => text.includes(token));
+    });
+  }, [places, placeSearchText]);
   const [postTitle, setPostTitle] = useState('');
   const [contributionType, setContributionType] = useState<ContributionType>(ContributionType.DISCOVERY);
   const [observedAt, setObservedAt] = useState(new Date().toISOString().slice(0, 10));
@@ -554,18 +573,38 @@ export function ContributeView() {
             {isLoadingPlaces ? (
               <div className="h-10 bg-sage/30 animate-pulse rounded-control" />
             ) : (
-              <select
-                value={selectedPlaceId}
-                onChange={e => setSelectedPlaceId(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-control border border-sage bg-white text-ink text-sm focus:outline-none focus:ring-2 focus:ring-forest"
-                required
-              >
-                {places.map(p => (
-                  <option key={p.placeId} value={p.placeId}>
-                    {p.name} — {p.regionName} ({p.displayCode})
-                  </option>
-                ))}
-              </select>
+              <div className="space-y-2">
+                <input
+                  type="text"
+                  value={placeSearchText}
+                  onChange={e => setPlaceSearchText(e.target.value)}
+                  placeholder="Tìm theo tên điểm đến, tỉnh/thành hoặc tên cũ (VD: Hội An, Đà Nẵng, Quảng Nam)..."
+                  className="w-full px-3 py-2 rounded-control border border-sage bg-surface-canvas text-ink text-xs focus:outline-none focus:ring-2 focus:ring-forest placeholder:text-ink-muted"
+                />
+                <select
+                  value={selectedPlaceId}
+                  onChange={e => setSelectedPlaceId(e.target.value)}
+                  className="w-full px-3 py-2.5 rounded-control border border-sage bg-white text-ink text-sm focus:outline-none focus:ring-2 focus:ring-forest"
+                  required
+                >
+                  {filteredPlaces.length === 0 ? (
+                    <option value="" disabled>
+                      Không tìm thấy điểm phù hợp với &quot;{placeSearchText}&quot;
+                    </option>
+                  ) : (
+                    filteredPlaces.map(p => (
+                      <option key={p.placeId} value={p.placeId}>
+                        {p.name} — {p.regionName} ({p.displayCode})
+                      </option>
+                    ))
+                  )}
+                </select>
+                {placeSearchText && (
+                  <p className="text-[11px] text-ink-muted">
+                    Tìm thấy {filteredPlaces.length} điểm phù hợp với &quot;{placeSearchText}&quot;
+                  </p>
+                )}
+              </div>
             )}
             <p className="text-[11px] text-ink-muted">
               Không tìm thấy địa điểm trong danh sách? Chuyển sang tab{' '}
