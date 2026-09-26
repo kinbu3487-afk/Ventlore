@@ -218,9 +218,9 @@ export function PostReader({ post }: PostReaderProps) {
                         setIsReportOpen(true);
                       }}
                       className="text-[10px] text-ink-muted hover:text-red-700 underline shrink-0 transition-colors"
-                      title="Phản ánh sai lệch cho khẳng định này"
+                      title={t('post.reportInaccuracy')}
                     >
-                      Báo sai
+                      {t('post.reportInaccuracy')}
                     </button>
                   </div>
                 </div>
@@ -238,10 +238,10 @@ export function PostReader({ post }: PostReaderProps) {
               </div>
               <div className="space-y-0.5">
                 <h4 className="font-bold text-sm text-ink">
-                  {t('post.tipRouteTitle')} (Tỷ lệ 80/20)
+                  {t('post.tipRouteTitle')} (80/20)
                 </h4>
                 <p className="text-xs text-ink-secondary">
-                  80% gửi tới tác giả <strong>{author.displayName}</strong>, 20% vào quỹ bảo tồn cộng đồng.
+                  {t('post.tipSplitDesc')} (<strong>{author.displayName}</strong>)
                 </p>
               </div>
             </div>
@@ -251,13 +251,13 @@ export function PostReader({ post }: PostReaderProps) {
                 revision.tipRoute?.status === TipRouteStatus.ACTIVE &&
                 revision.verificationStatus === VerificationStatus.VERIFIED;
 
-              let ineligibleReason = 'Phiên bản này chưa được thẩm định đạt chuẩn hoặc chưa hoàn tất đăng ký route on-chain.';
+              let ineligibleReason = t('post.ineligibleUnverified');
               if (revision.verificationStatus === VerificationStatus.NEEDS_CHANGES) {
-                ineligibleReason = 'Phiên bản này đang ở trạng thái Cần chỉnh sửa, chưa hoàn tất kiểm định thực địa.';
+                ineligibleReason = t('post.ineligibleNeedsChanges');
               } else if (revision.verificationStatus === VerificationStatus.UNVERIFIED) {
-                ineligibleReason = 'Phiên bản này chưa được kiểm định độc lập nên chưa thể nhận tip.';
+                ineligibleReason = t('post.ineligibleUnverified');
               } else if (revision.verificationStatus === VerificationStatus.EXPIRED) {
-                ineligibleReason = 'Phiên bản này đã hết hạn kiểm định. Lộ trình tip tạm dừng để đảm bảo an toàn.';
+                ineligibleReason = t('post.ineligibleExpired');
               }
 
               if (isEligible) {
@@ -278,7 +278,7 @@ export function PostReader({ post }: PostReaderProps) {
                     className="min-h-control inline-flex items-center gap-2 px-4 py-2 rounded-control font-bold text-xs text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
                   >
                     <WalletIcon className="w-4 h-4 text-amber" />
-                    <span>Ủng Hộ Tác Giả (Tip)</span>
+                    <span>{t('post.tipAuthor')}</span>
                   </button>
                 );
               }
@@ -292,7 +292,7 @@ export function PostReader({ post }: PostReaderProps) {
                     title={ineligibleReason}
                   >
                     <WalletIcon className="w-4 h-4 text-ink-muted" />
-                    <span>Chưa Thể Nhận Tip</span>
+                    <span>{t('post.tipNotEligible')}</span>
                   </button>
                   <span className="text-[10px] text-amber-800 font-medium text-right max-w-xs">
                     {ineligibleReason}
@@ -304,7 +304,7 @@ export function PostReader({ post }: PostReaderProps) {
 
           <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-forest/20 text-xs">
             <span className="text-ink-secondary text-[11px]">
-              Phát hiện thông tin sai lệch hoặc rủi ro an toàn thực địa?
+              {t('post.safetyDisclaimer')}
             </span>
             <button
               type="button"
@@ -315,7 +315,7 @@ export function PostReader({ post }: PostReaderProps) {
               className="inline-flex items-center gap-1.5 text-red-700 hover:text-red-800 font-semibold hover:underline"
             >
               <AlertTriangleIcon className="w-3.5 h-3.5" />
-              <span>Báo Sai / Phản Ánh Rủi Ro</span>
+              <span>{t('post.reportInaccuracy')}</span>
             </button>
           </div>
         </div>

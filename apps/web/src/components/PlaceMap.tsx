@@ -34,6 +34,7 @@ export function PlaceMap({
   const originMarkerRef = useRef<any>(null);
   const originCircleRef = useRef<any>(null);
   const [mapStatus, setMapStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [currentZoom, setCurrentZoom] = useState<number>(6);
   const initialFitRef = useRef<boolean>(false);
 
   // Load Leaflet CSS and JS dynamically if not already present
@@ -142,6 +143,10 @@ export function PlaceMap({
         maxZoom: 18,
       }).addTo(map);
 
+      map.on('zoomend', () => {
+        setCurrentZoom(map.getZoom());
+      });
+
       mapInstanceRef.current = map;
     }
 
@@ -186,16 +191,16 @@ export function PlaceMap({
 
       const oMarker = L.marker([origin.latitude, origin.longitude], {
         icon: originIcon,
-        title: 'Vị trí của bạn',
+        title: t('explore.yourLocation'),
       }).addTo(map);
 
       const oAccuracyStr = origin.accuracyMeters
-        ? `Độ chính xác: ±${Math.round(origin.accuracyMeters)}m`
-        : 'Vị trí thiết bị';
+        ? t('explore.accuracyMeters', { acc: Math.round(origin.accuracyMeters) })
+        : t('explore.yourLocation');
 
       oMarker.bindPopup(`
         <div style="font-family: inherit; font-size: 12px; line-height: 1.4; padding: 2px;">
-          <strong style="color: #2563eb;">📍 Vị trí của bạn</strong>
+          <strong style="color: #2563eb;">📍 ${t('explore.yourLocation')}</strong>
           <div style="color: #666; font-size: 11px; margin-top: 2px;">${oAccuracyStr}</div>
         </div>
       `);
@@ -230,41 +235,60 @@ export function PlaceMap({
       validCoordsCount++;
 
       const isSelected = selectedPlaceId === place.placeId;
+      const isCompact = currentZoom <= 6 && !isSelected;
       const pinColor = isSelected ? '#F0A44B' : '#173F35';
       const iconText = isSelected ? '★' : '📍';
 
-      const customIcon = L.divIcon({
-        className: `ventlore-map-pin ${isSelected ? 'ventlore-pin-selected' : ''}`,
-        html: `
-          <div style="
-            width: 30px;
-            height: 30px;
-            background: ${pinColor};
-            color: #F5F1E8;
-            border-radius: 50% 50% 50% 0;
-            transform: rotate(-45deg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            border: 2px solid #F5F1E8;
-            cursor: pointer;
-          " aria-label="Xem ${place.name} — ${place.regionName}">
-            <div style="transform: rotate(45deg); font-size: 13px; font-weight: bold; line-height: 1;">
-              ${iconText}
-            </div>
-          </div>
-        `,
-        iconSize: [30, 30],
-        iconAnchor: [15, 30],
-        popupAnchor: [0, -30],
-      });
+      const customIcon = isCompact
+        ? L.divIcon({
+            className: 'ventlore-map-dot',
+            html: `
+              <div style="
+                width: 14px;
+                height: 14px;
+                background: #173F35;
+                border-radius: 50%;
+                border: 2px solid #F5F1E8;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                cursor: pointer;
+              " title="${place.name} — ${place.regionName}"></div>
+            `,
+            iconSize: [14, 14],
+            iconAnchor: [7, 7],
+            popupAnchor: [0, -10],
+          })
+        : L.divIcon({
+            className: `ventlore-map-pin ${isSelected ? 'ventlore-pin-selected' : ''}`,
+            html: `
+              <div style="
+                width: ${isSelected ? 32 : 28}px;
+                height: ${isSelected ? 32 : 28}px;
+                background: ${pinColor};
+                color: #F5F1E8;
+                border-radius: 50% 50% 50% 0;
+                transform: rotate(-45deg);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+                border: 2px solid #F5F1E8;
+                cursor: pointer;
+              " aria-label="${place.name} — ${place.regionName}">
+                <div style="transform: rotate(45deg); font-size: ${isSelected ? 14 : 12}px; font-weight: bold; line-height: 1;">
+                  ${iconText}
+                </div>
+              </div>
+            `,
+            iconSize: isSelected ? [32, 32] : [28, 28],
+            iconAnchor: isSelected ? [16, 32] : [14, 28],
+            popupAnchor: isSelected ? [0, -32] : [0, -28],
+          });
 
       const placeUrl = getLocalizedPath(`/places/${place.placeId}`);
       const distanceBadge =
         place.distanceKm !== null && place.distanceKm !== undefined
           ? `<div style="display: inline-block; background: #e0ece4; color: #173F35; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-bottom: 4px;">
-               ≈ ${place.distanceKm < 1 ? '< 1' : place.distanceKm.toFixed(1)} km (đường thẳng)
+               ≈ ${place.distanceKm < 1 ? '< 1' : place.distanceKm.toFixed(1)} km (${t('explore.straightLineDistance')})
              </div>`
           : '';
 
@@ -333,7 +357,7 @@ export function PlaceMap({
     return () => {
       clearTimeout(resizeTimer);
     };
-  }, [places, origin, mapStatus, getLocalizedPath, t, onSelectPlace, selectedPlaceId]);
+  }, [places, origin, mapStatus, getLocalizedPath, t, onSelectPlace, selectedPlaceId, currentZoom]);
 
   // Synchronize selectedPlaceId with popup
   useEffect(() => {
@@ -391,17 +415,17 @@ export function PlaceMap({
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-forest/90 text-ivory text-xs font-semibold backdrop-blur-xs shadow-md">
             <CompassIcon className="w-3.5 h-3.5 text-amber" />
             <span>OpenStreetMap</span>
-            <span className="text-[10px] opacity-75 font-mono">({places.length} ghim)</span>
+            <span className="text-[10px] opacity-75 font-mono">({places.length} {t('explore.pinsUnit')})</span>
           </span>
 
           <button
             type="button"
             onClick={fitAllBounds}
-            title="Xem toàn bộ ghim trên bản đồ"
+            title={t('explore.fitAllBoundsTitle')}
             className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/90 text-ink text-[11px] font-semibold backdrop-blur-xs border border-sage hover:bg-white shadow-xs transition-colors"
           >
             <RefreshCwIcon className="w-3 h-3 text-forest" />
-            <span>Xem toàn bộ</span>
+            <span>{t('explore.fitAllBounds')}</span>
           </button>
         </div>
       )}

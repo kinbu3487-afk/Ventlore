@@ -157,8 +157,15 @@ export function UserProfileView({ initialHandle }: UserProfileViewProps) {
                               {t('profile.issuedAt')}: {formatDate(cred.issuedAt)}
                             </div>
                             {cred.tokenId && (
-                              <div className="text-[10px] font-mono text-forest mt-1">
-                                {t('profile.tokenId')}: {cred.tokenId} (ERC-5192)
+                              <div className="text-[10px] font-mono text-forest mt-1.5 space-y-0.5">
+                                <div className="font-semibold">
+                                  {t('profile.tokenId')}: {cred.tokenId} (ERC-5192)
+                                </div>
+                                <div className="text-[10px] text-ink-muted font-sans flex items-center gap-1">
+                                  <span>Arbitrum One</span>
+                                  <span>•</span>
+                                  <span>{t('profile.sbtPendingOnchain')}</span>
+                                </div>
                               </div>
                             )}
                           </div>

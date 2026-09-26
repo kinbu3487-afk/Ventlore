@@ -1,9 +1,9 @@
 # Tài Liệu Bàn Giao (HANDOFF)
 
-**Chặng hoàn thành gần nhất:** FE-Nearby v1.5 — Tích Hợp 100 Điểm Đến Nền & Định Vị "Gần Tôi" Thuần FE theo `docs/Ventlore_Nearby_v1_5/Ventlore_FE_100_Destinations_Location_v1_5.md`  
-**Nhiệm vụ tiếp theo:** Bin trực tiếp trải nghiệm và nghiệm thu cục bộ tính năng khám phá theo vị trí trên `http://localhost:3000/explore`; Chuẩn bị cho chặng kết nối Back-end  
-**Thời điểm bàn giao:** 26/09/2026 18:15 UTC+7  
-**Tài liệu kèm theo:** `docs/PROJECT_STATE.md`, `docs/Ventlore_Nearby_v1_5/Ventlore_FE_100_Destinations_Location_v1_5.md`  
+**Chặng hoàn thành gần nhất:** FE-Review v1.6 — Hoàn Thiện Đánh Giá Tiếng Anh & Trải Nghiệm Khám Phá theo `Ventlore_FE_Review_v1_6_EN.md`  
+**Nhiệm vụ tiếp theo:** Bin trải nghiệm và nghiệm thu toàn diện bản tiếng Anh trên `http://localhost:3000/en/` hoặc bản deploy; Chuẩn bị cho chặng kết nối Back-end song song  
+**Thời điểm bàn giao:** 26/09/2026 20:25 UTC+7  
+**Tài liệu kèm theo:** `docs/PROJECT_STATE.md`, `Ventlore_FE_Review_v1_6_EN.md`  
 
 ---
 

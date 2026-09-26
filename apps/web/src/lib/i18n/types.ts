@@ -143,6 +143,19 @@ export interface TranslationCatalog {
     imageAttribution: string;
     fieldInfoPending: string;
     noFieldPostsYet: string;
+    placesUnit: string;
+    searchRadius: string;
+    retryLocation: string;
+    emptyInRadiusDesc: string;
+    pinsUnit: string;
+    fitAllBounds: string;
+    fitAllBoundsTitle: string;
+    viewDestination: string;
+    yourLocation: string;
+    accuracyMeters: string;
+    mapPlacesList: string;
+    imageAttributionIllustration: string;
+    imageAttributionPhoto: string;
   };
   place: {
     mergedTitle: string;
@@ -164,6 +177,8 @@ export interface TranslationCatalog {
     approximateArea: string;
     fieldInfoPending: string;
     noFieldPostsYet: string;
+    shareExperience: string;
+    approximateCoordNote: string;
   };
   post: {
     verifiedTitle: string;
@@ -215,6 +230,13 @@ export interface TranslationCatalog {
     loadingPost: string;
     safetyDisclaimer: string;
     technicalDetailsTitle: string;
+    reportInaccuracy: string;
+    tipAuthor: string;
+    tipNotEligible: string;
+    tipSplitDesc: string;
+    ineligibleUnverified: string;
+    ineligibleNeedsChanges: string;
+    ineligibleExpired: string;
   };
   profile: {
     joined: string;
@@ -233,6 +255,8 @@ export interface TranslationCatalog {
     originalBioNotice: string;
     originalContentNotice: string;
     translationNotAvailable: string;
+    viewOnExplorer: string;
+    sbtPendingOnchain: string;
   };
   vip: {
     badge: string;
@@ -260,6 +284,24 @@ export interface TranslationCatalog {
     subscribeButton: string;
     renewButton: string;
     renewalBonusNotice: string;
+    comparisonTitle: string;
+    comparisonSubtitle: string;
+    colFeature: string;
+    colGuest: string;
+    colMember: string;
+    colVip: string;
+    featPublicRead: string;
+    featNearby: string;
+    featContribute: string;
+    featSbtNft: string;
+    featExclusiveReports: string;
+    featOfflineCoords: string;
+    featAdFreeBadge: string;
+    valGuestContribute: string;
+    valEligibleOnApproval: string;
+    valSummaryOnly: string;
+    valFullUnlimited: string;
+    priceAnnually: string;
   };
   transparency: {
     badge: string;
@@ -281,6 +323,14 @@ export interface TranslationCatalog {
     receipt: string;
     splitRuleNotice: string;
     privacyNotice: string;
+    periodicReport: string;
+    internalVoucher: string;
+    sourceFounderEndowment: string;
+    sourceVipRevenue: string;
+    sourceCommunityDonation: string;
+    sourceTipShare: string;
+    viewOnExplorer: string;
+    lastAuditedDate: string;
   };
   auth: {
     title: string;
@@ -291,6 +341,12 @@ export interface TranslationCatalog {
     signInRequired: string;
     signInRequiredDesc: string;
     signInButton: string;
+    continueApple: string;
+    continueFacebook: string;
+    publicDivider: string;
+    continueGuest: string;
+    privacyNote: string;
+    oauthPending: string;
   };
   errors: {
     notFoundTitle: string;
@@ -373,6 +429,20 @@ export interface TranslationCatalog {
     finalCtaTitle: string;
     finalCtaDesc: string;
     finalCtaAction: string;
+    contributeOpt1Title: string;
+    contributeOpt1Desc: string;
+    contributeOpt1Login: string;
+    contributeOpt1Open: string;
+    contributeOpt2Title: string;
+    contributeOpt2Desc: string;
+    contributeOpt2Open: string;
+    contributeOpt3Title: string;
+    contributeOpt3Desc: string;
+    contributeOpt3Action: string;
+    contributeOpt4Title: string;
+    contributeOpt4Desc: string;
+    contributeOpt4Vip: string;
+    contributeOpt4Ledger: string;
   };
   account: {
     tabProfile: string;
@@ -426,6 +496,53 @@ export interface TranslationCatalog {
     draftSavedAt: string;
     previewTab: string;
     editTab: string;
+    headerBadge: string;
+    mainTitle: string;
+    mainSubtitle: string;
+    guestSessionTitle: string;
+    guestSessionDesc: string;
+    guestLoginCta: string;
+    selectPlacePlaceholder: string;
+    searchPlacePlaceholder: string;
+    noPlaceMatch: string;
+    foundPlacesMatch: string;
+    cantFindPlaceHint: string;
+    titlePlaceholder: string;
+    typeLabel: string;
+    typeDiscovery: string;
+    typeGuide: string;
+    typeExperience: string;
+    observedAtLabel: string;
+    accessTierLabel: string;
+    accessPublic: string;
+    accessVip: string;
+    claimPlaceholder: string;
+    removeClaimTitle: string;
+    sourceNamePlaceholder: string;
+    sourceUrlPlaceholder: string;
+    removeSourceTitle: string;
+    mediaLabel: string;
+    chooseFilesBtn: string;
+    mediaHint: string;
+    candidateNamePlaceholder: string;
+    candidateCoordHint: string;
+    candidateSummaryPlaceholder: string;
+    candidateDescPlaceholder: string;
+    warningsSectionLabel: string;
+    warningsSectionHint: string;
+    addWarningBtn: string;
+    warningPlaceholder: string;
+    activitiesSectionLabel: string;
+    activitiesSectionHint: string;
+    candidatePostSectionTitle: string;
+    candidatePostSectionSubtitle: string;
+    submittingLabel: string;
+    successCandidateTitle: string;
+    successExistingTitle: string;
+    successCandidateDesc: string;
+    successExistingDesc: string;
+    viewMyContributions: string;
+    systemIdLabel: string;
   };
   payment: {
     projectTitle: string;
@@ -446,5 +563,28 @@ export interface TranslationCatalog {
     successTitle: string;
     successDesc: string;
     closeModal: string;
+    targetDestination: string;
+    authorPostTarget: string;
+    beneficiaryAccount: string;
+    method: string;
+    web3Wallet: string;
+    gatewayStatus: string;
+    gatewayConnecting: string;
+    gatewayConnectingBtn: string;
+    gatewaySecurityNotice: string;
+    tipSplitNotice: string;
+    standardPackage: string;
+    pegRate: string;
+    customAmountPlaceholder: string;
+    vipLoginRequiredTitle: string;
+    vipLoginRequiredDesc: string;
+    vipLoginRequiredCta: string;
+    projectFundName: string;
+    projectFundDesc: string;
+    authorLabel: string;
+    receivingWallet: string;
+    guestAccountNotice: string;
+    vipTermDesc: string;
+    pegUsdc: string;
   };
 }

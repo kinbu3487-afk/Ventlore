@@ -114,6 +114,92 @@ const ACTIVITY_LABELS: Record<string, string> = {
   landscape: 'Ngắm cảnh',
 };
 
+const LOCALIZED_ACTIVITY_LABELS: Record<string, Record<string, string>> = {
+  lake: {
+    en: 'Lakes & Waterways',
+    ja: '湖・水辺',
+    'zh-Hans': '湖泊与水域',
+    ko: '호수 및 수상',
+    fr: 'Lacs et cours d’eau',
+  },
+  walking: {
+    en: 'Scenic Walking',
+    ja: '散策・トレイル',
+    'zh-Hans': '漫步观景',
+    ko: '경관 도보',
+    fr: 'Randonnée pédestre',
+  },
+  forest: {
+    en: 'Forest Exploration',
+    ja: '森林探検',
+    'zh-Hans': '森林探险',
+    ko: '원시림 탐험',
+    fr: 'Exploration forestière',
+  },
+  mountain: {
+    en: 'Mountains & Plateaus',
+    ja: '山岳・高原',
+    'zh-Hans': '山脉与高原',
+    ko: '산악 및 고원',
+    fr: 'Montagnes et plateaux',
+  },
+  coastal: {
+    en: 'Coasts & Islands',
+    ja: '海岸・島嶼',
+    'zh-Hans': '滨海与海岛',
+    ko: '해안 및 도서',
+    fr: 'Côtes et îles',
+  },
+  culture: {
+    en: 'Culture & Heritage',
+    ja: '文化・遺産',
+    'zh-Hans': '文化与遗产',
+    ko: '문화 및 유산',
+    fr: 'Culture et patrimoine',
+  },
+  landscape: {
+    en: 'Scenic Landscape',
+    ja: '景勝地展望',
+    'zh-Hans': '自然风光',
+    ko: '경관 조망',
+    fr: 'Paysages naturels',
+  },
+};
+
+function getLocalizedSeedFields(p: PlaceDetailDTO, targetLocale: string) {
+  const transActivities = (p.activityIds ?? []).map(
+    (id: string) => LOCALIZED_ACTIVITY_LABELS[id]?.[targetLocale] || ACTIVITY_LABELS[id] || id
+  );
+
+  let regionName = p.regionName;
+  let summary = p.summary;
+  let description = p.description;
+
+  if (targetLocale === 'en') {
+    regionName = p.provinceName ? `${p.provinceName} • ${p.name} Area` : `${p.name} Area`;
+    summary = `${p.name} is a reference point in the ${p.name} area. View coordinates and explore surrounding trails.`;
+    description = `${p.name} is an exploratory seed destination in ${p.provinceName || 'Vietnam'}. Field reports, verification assessments, and route waypoints are being compiled by the Ventlore community.`;
+  } else if (targetLocale === 'ja') {
+    regionName = p.provinceName ? `${p.provinceName} • ${p.name}地域` : `${p.name}地域`;
+    summary = `${p.name}は${p.name}地域の探検基準地点です。位置を確認し、周辺の探索ポイントをご覧ください。`;
+    description = `${p.name}はベトナム・${p.provinceName || ''}の探索候補地です。実地調査レポートおよびルート情報はコミュニティにより順次追加されています。`;
+  } else if (targetLocale === 'zh-Hans') {
+    regionName = p.provinceName ? `${p.provinceName} • ${p.name}地区` : `${p.name}地区`;
+    summary = `${p.name}是${p.name}地区的一处参考探索点。可查看坐标位置并探索周边目的地。`;
+    description = `${p.name}是位于${p.provinceName || '越南'}的实地探索目的地。实地考察手记与路线信息正由 Ventlore 社区共建完善中。`;
+  } else if (targetLocale === 'ko') {
+    regionName = p.provinceName ? `${p.provinceName} • ${p.name} 지역` : `${p.name} 지역`;
+    summary = `${p.name}은(는) ${p.name} 지역의 기준 탐험 지점입니다. 위치를 확인하고 주변 지형을 탐험해 보세요.`;
+    description = `${p.name}은(는) ${p.provinceName || '베트남'}에 위치한 탐험 목적지입니다. 현장 조사 기록과 세부 경로는 커뮤니티를 통해 보완되고 있습니다.`;
+  } else if (targetLocale === 'fr') {
+    regionName = p.provinceName ? `${p.provinceName} • Région de ${p.name}` : `Région de ${p.name}`;
+    summary = `${p.name} est un point de référence dans la région de ${p.name}. Consultez son emplacement et explorez les environs.`;
+    description = `${p.name} est une destination exploratoire située dans la province de ${p.provinceName || 'Vietnam'}. Les rapports de terrain et données d'accès sont en cours de consolidation par la communauté.`;
+  }
+
+  return { regionName, summary, description, activities: transActivities };
+}
+
 function buildMergedPlaces(basePlaces: PlaceDetailDTO[]): PlaceDetailDTO[] {
   const result: PlaceDetailDTO[] = [...basePlaces];
   const placeMap = new Map<string, PlaceDetailDTO>();
@@ -1889,15 +1975,28 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
     const targetLocale = params?.locale;
     const localize = (p: PlaceDetailDTO): PlaceSummaryDTO => {
       const cover = p.coverImageUrl || (p as any).imageUrl || '/destinations/hero-coastal.svg';
-      if (targetLocale && p.translations && p.translations[targetLocale]) {
-        const t = p.translations[targetLocale];
+      if (targetLocale && targetLocale !== 'vi') {
+        if (p.translations && p.translations[targetLocale]) {
+          const t = p.translations[targetLocale];
+          return {
+            ...p,
+            name: t.name ?? p.name,
+            summary: t.summary ?? p.summary,
+            regionName: t.regionName ?? p.regionName,
+            warnings: t.warnings ?? p.warnings,
+            activities: t.activities ?? p.activities,
+            coverImageUrl: cover,
+            imageUrl: cover,
+            isTranslated: true,
+            originalLocale: 'vi',
+          };
+        }
+        const seedFields = getLocalizedSeedFields(p, targetLocale);
         return {
           ...p,
-          name: t.name ?? p.name,
-          summary: t.summary ?? p.summary,
-          regionName: t.regionName ?? p.regionName,
-          warnings: t.warnings ?? p.warnings,
-          activities: t.activities ?? p.activities,
+          summary: seedFields.summary,
+          regionName: seedFields.regionName,
+          activities: seedFields.activities,
           coverImageUrl: cover,
           imageUrl: cover,
           isTranslated: true,
@@ -1931,8 +2030,15 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
     return (destinationsData as any).provinces as ProvinceDTO[];
   }
 
-  async getActivities(): Promise<ActivityDTO[]> {
-    return (destinationsData as any).activities as ActivityDTO[];
+  async getActivities(locale?: string): Promise<ActivityDTO[]> {
+    const rawActivities = (destinationsData as any).activities as ActivityDTO[];
+    if (locale && locale !== 'vi') {
+      return rawActivities.map(act => ({
+        ...act,
+        label: LOCALIZED_ACTIVITY_LABELS[act.id]?.[locale] || act.label,
+      }));
+    }
+    return rawActivities;
   }
 
   async getPlace(placeId: string, locale?: string): Promise<PlaceDetailDTO | null> {
@@ -1959,22 +2065,47 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
     place.coverImageUrl = cover;
     place.imageUrl = cover;
 
-    if (locale && place.translations && place.translations[locale]) {
-      const t = place.translations[locale];
-      place.name = t.name ?? place.name;
-      place.summary = t.summary ?? place.summary;
-      place.description = t.description ?? place.description;
-      place.regionName = t.regionName ?? place.regionName;
-      if (t.warnings) {
-        place.warnings = t.warnings;
+    if (locale && locale !== 'vi') {
+      if (place.translations && place.translations[locale]) {
+        const t = place.translations[locale];
+        place.name = t.name ?? place.name;
+        place.summary = t.summary ?? place.summary;
+        place.description = t.description ?? place.description;
+        place.regionName = t.regionName ?? place.regionName;
+        if (t.warnings) {
+          place.warnings = t.warnings;
+        }
+        if (t.activities) {
+          place.activities = t.activities;
+        }
+        place.isTranslated = true;
+        place.originalLocale = 'vi';
+      } else {
+        const seedFields = getLocalizedSeedFields(place, locale);
+        place.summary = seedFields.summary;
+        place.description = seedFields.description;
+        place.regionName = seedFields.regionName;
+        place.activities = seedFields.activities;
+        if (place.provenance) {
+          const provNotes: Record<string, string> = {
+            en: 'Approximate area coordinates authored for exploration simulation; not geodetically verified boundaries. Not intended for precise turn-by-turn navigation or trailheads.',
+            ja: '探索シミュレーション用に作成された概算地域座標です。正確な測地境界は未検証であり、ナビゲーション案内としては使用しないでください。',
+            'zh-Hans': '为探索模拟编制的区域估算坐标；未经测绘对齐独立边界。不可用作精确导航指引。',
+            ko: '탐험 시뮬레이션을 위해 작성된 대략적인 지역 좌표이며 독립된 경계 검증을 거치지 않았습니다. 정밀 내비게이션용이 아닙니다.',
+            fr: 'Coordonnées approximatives définies pour la simulation d’exploration ; limites non vérifiées géodésiquement. Ne pas utiliser pour la navigation précise.',
+          };
+          if (provNotes[locale]) {
+            place.provenance = {
+              ...place.provenance,
+              note: provNotes[locale],
+            };
+          }
+        }
+        place.isTranslated = true;
+        place.originalLocale = 'vi';
       }
-      if (t.activities) {
-        place.activities = t.activities;
-      }
-      place.isTranslated = true;
-      place.originalLocale = 'vi';
     } else {
-      place.isTranslated = locale === 'vi' || !locale;
+      place.isTranslated = true;
       place.originalLocale = 'vi';
     }
 
@@ -2267,8 +2398,69 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
     }));
   }
 
-  async getTransparencySummary(year?: number): Promise<TransparencySummaryDTO> {
-    return this.transparencySummary;
+  async getTransparencySummary(year?: number, locale?: string): Promise<TransparencySummaryDTO> {
+    const targetLocale = locale || 'vi';
+    if (targetLocale === 'vi') return this.transparencySummary;
+
+    const sourceDescs: Record<string, Record<string, string>> = {
+      OWNER_FUNDING: {
+        en: 'Initial verification reserve match funded by Ventlore founders',
+        ja: 'Ventlore創業者による初期現地検証準備金',
+        'zh-Hans': 'Ventlore 创始团队提供的实地核验初始对等储备基金',
+        ko: 'Ventlore 설립자가 출연한 초기 실측 검증 준비금',
+        fr: 'Fonds de contrepartie initial abondé par les fondateurs de Ventlore',
+      },
+      VIP_REVENUE: {
+        en: '80 active VIP memberships ($15/annual pass credited to fund)',
+        ja: '有効なVIP会員80件（15米ドル/件を基金へ繰入）',
+        'zh-Hans': '80 位活跃 VIP 会员订阅（15 美元/份直接归入基金）',
+        ko: '활성화된 VIP 회원 80건 (건당 15 USD 기금 전입)',
+        fr: '80 adhésions VIP actives (15 USD/adhésion reversés au fonds)',
+      },
+      PROJECT_DONATION: {
+        en: 'Direct public contributions from the community to the treasury wallet',
+        ja: 'コミュニティからプロジェクト資金ウォレットへの直接寄付',
+        'zh-Hans': '来自社区向项目公共金库钱包的直接公开捐赠',
+        ko: '커뮤니티에서 프로젝트 재정 지갑으로 직접 후원한 공개 기부금',
+        fr: 'Dons publics directs de la communauté vers le portefeuille de trésorerie',
+      },
+      POST_TIP_SHARE: {
+        en: '20% allocation from reader tips for verified field reports',
+        ja: '承認済み現地調査レポートに対する読者チップからの20%配分',
+        'zh-Hans': '自读者向已核验文章作者打赏中按规则提取的 20% 储备',
+        ko: '승인된 현장 보고서에 대한 독자 팁 중 20% 공제액',
+        fr: '20 % prélevés sur les pourboires versés aux auteurs de rapports vérifiés',
+      },
+    };
+
+    const disbursePurposes: Record<string, Record<string, string>> = {
+      '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5p01': {
+        en: 'Cat Co 3 Bay field verification fee (Reviewer Hoang)',
+        ja: 'カットコー3実地検証手当（レビュアー・ホアン）',
+        'zh-Hans': '吉婆岛三号猫头海湾实地核验劳务报酬（审核员黄）',
+        ko: '깟바 깟꼬 3 현장 검증 수당 (검토자 호앙)',
+        fr: 'Rémunération pour la vérification de terrain à Cat Co 3 (Réviseur Hoang)',
+      },
+      '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5p02': {
+        en: 'Dragon Claw Cliffs geomorphology verification fee',
+        ja: 'コトー島ドラゴンの爪地形検証手当',
+        'zh-Hans': '姑苏岛龙爪绝壁地貌核验劳务报酬',
+        ko: '꼬또 드래곤 클로 지형 실측 검증 수당',
+        fr: 'Rémunération pour l’expertise géomorphologique des falaises de la Griffe du Dragon',
+      },
+    };
+
+    return {
+      ...this.transparencySummary,
+      sources: this.transparencySummary.sources.map(s => ({
+        ...s,
+        description: sourceDescs[s.sourceType]?.[targetLocale] || s.description,
+      })),
+      recentDisbursements: this.transparencySummary.recentDisbursements.map(d => ({
+        ...d,
+        purpose: disbursePurposes[d.payoutId]?.[targetLocale] || d.purpose,
+      })),
+    };
   }
 
   // === NEW ADAPTER STORES FOR FE FIRST V1.0 ===

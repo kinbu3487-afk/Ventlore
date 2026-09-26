@@ -275,7 +275,7 @@ function ExploreViewInner() {
           </div>
 
           <Link
-            href={getLocalizedPath('/login')}
+            href={getLocalizedPath('/contribute?tab=candidate')}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-control font-bold text-xs sm:text-sm text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm shrink-0"
           >
             <span>{t('explore.proposePlaceButton')}</span>
@@ -289,7 +289,7 @@ function ExploreViewInner() {
 
 export default function ExplorePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-surface-canvas flex items-center justify-center text-ink-muted">Đang tải...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-surface-canvas flex items-center justify-center text-ink-muted">...</div>}>
       <ExploreViewInner />
     </Suspense>
   );

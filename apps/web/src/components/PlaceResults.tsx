@@ -79,6 +79,15 @@ export function PlaceResults({
     }));
   };
 
+  React.useEffect(() => {
+    if (selectedPlaceId && currentViewMode === 'map') {
+      const el = document.getElementById(`map-card-${selectedPlaceId}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  }, [selectedPlaceId, currentViewMode]);
+
   const totalCount = total !== undefined ? total : places.length;
   const fromIndex = totalCount === 0 ? 0 : (page - 1) * pageSize + 1;
   const toIndex = Math.min(page * pageSize, totalCount);
@@ -173,7 +182,9 @@ export function PlaceResults({
               </span>
             )}
             <span className="px-1.5 py-0.5 rounded bg-black/60 backdrop-blur-xs text-white/80 text-[10px] font-medium">
-              {t('explore.imageAttribution')}
+              {(coverImage || fallbackSvg).endsWith('.svg') || (coverImage || fallbackSvg).includes('/destinations/')
+                ? t('explore.imageAttributionIllustration')
+                : t('explore.imageAttributionPhoto')}
             </span>
           </div>
 
@@ -274,7 +285,7 @@ export function PlaceResults({
             </h3>
             <p className="text-xs sm:text-sm text-ink-secondary leading-relaxed">
               {isRadiusEmpty
-                ? 'Không có điểm đến trong bán kính này. Bạn có thể mở rộng bán kính hoặc chọn khu vực khác.'
+                ? t('explore.emptyInRadiusDesc', { radius: radiusKm })
                 : t('explore.noPlacesHint')}
             </p>
           </div>
@@ -344,7 +355,7 @@ export function PlaceResults({
           </span>
           {origin && radiusKm !== null && (
             <span className="text-[11px] text-forest font-bold bg-forest/10 px-2 py-0.5 rounded-full">
-              (Bán kính {radiusKm} km)
+              ({t('explore.searchRadius')}: {radiusKm} km)
             </span>
           )}
         </div>
@@ -384,13 +395,19 @@ export function PlaceResults({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left Column (Desktop): Compact Places List */}
           <div className="lg:col-span-5 space-y-3 max-h-[580px] overflow-y-auto pr-1">
-            {places.map((place) => {
+            <div className="flex items-center justify-between pb-1 px-1">
+              <span className="text-xs font-bold text-ink">
+                {t('explore.mapPlacesList', { count: mapData.length })}
+              </span>
+            </div>
+            {mapData.map((place) => {
               const isSelected = selectedPlaceId === place.placeId;
               const hasDistance = place.distanceKm !== null && place.distanceKm !== undefined;
 
               return (
                 <div
                   key={place.placeId}
+                  id={`map-card-${place.placeId}`}
                   onClick={() => setSelectedPlaceId(place.placeId)}
                   className={`p-3.5 rounded-card border transition-all cursor-pointer ${
                     isSelected
@@ -470,7 +487,7 @@ export function PlaceResults({
                 <span className="font-semibold text-ink">
                   {t('explore.pageOf', { page, total: totalPages })}
                 </span>
-                <span className="text-ink-muted">({totalCount} điểm)</span>
+                <span className="text-ink-muted">({totalCount} {t('explore.placesUnit')})</span>
               </div>
 
               <button

@@ -120,8 +120,12 @@ export function ContributeView() {
         const res = await mockApiClient.listPlaces();
         if (mounted) {
           setPlaces(res.items);
-          if (!selectedPlaceId && res.items.length > 0 && res.items[0]) {
-            setSelectedPlaceId(res.items[0].placeId);
+          if (preselectedPlaceId) {
+            const found = res.items.find(p => p.placeId === preselectedPlaceId);
+            if (found) {
+              setSelectedPlaceId(found.placeId);
+              setPlaceSearchText(found.name);
+            }
           }
           setIsLoadingPlaces(false);
         }
@@ -133,7 +137,20 @@ export function ContributeView() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [preselectedPlaceId]);
+
+  // Sync place selection if searchParams change
+  useEffect(() => {
+    const pId = searchParams.get('placeId');
+    if (pId && places.length > 0) {
+      const found = places.find(p => p.placeId === pId);
+      if (found) {
+        setSelectedPlaceId(found.placeId);
+        setPlaceSearchText(found.name);
+        setActiveTab('existing');
+      }
+    }
+  }, [searchParams, places]);
 
   const currentUserId = session?.userId || 'guest';
   const draftKeyTab1 = `ventlore_draft_${currentUserId}_existing`;
@@ -440,13 +457,13 @@ export function ContributeView() {
       <div className="space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-forest/10 border border-forest/20 text-forest text-xs font-bold uppercase tracking-wider">
           <FileTextIcon className="w-3.5 h-3.5" />
-          <span>Đóng góp dữ liệu dã ngoại</span>
+          <span>{t('contribute.headerBadge')}</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-ink tracking-tight">
-          Chia Sẻ Trải Nghiệm Khảo Sát Thực Địa
+          {t('contribute.mainTitle')}
         </h1>
         <p className="text-sm sm:text-base text-ink-secondary leading-relaxed">
-          Chia sẻ bài viết cho một địa điểm bạn đã trực tiếp đến hoặc đề xuất một tọa độ mới chưa có trên bản đồ Ventlore.
+          {t('contribute.mainSubtitle')}
         </p>
       </div>
 
@@ -457,19 +474,19 @@ export function ContributeView() {
             <InfoIcon className="w-5 h-5 text-status-pending shrink-0" />
             <div>
               <p className="font-semibold text-xs text-status-pending uppercase tracking-wider">
-                Phiên khách vãng lai (Guest)
+                {t('contribute.guestSessionTitle')}
               </p>
               <p className="text-xs text-ink-secondary">
-                Bạn có thể tự do soạn thảo và lưu bản nháp trên máy. Để gửi bài viết đóng góp và nhận chứng nhận tác giả, vui lòng đăng nhập tài khoản.
+                {t('contribute.guestSessionDesc')}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <Link
-              href={getLocalizedPath(`/login?returnTo=${encodeURIComponent(`/contribute?tab=${activeTab}`)}`)}
+              href={getLocalizedPath(`/login?returnTo=${encodeURIComponent(`/contribute?tab=${activeTab}${selectedPlaceId ? `&placeId=${selectedPlaceId}` : ''}`)}`)}
               className="px-4 py-2 rounded-control text-xs font-bold text-white bg-forest hover:bg-forest-hover transition-colors whitespace-nowrap shadow-xs"
             >
-              Đăng nhập tài khoản
+              {t('contribute.guestLoginCta')}
             </Link>
           </div>
         </div>
@@ -483,19 +500,19 @@ export function ContributeView() {
             <div>
               <h3 className="font-extrabold text-lg">
                 {submitSuccess.isCandidate
-                  ? 'Đề xuất điểm mới đã gửi thành công!'
-                  : 'Bài viết khảo sát đã được xuất bản!'}
+                  ? t('contribute.successCandidateTitle')
+                  : t('contribute.successExistingTitle')}
               </h3>
               <p className="text-xs text-ink-secondary">
-                Mã định danh hệ thống: <strong className="font-mono text-ink">{submitSuccess.displayCode}</strong>
+                {t('contribute.systemIdLabel')}: <strong className="font-mono text-ink">{submitSuccess.displayCode}</strong>
               </p>
             </div>
           </div>
 
           <p className="text-sm leading-relaxed text-ink-secondary">
             {submitSuccess.isCandidate
-              ? 'Hồ sơ địa điểm và bài viết khám phá ban đầu đã được chuyển vào hàng đợi Tiếp nhận (Admin Intake). Hồ sơ được công khai sau khi xét duyệt. Kết quả kiểm định, nếu có, thể hiện rõ phạm vi, thời điểm và các cảnh báo liên quan.'
-              : 'Bài viết của bạn đã được lưu vào kho dữ liệu ở trạng thái Chưa kiểm định độc lập. Bạn có thể theo dõi tiến trình thẩm định trong mục Đóng góp của tôi. Khi được chuyên gia xác thực, nhãn kiểm định và quyền nhận tip sẽ được kích hoạt.'}
+              ? t('contribute.successCandidateDesc')
+              : t('contribute.successExistingDesc')}
           </p>
 
           <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -503,7 +520,7 @@ export function ContributeView() {
               href={getLocalizedPath('/account?tab=contributions')}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover transition-colors shadow-sm"
             >
-              <span>Xem trong Đóng góp của tôi</span>
+              <span>{t('contribute.viewMyContributions')}</span>
               <ArrowRightIcon className="w-3.5 h-3.5" />
             </Link>
             <button
@@ -518,7 +535,7 @@ export function ContributeView() {
               }}
               className="px-4 py-2 rounded-control border border-sage text-ink text-xs font-semibold hover:bg-surface-canvas transition-colors"
             >
-              Viết bài đóng góp khác
+              {t('account.newPostButton')}
             </button>
           </div>
         </div>
@@ -560,7 +577,6 @@ export function ContributeView() {
           <div className="p-3.5 rounded-control bg-surface-canvas border border-sage/80 flex items-start gap-2.5 text-xs text-ink-secondary">
             <ShieldCheckIcon className="w-4 h-4 text-forest shrink-0 mt-0.5" />
             <div>
-              <strong className="text-ink font-semibold">Quy chuẩn kiểm định: </strong>
               {t('contribute.ruleExistingNotice')}
             </div>
           </div>
@@ -578,7 +594,7 @@ export function ContributeView() {
                   type="text"
                   value={placeSearchText}
                   onChange={e => setPlaceSearchText(e.target.value)}
-                  placeholder="Tìm theo tên điểm đến, tỉnh/thành hoặc tên cũ (VD: Hội An, Đà Nẵng, Quảng Nam)..."
+                  placeholder={t('contribute.searchPlacePlaceholder')}
                   className="w-full px-3 py-2 rounded-control border border-sage bg-surface-canvas text-ink text-xs focus:outline-none focus:ring-2 focus:ring-forest placeholder:text-ink-muted"
                 />
                 <select
@@ -587,9 +603,12 @@ export function ContributeView() {
                   className="w-full px-3 py-2.5 rounded-control border border-sage bg-white text-ink text-sm focus:outline-none focus:ring-2 focus:ring-forest"
                   required
                 >
+                  <option value="" disabled>
+                    {t('contribute.selectPlacePlaceholder')}
+                  </option>
                   {filteredPlaces.length === 0 ? (
                     <option value="" disabled>
-                      Không tìm thấy điểm phù hợp với &quot;{placeSearchText}&quot;
+                      {t('contribute.noPlaceMatch')}
                     </option>
                   ) : (
                     filteredPlaces.map(p => (
@@ -601,21 +620,13 @@ export function ContributeView() {
                 </select>
                 {placeSearchText && (
                   <p className="text-[11px] text-ink-muted">
-                    Tìm thấy {filteredPlaces.length} điểm phù hợp với &quot;{placeSearchText}&quot;
+                    {t('contribute.foundPlacesMatch', { count: filteredPlaces.length })}
                   </p>
                 )}
               </div>
             )}
             <p className="text-[11px] text-ink-muted">
-              Không tìm thấy địa điểm trong danh sách? Chuyển sang tab{' '}
-              <button
-                type="button"
-                onClick={() => handleSwitchTab('candidate')}
-                className="text-forest underline font-semibold"
-              >
-                Đề xuất điểm mới
-              </button>
-              .
+              {t('contribute.cantFindPlaceHint')}
             </p>
           </div>
 
@@ -628,7 +639,7 @@ export function ContributeView() {
               type="text"
               value={postTitle}
               onChange={e => setPostTitle(e.target.value)}
-              placeholder="VD: Cập nhật lộ trình đường mòn vách đá sau bão và điều kiện cắm trại"
+              placeholder={t('contribute.titlePlaceholder')}
               className="w-full px-3.5 py-2.5 rounded-control border border-sage bg-white text-ink text-sm focus:outline-none focus:ring-2 focus:ring-forest"
               required
             />
@@ -638,22 +649,22 @@ export function ContributeView() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-1.5">
               <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-                Loại đóng góp
+                {t('contribute.typeLabel')}
               </label>
               <select
                 value={contributionType}
                 onChange={e => setContributionType(e.target.value as ContributionType)}
                 className="w-full px-3 py-2 rounded-control border border-sage bg-white text-ink text-xs focus:outline-none focus:ring-2 focus:ring-forest"
               >
-                <option value={ContributionType.DISCOVERY}>Khám phá mới (Discovery)</option>
-                <option value={ContributionType.GUIDE}>Hướng dẫn lộ trình (Guide)</option>
-                <option value={ContributionType.EXPERIENCE}>Ký sự trải nghiệm (Experience)</option>
+                <option value={ContributionType.DISCOVERY}>{t('contribute.typeDiscovery')}</option>
+                <option value={ContributionType.GUIDE}>{t('contribute.typeGuide')}</option>
+                <option value={ContributionType.EXPERIENCE}>{t('contribute.typeExperience')}</option>
               </select>
             </div>
 
             <div className="space-y-1.5">
               <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-                Ngày quan sát thực địa
+                {t('contribute.observedAtLabel')}
               </label>
               <input
                 type="date"
@@ -666,15 +677,15 @@ export function ContributeView() {
 
             <div className="space-y-1.5">
               <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-                Quyền truy cập
+                {t('contribute.accessTierLabel')}
               </label>
               <select
                 value={accessTier}
                 onChange={e => setAccessTier(e.target.value as AccessTier)}
                 className="w-full px-3 py-2 rounded-control border border-sage bg-white text-ink text-xs focus:outline-none focus:ring-2 focus:ring-forest"
               >
-                <option value={AccessTier.PUBLIC}>Công khai miễn phí (Public)</option>
-                <option value={AccessTier.VIP}>Đặc quyền Hội viên VIP (VIP Tier)</option>
+                <option value={AccessTier.PUBLIC}>{t('contribute.accessPublic')}</option>
+                <option value={AccessTier.VIP}>{t('contribute.accessVip')}</option>
               </select>
             </div>
           </div>
@@ -710,7 +721,7 @@ export function ContributeView() {
                     type="text"
                     value={claim}
                     onChange={e => handleClaimChange(idx, e.target.value)}
-                    placeholder="VD: Suối cạn nước vào tháng 6; điểm cắm trại bãi đá có gió giật cấp 5 về đêm"
+                    placeholder={t('contribute.claimPlaceholder')}
                     className="flex-1 px-3 py-2 rounded-control border border-sage bg-white text-ink text-xs focus:outline-none focus:ring-2 focus:ring-forest"
                   />
                   {claims.length > 1 && (
@@ -718,7 +729,7 @@ export function ContributeView() {
                       type="button"
                       onClick={() => handleRemoveClaim(idx)}
                       className="p-1.5 text-ink-muted hover:text-status-danger rounded-control transition-colors"
-                      title="Xóa nhận định này"
+                      title={t('contribute.removeClaimTitle')}
                     >
                       <CloseIcon className="w-4 h-4" />
                     </button>
@@ -758,12 +769,12 @@ export function ContributeView() {
             {showPreview ? (
               <div className="p-4 rounded-control border border-sage bg-surface-canvas min-h-[220px]">
                 <div className="text-xs font-bold text-ink-muted mb-2 uppercase tracking-wider border-b border-sage/40 pb-1">
-                  Bản xem trước trực tiếp:
+                  {t('contribute.previewTab')}:
                 </div>
                 {postContent ? (
                   <MarkdownView content={postContent} />
                 ) : (
-                  <p className="text-xs text-ink-muted italic">Chưa có nội dung để xem trước...</p>
+                  <p className="text-xs text-ink-muted italic">...</p>
                 )}
               </div>
             ) : (
@@ -771,7 +782,7 @@ export function ContributeView() {
                 value={postContent}
                 onChange={e => setPostContent(e.target.value)}
                 rows={10}
-                placeholder="Sử dụng Markdown để trình bày kinh nghiệm:&#10;&#10;## Hành trình thực địa&#10;Mô tả chi tiết đường đi, các mốc quan trọng...&#10;&#10;### Cảnh báo thiết yếu&#10;- Chú ý đoạn dốc đá trơn trượt sau km thứ 4&#10;- Cần mang tối thiểu 2 lít nước"
+                placeholder={`## ${t('contribute.mainTitle')}\n\n### ${t('contribute.warningsSectionLabel')}`}
                 className="w-full px-3.5 py-2.5 rounded-control border border-sage bg-white text-ink text-sm font-mono focus:outline-none focus:ring-2 focus:ring-forest"
                 required
               />
@@ -783,11 +794,8 @@ export function ContributeView() {
             <div className="flex items-center justify-between">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-                  Nguồn tham khảo & Tọa độ đối chứng
+                  {t('post.sourcesTitle')}
                 </label>
-                <p className="text-[11px] text-ink-muted">
-                  Bổ sung liên kết bản đồ vệ tinh, GPX tracklog hoặc bài nghiên cứu liên quan.
-                </p>
               </div>
               <button
                 type="button"
@@ -795,7 +803,7 @@ export function ContributeView() {
                 className="inline-flex items-center gap-1 px-2.5 py-1 rounded-control bg-forest/10 text-forest text-xs font-bold hover:bg-forest/20 transition-colors"
               >
                 <PlusCircleIcon className="w-3.5 h-3.5" />
-                <span>Thêm nguồn</span>
+                <span>+</span>
               </button>
             </div>
 
@@ -805,7 +813,7 @@ export function ContributeView() {
                   type="text"
                   value={src.title}
                   onChange={e => handleSourceChange(idx, 'title', e.target.value)}
-                  placeholder="Tên nguồn (VD: Tracklog Wikiloc)"
+                  placeholder={t('contribute.sourceNamePlaceholder')}
                   className="px-3 py-2 rounded-control border border-sage bg-white text-ink text-xs focus:outline-none focus:ring-2 focus:ring-forest"
                 />
                 <div className="flex items-center gap-2">
@@ -813,7 +821,7 @@ export function ContributeView() {
                     type="url"
                     value={src.url}
                     onChange={e => handleSourceChange(idx, 'url', e.target.value)}
-                    placeholder="https://..."
+                    placeholder={t('contribute.sourceUrlPlaceholder')}
                     className="flex-1 px-3 py-2 rounded-control border border-sage bg-white text-ink text-xs focus:outline-none focus:ring-2 focus:ring-forest"
                   />
                   {sources.length > 1 && (
@@ -821,6 +829,7 @@ export function ContributeView() {
                       type="button"
                       onClick={() => handleRemoveSource(idx)}
                       className="p-1.5 text-ink-muted hover:text-status-danger rounded-control transition-colors"
+                      title={t('contribute.removeSourceTitle')}
                     >
                       <CloseIcon className="w-4 h-4" />
                     </button>
@@ -833,7 +842,7 @@ export function ContributeView() {
           {/* Media Attachments */}
           <div className="space-y-2 pt-2 border-t border-sage/60">
             <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-              Ảnh và tài liệu
+              {t('contribute.mediaLabel')}
             </label>
             <div className="p-4 rounded-control border-2 border-dashed border-sage bg-surface-canvas text-center">
               <input
@@ -849,10 +858,10 @@ export function ContributeView() {
                 className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-control bg-white border border-sage text-ink text-xs font-bold hover:bg-sage/20 transition-colors shadow-xs"
               >
                 <PlusCircleIcon className="w-4 h-4 text-forest" />
-                <span>Chọn ảnh từ thiết bị</span>
+                <span>{t('contribute.chooseFilesBtn')}</span>
               </label>
               <p className="text-[11px] text-ink-muted mt-2">
-                Các tệp đính kèm được lưu an toàn cùng bản nháp trên thiết bị của bạn.
+                {t('contribute.mediaHint')}
               </p>
 
               {mockFiles.length > 0 && (
@@ -878,7 +887,7 @@ export function ContributeView() {
               disabled={isSubmitting}
               className="min-h-control inline-flex items-center justify-center px-6 py-2.5 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-sm disabled:opacity-50"
             >
-              {isSubmitting ? 'Đang lưu bản ghi...' : t('contribute.submitButton')}
+              {isSubmitting ? t('contribute.submittingLabel') : t('contribute.submitButton')}
             </button>
           </div>
         </form>
@@ -891,7 +900,6 @@ export function ContributeView() {
           <div className="p-3.5 rounded-control bg-status-pending-bg/60 border border-status-pending/30 flex items-start gap-2.5 text-xs text-ink-secondary">
             <ShieldCheckIcon className="w-4 h-4 text-status-pending shrink-0 mt-0.5" />
             <div>
-              <strong className="text-ink font-semibold">Quy chuẩn Đề xuất điểm mới: </strong>
               {t('contribute.ruleCandidateNotice')}
             </div>
           </div>
@@ -908,7 +916,7 @@ export function ContributeView() {
                 setPlaceName(e.target.value);
                 setDismissDuplicate(false);
               }}
-              placeholder="VD: Hẻm Vực Sông Nho Quế Đoạn Thượng Nguồn"
+              placeholder={t('contribute.candidateNamePlaceholder')}
               className="w-full px-3.5 py-2.5 rounded-control border border-sage bg-white text-ink text-sm focus:outline-none focus:ring-2 focus:ring-forest"
               required
             />
@@ -971,7 +979,7 @@ export function ContributeView() {
 
             <div className="space-y-1.5">
               <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-                Vĩ độ (Latitude)
+                {t('contribute.candidateCoordinatesLabel')} (Lat)
               </label>
               <input
                 type="text"
@@ -984,7 +992,7 @@ export function ContributeView() {
 
             <div className="space-y-1.5">
               <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-                Kinh độ (Longitude)
+                {t('contribute.candidateCoordinatesLabel')} (Lng)
               </label>
               <input
                 type="text"
@@ -999,13 +1007,13 @@ export function ContributeView() {
           {/* Place Summary */}
           <div className="space-y-2">
             <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-              Tóm tắt tổng quan về điểm mới <span className="text-status-danger">*</span>
+              {t('contribute.candidateSummaryPlaceholder')} <span className="text-status-danger">*</span>
             </label>
             <input
               type="text"
               value={placeSummary}
               onChange={e => setPlaceSummary(e.target.value)}
-              placeholder="VD: Hẻm vực đá vôi với dòng suối ngầm và nhiều bãi cát tự nhiên thích hợp chèo kayak."
+              placeholder={t('contribute.candidateSummaryPlaceholder')}
               className="w-full px-3.5 py-2.5 rounded-control border border-sage bg-white text-ink text-sm focus:outline-none focus:ring-2 focus:ring-forest"
               required
             />
@@ -1015,14 +1023,14 @@ export function ContributeView() {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-                Cảnh báo an toàn ban đầu
+                {t('contribute.warningsSectionLabel')}
               </label>
               <button
                 type="button"
                 onClick={() => setWarnings([...warnings, ''])}
                 className="text-xs font-bold text-forest hover:underline"
               >
-                + Thêm cảnh báo
+                + {t('contribute.addWarningBtn')}
               </button>
             </div>
             {warnings.map((w, idx) => (
@@ -1035,7 +1043,7 @@ export function ContributeView() {
                     updated[idx] = e.target.value;
                     setWarnings(updated);
                   }}
-                  placeholder="VD: Nước chảy xiết vào mùa mưa lũ; không có sóng điện thoại"
+                  placeholder={t('contribute.warningPlaceholder')}
                   className="flex-1 px-3 py-2 rounded-control border border-sage bg-white text-ink text-xs focus:outline-none focus:ring-2 focus:ring-forest"
                 />
                 {warnings.length > 1 && (
@@ -1055,22 +1063,22 @@ export function ContributeView() {
           <div className="space-y-4 pt-4 border-t border-sage">
             <div className="space-y-1">
               <h3 className="font-extrabold text-sm text-ink uppercase tracking-wider">
-                Bài viết khảo sát khám phá kèm theo
+                {t('contribute.candidatePostSectionTitle')}
               </h3>
               <p className="text-xs text-ink-secondary">
-                Mỗi điểm mới bắt buộc đi kèm tối thiểu một bài viết mô tả thực địa (`postId` DISCOVERY) để làm căn cứ thẩm định.
+                {t('contribute.candidatePostSectionSubtitle')}
               </p>
             </div>
 
             <div className="space-y-2">
               <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-                Tiêu đề bài viết khám phá <span className="text-status-danger">*</span>
+                {t('contribute.titleLabel')} <span className="text-status-danger">*</span>
               </label>
               <input
                 type="text"
                 value={candidatePostTitle}
                 onChange={e => setCandidatePostTitle(e.target.value)}
-                placeholder="VD: Nhật ký trinh sát hẻm vực thượng nguồn tháng 9/2026"
+                placeholder={t('contribute.titlePlaceholder')}
                 className="w-full px-3.5 py-2.5 rounded-control border border-sage bg-white text-ink text-sm focus:outline-none focus:ring-2 focus:ring-forest"
                 required
               />
@@ -1078,13 +1086,13 @@ export function ContributeView() {
 
             <div className="space-y-2">
               <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-                Nội dung khảo sát chi tiết (Markdown) <span className="text-status-danger">*</span>
+                {t('contribute.contentLabel')} <span className="text-status-danger">*</span>
               </label>
               <textarea
                 value={candidatePostContent}
                 onChange={e => setCandidatePostContent(e.target.value)}
                 rows={6}
-                placeholder="Mô tả hành trình tiếp cận, phương tiện, thời gian di chuyển và điều kiện địa hình..."
+                placeholder={t('contribute.candidateDescPlaceholder')}
                 className="w-full px-3.5 py-2.5 rounded-control border border-sage bg-white text-ink text-sm font-mono focus:outline-none focus:ring-2 focus:ring-forest"
                 required
               />
@@ -1098,7 +1106,7 @@ export function ContributeView() {
               disabled={isSubmitting}
               className="min-h-control inline-flex items-center justify-center px-6 py-2.5 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-sm disabled:opacity-50"
             >
-              {isSubmitting ? 'Đang tạo giao dịch...' : t('contribute.submitCandidateButton')}
+              {isSubmitting ? t('contribute.submittingLabel') : t('contribute.submitCandidateButton')}
             </button>
           </div>
         </form>
