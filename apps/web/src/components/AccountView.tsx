@@ -10,7 +10,6 @@ import {
   VerificationStatus,
   PostVisibility,
   TipRouteStatus,
-  generateUUIDv7,
 } from '@ventlore/api-client';
 import { useSession } from '@/components/SessionContext';
 import { usePayment } from '@/components/PaymentContext';
@@ -97,8 +96,6 @@ export function AccountView() {
   // Benefits state
   const [benefits, setBenefits] = useState<BenefitsDTO | null>(null);
   const [isLoadingBenefits, setIsLoadingBenefits] = useState(true);
-  const [isClaimingSbt, setIsClaimingSbt] = useState(false);
-  const [isClaimingNft, setIsClaimingNft] = useState(false);
 
   // Profile Editor state
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -154,30 +151,6 @@ export function AccountView() {
     };
   }, [persona, session?.userId]);
 
-  // Handle SBT Claim demo
-  const handleClaimSbt = async () => {
-    if (!session) return;
-    setIsClaimingSbt(true);
-    try {
-      const updated = await mockApiClient.claimBenefit(session.userId, 'sbt');
-      setBenefits(updated);
-    } finally {
-      setIsClaimingSbt(false);
-    }
-  };
-
-  // Handle NFT Claim demo
-  const handleClaimNft = async () => {
-    if (!session) return;
-    setIsClaimingNft(true);
-    try {
-      const updated = await mockApiClient.claimBenefit(session.userId, 'nft');
-      setBenefits(updated);
-    } finally {
-      setIsClaimingNft(false);
-    }
-  };
-
   // Handle Tip Consent Toggle
   const handleToggleTipConsent = async () => {
     if (!benefits || !session) return;
@@ -216,60 +189,20 @@ export function AccountView() {
   // Gate for Guest
   if (persona === 'guest' || !session) {
     return (
-      <div className="max-w-2xl mx-auto py-12 px-4 text-center space-y-6">
+      <div className="max-w-md mx-auto py-16 px-4 text-center space-y-6">
         <div className="w-16 h-16 rounded-full bg-forest/10 text-forest mx-auto flex items-center justify-center">
           <UserIcon className="w-8 h-8" />
         </div>
         <div className="space-y-2">
           <h1 className="text-2xl sm:text-3xl font-extrabold text-ink tracking-tight">
-            Khu vực Tài khoản Thành viên
+            Hồ Sơ Thành Viên
           </h1>
           <p className="text-sm text-ink-secondary leading-relaxed">
-            Bạn đang truy cập với tư cách khách (Guest). Vui lòng đăng nhập hoặc lựa chọn một hồ sơ mẫu để trải nghiệm đầy đủ các tính năng quản lý đóng góp, gói VIP và nhận quyền lợi tác giả.
+            Vui lòng đăng nhập để xem thông tin tài khoản, quản lý bài viết đã đóng góp, gói hội viên và các quyền lợi tác giả.
           </p>
         </div>
 
-        <div className="p-6 rounded-card border border-sage bg-surface-card space-y-4">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-ink">
-            Chuyển nhanh sang hồ sơ thử nghiệm (Demo Personas)
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={() => setPersona('author')}
-              className="p-3 rounded-control border border-sage hover:border-forest hover:bg-forest/5 text-left transition-colors"
-            >
-              <div className="font-bold text-xs text-forest">Minh Hướng Dẫn Viên</div>
-              <div className="text-[11px] text-ink-muted">Tác giả đóng góp bài viết thực địa & Candidate place</div>
-            </button>
-            <button
-              type="button"
-              onClick={() => setPersona('vip')}
-              className="p-3 rounded-control border border-sage hover:border-status-vip hover:bg-status-vip-bg/40 text-left transition-colors"
-            >
-              <div className="font-bold text-xs text-status-vip">Lan Khám Phá VIP</div>
-              <div className="text-[11px] text-ink-muted">Hội viên VIP đã kích hoạt gói 15 USD/năm</div>
-            </button>
-            <button
-              type="button"
-              onClick={() => setPersona('expert')}
-              className="p-3 rounded-control border border-sage hover:border-waypoint hover:bg-status-caution-bg text-left transition-colors"
-            >
-              <div className="font-bold text-xs text-waypoint">Hoàng Kiểm Định Viên</div>
-              <div className="text-[11px] text-ink-muted">Chuyên gia thực địa có nhiệm vụ thẩm định & công nợ</div>
-            </button>
-            <button
-              type="button"
-              onClick={() => setPersona('admin')}
-              className="p-3 rounded-control border border-sage hover:border-ink hover:bg-surface-canvas text-left transition-colors"
-            >
-              <div className="font-bold text-xs text-ink">Linh Quản Trị Viên</div>
-              <div className="text-[11px] text-ink-muted">Ban điều hành duyệt tiếp nhận, giao việc & quyết định</div>
-            </button>
-          </div>
-        </div>
-
-        <div>
+        <div className="pt-2">
           <Link
             href={getLocalizedPath(`/login?returnTo=${encodeURIComponent(searchParams.toString() ? `/account?${searchParams.toString()}` : '/account')}`)}
             className="inline-flex items-center justify-center px-6 py-2.5 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-sm"
@@ -498,42 +431,14 @@ export function AccountView() {
                 </div>
               </div>
             )}
-
-            <div className="p-3.5 rounded-control bg-surface-canvas border border-sage/60 text-xs text-ink-secondary">
-              <strong className="text-ink">Bất biến kiến trúc: </strong>
-              Một <code className="text-forest">userId</code> duy nhất đại diện cho người dùng xuyên suốt mọi vai trò. Quyền đọc, vai trò đóng góp, gói VIP và ví Web3 liên kết đều là các quan hệ trỏ về <code className="text-forest">userId</code> này.
-            </div>
           </div>
 
           {/* Linked Wallet Block */}
           <div className="space-y-3">
             <h2 className="text-sm font-extrabold uppercase tracking-wider text-ink">
-              Ví Web3 liên kết (Wallet Binding)
+              Ví Web3 liên kết
             </h2>
             <WalletBinding walletBinding={session.walletBinding} />
-            {!session.walletBinding && (
-              <div className="p-4 rounded-card border border-sage bg-surface-card flex items-center justify-between">
-                <div>
-                  <div className="font-bold text-xs text-ink">Mô phỏng liên kết ví (Demo Wallet Binding)</div>
-                  <div className="text-[11px] text-ink-muted">Gắn địa chỉ ví mẫu để thử nghiệm nhận Contributor SBT và Author NFT</div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    session.walletBinding = {
-                      walletBindingId: generateUUIDv7(),
-                      address: '0x71C8364420423171638202937038a174FB774053',
-                      chainNamespace: 'eip155:421614',
-                      isVerified: true,
-                    };
-                    alert('Đã liên kết ví demo thành công (Arbitrum Sepolia)!');
-                  }}
-                  className="px-3.5 py-2 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover transition-colors"
-                >
-                  Liên kết ví mẫu
-                </button>
-              </div>
-            )}
           </div>
         </div>
       )}
@@ -702,8 +607,7 @@ export function AccountView() {
                 </div>
 
                 <div className="p-3 rounded-control bg-surface-canvas border border-sage/60 text-xs text-ink-secondary">
-                  <strong className="text-ink">Quy tắc Bất biến Revisions: </strong>
-                  Mỗi lần nộp sửa đổi sẽ tạo <code className="text-forest">revisionId</code> mới và tăng số phiên bản lên <strong className="font-mono text-ink">v{editingPost.versionNumber + 1}</strong>. Phiên bản cũ được đóng băng bất biến trong lịch sử đối soát.
+                  Mỗi lần nộp sửa đổi sẽ tạo phiên bản mới <strong className="font-mono text-ink">v{editingPost.versionNumber + 1}</strong>. Phiên bản trước vẫn được lưu giữ đầy đủ trong lịch sử bài viết.
                 </div>
 
                 <div className="space-y-1.5">
@@ -745,7 +649,7 @@ export function AccountView() {
                     disabled={isSubmittingRevision}
                     className="px-5 py-2 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover shadow-sm disabled:opacity-50"
                   >
-                    {isSubmittingRevision ? 'Đang lưu revision...' : 'Xác nhận nộp bản mới (Demo)'}
+                    {isSubmittingRevision ? 'Đang lưu bản sửa đổi...' : 'Nộp bản sửa đổi'}
                   </button>
                 </div>
               </form>
@@ -822,21 +726,21 @@ export function AccountView() {
             </div>
           </div>
 
-          {/* Architectural Invariants Callout */}
+          {/* VIP Information Callout */}
           <div className="p-5 rounded-card border border-sage bg-surface-card space-y-2 text-xs text-ink-secondary">
             <div className="flex items-center gap-2 font-bold text-ink text-sm">
               <ShieldCheckIcon className="w-4 h-4 text-forest" />
-              <span>Quy tắc kiến trúc VIP không làm lệch:</span>
+              <span>Thông tin gói VIP:</span>
             </div>
             <ul className="space-y-1.5 list-disc list-inside">
               <li>
-                <strong>VIP gắn theo Tài khoản (`userId`):</strong> Không gắn theo địa chỉ ví. Người dùng đổi ví không làm mất quyền VIP; đăng nhập lại cùng tài khoản giữ nguyên quyền lợi.
+                <strong>Quyền lợi gắn theo tài khoản:</strong> Quyền VIP liên kết trực tiếp với tài khoản của bạn, duy trì xuyên suốt khi bạn đăng nhập trên các thiết bị khác nhau.
               </li>
               <li>
-                <strong>Gia hạn chủ động:</strong> Không tự động trừ thẻ định kỳ. Người dùng chủ động thanh toán khi muốn tiếp tục sử dụng.
+                <strong>Thời hạn và mức phí:</strong> 15 USD / năm (12 tháng lịch), kích hoạt ngay sau khi đăng ký hoặc cộng dồn nếu gói hiện tại còn hạn.
               </li>
               <li>
-                <strong>Quyên góp (`DON`) không cấp VIP:</strong> Tiền ủng hộ quỹ dự án và tiền đăng ký gói VIP được đối soát vào hai mã nghiệp vụ tách biệt hoàn toàn.
+                <strong>Gia hạn chủ động:</strong> Hệ thống không tự động trừ tiền định kỳ. Bạn hoàn toàn chủ động gia hạn khi có nhu cầu tiếp tục sử dụng.
               </li>
             </ul>
           </div>
@@ -917,19 +821,15 @@ export function AccountView() {
               </p>
               <div className="space-y-2">
                 <div className="p-3 rounded-control bg-surface-canvas border border-sage/60 text-xs space-y-1 font-mono">
+                  <div>Hạng mục: Contributor SBT</div>
                   <div>
                     Trạng thái:{' '}
                     <strong>
                       {(benefits?.verifiedContentCount ?? 0) === 0
                         ? t('account.notEligible')
-                        : benefits?.sbt.status}
+                        : 'Đủ điều kiện nhận'}
                     </strong>
                   </div>
-                  {benefits?.sbt.tokenId && (
-                    <div className="text-[11px] text-ink-muted">
-                      Token ID: {benefits.sbt.tokenId}
-                    </div>
-                  )}
                 </div>
 
                 {(benefits?.verifiedContentCount ?? 0) === 0 ? (
@@ -940,18 +840,18 @@ export function AccountView() {
                   >
                     {t('account.notEligible')}
                   </button>
-                ) : benefits?.sbt.status !== 'ISSUED_DEMO' ? (
-                  <button
-                    type="button"
-                    onClick={handleClaimSbt}
-                    disabled={isClaimingSbt}
-                    className="w-full py-2 px-3 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover shadow-xs disabled:opacity-50"
-                  >
-                    {isClaimingSbt ? t('account.claiming') : t('account.claimSbt')}
-                  </button>
                 ) : (
-                  <div className="text-center p-2 rounded-control bg-status-success-bg text-status-success text-xs font-bold">
-                    ✓ {t('account.claimed')}
+                  <div className="space-y-1.5">
+                    <button
+                      type="button"
+                      disabled
+                      className="w-full py-2 px-3 rounded-control bg-sage/40 text-ink-muted text-xs font-bold cursor-not-allowed"
+                    >
+                      Nhận Contributor SBT (Đang kết nối onchain)
+                    </button>
+                    <p className="text-[10px] text-ink-muted text-center">
+                      Cổng đúc chứng nhận onchain đang được chuẩn bị tích hợp trên Arbitrum.
+                    </p>
                   </div>
                 )}
               </div>
@@ -979,14 +879,9 @@ export function AccountView() {
                     <strong>
                       {(benefits?.verifiedContentCount ?? 0) === 0
                         ? t('account.notEligible')
-                        : benefits?.nft.status}
+                        : 'Đủ điều kiện đúc'}
                     </strong>
                   </div>
-                  {benefits?.nft.tokenId && (
-                    <div className="text-[11px] text-ink-muted">
-                      Token ID: {benefits.nft.tokenId}
-                    </div>
-                  )}
                 </div>
 
                 {(benefits?.verifiedContentCount ?? 0) === 0 ? (
@@ -997,18 +892,18 @@ export function AccountView() {
                   >
                     {t('account.notEligible')}
                   </button>
-                ) : benefits?.nft.status !== 'ISSUED_DEMO' ? (
-                  <button
-                    type="button"
-                    onClick={handleClaimNft}
-                    disabled={isClaimingNft}
-                    className="w-full py-2 px-3 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover shadow-xs disabled:opacity-50"
-                  >
-                    {isClaimingNft ? t('account.claiming') : t('account.claimNft')}
-                  </button>
                 ) : (
-                  <div className="text-center p-2 rounded-control bg-status-success-bg text-status-success text-xs font-bold">
-                    ✓ {t('account.claimed')}
+                  <div className="space-y-1.5">
+                    <button
+                      type="button"
+                      disabled
+                      className="w-full py-2 px-3 rounded-control bg-sage/40 text-ink-muted text-xs font-bold cursor-not-allowed"
+                    >
+                      Đúc Author NFT (Đang kết nối onchain)
+                    </button>
+                    <p className="text-[10px] text-ink-muted text-center">
+                      Hợp đồng Author NFT ERC-721 đang được chuẩn bị tích hợp trên Arbitrum.
+                    </p>
                   </div>
                 )}
               </div>

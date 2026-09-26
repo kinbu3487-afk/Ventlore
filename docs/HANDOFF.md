@@ -1,84 +1,76 @@
 # Tài Liệu Bàn Giao (HANDOFF)
 
-**Chặng hoàn thành gần nhất:** FE-Continue v1.2 — Hoàn thiện URL 2 chiều Account, Đa ngôn ngữ 6 locales, Chuẩn hóa an toàn & Nhãn demo, Di chuyển ReviewToolbar sang Bottom-Left, Chỉnh đốn Data Map 38 dòng  
-**Nhiệm vụ tiếp theo:** Bin trực tiếp trải nghiệm và nghiệm thu cục bộ trên `http://localhost:3000`; Chốt các quyết định kỹ thuật trong `docs/FE_DATA_MAP.md` trước khi bàn giao Backend  
-**Thời điểm bàn giao:** 26/09/2026 16:30 UTC+7  
-**Tài liệu kèm theo:** `docs/FE_QA.md`, `docs/FE_DATA_MAP.md`, `docs/FE_COVERAGE.md`, `docs/FE_REVIEW.md`, `docs/FE_HANDOFF.md`, `docs/PROJECT_STATE.md`  
+**Chặng hoàn thành gần nhất:** FE-Official v1.4 — Triển khai Giao diện Sản phẩm Chính thức (Clean Production Interface) theo `Ventlore_FE_Official_Interface_v1_4.md`  
+**Nhiệm vụ tiếp theo:** Bin trực tiếp trải nghiệm và nghiệm thu cục bộ trên `http://localhost:3000`; Chuẩn bị cho chặng kết nối Back-end  
+**Thời điểm bàn giao:** 26/09/2026 17:15 UTC+7  
+**Tài liệu kèm theo:** `docs/PROJECT_STATE.md`, `Ventlore_FE_Official_Interface_v1_4.md`  
 
 ---
 
-## 1. Kết quả đạt được tại Chặng FE-Continue v1.2
+## 1. Kết quả đạt được tại Chặng FE-Official v1.4
 
-1. **FE-12-01 (Đồng bộ 2 chiều URL Query cho Trang Tài Khoản /account):**
-   - Hỗ trợ đầy đủ 5 tab qua URL: `?tab=profile`, `?tab=contributions`, `?tab=vip`, `?tab=benefits`, `?tab=expert`.
-   - Sử dụng `router.push(..., { scroll: false })` giúp lưu giữ lịch sử Back/Forward của trình duyệt để lật qua lại giữa các tab mượt mà.
-   - Tự động chuẩn hóa (normalize) bằng `router.replace` khi query không hợp lệ (e.g. `?tab=xyz`) hoặc khi người dùng thường cố truy cập `?tab=expert`.
-   - Giữ nguyên toàn bộ search query string trong `returnTo` khi Guest bấm đăng nhập (e.g. `/login?returnTo=/account?tab=benefits`).
+1. **Gỡ bỏ hoàn toàn Banner DEMO, ReviewToolbar & Persona Selectors:**
+   - Đã gỡ bỏ thẻ `<aside>` chứa banner thông báo demo trên Header của `AppShell.tsx`, khôi phục layout padding và sticky header đúng chuẩn thiết kế.
+   - Gỡ bỏ hoàn toàn component `<ReviewToolbar />` khỏi root layout (`apps/web/src/app/layout.tsx`) và xóa file implementation.
+   - Gỡ bỏ khối chọn persona mẫu cho Guest trên trang `/account`, thay bằng màn hình hướng dẫn đăng nhập trang nhã.
+   - Gỡ bỏ các nút tự đổi vai trò mẫu ("Trải nghiệm vai trò Chuyên gia", "Trải nghiệm vai trò Quản trị viên") tại `/expert` và `/admin`, thay bằng màn hình giới hạn quyền truy cập chuẩn mực với CTA đăng nhập hoặc quay về Khám phá / Trang chủ.
+   - Gỡ bỏ hoàn toàn khối danh sách tài khoản mẫu trong trang `/login` (`SocialLogin.tsx`), chỉ giữ các nút đăng nhập thực tế (Google, Apple) kèm trạng thái thông báo và link "Tiếp tục khám phá".
 
-2. **FE-12-02 (Đa ngôn ngữ trọn vẹn 6 Locales):**
-   - Bổ sung schema và dịch 100% key parity trên cả 6 ngôn ngữ: Tiếng Việt (`vi`), English (`en`), 日本語 (`ja`), 简体中文 (`zh-Hans`), 한국어 (`ko`), Français (`fr`).
-   - Bao phủ toàn diện: Trang `/account` (5 tab, hồ sơ, ví, 4 khối quyền lợi sau duyệt), `/contribute` (cả 2 tab, form fields, claims, candidate place, preview), `/vip` (nút đăng ký/gia hạn ngữ cảnh), `PaymentModal` (3 chế độ, phân bổ 80/20, lỗi sai mạng, tiến trình, màn hình thành công), thanh điều hướng Header và Footer.
-   - Loại bỏ triệt để hardcoded tiếng Việt và hiện tượng fallback nhầm ngôn ngữ.
+2. **Dọn dẹp Data Map và Tài liệu Nội bộ khỏi Bản Công khai:**
+   - Xóa bỏ route `/data-map` (`apps/web/src/app/data-map` và `apps/web/src/app/[locale]/data-map`) cùng component `DataMapView.tsx` và `data-map-data.ts`.
+   - Gỡ bỏ link `/data-map` và "Tải .md" khỏi thanh Header, Footer và User Dropdown.
+   - Xóa bỏ toàn bộ các file markdown nội bộ trong thư mục `apps/web/public/docs/` (`FE_COVERAGE.md`, `FE_DATA_MAP.md`, `FE_HANDOFF.md`, `FE_QA.md`, `FE_REVIEW.md`) để bảo đảm bản build công khai không phát hành tài liệu kỹ thuật ngoài ý muốn.
 
-3. **FE-12-03 (Chỉnh đốn FE Data Map 38 Dòng & Trang /data-map):**
-   - Loại bỏ dòng số 3 (Home Highlights thừa từ thiết kế cũ) khỏi bảng đối soát, giảm số thành phần xuống đúng **38 dòng thực tế** theo Masterboard v1.1.
-   - Cập nhật dòng 1 & 2 chuẩn Single-Hero (2 CTA, 4 thẻ đóng góp).
-   - Chuẩn hóa toàn bộ vòng đời ID theo ID Registry v0.3: `placeId (CANDIDATE, REVIEW_ONLY)` + `postId (DISCOVERY)` + `revisionId`; `reviewCaseId` cho phân công thẩm định; Tách bạch Quyết định 1 (`acceptanceId` -> `payableId`) và Quyết định 2 (`decisionId`).
-   - Thống kê trên giao diện `/data-map` được tính động hoàn toàn theo dữ liệu mảng.
-   - Đồng bộ 100% nội dung giữa `apps/web/src/lib/data-map-data.ts`, `docs/FE_DATA_MAP.md` và `apps/web/public/docs/FE_DATA_MAP.md`.
+3. **Chuyển ngữ & Chuẩn hóa Copy Sản phẩm Chính thức trên cả 6 Locales:**
+   - Rà soát toàn bộ từ điển và layout trên 6 ngôn ngữ (`vi`, `en`, `ja`, `zh-Hans`, `ko`, `fr`).
+   - Bổ sung đầy đủ bản dịch cho các key còn thiếu (như `missionClose`, `missionExploreCta` trong hộp thoại Sứ mệnh để không bao giờ bị lộ raw string).
+   - Viết lại toàn bộ nhãn kỹ thuật / mô phỏng sang ngôn ngữ sản phẩm:
+     - "Tệp hình ảnh đối chứng (Demo Upload)" $\to$ "Ảnh và tài liệu"
+     - "Xác nhận nộp bản mới (Demo)" $\to$ "Nộp bản sửa đổi"
+     - "Bất biến kiến trúc / UUIDv7" $\to$ Gỡ khỏi UI hướng dẫn
+     - "Quy tắc kiến trúc VIP không làm lệch" $\to$ "Thông tin gói VIP" (nêu rõ quyền lợi, phí $15/năm, kỳ hạn 12 tháng, gia hạn chủ động)
+     - "Xác nhận giao nhiệm vụ (Demo)" $\to$ "Xác nhận giao nhiệm vụ"
+     - "Ban hành quyết định (Demo Decision)" $\to$ "Ban hành quyết định"
 
-4. **FE-12-04 (Chuẩn hóa Ngữ nghĩa An toàn & Nhãn Mô phỏng Demo):**
-   - Áp dụng văn bản chuẩn hoá an toàn cho đề xuất điểm mới tại `/contribute`: *"Hồ sơ được công khai sau khi xét duyệt. Kết quả kiểm định, nếu có, thể hiện rõ phạm vi, thời điểm và các cảnh báo liên quan."*
-   - Xóa bỏ triệt để các cách diễn đạt mang tính cam kết chung ("xác nhận an toàn", "điểm đến an toàn").
-   - Loại bỏ thuật ngữ kỹ thuật thuật toán (`floor(amount / 5)`, `UUIDv7`, `Canonical User`).
-   - Dán nhãn mô phỏng rõ ràng: "Ví liên kết (Mô phỏng demo)", "Đã xác minh (Mô phỏng demo)", "Số dư khả dụng (Mô phỏng demo)".
-   - Khối Author NFT ghi rõ: *Mỗi bài viết hoàn tất kiểm định chỉ được phát hành tối đa 1 Author NFT độc bản (`AUTHOR_CONTRIBUTION`)*.
-
-5. **FE-12-05 (Di dời ReviewToolbar sang Bottom-Left tránh Netlify Badge):**
-   - Cố định thanh ReviewToolbar ở góc dưới bên trái: `bottom-16 sm:bottom-4 left-3 sm:left-4`.
-   - Toast thông báo neo lề trái (`left-0`), Drawer mở bung lên trên neo theo lề trái (`origin-bottom-left`).
-   - Chiều rộng responsive an toàn: `w-[calc(100vw-24px)] sm:w-[440px] max-w-[440px]`.
-   - Giải quyết triệt để xung đột click với badge Deploy Preview của Netlify ở góc phải dưới.
-
----
-
-## 2. Danh Sách Các File Đã Chỉnh Sửa
-
-- `apps/web/src/lib/i18n/types.ts`: Khai báo schema bản dịch cho `account`, `contribute`, `payment`, `vip`, `nav`.
-- `apps/web/src/lib/i18n/locales/{vi,en,ja,zh-Hans,ko,fr}.ts`: 6 file từ điển bản địa hóa chuẩn xác 100%.
-- `apps/web/src/components/AccountView.tsx`: URL query 2 chiều, Back/Forward history, đa ngôn ngữ 6 locales, loại bỏ jargon.
-- `apps/web/src/components/AppShell.tsx`: URL tracking an toàn SSR, đa ngôn ngữ header/footer/dropdown, loại bỏ hardcoded.
-- `apps/web/src/app/vip/page.tsx`: Nút CTA theo ngữ cảnh người dùng và đa ngôn ngữ.
-- `apps/web/src/components/ContributeView.tsx`: Chuẩn hoá văn bản an toàn, đa ngôn ngữ toàn bộ form.
-- `apps/web/src/components/PaymentModal.tsx`: Đa ngôn ngữ, phân bổ 80/20 rõ ràng, dán nhãn mô phỏng demo.
-- `apps/web/src/components/WalletBinding.tsx`: Dán nhãn ví demo, bỏ code tick `userId`.
-- `apps/web/src/components/ReviewToolbar.tsx`: Chuyển vị trí sang góc dưới bên trái `bottom-left`.
-- `apps/web/src/lib/data-map-data.ts`: Xóa dòng 3, cập nhật 38 dòng chuẩn ID Registry v0.3.
-- `apps/web/src/components/DataMapView.tsx`: Thống kê động, cập nhật nhãn phiên bản v1.2 (26/09/2026).
-- `docs/FE_DATA_MAP.md` & `apps/web/public/docs/FE_DATA_MAP.md`: Đồng bộ bảng 38 dòng tương ứng.
-- `docs/FE_QA.md`: Cập nhật bảng nghiệm thu 15 tiêu chí QA-01 đến QA-15 (100% PASS).
+4. **Trạng thái Khả dụng Trung thực cho Nút và Tính năng Chưa kết nối:**
+   - **Thanh toán trực tuyến (`PaymentModal.tsx`):**
+     - Gỡ bỏ hoàn toàn số dư giả 250 USDC, địa chỉ ví mẫu và dropdown mạng thử nghiệm sai.
+     - Gỡ bỏ hoàn toàn luồng mô phỏng tạo mã biên nhận giả `0xmock...demo`.
+     - Chuyển sang trạng thái khả dụng trung thực: Nút thanh toán hiển thị *"Cổng thanh toán trực tuyến đang kết nối"* (disabled) kèm ghi chú rõ ràng về việc hạ tầng thanh toán qua Arbitrum đang được tích hợp đối soát an toàn. Vẫn giữ nguyên phân bổ tài chính chuẩn mực (80/20 tip, 100% quỹ, 15 USD VIP).
+   - **Trang Minh bạch (`PublicLedger.tsx`):**
+     - Gỡ bỏ hoàn toàn component `DemoPaymentsStream` (xóa nhãn "DEMO STREAM" và bảng biên nhận giao dịch mô phỏng giả lập).
+     - Cập nhật nhãn huy hiệu từ "Đối soát thời gian thực" sang *"Sổ quỹ công bố định kỳ"*.
+   - **Chứng nhận Contributor SBT & Author NFT (`AccountView.tsx`):**
+     - Không tự động dán nhãn `ISSUED_DEMO` thành "Đã nhận".
+     - Khi bài viết đã được thẩm định: Hiển thị trạng thái "Đủ điều kiện nhận" / "Đủ điều kiện đúc" với nút disabled thông tin *"Nhận Contributor SBT (Đang kết nối onchain)"* / *"Đúc Author NFT (Đang kết nối onchain)"* kèm ghi chú hạ tầng.
+   - **Gần tôi (`SearchFilters.tsx`):**
+     - Thay thế hàm mô phỏng GPS bằng hàm gọi trực tiếp `navigator.geolocation.getCurrentPosition` của trình duyệt. Nếu người dùng từ chối cấp quyền hoặc trình duyệt không hỗ trợ, hiển thị thông báo nhẹ nhàng hướng dẫn chọn vùng miền mà không chặn trải nghiệm.
+   - **Soạn thảo (`ContributeView.tsx`):**
+     - Gỡ bỏ nút và hộp thoại "Thử mô phỏng xung đột 409 (Concurrent Edit)".
 
 ---
 
-## 3. Kết Quả Kiểm Tra Kỹ Thuật
+## 2. Kết Quả Kiểm Tra Kỹ Thuật
 
-- **TypeScript Typecheck (`pnpm -r run typecheck`):** 0 lỗi (PASS 100% trên 6 packages).
-- **ESLint (`pnpm -r run lint`):** 0 lỗi.
-- **Production Build (`pnpm --filter @ventlore/web build`):** Biên dịch thành công **234/234 trang SSG**.
-- **Foundation Validator (`validate_foundation.py`):** Đạt 34/34 thực thể, 10/10 vectors (PASS 100%).
+- **TypeScript Typecheck (`pnpm --filter @ventlore/web typecheck`):** 0 lỗi (PASS).
+- **ESLint (`pnpm --filter @ventlore/web lint`):** 0 lỗi (PASS).
+- **Production Build (`pnpm --filter @ventlore/web build`):** Biên dịch thành công **227/227 trang SSG** (First load JS: 103 kB, sạch hoàn toàn các route và file tài liệu nội bộ).
+- **Foundation Validator (`python3 scripts/validate_foundation.py`):** Đạt 34/34 thực thể, 10/10 vectors (PASS 100%).
 
 ---
 
-## 4. Hướng Dẫn Nghiệm Thu Cục Bộ Cho Bin
+## 3. Hướng Dẫn Trải Nghiệm & Nghiệm Thu Cho Bin
 
-```bash
-# 1. Khởi động server (đã chạy sẵn hoặc chạy lại)
-pnpm --filter @ventlore/web dev
-```
-
-Mở trình duyệt tại: `http://localhost:3000`
-
-1. **ReviewToolbar:** Quan sát nút thuốc (pill) ở góc dưới bên trái màn hình. Bấm mở panel 14 scenarios thử nghiệm, click nhạy và không bị cản trở bởi Netlify badge.
-2. **Account Tabs & Query:** Vào `/account`, bấm chuyển tab, quan sát URL cập nhật và bấm Back/Forward trình duyệt.
-3. **Đa ngôn ngữ:** Thử chuyển sang English, 日本語, 한국어, Français và duyệt các trang `/account`, `/contribute`, `/vip`, `/data-map`.
-4. **Data Map:** Vào `/data-map`, kiểm tra đủ 38 dòng, bấm tải file `.md`.
+1. **Khởi động server dev (nếu chưa chạy):**
+   ```bash
+   pnpm --filter @ventlore/web dev
+   ```
+2. **Mở trình duyệt tại:** `http://localhost:3000`
+3. **Các điểm kiểm tra trọng yếu:**
+   - **Giao diện công khai:** Không còn banner thông báo DEMO màu vàng/cam; không còn nút nổi ReviewToolbar hay scenario controls; header và footer sạch sẽ, đúng tỷ lệ thương hiệu.
+   - **Điều hướng & Trang:** Không còn link `/data-map` hay "Tải .md". Thử truy cập trực tiếp `http://localhost:3000/data-map` sẽ trả về trang 404 chuẩn.
+   - **Đăng nhập (`/login`):** Giao diện sạch sẽ, chỉ có Google, Apple, ghi chú trạng thái và liên kết "Tiếp tục khám phá".
+   - **Đóng góp (`/contribute`):** Không còn nút mô phỏng xung đột 409; mục đính kèm tệp hiển thị "Ảnh và tài liệu"; thông báo Guest rõ ràng, lịch sự.
+   - **Thanh toán (`PaymentModal`):** Mở thử nút "Ủng hộ" trên Header hoặc "Ủng hộ tác giả" trong bài viết; giao diện hiển thị rõ ràng đích đến, phân bổ 80/20 hoặc 100% quỹ; nút hiển thị trung thực *"Cổng thanh toán trực tuyến đang kết nối"*; không sinh ra biên nhận giả `0xmock`.
+   - **Minh bạch (`/transparency`):** Bảng số dư và các khoản chi thể hiện nguồn "Arbitrum One" và "Nội bộ"; không còn stream giao dịch giả lập.
+   - **Đa ngôn ngữ:** Lần lượt chọn 6 ngôn ngữ trên Header (`vi`, `en`, `ja`, `zh-Hans`, `ko`, `fr`), tất cả tiêu đề, mô tả và nút bấm đều được bản địa hóa trọn vẹn, không còn từ "Demo" hay chuỗi raw chưa dịch.

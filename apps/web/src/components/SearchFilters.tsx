@@ -42,9 +42,20 @@ export function SearchFilters({
     { id: 'Khám phá rừng', name: t('explore.actForest') },
   ];
 
-  const handleSimulateGps = () => {
-    // Invariant: GPS rejection or simulated click does not block usage.
-    setGpsNotice(t('explore.gpsSimulated'));
+  const handleGpsLocation = () => {
+    if (typeof window !== 'undefined' && 'geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        () => {
+          setGpsNotice(t('explore.gpsSimulated'));
+        },
+        () => {
+          setGpsNotice('Không thể lấy vị trí thiết bị. Bạn có thể chọn vùng miền trong danh sách bộ lọc.');
+        },
+        { timeout: 5000 }
+      );
+    } else {
+      setGpsNotice('Trình duyệt không hỗ trợ định vị. Bạn có thể chọn vùng miền trong danh sách bộ lọc.');
+    }
   };
 
   const hasFilters = query !== '' || regionId !== 'all' || activity !== 'all';
@@ -124,7 +135,7 @@ export function SearchFilters({
           </span>
           <button
             type="button"
-            onClick={handleSimulateGps}
+            onClick={handleGpsLocation}
             className="w-full min-h-control flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-control border border-sage bg-surface-canvas text-ink text-sm font-medium hover:bg-sage/40 transition-colors shadow-xs"
           >
             <MapPinIcon className="w-4 h-4 text-forest" />

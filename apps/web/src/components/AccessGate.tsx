@@ -3,7 +3,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { LockIcon, SparklesIcon } from './Icons';
-import { useSession } from './SessionContext';
 import { useI18n } from '../lib/i18n';
 
 interface AccessGateProps {
@@ -19,7 +18,6 @@ export function AccessGate({
   description,
   returnTo = '/explore',
 }: AccessGateProps) {
-  const { setPersona } = useSession();
   const { t, getLocalizedPath } = useI18n();
 
   // Validate returnTo for security (same-origin allowlist only)
@@ -50,15 +48,6 @@ export function AccessGate({
           >
             {t('vip.explorePlanButton')}
           </Link>
-
-          {/* Persona quick switch for evaluator convenience */}
-          <button
-            type="button"
-            onClick={() => setPersona('vip')}
-            className="inline-flex items-center justify-center min-h-control px-4 py-2.5 rounded-control text-xs font-semibold text-status-vip border border-status-vip/40 bg-white hover:bg-status-vip-bg transition-colors"
-          >
-            {t('vip.simulateSwitchButton')}
-          </button>
         </div>
 
         <div className="mt-4 text-[11px] text-ink-muted">

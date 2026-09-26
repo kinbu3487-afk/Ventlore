@@ -157,31 +157,6 @@ export function AdminWorkspaceView() {
     }
   };
 
-  // MANDATORY DEMO SCENARIO: Expert Work Accepted + Post Rejected
-  const handleRunMandatoryDemoScenario = async () => {
-    // Find case or create demo case
-    const targetCase = reviewCases[0];
-    if (!targetCase || !targetCase.taskId) {
-      alert('Không tìm thấy review case hợp lệ để chạy demo.');
-      return;
-    }
-
-    try {
-      // 1. Accept work -> creates payable
-      await mockApiClient.adminAcceptWork(targetCase.taskId, 'ACCEPTED_WORK', 'Chuyên gia hoàn thành đầy đủ khảo sát thực địa đối chứng');
-      // 2. Reject content -> post rejected
-      await mockApiClient.adminDecideContent(
-        targetCase.caseId,
-        ReviewDecisionOutcome.REJECTED,
-        'Nội dung bài viết chứa tọa độ sạt lở nguy hiểm không khuyến khích công chúng tiếp cận trong mùa mưa bão.'
-      );
-      await loadData();
-      alert('Đã thực hiện kịch bản mẫu: Nghiệm thu công đạt yêu cầu (ACCEPTED_WORK -> sinh công nợ) VÀ Bác nội dung bài viết (REJECTED). Hai quyết định này hoàn toàn độc lập!');
-    } catch (err: any) {
-      alert(`Lỗi chạy kịch bản: ${err?.message}`);
-    }
-  };
-
   // Toggle App Hold
   const handleToggleHold = async (revisionId: string, currentHold: boolean) => {
     try {
@@ -229,19 +204,24 @@ export function AdminWorkspaceView() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-          <button
-            type="button"
-            onClick={() => setPersona('admin')}
-            className="w-full sm:w-auto px-6 py-2.5 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-xs"
-          >
-            Trải nghiệm vai trò Quản trị viên (Linh Admin)
-          </button>
-          <Link
-            href={getLocalizedPath('/')}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-control border border-sage text-ink text-xs font-semibold hover:bg-surface-canvas transition-colors"
-          >
-            Quay về Trang chủ
-          </Link>
+          {persona === 'guest' ? (
+            <Link
+              href={getLocalizedPath(`/login?returnTo=${encodeURIComponent('/admin')}`)}
+              className="w-full sm:w-auto px-6 py-2.5 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-xs text-center"
+            >
+              Đăng nhập với tài khoản Quản trị
+            </Link>
+          ) : (
+            <div className="space-y-3 text-center">
+              <p className="text-xs text-status-danger font-medium">Tài khoản hiện tại chưa có quyền quản trị hệ thống.</p>
+              <Link
+                href={getLocalizedPath('/')}
+                className="inline-block px-5 py-2.5 rounded-control border border-sage text-ink text-xs font-semibold hover:bg-surface-canvas transition-colors"
+              >
+                Quay về Trang chủ
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -269,39 +249,15 @@ export function AdminWorkspaceView() {
             </p>
           </div>
         </div>
-
-        {/* Persona hint */}
-        {persona !== 'admin' && (
-          <button
-            type="button"
-            onClick={() => setPersona('admin')}
-            className="px-3 py-1.5 rounded-control text-xs font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
-          >
-            Chuyển sang Persona Admin (Linh)
-          </button>
-        )}
       </div>
 
-      {/* Mandatory Invariant Banner & One-click Demo Trigger */}
-      <div className="p-5 rounded-card bg-status-vip-bg/50 border-2 border-status-vip/40 space-y-3 shadow-xs">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2 font-bold text-sm text-status-vip">
-            <SparklesIcon className="w-5 h-5 text-status-vip" />
-            <span>KỊCH BẢN THỬ NGHIỆM BẮT BUỘC: HAI QUYẾT ĐỊNH ĐỘC LẬP</span>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleRunMandatoryDemoScenario}
-            className="px-4 py-2 rounded-control bg-status-vip text-white text-xs font-bold hover:opacity-90 transition-opacity shadow-xs"
-          >
-            Chạy thử: Công Đạt (Trả tiền) & Bài Bác (REJECTED)
-          </button>
+      {/* Invariant Banner */}
+      <div className="p-4 rounded-card bg-surface-canvas border border-sage flex items-start gap-3 text-xs text-ink-secondary shadow-xs">
+        <SparklesIcon className="w-5 h-5 text-forest shrink-0 mt-0.5" />
+        <div>
+          <strong className="text-ink font-semibold">Quy chuẩn Thẩm định: Hai Quyết Định Độc Lập. </strong>
+          Đánh giá chất lượng thực hiện công việc của chuyên gia (<code className="text-forest">acceptanceId</code> &rarr; <code className="text-forest">payableId</code>) tách biệt hoàn toàn với kết luận tính chính xác của nội dung bài viết (<code className="text-forest">decisionId</code>). Chuyên gia thực hiện đúng quy trình vẫn được nghiệm thu và nhận thù lao dù bài viết bị từ chối phê duyệt.
         </div>
-
-        <p className="text-xs text-ink-secondary leading-relaxed">
-          Đặc tả yêu cầu: <strong>Chuyên gia làm việc đạt chuẩn thì công vẫn được ghi nhận phải trả (sinh `payableId`), dù Ban Điều Hành quyết định từ chối nội dung bài viết (`REJECTED`).</strong> Bấm nút trên để kiểm chứng ngay kịch bản này trên dữ liệu demo!
-        </p>
       </div>
 
       {/* Main Tabs */}
@@ -708,7 +664,7 @@ export function AdminWorkspaceView() {
                 disabled={isAssigning}
                 className="px-5 py-2 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover shadow-xs disabled:opacity-50"
               >
-                {isAssigning ? 'Đang giao việc...' : 'Xác nhận giao nhiệm vụ (Demo)'}
+                {isAssigning ? 'Đang giao việc...' : 'Xác nhận giao nhiệm vụ'}
               </button>
             </div>
           </form>
@@ -840,7 +796,7 @@ export function AdminWorkspaceView() {
                 disabled={isDeciding}
                 className="px-5 py-2 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover shadow-xs disabled:opacity-50"
               >
-                {isDeciding ? 'Đang lưu...' : 'Ban hành quyết định (Demo Decision)'}
+                {isDeciding ? 'Đang lưu...' : 'Ban hành quyết định'}
               </button>
             </div>
           </form>

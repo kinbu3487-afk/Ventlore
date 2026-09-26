@@ -172,27 +172,23 @@ export function ExpertWorkspaceView() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-          <button
-            type="button"
-            onClick={() => setPersona('expert')}
-            className="w-full sm:w-auto px-6 py-2.5 rounded-control font-bold text-white bg-waypoint hover:opacity-90 transition-opacity shadow-sm text-xs"
-          >
-            Trải nghiệm vai trò Chuyên gia (Hoàng Kiểm Lâm)
-          </button>
           {persona === 'guest' ? (
             <Link
               href={getLocalizedPath(`/login?returnTo=${encodeURIComponent('/expert')}`)}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-control border border-sage text-ink text-xs font-semibold hover:bg-surface-canvas transition-colors"
+              className="w-full sm:w-auto px-6 py-2.5 rounded-control font-bold text-white bg-waypoint hover:opacity-90 transition-opacity shadow-sm text-xs text-center"
             >
               Đăng nhập với tài khoản Chuyên gia
             </Link>
           ) : (
-            <Link
-              href={getLocalizedPath('/explore')}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-control border border-sage text-ink text-xs font-semibold hover:bg-surface-canvas transition-colors"
-            >
-              Quay lại Khám phá
-            </Link>
+            <div className="space-y-3 text-center">
+              <p className="text-xs text-status-danger font-medium">Tài khoản hiện tại chưa được cấp quyền thẩm định thực địa.</p>
+              <Link
+                href={getLocalizedPath('/explore')}
+                className="inline-block px-5 py-2.5 rounded-control border border-sage text-ink text-xs font-semibold hover:bg-surface-canvas transition-colors"
+              >
+                Quay lại Khám phá
+              </Link>
+            </div>
           )}
         </div>
       </div>
@@ -221,17 +217,6 @@ export function ExpertWorkspaceView() {
             </p>
           </div>
         </div>
-
-        {/* Quick Switch to Expert Persona if not already */}
-        {persona !== 'expert' && (
-          <button
-            type="button"
-            onClick={() => setPersona('expert')}
-            className="px-3 py-1.5 rounded-control text-xs font-bold text-white bg-waypoint hover:opacity-90 transition-opacity shadow-xs"
-          >
-            Chuyển sang Persona Chuyên gia (Hoàng)
-          </button>
-        )}
       </div>
 
       {/* Invariant Banner */}
@@ -455,7 +440,7 @@ export function ExpertWorkspaceView() {
               <table className="w-full text-left text-xs">
                 <thead>
                   <tr className="border-b border-sage bg-surface-canvas text-ink-secondary font-semibold">
-                    <th className="py-3 px-4">Mã công nợ (UUIDv7)</th>
+                    <th className="py-3 px-4">Mã công nợ</th>
                     <th className="py-3 px-4">Mã nhiệm vụ</th>
                     <th className="py-3 px-4">Bài viết khảo sát</th>
                     <th className="py-3 px-4 text-right">Mức thù lao</th>
@@ -624,7 +609,7 @@ export function ExpertWorkspaceView() {
                 disabled={isSubmittingEvidence}
                 className="px-5 py-2 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover shadow-sm disabled:opacity-50"
               >
-                {isSubmittingEvidence ? 'Đang lưu...' : 'Gửi hồ sơ thẩm định (Demo Submit)'}
+                {isSubmittingEvidence ? 'Đang lưu...' : 'Gửi hồ sơ thẩm định'}
               </button>
             </div>
           </form>

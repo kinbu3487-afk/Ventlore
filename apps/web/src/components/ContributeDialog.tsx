@@ -192,7 +192,7 @@ export function ContributeDialog({ isOpen, onClose }: ContributeDialogProps) {
                 className="min-h-control inline-flex items-center gap-1.5 px-4 py-2 rounded-control font-bold text-xs text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
               >
                 <SparklesIcon className="w-3.5 h-3.5 text-amber" />
-                <span>Ủng Hộ Quỹ Ngay (Demo)</span>
+                <span>Ủng Hộ Quỹ Ventlore</span>
               </button>
             </div>
           </div>
@@ -208,7 +208,7 @@ export function ContributeDialog({ isOpen, onClose }: ContributeDialogProps) {
                   Gói Hội Viên VIP & Sổ Quỹ Minh Bạch
                 </h3>
                 <p className="text-xs text-ink-secondary leading-relaxed">
-                  Trở thành Hội viên VIP để mở khóa tài liệu địa chất chuyên sâu hoặc tra cứu thời gian thực dòng tiền thu chi của quỹ.
+                  Trở thành Hội viên VIP để mở khóa tài liệu địa chất chuyên sâu hoặc tra cứu sổ quỹ công khai của dự án.
                 </p>
               </div>
             </div>

@@ -7,7 +7,6 @@ import { useSession } from './SessionContext';
 import { useI18n } from '../lib/i18n';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { MissionDialog } from './MissionDialog';
-import { DemoPersona } from '@ventlore/api-client';
 import {
   CompassIcon,
   SparklesIcon,
@@ -18,8 +17,6 @@ import {
   ChevronDownIcon,
   HomeIcon,
   TargetIcon,
-  TableIcon,
-  DownloadIcon,
 } from './Icons';
 
 
@@ -73,31 +70,18 @@ export function AppShell({ children }: AppShellProps) {
     { href: '/vip', label: t('nav.vip'), icon: <SparklesIcon className="w-4 h-4 shrink-0" /> },
   ];
 
-  const personas: Array<{ id: DemoPersona; name: string; tag: string }> = [
-    { id: 'guest', name: t('common.guestPersona'), tag: 'GUEST' },
-    { id: 'member', name: 'Bin Khám Phá', tag: 'MEMBER' },
-    { id: 'vip', name: 'An Thám Hiểm VIP', tag: 'VIP_MEMBER' },
-    { id: 'author', name: 'Minh Hướng Dẫn Viên', tag: 'MEMBER/AUTHOR' },
-    { id: 'expert', name: 'Hoàng Kiểm Lâm', tag: 'EXPERT' },
-    { id: 'admin', name: 'Linh Quản Trị Viên', tag: 'ADMIN' },
-  ];
-
-  const currentPersonaData = personas.find((p) => p.id === persona);
+  const roleTag =
+    persona === 'admin'
+      ? 'ADMIN'
+      : persona === 'expert'
+      ? 'EXPERT'
+      : persona === 'vip'
+      ? 'VIP'
+      : 'MEMBER';
 
   return (
     <div className="min-h-screen flex flex-col bg-surface-canvas text-ink overflow-x-hidden">
-      {/* 1. Global Demo Notification Banner */}
-      <aside
-        aria-label="Demo environment announcement"
-        className="bg-[#122e27] text-ivory/90 text-xs py-1.5 px-4 text-center font-medium border-b border-white/10"
-      >
-        <span className="inline-block mr-2 px-1.5 py-0.2 rounded bg-amber text-ink font-bold text-[10px]">
-          DEMO
-        </span>
-        {t('common.demoNotice')}
-      </aside>
-
-      {/* 2. Top Header Navigation (Forest Green #173F35 with Ivory Logo) */}
+      {/* Top Header Navigation (Forest Green #173F35 with Ivory Logo) */}
       <header className="sticky top-0 z-40 bg-[#173F35] text-ivory border-b border-[#1f4e42] shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20 gap-3 sm:gap-4">
@@ -227,7 +211,7 @@ export function AppShell({ children }: AppShellProps) {
                         <p className="text-xs font-bold text-ink truncate">{session?.displayName}</p>
                         <p className="text-[11px] font-mono text-ink-muted">@{session?.handle || 'user'}</p>
                         <span className="mt-1 inline-block text-[10px] font-bold px-1.5 py-0.2 rounded bg-forest/15 text-forest">
-                          {currentPersonaData?.tag || 'MEMBER'}
+                          {roleTag}
                         </span>
                       </div>
 
@@ -256,7 +240,7 @@ export function AppShell({ children }: AppShellProps) {
                           className="w-full text-left px-3 py-2 rounded-control flex items-center gap-2 text-ink hover:bg-surface-canvas transition-colors"
                         >
                           <SparklesIcon className="w-4 h-4 text-ink-secondary" />
-                          <span>{t('nav.benefits')} (SBT/NFT/Tip)</span>
+                          <span>{t('nav.benefits')}</span>
                         </Link>
 
                         {(persona === 'expert' || persona === 'admin') && (
@@ -280,15 +264,6 @@ export function AppShell({ children }: AppShellProps) {
                             <span>Quản trị hệ thống (Admin)</span>
                           </Link>
                         )}
-
-                        <Link
-                          href={getLocalizedPath('/data-map')}
-                          onClick={() => setUserDropdownOpen(false)}
-                          className="w-full text-left px-3 py-2 rounded-control flex items-center gap-2 text-ink-secondary hover:bg-surface-canvas transition-colors"
-                        >
-                          <TableIcon className="w-4 h-4" />
-                          <span>Data Map (BE)</span>
-                        </Link>
                       </div>
 
                       <div className="pt-1 border-t border-sage/60">
@@ -300,7 +275,7 @@ export function AppShell({ children }: AppShellProps) {
                           }}
                           className="w-full text-left px-3 py-2 rounded-control text-xs text-status-danger hover:bg-status-danger-bg transition-colors font-medium"
                         >
-                          Đăng xuất (Về phiên Guest)
+                          Đăng xuất
                         </button>
                       </div>
                     </div>
@@ -480,22 +455,6 @@ export function AppShell({ children }: AppShellProps) {
             <Link href={getLocalizedPath('/vip')} className="hover:text-forest">
               {t('nav.vip')}
             </Link>
-            <Link
-              href={getLocalizedPath('/data-map')}
-              className="hover:text-forest font-semibold text-forest flex items-center gap-1.5"
-            >
-              <TableIcon className="w-3.5 h-3.5" />
-              <span>Data Map (BE)</span>
-            </Link>
-            <a
-              href="/docs/FE_DATA_MAP.md"
-              download="FE_DATA_MAP.md"
-              className="hover:text-forest flex items-center gap-1 font-mono text-[11px] px-2 py-0.5 rounded bg-sage/40 text-ink"
-              title="Tải trực tiếp file docs/FE_DATA_MAP.md"
-            >
-              <DownloadIcon className="w-3 h-3 text-forest" />
-              <span>{t('common.downloadMd')}</span>
-            </a>
             <Link href={getLocalizedPath('/login')} className="hover:text-forest">
               {t('nav.login')}
             </Link>

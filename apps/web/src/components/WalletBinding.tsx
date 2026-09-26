@@ -27,12 +27,12 @@ export function WalletBinding({ walletBinding, className = '' }: WalletBindingPr
       <div className="flex items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-2 text-ink font-semibold">
           <WalletIcon className="w-4 h-4 text-forest" />
-          <span>Ví liên kết (Mô phỏng demo)</span>
+          <span>Ví Web3 liên kết</span>
         </div>
         {walletBinding.isVerified ? (
           <span className="inline-flex items-center gap-1 font-medium px-2 py-0.5 rounded-full bg-status-success-bg text-status-success text-[11px]">
             <CheckIcon className="w-3 h-3" />
-            Đã xác minh (Mô phỏng demo)
+            Đã xác minh
           </span>
         ) : (
           <span className="inline-flex items-center gap-1 font-medium px-2 py-0.5 rounded-full bg-status-pending-bg text-status-pending text-[11px]">
