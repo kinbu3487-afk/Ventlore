@@ -1,0 +1,4092 @@
+{
+  "schemaVersion": "1.5",
+  "datasetId": "ventlore-vn-discovery-100-20260926",
+  "preparedAt": "2026-09-26",
+  "coordinateReferenceSystem": "WGS84",
+  "purpose": "Dữ liệu giả lập theo yêu cầu để triển khai và đánh giá Explore/Gần tôi. Không phải bộ dữ liệu địa lý đã kiểm chứng.",
+  "administrativeSources": [
+    "https://xaydungchinhsach.chinhphu.vn/bang-danh-muc-va-ma-so-cua-34-tinh-thanh-moi-cac-don-vi-hanh-chinh-cap-xa-moi-11925070418263625.htm",
+    "https://xaydungchinhsach.chinhphu.vn/chi-tiet-34-don-vi-hanh-chinh-cap-tinh-tu-12-6-2025-119250612141845533.htm"
+  ],
+  "administrativeNote": "34 tỉnh/thành theo danh mục có hiệu lực 01/07/2025. Tên cũ chỉ là từ khóa tìm kiếm; areaLabel là nhãn địa lý, không khẳng định cấp hành chính hiện hành.",
+  "coordinateNote": "97 tọa độ khu vực được soạn gần đúng, 3 tọa độ lấy từ website hiện tại; chưa kiểm định ranh giới hay tọa độ độc lập. Chỉ dùng để tạo phân bố và tính khoảng cách tham khảo. Không dùng điều hướng.",
+  "defaults": {
+    "pageSize": 12,
+    "nearbyRadiusKm": 50,
+    "radiusOptionsKm": [
+      5,
+      25,
+      50,
+      100,
+      200,
+      null
+    ],
+    "minimumPlacesPerProvince": 2
+  },
+  "activities": [
+    {
+      "id": "lake",
+      "label": "Hồ và sông nước"
+    },
+    {
+      "id": "walking",
+      "label": "Đi bộ ngắm cảnh"
+    },
+    {
+      "id": "forest",
+      "label": "Khám phá rừng"
+    },
+    {
+      "id": "mountain",
+      "label": "Núi và cao nguyên"
+    },
+    {
+      "id": "coastal",
+      "label": "Biển và đảo"
+    },
+    {
+      "id": "culture",
+      "label": "Văn hóa và di sản"
+    },
+    {
+      "id": "landscape",
+      "label": "Ngắm cảnh"
+    }
+  ],
+  "provinces": [
+    {
+      "code": "01",
+      "name": "Hà Nội",
+      "searchAliases": [],
+      "seedCount": 3
+    },
+    {
+      "code": "04",
+      "name": "Cao Bằng",
+      "searchAliases": [],
+      "seedCount": 3
+    },
+    {
+      "code": "08",
+      "name": "Tuyên Quang",
+      "searchAliases": [
+        "Hà Giang"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "11",
+      "name": "Điện Biên",
+      "searchAliases": [],
+      "seedCount": 2
+    },
+    {
+      "code": "12",
+      "name": "Lai Châu",
+      "searchAliases": [],
+      "seedCount": 2
+    },
+    {
+      "code": "14",
+      "name": "Sơn La",
+      "searchAliases": [],
+      "seedCount": 3
+    },
+    {
+      "code": "15",
+      "name": "Lào Cai",
+      "searchAliases": [
+        "Yên Bái"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "19",
+      "name": "Thái Nguyên",
+      "searchAliases": [
+        "Bắc Kạn"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "20",
+      "name": "Lạng Sơn",
+      "searchAliases": [],
+      "seedCount": 3
+    },
+    {
+      "code": "22",
+      "name": "Quảng Ninh",
+      "searchAliases": [],
+      "seedCount": 3
+    },
+    {
+      "code": "24",
+      "name": "Bắc Ninh",
+      "searchAliases": [
+        "Bắc Giang"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "25",
+      "name": "Phú Thọ",
+      "searchAliases": [
+        "Vĩnh Phúc",
+        "Hòa Bình"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "31",
+      "name": "Hải Phòng",
+      "searchAliases": [
+        "Hải Dương"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "33",
+      "name": "Hưng Yên",
+      "searchAliases": [
+        "Thái Bình"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "37",
+      "name": "Ninh Bình",
+      "searchAliases": [
+        "Hà Nam",
+        "Nam Định"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "38",
+      "name": "Thanh Hóa",
+      "searchAliases": [],
+      "seedCount": 3
+    },
+    {
+      "code": "40",
+      "name": "Nghệ An",
+      "searchAliases": [],
+      "seedCount": 3
+    },
+    {
+      "code": "42",
+      "name": "Hà Tĩnh",
+      "searchAliases": [],
+      "seedCount": 3
+    },
+    {
+      "code": "44",
+      "name": "Quảng Trị",
+      "searchAliases": [
+        "Quảng Bình"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "46",
+      "name": "Huế",
+      "searchAliases": [
+        "Thừa Thiên Huế"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "48",
+      "name": "Đà Nẵng",
+      "searchAliases": [
+        "Quảng Nam"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "51",
+      "name": "Quảng Ngãi",
+      "searchAliases": [
+        "Kon Tum"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "52",
+      "name": "Gia Lai",
+      "searchAliases": [
+        "Bình Định"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "56",
+      "name": "Khánh Hòa",
+      "searchAliases": [
+        "Ninh Thuận"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "66",
+      "name": "Đắk Lắk",
+      "searchAliases": [
+        "Phú Yên"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "68",
+      "name": "Lâm Đồng",
+      "searchAliases": [
+        "Đắk Nông",
+        "Bình Thuận"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "75",
+      "name": "Đồng Nai",
+      "searchAliases": [
+        "Bình Phước"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "79",
+      "name": "Thành phố Hồ Chí Minh",
+      "searchAliases": [
+        "TP HCM",
+        "TP.HCM",
+        "Sài Gòn",
+        "Bình Dương",
+        "Bà Rịa - Vũng Tàu"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "80",
+      "name": "Tây Ninh",
+      "searchAliases": [
+        "Long An"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "82",
+      "name": "Đồng Tháp",
+      "searchAliases": [
+        "Tiền Giang"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "86",
+      "name": "Vĩnh Long",
+      "searchAliases": [
+        "Bến Tre",
+        "Trà Vinh"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "91",
+      "name": "An Giang",
+      "searchAliases": [
+        "Kiên Giang"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "92",
+      "name": "Cần Thơ",
+      "searchAliases": [
+        "Hậu Giang",
+        "Sóc Trăng"
+      ],
+      "seedCount": 3
+    },
+    {
+      "code": "96",
+      "name": "Cà Mau",
+      "searchAliases": [
+        "Bạc Liêu"
+      ],
+      "seedCount": 3
+    }
+  ],
+  "places": [
+    {
+      "placeId": "01a0db02-f85f-7268-8891-5659b9c250fa",
+      "seedKey": "vn-92-lung-ngoc-hoang",
+      "slug": "lung-ngoc-hoang",
+      "name": "Lung Ngọc Hoàng",
+      "provinceCode": "92",
+      "provinceName": "Cần Thơ",
+      "areaLabel": "Khu vực Lung Ngọc Hoàng",
+      "searchAliases": [
+        "Hậu Giang",
+        "Sóc Trăng"
+      ],
+      "activityIds": [
+        "forest",
+        "landscape"
+      ],
+      "summary": "Lung Ngọc Hoàng là một điểm tham khảo trong khu vực Lung Ngọc Hoàng. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 9.75,
+        "longitude": 105.648,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 0
+    },
+    {
+      "placeId": "01a0db02-f828-7dd1-835f-c3e2cc61a8c6",
+      "seedKey": "vn-37-trang-an",
+      "slug": "trang-an",
+      "name": "Tràng An",
+      "provinceCode": "37",
+      "provinceName": "Ninh Bình",
+      "areaLabel": "Khu vực Tràng An",
+      "searchAliases": [
+        "Hà Nam",
+        "Nam Định"
+      ],
+      "activityIds": [
+        "landscape",
+        "culture"
+      ],
+      "summary": "Tràng An là một điểm tham khảo trong khu vực Tràng An. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 20.249,
+        "longitude": 105.916,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 1
+    },
+    {
+      "placeId": "01a0db02-f83e-73f6-a6ec-39df46c6e3be",
+      "seedKey": "vn-51-bien-my-khe-quang-ngai",
+      "slug": "bien-my-khe-quang-ngai",
+      "name": "Biển Mỹ Khê — Quảng Ngãi",
+      "provinceCode": "51",
+      "provinceName": "Quảng Ngãi",
+      "areaLabel": "Khu vực Mỹ Khê, Quảng Ngãi",
+      "searchAliases": [
+        "Kon Tum"
+      ],
+      "activityIds": [
+        "coastal",
+        "walking"
+      ],
+      "summary": "Biển Mỹ Khê — Quảng Ngãi là một điểm tham khảo trong khu vực Mỹ Khê, Quảng Ngãi. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 15.179,
+        "longitude": 108.914,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 2
+    },
+    {
+      "placeId": "01a0db02-f834-7fc5-a9cf-6b79c1a4e9fe",
+      "seedKey": "vn-44-phong-nha",
+      "slug": "phong-nha",
+      "name": "Phong Nha",
+      "provinceCode": "44",
+      "provinceName": "Quảng Trị",
+      "areaLabel": "Khu vực Phong Nha",
+      "searchAliases": [
+        "Quảng Bình"
+      ],
+      "activityIds": [
+        "landscape",
+        "forest"
+      ],
+      "summary": "Phong Nha là một điểm tham khảo trong khu vực Phong Nha. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 17.59,
+        "longitude": 106.284,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 3
+    },
+    {
+      "placeId": "01a0db02-f821-796c-b65a-96f8fdd82d67",
+      "seedKey": "vn-25-vuon-quoc-gia-xuan-son",
+      "slug": "vuon-quoc-gia-xuan-son",
+      "name": "Vườn quốc gia Xuân Sơn",
+      "provinceCode": "25",
+      "provinceName": "Phú Thọ",
+      "areaLabel": "Khu vực Xuân Sơn",
+      "searchAliases": [
+        "Vĩnh Phúc",
+        "Hòa Bình"
+      ],
+      "activityIds": [
+        "forest",
+        "mountain"
+      ],
+      "summary": "Vườn quốc gia Xuân Sơn là một điểm tham khảo trong khu vực Xuân Sơn. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.123,
+        "longitude": 104.945,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 4
+    },
+    {
+      "placeId": "01a0db02-f814-76e2-a8be-b5cefed2093d",
+      "seedKey": "vn-19-ho-ba-be",
+      "slug": "ho-ba-be",
+      "name": "Hồ Ba Bể",
+      "provinceCode": "19",
+      "provinceName": "Thái Nguyên",
+      "areaLabel": "Ba Bể",
+      "searchAliases": [
+        "Bắc Kạn"
+      ],
+      "activityIds": [
+        "lake",
+        "forest"
+      ],
+      "summary": "Hồ Ba Bể là một điểm tham khảo trong khu vực Ba Bể. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 22.411,
+        "longitude": 105.614,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 5
+    },
+    {
+      "placeId": "01a0db02-f80e-7751-ac99-79eb40867f93",
+      "seedKey": "vn-14-cao-nguyen-moc-chau",
+      "slug": "cao-nguyen-moc-chau",
+      "name": "Cao nguyên Mộc Châu",
+      "provinceCode": "14",
+      "provinceName": "Sơn La",
+      "areaLabel": "Mộc Châu",
+      "searchAliases": [],
+      "activityIds": [
+        "landscape",
+        "walking"
+      ],
+      "summary": "Cao nguyên Mộc Châu là một điểm tham khảo trong khu vực Mộc Châu. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 20.83,
+        "longitude": 104.636,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 6
+    },
+    {
+      "placeId": "01a0db02-f856-7cea-9704-12e36a5513d3",
+      "seedKey": "vn-82-xeo-quyt",
+      "slug": "xeo-quyt",
+      "name": "Xẻo Quýt",
+      "provinceCode": "82",
+      "provinceName": "Đồng Tháp",
+      "areaLabel": "Khu vực Xẻo Quýt",
+      "searchAliases": [
+        "Tiền Giang"
+      ],
+      "activityIds": [
+        "forest",
+        "culture"
+      ],
+      "summary": "Xẻo Quýt là một điểm tham khảo trong khu vực Xẻo Quýt. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 10.462,
+        "longitude": 105.685,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 7
+    },
+    {
+      "placeId": "01a0db02-f861-747b-b481-7124e01a5039",
+      "seedKey": "vn-96-mui-ca-mau",
+      "slug": "mui-ca-mau",
+      "name": "Mũi Cà Mau",
+      "provinceCode": "96",
+      "provinceName": "Cà Mau",
+      "areaLabel": "Khu vực Đất Mũi",
+      "searchAliases": [
+        "Bạc Liêu"
+      ],
+      "activityIds": [
+        "coastal",
+        "forest"
+      ],
+      "summary": "Mũi Cà Mau là một điểm tham khảo trong khu vực Đất Mũi. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 8.606,
+        "longitude": 104.728,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 8
+    },
+    {
+      "placeId": "01a0db02-f829-725b-931c-078888a1d655",
+      "seedKey": "vn-37-bai-dinh",
+      "slug": "bai-dinh",
+      "name": "Bái Đính",
+      "provinceCode": "37",
+      "provinceName": "Ninh Bình",
+      "areaLabel": "Khu vực Bái Đính",
+      "searchAliases": [
+        "Hà Nam",
+        "Nam Định"
+      ],
+      "activityIds": [
+        "culture",
+        "walking"
+      ],
+      "summary": "Bái Đính là một điểm tham khảo trong khu vực Bái Đính. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 20.273,
+        "longitude": 105.862,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 9
+    },
+    {
+      "placeId": "01a0db02-f810-7b95-bfd6-666d75d7b926",
+      "seedKey": "vn-15-fansipan",
+      "slug": "fansipan",
+      "name": "Fansipan",
+      "provinceCode": "15",
+      "provinceName": "Lào Cai",
+      "areaLabel": "Khu vực Fansipan",
+      "searchAliases": [
+        "Yên Bái"
+      ],
+      "activityIds": [
+        "mountain",
+        "landscape"
+      ],
+      "summary": "Fansipan là một điểm tham khảo trong khu vực Fansipan. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 22.304,
+        "longitude": 103.776,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 10
+    },
+    {
+      "placeId": "01a0db02-f838-7ea7-8045-e62e79f510d5",
+      "seedKey": "vn-46-lang-co",
+      "slug": "lang-co",
+      "name": "Lăng Cô",
+      "provinceCode": "46",
+      "provinceName": "Huế",
+      "areaLabel": "Khu vực Lăng Cô",
+      "searchAliases": [
+        "Thừa Thiên Huế"
+      ],
+      "activityIds": [
+        "coastal",
+        "landscape"
+      ],
+      "summary": "Lăng Cô là một điểm tham khảo trong khu vực Lăng Cô. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 16.246,
+        "longitude": 108.076,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 11
+    },
+    {
+      "placeId": "01a0db02-f80d-7adb-b37b-f9d965cb9bdd",
+      "seedKey": "vn-14-ta-xua",
+      "slug": "ta-xua",
+      "name": "Tà Xùa",
+      "provinceCode": "14",
+      "provinceName": "Sơn La",
+      "areaLabel": "Khu vực Tà Xùa",
+      "searchAliases": [],
+      "activityIds": [
+        "mountain",
+        "landscape"
+      ],
+      "summary": "Tà Xùa là một điểm tham khảo trong khu vực Tà Xùa. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.286,
+        "longitude": 104.435,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 12
+    },
+    {
+      "placeId": "01a0db02-f816-7b87-bdbb-c6bf2a6f270a",
+      "seedKey": "vn-20-mau-son",
+      "slug": "mau-son",
+      "name": "Mẫu Sơn",
+      "provinceCode": "20",
+      "provinceName": "Lạng Sơn",
+      "areaLabel": "Khu vực Mẫu Sơn",
+      "searchAliases": [],
+      "activityIds": [
+        "mountain",
+        "landscape"
+      ],
+      "summary": "Mẫu Sơn là một điểm tham khảo trong khu vực Mẫu Sơn. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.849,
+        "longitude": 106.958,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 13
+    },
+    {
+      "placeId": "01a0db02-f84a-753e-bb32-39f919df77d3",
+      "seedKey": "vn-68-ho-ta-dung",
+      "slug": "ho-ta-dung",
+      "name": "Hồ Tà Đùng",
+      "provinceCode": "68",
+      "provinceName": "Lâm Đồng",
+      "areaLabel": "Khu vực Tà Đùng",
+      "searchAliases": [
+        "Đắk Nông",
+        "Bình Thuận"
+      ],
+      "activityIds": [
+        "lake",
+        "landscape"
+      ],
+      "summary": "Hồ Tà Đùng là một điểm tham khảo trong khu vực Tà Đùng. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 11.849,
+        "longitude": 107.987,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 14
+    },
+    {
+      "placeId": "01a0db02-f80a-7bba-9527-ec52c5bcbf4c",
+      "seedKey": "vn-11-doi-a1",
+      "slug": "doi-a1",
+      "name": "Đồi A1",
+      "provinceCode": "11",
+      "provinceName": "Điện Biên",
+      "areaLabel": "Điện Biên Phủ",
+      "searchAliases": [],
+      "activityIds": [
+        "culture",
+        "walking"
+      ],
+      "summary": "Đồi A1 là một điểm tham khảo trong khu vực Điện Biên Phủ. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.386,
+        "longitude": 103.017,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 15
+    },
+    {
+      "placeId": "01a0db02-f836-717c-96cd-945a7ffcd614",
+      "seedKey": "vn-44-cua-viet",
+      "slug": "cua-viet",
+      "name": "Cửa Việt",
+      "provinceCode": "44",
+      "provinceName": "Quảng Trị",
+      "areaLabel": "Khu vực Cửa Việt",
+      "searchAliases": [
+        "Quảng Bình"
+      ],
+      "activityIds": [
+        "coastal",
+        "walking"
+      ],
+      "summary": "Cửa Việt là một điểm tham khảo trong khu vực Cửa Việt. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 16.903,
+        "longitude": 107.189,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 16
+    },
+    {
+      "placeId": "01a0db02-f843-7b27-b1da-5333f70f9436",
+      "seedKey": "vn-56-hon-chong",
+      "slug": "hon-chong",
+      "name": "Hòn Chồng",
+      "provinceCode": "56",
+      "provinceName": "Khánh Hòa",
+      "areaLabel": "Nha Trang",
+      "searchAliases": [
+        "Ninh Thuận"
+      ],
+      "activityIds": [
+        "coastal",
+        "walking"
+      ],
+      "summary": "Hòn Chồng là một điểm tham khảo trong khu vực Nha Trang. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 12.274,
+        "longitude": 109.207,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 17
+    },
+    {
+      "placeId": "018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e08",
+      "seedKey": "vn-22-vach-da-mong-rong-dao-co-to",
+      "slug": "vach-da-mong-rong-dao-co-to",
+      "name": "Vách Đá Móng Rồng Đảo Cô Tô",
+      "provinceCode": "22",
+      "provinceName": "Quảng Ninh",
+      "areaLabel": "Đảo Cô Tô",
+      "searchAliases": [],
+      "activityIds": [
+        "coastal",
+        "walking"
+      ],
+      "summary": "Vách Đá Móng Rồng Đảo Cô Tô là một điểm tham khảo trong khu vực Đảo Cô Tô. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 20.9782,
+        "longitude": 107.7554,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": null,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "EXISTING_SITE_REFERENCE",
+        "coordinateSource": "OBSERVED_SITE_MAP",
+        "sourceUrl": "https://ventlore.com/vi/places/018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e08/",
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ chép từ chế độ Bản đồ của website; chưa kiểm chứng độc lập."
+      },
+      "catalogOrder": 18
+    },
+    {
+      "placeId": "01a0db02-f81a-721d-af54-9b74e55791a7",
+      "seedKey": "vn-22-bai-chay",
+      "slug": "bai-chay",
+      "name": "Bãi Cháy",
+      "provinceCode": "22",
+      "provinceName": "Quảng Ninh",
+      "areaLabel": "Hạ Long",
+      "searchAliases": [],
+      "activityIds": [
+        "coastal",
+        "walking"
+      ],
+      "summary": "Bãi Cháy là một điểm tham khảo trong khu vực Hạ Long. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 20.951,
+        "longitude": 107.041,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 19
+    },
+    {
+      "placeId": "01a0db02-f85b-797d-8307-e79cc41cd36c",
+      "seedKey": "vn-91-rung-tram-tra-su",
+      "slug": "rung-tram-tra-su",
+      "name": "Rừng tràm Trà Sư",
+      "provinceCode": "91",
+      "provinceName": "An Giang",
+      "areaLabel": "Khu vực Trà Sư",
+      "searchAliases": [
+        "Kiên Giang"
+      ],
+      "activityIds": [
+        "forest",
+        "landscape"
+      ],
+      "summary": "Rừng tràm Trà Sư là một điểm tham khảo trong khu vực Trà Sư. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 10.583,
+        "longitude": 105.091,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 20
+    },
+    {
+      "placeId": "01a0db02-f84c-7e26-a285-7b78fc38c60e",
+      "seedKey": "vn-75-buu-long",
+      "slug": "buu-long",
+      "name": "Bửu Long",
+      "provinceCode": "75",
+      "provinceName": "Đồng Nai",
+      "areaLabel": "Biên Hòa",
+      "searchAliases": [
+        "Bình Phước"
+      ],
+      "activityIds": [
+        "landscape",
+        "walking"
+      ],
+      "summary": "Bửu Long là một điểm tham khảo trong khu vực Biên Hòa. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 10.976,
+        "longitude": 106.812,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 21
+    },
+    {
+      "placeId": "01a0db02-f85e-7dce-8bbc-c65ab035331c",
+      "seedKey": "vn-92-ben-ninh-kieu",
+      "slug": "ben-ninh-kieu",
+      "name": "Bến Ninh Kiều",
+      "provinceCode": "92",
+      "provinceName": "Cần Thơ",
+      "areaLabel": "Khu vực Ninh Kiều",
+      "searchAliases": [
+        "Hậu Giang",
+        "Sóc Trăng"
+      ],
+      "activityIds": [
+        "walking",
+        "culture"
+      ],
+      "summary": "Bến Ninh Kiều là một điểm tham khảo trong khu vực Ninh Kiều. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 10.033,
+        "longitude": 105.789,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 22
+    },
+    {
+      "placeId": "01a0db02-f83a-7bd5-abe9-537234ab91df",
+      "seedKey": "vn-48-bien-my-khe-da-nang",
+      "slug": "bien-my-khe-da-nang",
+      "name": "Biển Mỹ Khê — Đà Nẵng",
+      "provinceCode": "48",
+      "provinceName": "Đà Nẵng",
+      "areaLabel": "Khu vực Mỹ Khê, Đà Nẵng",
+      "searchAliases": [
+        "Quảng Nam"
+      ],
+      "activityIds": [
+        "coastal",
+        "walking"
+      ],
+      "summary": "Biển Mỹ Khê — Đà Nẵng là một điểm tham khảo trong khu vực Mỹ Khê, Đà Nẵng. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 16.059,
+        "longitude": 108.246,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 23
+    },
+    {
+      "placeId": "01a0db02-f849-76e4-b7d1-d49e6daa3e24",
+      "seedKey": "vn-68-ho-tuyen-lam",
+      "slug": "ho-tuyen-lam",
+      "name": "Hồ Tuyền Lâm",
+      "provinceCode": "68",
+      "provinceName": "Lâm Đồng",
+      "areaLabel": "Đà Lạt",
+      "searchAliases": [
+        "Đắk Nông",
+        "Bình Thuận"
+      ],
+      "activityIds": [
+        "lake",
+        "forest"
+      ],
+      "summary": "Hồ Tuyền Lâm là một điểm tham khảo trong khu vực Đà Lạt. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 11.882,
+        "longitude": 108.431,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 24
+    },
+    {
+      "placeId": "01a0db02-f801-7a18-a703-bede786146ef",
+      "seedKey": "vn-01-ho-tay",
+      "slug": "ho-tay",
+      "name": "Hồ Tây",
+      "provinceCode": "01",
+      "provinceName": "Hà Nội",
+      "areaLabel": "Khu vực hồ Tây",
+      "searchAliases": [],
+      "activityIds": [
+        "lake",
+        "walking"
+      ],
+      "summary": "Hồ Tây là một điểm tham khảo trong khu vực hồ Tây. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.058,
+        "longitude": 105.824,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 25
+    },
+    {
+      "placeId": "01a0db02-f859-7ca7-b763-e8d66055a672",
+      "seedKey": "vn-86-con-phung",
+      "slug": "con-phung",
+      "name": "Cồn Phụng",
+      "provinceCode": "86",
+      "provinceName": "Vĩnh Long",
+      "areaLabel": "Khu vực Cồn Phụng",
+      "searchAliases": [
+        "Bến Tre",
+        "Trà Vinh"
+      ],
+      "activityIds": [
+        "landscape",
+        "culture"
+      ],
+      "summary": "Cồn Phụng là một điểm tham khảo trong khu vực Cồn Phụng. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 10.327,
+        "longitude": 106.364,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 26
+    },
+    {
+      "placeId": "01a0db02-f812-7fc7-adc6-f0272f9dec8b",
+      "seedKey": "vn-15-ho-thac-ba",
+      "slug": "ho-thac-ba",
+      "name": "Hồ Thác Bà",
+      "provinceCode": "15",
+      "provinceName": "Lào Cai",
+      "areaLabel": "Khu vực hồ Thác Bà",
+      "searchAliases": [
+        "Yên Bái"
+      ],
+      "activityIds": [
+        "lake",
+        "landscape"
+      ],
+      "summary": "Hồ Thác Bà là một điểm tham khảo trong khu vực hồ Thác Bà. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.751,
+        "longitude": 105.019,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 27
+    },
+    {
+      "placeId": "01a0db02-f802-788d-ba76-5799d25edab7",
+      "seedKey": "vn-01-vuon-quoc-gia-ba-vi",
+      "slug": "vuon-quoc-gia-ba-vi",
+      "name": "Vườn quốc gia Ba Vì",
+      "provinceCode": "01",
+      "provinceName": "Hà Nội",
+      "areaLabel": "Ba Vì",
+      "searchAliases": [],
+      "activityIds": [
+        "forest",
+        "mountain"
+      ],
+      "summary": "Vườn quốc gia Ba Vì là một điểm tham khảo trong khu vực Ba Vì. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.079,
+        "longitude": 105.362,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 28
+    },
+    {
+      "placeId": "01a0db02-f855-740f-8295-6b536380d690",
+      "seedKey": "vn-82-tram-chim",
+      "slug": "tram-chim",
+      "name": "Tràm Chim",
+      "provinceCode": "82",
+      "provinceName": "Đồng Tháp",
+      "areaLabel": "Khu vực Tràm Chim",
+      "searchAliases": [
+        "Tiền Giang"
+      ],
+      "activityIds": [
+        "forest",
+        "landscape"
+      ],
+      "summary": "Tràm Chim là một điểm tham khảo trong khu vực Tràm Chim. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 10.72,
+        "longitude": 105.567,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 29
+    },
+    {
+      "placeId": "01a0db02-f818-7b39-9b33-cf22ac130c9e",
+      "seedKey": "vn-20-ai-chi-lang",
+      "slug": "ai-chi-lang",
+      "name": "Ải Chi Lăng",
+      "provinceCode": "20",
+      "provinceName": "Lạng Sơn",
+      "areaLabel": "Chi Lăng",
+      "searchAliases": [],
+      "activityIds": [
+        "culture",
+        "landscape"
+      ],
+      "summary": "Ải Chi Lăng là một điểm tham khảo trong khu vực Chi Lăng. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.416,
+        "longitude": 106.54,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 30
+    },
+    {
+      "placeId": "01a0db02-f81c-760e-b352-eb11b9c7e5ed",
+      "seedKey": "vn-24-ho-cam-son",
+      "slug": "ho-cam-son",
+      "name": "Hồ Cấm Sơn",
+      "provinceCode": "24",
+      "provinceName": "Bắc Ninh",
+      "areaLabel": "Khu vực Cấm Sơn",
+      "searchAliases": [
+        "Bắc Giang"
+      ],
+      "activityIds": [
+        "lake",
+        "landscape"
+      ],
+      "summary": "Hồ Cấm Sơn là một điểm tham khảo trong khu vực Cấm Sơn. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.604,
+        "longitude": 106.51,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 31
+    },
+    {
+      "placeId": "01a0db02-f830-7a25-9ae9-ad728e4495c2",
+      "seedKey": "vn-40-doi-che-thanh-chuong",
+      "slug": "doi-che-thanh-chuong",
+      "name": "Đồi chè Thanh Chương",
+      "provinceCode": "40",
+      "provinceName": "Nghệ An",
+      "areaLabel": "Thanh Chương",
+      "searchAliases": [],
+      "activityIds": [
+        "landscape",
+        "lake"
+      ],
+      "summary": "Đồi chè Thanh Chương là một điểm tham khảo trong khu vực Thanh Chương. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 18.696,
+        "longitude": 105.158,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 32
+    },
+    {
+      "placeId": "01a0db02-f847-7511-b912-f9e2399c4ddd",
+      "seedKey": "vn-66-thac-dray-nur",
+      "slug": "thac-dray-nur",
+      "name": "Thác Dray Nur",
+      "provinceCode": "66",
+      "provinceName": "Đắk Lắk",
+      "areaLabel": "Khu vực Dray Nur",
+      "searchAliases": [
+        "Phú Yên"
+      ],
+      "activityIds": [
+        "landscape",
+        "walking"
+      ],
+      "summary": "Thác Dray Nur là một điểm tham khảo trong khu vực Dray Nur. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 12.537,
+        "longitude": 107.943,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 33
+    },
+    {
+      "placeId": "01a0db02-f824-76bc-99f2-33dd6e7b04f5",
+      "seedKey": "vn-31-con-son",
+      "slug": "con-son",
+      "name": "Côn Sơn",
+      "provinceCode": "31",
+      "provinceName": "Hải Phòng",
+      "areaLabel": "Khu vực Côn Sơn",
+      "searchAliases": [
+        "Hải Dương"
+      ],
+      "activityIds": [
+        "culture",
+        "landscape"
+      ],
+      "summary": "Côn Sơn là một điểm tham khảo trong khu vực Côn Sơn. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.143,
+        "longitude": 106.382,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 34
+    },
+    {
+      "placeId": "018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e02",
+      "seedKey": "vn-31-vinh-cat-co-3-hai-trinh-ven-dao",
+      "slug": "vinh-cat-co-3-hai-trinh-ven-dao",
+      "name": "Vịnh Cát Cò 3 - Hải Trình Ven Đảo",
+      "provinceCode": "31",
+      "provinceName": "Hải Phòng",
+      "areaLabel": "Cát Bà",
+      "searchAliases": [
+        "Hải Dương"
+      ],
+      "activityIds": [
+        "coastal",
+        "walking"
+      ],
+      "summary": "Vịnh Cát Cò 3 - Hải Trình Ven Đảo là một điểm tham khảo trong khu vực Cát Bà. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 20.7183,
+        "longitude": 107.0514,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": null,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "EXISTING_SITE_REFERENCE",
+        "coordinateSource": "OBSERVED_SITE_MAP",
+        "sourceUrl": "https://ventlore.com/vi/places/018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e02/",
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ chép từ chế độ Bản đồ của website; chưa kiểm chứng độc lập."
+      },
+      "catalogOrder": 35
+    },
+    {
+      "placeId": "01a0db02-f809-780a-9d04-600cc12c0b02",
+      "seedKey": "vn-11-ho-pa-khoang",
+      "slug": "ho-pa-khoang",
+      "name": "Hồ Pá Khoang",
+      "provinceCode": "11",
+      "provinceName": "Điện Biên",
+      "areaLabel": "Pá Khoang",
+      "searchAliases": [],
+      "activityIds": [
+        "lake",
+        "landscape"
+      ],
+      "summary": "Hồ Pá Khoang là một điểm tham khảo trong khu vực Pá Khoang. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.453,
+        "longitude": 103.16,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 36
+    },
+    {
+      "placeId": "01a0db02-f83f-7931-81f9-cfc708da1664",
+      "seedKey": "vn-51-mang-den",
+      "slug": "mang-den",
+      "name": "Măng Đen",
+      "provinceCode": "51",
+      "provinceName": "Quảng Ngãi",
+      "areaLabel": "Khu vực Măng Đen",
+      "searchAliases": [
+        "Kon Tum"
+      ],
+      "activityIds": [
+        "forest",
+        "mountain"
+      ],
+      "summary": "Măng Đen là một điểm tham khảo trong khu vực Măng Đen. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 14.604,
+        "longitude": 108.294,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 37
+    },
+    {
+      "placeId": "01a0db02-f807-70aa-b12e-4f540de05828",
+      "seedKey": "vn-08-ho-na-hang",
+      "slug": "ho-na-hang",
+      "name": "Hồ Na Hang",
+      "provinceCode": "08",
+      "provinceName": "Tuyên Quang",
+      "areaLabel": "Na Hang",
+      "searchAliases": [
+        "Hà Giang"
+      ],
+      "activityIds": [
+        "lake",
+        "landscape"
+      ],
+      "summary": "Hồ Na Hang là một điểm tham khảo trong khu vực Na Hang. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 22.351,
+        "longitude": 105.376,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 38
+    },
+    {
+      "placeId": "01a0db02-f832-7df6-b865-15c06dfc24f2",
+      "seedKey": "vn-42-chua-huong-tich",
+      "slug": "chua-huong-tich",
+      "name": "Chùa Hương Tích",
+      "provinceCode": "42",
+      "provinceName": "Hà Tĩnh",
+      "areaLabel": "Khu vực Hương Tích",
+      "searchAliases": [],
+      "activityIds": [
+        "culture",
+        "mountain"
+      ],
+      "summary": "Chùa Hương Tích là một điểm tham khảo trong khu vực Hương Tích. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 18.488,
+        "longitude": 105.812,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 39
+    },
+    {
+      "placeId": "01a0db02-f805-7f67-89c1-fb08554bfcc0",
+      "seedKey": "vn-04-nui-mat-than",
+      "slug": "nui-mat-than",
+      "name": "Núi Mắt Thần",
+      "provinceCode": "04",
+      "provinceName": "Cao Bằng",
+      "areaLabel": "Khu vực Trà Lĩnh",
+      "searchAliases": [],
+      "activityIds": [
+        "mountain",
+        "landscape"
+      ],
+      "summary": "Núi Mắt Thần là một điểm tham khảo trong khu vực Trà Lĩnh. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 22.749,
+        "longitude": 106.31,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 40
+    },
+    {
+      "placeId": "01a0db02-f84b-7d23-8192-10497e9d9be5",
+      "seedKey": "vn-68-mui-ne",
+      "slug": "mui-ne",
+      "name": "Mũi Né",
+      "provinceCode": "68",
+      "provinceName": "Lâm Đồng",
+      "areaLabel": "Khu vực Mũi Né",
+      "searchAliases": [
+        "Đắk Nông",
+        "Bình Thuận"
+      ],
+      "activityIds": [
+        "coastal",
+        "walking"
+      ],
+      "summary": "Mũi Né là một điểm tham khảo trong khu vực Mũi Né. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 10.933,
+        "longitude": 108.289,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 41
+    },
+    {
+      "placeId": "01a0db02-f863-7e54-af06-8f3273dc8270",
+      "seedKey": "vn-96-vuon-chim-bac-lieu",
+      "slug": "vuon-chim-bac-lieu",
+      "name": "Vườn chim Bạc Liêu",
+      "provinceCode": "96",
+      "provinceName": "Cà Mau",
+      "areaLabel": "Khu vực Bạc Liêu",
+      "searchAliases": [
+        "Bạc Liêu"
+      ],
+      "activityIds": [
+        "forest",
+        "walking"
+      ],
+      "summary": "Vườn chim Bạc Liêu là một điểm tham khảo trong khu vực Bạc Liêu. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 9.256,
+        "longitude": 105.747,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 42
+    },
+    {
+      "placeId": "01a0db02-f83d-72d0-a147-5a75477006f9",
+      "seedKey": "vn-51-dao-ly-son",
+      "slug": "dao-ly-son",
+      "name": "Đảo Lý Sơn",
+      "provinceCode": "51",
+      "provinceName": "Quảng Ngãi",
+      "areaLabel": "Khu vực Lý Sơn",
+      "searchAliases": [
+        "Kon Tum"
+      ],
+      "activityIds": [
+        "coastal",
+        "landscape"
+      ],
+      "summary": "Đảo Lý Sơn là một điểm tham khảo trong khu vực Lý Sơn. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 15.382,
+        "longitude": 109.117,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 43
+    },
+    {
+      "placeId": "01a0db02-f817-769d-8176-f66871470fac",
+      "seedKey": "vn-20-dong-tam-thanh",
+      "slug": "dong-tam-thanh",
+      "name": "Động Tam Thanh",
+      "provinceCode": "20",
+      "provinceName": "Lạng Sơn",
+      "areaLabel": "Khu vực Tam Thanh",
+      "searchAliases": [],
+      "activityIds": [
+        "culture",
+        "landscape"
+      ],
+      "summary": "Động Tam Thanh là một điểm tham khảo trong khu vực Tam Thanh. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.861,
+        "longitude": 106.758,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 44
+    },
+    {
+      "placeId": "01a0db02-f858-7790-b4e8-48e81c4f208a",
+      "seedKey": "vn-86-cu-lao-an-binh",
+      "slug": "cu-lao-an-binh",
+      "name": "Cù lao An Bình",
+      "provinceCode": "86",
+      "provinceName": "Vĩnh Long",
+      "areaLabel": "Khu vực An Bình",
+      "searchAliases": [
+        "Bến Tre",
+        "Trà Vinh"
+      ],
+      "activityIds": [
+        "landscape",
+        "walking"
+      ],
+      "summary": "Cù lao An Bình là một điểm tham khảo trong khu vực An Bình. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 10.293,
+        "longitude": 105.985,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 45
+    },
+    {
+      "placeId": "01a0db02-f839-7124-bc62-0bc2e4c32d00",
+      "seedKey": "vn-46-vuon-quoc-gia-bach-ma",
+      "slug": "vuon-quoc-gia-bach-ma",
+      "name": "Vườn quốc gia Bạch Mã",
+      "provinceCode": "46",
+      "provinceName": "Huế",
+      "areaLabel": "Khu vực Bạch Mã",
+      "searchAliases": [
+        "Thừa Thiên Huế"
+      ],
+      "activityIds": [
+        "forest",
+        "mountain"
+      ],
+      "summary": "Vườn quốc gia Bạch Mã là một điểm tham khảo trong khu vực Bạch Mã. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 16.194,
+        "longitude": 107.855,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 46
+    },
+    {
+      "placeId": "01a0db02-f84e-7f45-bbb2-3b8378c8d969",
+      "seedKey": "vn-75-vuon-quoc-gia-bu-gia-map",
+      "slug": "vuon-quoc-gia-bu-gia-map",
+      "name": "Vườn quốc gia Bù Gia Mập",
+      "provinceCode": "75",
+      "provinceName": "Đồng Nai",
+      "areaLabel": "Khu vực Bù Gia Mập",
+      "searchAliases": [
+        "Bình Phước"
+      ],
+      "activityIds": [
+        "forest",
+        "landscape"
+      ],
+      "summary": "Vườn quốc gia Bù Gia Mập là một điểm tham khảo trong khu vực Bù Gia Mập. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 12.198,
+        "longitude": 107.207,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 47
+    },
+    {
+      "placeId": "01a0db02-f82c-7aeb-ab74-6172d51c0adf",
+      "seedKey": "vn-38-sam-son",
+      "slug": "sam-son",
+      "name": "Sầm Sơn",
+      "provinceCode": "38",
+      "provinceName": "Thanh Hóa",
+      "areaLabel": "Khu vực Sầm Sơn",
+      "searchAliases": [],
+      "activityIds": [
+        "coastal",
+        "walking"
+      ],
+      "summary": "Sầm Sơn là một điểm tham khảo trong khu vực Sầm Sơn. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 19.735,
+        "longitude": 105.912,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 48
+    },
+    {
+      "placeId": "01a0db02-f803-72ad-afbb-8ff05f28739a",
+      "seedKey": "vn-04-thac-ban-gioc",
+      "slug": "thac-ban-gioc",
+      "name": "Thác Bản Giốc",
+      "provinceCode": "04",
+      "provinceName": "Cao Bằng",
+      "areaLabel": "Khu vực Bản Giốc",
+      "searchAliases": [],
+      "activityIds": [
+        "landscape",
+        "walking"
+      ],
+      "summary": "Thác Bản Giốc là một điểm tham khảo trong khu vực Bản Giốc. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 22.854,
+        "longitude": 106.724,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 49
+    },
+    {
+      "placeId": "01a0db02-f840-7260-ad4c-4609a5c65933",
+      "seedKey": "vn-52-bien-ho-pleiku",
+      "slug": "bien-ho-pleiku",
+      "name": "Biển Hồ Pleiku",
+      "provinceCode": "52",
+      "provinceName": "Gia Lai",
+      "areaLabel": "Khu vực Biển Hồ",
+      "searchAliases": [
+        "Bình Định"
+      ],
+      "activityIds": [
+        "lake",
+        "landscape"
+      ],
+      "summary": "Biển Hồ Pleiku là một điểm tham khảo trong khu vực Biển Hồ. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 14.053,
+        "longitude": 108.004,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 50
+    },
+    {
+      "placeId": "01a0db02-f831-7e8e-a7f0-690253cf71c1",
+      "seedKey": "vn-42-bien-thien-cam",
+      "slug": "bien-thien-cam",
+      "name": "Biển Thiên Cầm",
+      "provinceCode": "42",
+      "provinceName": "Hà Tĩnh",
+      "areaLabel": "Khu vực Thiên Cầm",
+      "searchAliases": [],
+      "activityIds": [
+        "coastal",
+        "walking"
+      ],
+      "summary": "Biển Thiên Cầm là một điểm tham khảo trong khu vực Thiên Cầm. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 18.239,
+        "longitude": 106.088,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 51
+    },
+    {
+      "placeId": "01a0db02-f845-7563-bc60-4a70982e235f",
+      "seedKey": "vn-56-vuon-quoc-gia-nui-chua",
+      "slug": "vuon-quoc-gia-nui-chua",
+      "name": "Vườn quốc gia Núi Chúa",
+      "provinceCode": "56",
+      "provinceName": "Khánh Hòa",
+      "areaLabel": "Khu vực Núi Chúa",
+      "searchAliases": [
+        "Ninh Thuận"
+      ],
+      "activityIds": [
+        "forest",
+        "mountain"
+      ],
+      "summary": "Vườn quốc gia Núi Chúa là một điểm tham khảo trong khu vực Núi Chúa. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 11.716,
+        "longitude": 109.148,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 52
+    },
+    {
+      "placeId": "01a0db02-f84f-7a56-9f8b-bb8d626ff690",
+      "seedKey": "vn-79-can-gio",
+      "slug": "can-gio",
+      "name": "Cần Giờ",
+      "provinceCode": "79",
+      "provinceName": "Thành phố Hồ Chí Minh",
+      "areaLabel": "Khu vực Cần Giờ",
+      "searchAliases": [
+        "TP HCM",
+        "TP.HCM",
+        "Sài Gòn",
+        "Bình Dương",
+        "Bà Rịa - Vũng Tàu"
+      ],
+      "activityIds": [
+        "forest",
+        "coastal"
+      ],
+      "summary": "Cần Giờ là một điểm tham khảo trong khu vực Cần Giờ. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 10.408,
+        "longitude": 106.954,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 53
+    },
+    {
+      "placeId": "01a0db02-f85c-7322-98fc-7bc31997d7e4",
+      "seedKey": "vn-91-nui-cam",
+      "slug": "nui-cam",
+      "name": "Núi Cấm",
+      "provinceCode": "91",
+      "provinceName": "An Giang",
+      "areaLabel": "Khu vực núi Cấm",
+      "searchAliases": [
+        "Kiên Giang"
+      ],
+      "activityIds": [
+        "mountain",
+        "culture"
+      ],
+      "summary": "Núi Cấm là một điểm tham khảo trong khu vực núi Cấm. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 10.495,
+        "longitude": 104.998,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 54
+    },
+    {
+      "placeId": "01a0db02-f83c-7b99-a9cd-6fa5128a8bab",
+      "seedKey": "vn-48-pho-co-hoi-an",
+      "slug": "pho-co-hoi-an",
+      "name": "Phố cổ Hội An",
+      "provinceCode": "48",
+      "provinceName": "Đà Nẵng",
+      "areaLabel": "Khu vực Hội An",
+      "searchAliases": [
+        "Quảng Nam"
+      ],
+      "activityIds": [
+        "culture",
+        "walking"
+      ],
+      "summary": "Phố cổ Hội An là một điểm tham khảo trong khu vực Hội An. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 15.878,
+        "longitude": 108.327,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 55
+    },
+    {
+      "placeId": "01a0db02-f808-71fb-b408-40cec1628e5d",
+      "seedKey": "vn-08-lung-cu",
+      "slug": "lung-cu",
+      "name": "Lũng Cú",
+      "provinceCode": "08",
+      "provinceName": "Tuyên Quang",
+      "areaLabel": "Khu vực Lũng Cú",
+      "searchAliases": [
+        "Hà Giang"
+      ],
+      "activityIds": [
+        "culture",
+        "mountain"
+      ],
+      "summary": "Lũng Cú là một điểm tham khảo trong khu vực Lũng Cú. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 23.365,
+        "longitude": 105.316,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 56
+    },
+    {
+      "placeId": "01a0db02-f80c-7032-92bd-104ec3480ba0",
+      "seedKey": "vn-12-cao-nguyen-sin-ho",
+      "slug": "cao-nguyen-sin-ho",
+      "name": "Cao nguyên Sìn Hồ",
+      "provinceCode": "12",
+      "provinceName": "Lai Châu",
+      "areaLabel": "Sìn Hồ",
+      "searchAliases": [],
+      "activityIds": [
+        "mountain",
+        "landscape"
+      ],
+      "summary": "Cao nguyên Sìn Hồ là một điểm tham khảo trong khu vực Sìn Hồ. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 22.363,
+        "longitude": 103.243,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 57
+    },
+    {
+      "placeId": "01a0db02-f80f-7573-89e9-972f62045666",
+      "seedKey": "vn-14-thac-dai-yem",
+      "slug": "thac-dai-yem",
+      "name": "Thác Dải Yếm",
+      "provinceCode": "14",
+      "provinceName": "Sơn La",
+      "areaLabel": "Mộc Châu",
+      "searchAliases": [],
+      "activityIds": [
+        "landscape",
+        "walking"
+      ],
+      "summary": "Thác Dải Yếm là một điểm tham khảo trong khu vực Mộc Châu. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 20.807,
+        "longitude": 104.619,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 58
+    },
+    {
+      "placeId": "01a0db02-f837-7f02-b920-8ce4273e98e3",
+      "seedKey": "vn-46-dai-noi-hue",
+      "slug": "dai-noi-hue",
+      "name": "Đại Nội Huế",
+      "provinceCode": "46",
+      "provinceName": "Huế",
+      "areaLabel": "Khu vực kinh thành Huế",
+      "searchAliases": [
+        "Thừa Thiên Huế"
+      ],
+      "activityIds": [
+        "culture",
+        "walking"
+      ],
+      "summary": "Đại Nội Huế là một điểm tham khảo trong khu vực kinh thành Huế. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 16.47,
+        "longitude": 107.578,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 59
+    },
+    {
+      "placeId": "01a0db02-f825-76c6-8e97-0c71ec083c07",
+      "seedKey": "vn-33-con-vanh",
+      "slug": "con-vanh",
+      "name": "Cồn Vành",
+      "provinceCode": "33",
+      "provinceName": "Hưng Yên",
+      "areaLabel": "Khu vực Cồn Vành",
+      "searchAliases": [
+        "Thái Bình"
+      ],
+      "activityIds": [
+        "coastal",
+        "landscape"
+      ],
+      "summary": "Cồn Vành là một điểm tham khảo trong khu vực Cồn Vành. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 20.285,
+        "longitude": 106.574,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 60
+    },
+    {
+      "placeId": "01a0db02-f81e-77b4-ba98-ad5c22e03526",
+      "seedKey": "vn-24-chua-but-thap",
+      "slug": "chua-but-thap",
+      "name": "Chùa Bút Tháp",
+      "provinceCode": "24",
+      "provinceName": "Bắc Ninh",
+      "areaLabel": "Khu vực Bút Tháp",
+      "searchAliases": [
+        "Bắc Giang"
+      ],
+      "activityIds": [
+        "culture",
+        "walking"
+      ],
+      "summary": "Chùa Bút Tháp là một điểm tham khảo trong khu vực Bút Tháp. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.069,
+        "longitude": 106.055,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 61
+    },
+    {
+      "placeId": "01a0db02-f81b-77ec-b3dc-5413ccd8cf8f",
+      "seedKey": "vn-22-yen-tu",
+      "slug": "yen-tu",
+      "name": "Yên Tử",
+      "provinceCode": "22",
+      "provinceName": "Quảng Ninh",
+      "areaLabel": "Khu vực Yên Tử",
+      "searchAliases": [],
+      "activityIds": [
+        "mountain",
+        "culture"
+      ],
+      "summary": "Yên Tử là một điểm tham khảo trong khu vực Yên Tử. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.16,
+        "longitude": 106.719,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 62
+    },
+    {
+      "placeId": "01a0db02-f82d-7ee1-8ec0-0ec98ae002f4",
+      "seedKey": "vn-38-ben-en",
+      "slug": "ben-en",
+      "name": "Bến En",
+      "provinceCode": "38",
+      "provinceName": "Thanh Hóa",
+      "areaLabel": "Khu vực Bến En",
+      "searchAliases": [],
+      "activityIds": [
+        "lake",
+        "forest"
+      ],
+      "summary": "Bến En là một điểm tham khảo trong khu vực Bến En. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 19.616,
+        "longitude": 105.527,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 63
+    },
+    {
+      "placeId": "01a0db02-f853-7ca8-80f3-b9d792492139",
+      "seedKey": "vn-80-lang-noi-tan-lap",
+      "slug": "lang-noi-tan-lap",
+      "name": "Làng nổi Tân Lập",
+      "provinceCode": "80",
+      "provinceName": "Tây Ninh",
+      "areaLabel": "Khu vực Tân Lập",
+      "searchAliases": [
+        "Long An"
+      ],
+      "activityIds": [
+        "forest",
+        "landscape"
+      ],
+      "summary": "Làng nổi Tân Lập là một điểm tham khảo trong khu vực Tân Lập. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 10.847,
+        "longitude": 105.911,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 64
+    },
+    {
+      "placeId": "01a0db02-f850-7b00-963d-43a7208c4e6e",
+      "seedKey": "vn-79-nui-nho-vung-tau",
+      "slug": "nui-nho-vung-tau",
+      "name": "Núi Nhỏ — Vũng Tàu",
+      "provinceCode": "79",
+      "provinceName": "Thành phố Hồ Chí Minh",
+      "areaLabel": "Khu vực Vũng Tàu",
+      "searchAliases": [
+        "TP HCM",
+        "TP.HCM",
+        "Sài Gòn",
+        "Bình Dương",
+        "Bà Rịa - Vũng Tàu"
+      ],
+      "activityIds": [
+        "mountain",
+        "coastal"
+      ],
+      "summary": "Núi Nhỏ — Vũng Tàu là một điểm tham khảo trong khu vực Vũng Tàu. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 10.328,
+        "longitude": 107.083,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 65
+    },
+    {
+      "placeId": "01a0db02-f841-7a4b-9d5f-2e8ef0e3f2d5",
+      "seedKey": "vn-52-eo-gio",
+      "slug": "eo-gio",
+      "name": "Eo Gió",
+      "provinceCode": "52",
+      "provinceName": "Gia Lai",
+      "areaLabel": "Khu vực Nhơn Lý",
+      "searchAliases": [
+        "Bình Định"
+      ],
+      "activityIds": [
+        "coastal",
+        "landscape"
+      ],
+      "summary": "Eo Gió là một điểm tham khảo trong khu vực Nhơn Lý. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 13.892,
+        "longitude": 109.289,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 66
+    },
+    {
+      "placeId": "01a0db02-f81d-7330-b34e-5e95aaad0e26",
+      "seedKey": "vn-24-tay-yen-tu",
+      "slug": "tay-yen-tu",
+      "name": "Tây Yên Tử",
+      "provinceCode": "24",
+      "provinceName": "Bắc Ninh",
+      "areaLabel": "Khu vực Tây Yên Tử",
+      "searchAliases": [
+        "Bắc Giang"
+      ],
+      "activityIds": [
+        "mountain",
+        "culture"
+      ],
+      "summary": "Tây Yên Tử là một điểm tham khảo trong khu vực Tây Yên Tử. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.182,
+        "longitude": 106.713,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 67
+    },
+    {
+      "placeId": "01a0db02-f83b-714c-a78c-069ee24d9a2e",
+      "seedKey": "vn-48-ban-dao-son-tra",
+      "slug": "ban-dao-son-tra",
+      "name": "Bán đảo Sơn Trà",
+      "provinceCode": "48",
+      "provinceName": "Đà Nẵng",
+      "areaLabel": "Khu vực Sơn Trà",
+      "searchAliases": [
+        "Quảng Nam"
+      ],
+      "activityIds": [
+        "forest",
+        "coastal"
+      ],
+      "summary": "Bán đảo Sơn Trà là một điểm tham khảo trong khu vực Sơn Trà. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 16.122,
+        "longitude": 108.278,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 68
+    },
+    {
+      "placeId": "01a0db02-f80b-70eb-aa8e-7616556283f3",
+      "seedKey": "vn-12-doi-che-tan-uyen",
+      "slug": "doi-che-tan-uyen",
+      "name": "Đồi chè Tân Uyên",
+      "provinceCode": "12",
+      "provinceName": "Lai Châu",
+      "areaLabel": "Khu vực Tân Uyên",
+      "searchAliases": [],
+      "activityIds": [
+        "mountain",
+        "landscape"
+      ],
+      "summary": "Đồi chè Tân Uyên là một điểm tham khảo trong khu vực Tân Uyên. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 22.068,
+        "longitude": 103.764,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 69
+    },
+    {
+      "placeId": "01a0db02-f848-7803-a498-135671b338db",
+      "seedKey": "vn-66-ganh-da-dia",
+      "slug": "ganh-da-dia",
+      "name": "Gành Đá Đĩa",
+      "provinceCode": "66",
+      "provinceName": "Đắk Lắk",
+      "areaLabel": "Khu vực Gành Đá Đĩa",
+      "searchAliases": [
+        "Phú Yên"
+      ],
+      "activityIds": [
+        "coastal",
+        "landscape"
+      ],
+      "summary": "Gành Đá Đĩa là một điểm tham khảo trong khu vực Gành Đá Đĩa. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 13.353,
+        "longitude": 109.297,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 70
+    },
+    {
+      "placeId": "01a0db02-f852-7d5e-9469-438c2bc519a6",
+      "seedKey": "vn-80-nui-ba-den",
+      "slug": "nui-ba-den",
+      "name": "Núi Bà Đen",
+      "provinceCode": "80",
+      "provinceName": "Tây Ninh",
+      "areaLabel": "Khu vực núi Bà Đen",
+      "searchAliases": [
+        "Long An"
+      ],
+      "activityIds": [
+        "mountain",
+        "culture"
+      ],
+      "summary": "Núi Bà Đen là một điểm tham khảo trong khu vực núi Bà Đen. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 11.369,
+        "longitude": 106.169,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 71
+    },
+    {
+      "placeId": "01a0db02-f85a-7c7b-bd21-5a9d06256476",
+      "seedKey": "vn-86-ao-ba-om",
+      "slug": "ao-ba-om",
+      "name": "Ao Bà Om",
+      "provinceCode": "86",
+      "provinceName": "Vĩnh Long",
+      "areaLabel": "Khu vực Ao Bà Om",
+      "searchAliases": [
+        "Bến Tre",
+        "Trà Vinh"
+      ],
+      "activityIds": [
+        "lake",
+        "culture"
+      ],
+      "summary": "Ao Bà Om là một điểm tham khảo trong khu vực Ao Bà Om. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 9.935,
+        "longitude": 106.316,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 72
+    },
+    {
+      "placeId": "01a0db02-f860-7a86-8208-1219a8cf081c",
+      "seedKey": "vn-92-cu-lao-dung",
+      "slug": "cu-lao-dung",
+      "name": "Cù lao Dung",
+      "provinceCode": "92",
+      "provinceName": "Cần Thơ",
+      "areaLabel": "Khu vực Cù lao Dung",
+      "searchAliases": [
+        "Hậu Giang",
+        "Sóc Trăng"
+      ],
+      "activityIds": [
+        "forest",
+        "landscape"
+      ],
+      "summary": "Cù lao Dung là một điểm tham khảo trong khu vực Cù lao Dung. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 9.625,
+        "longitude": 106.202,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 73
+    },
+    {
+      "placeId": "01a0db02-f827-730d-9f0b-d08e946a9d74",
+      "seedKey": "vn-33-pho-hien",
+      "slug": "pho-hien",
+      "name": "Phố Hiến",
+      "provinceCode": "33",
+      "provinceName": "Hưng Yên",
+      "areaLabel": "Khu vực Phố Hiến",
+      "searchAliases": [
+        "Thái Bình"
+      ],
+      "activityIds": [
+        "culture",
+        "walking"
+      ],
+      "summary": "Phố Hiến là một điểm tham khảo trong khu vực Phố Hiến. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 20.646,
+        "longitude": 106.06,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 74
+    },
+    {
+      "placeId": "01a0db02-f820-7b0c-938c-0bb67470a61d",
+      "seedKey": "vn-25-mai-chau",
+      "slug": "mai-chau",
+      "name": "Mai Châu",
+      "provinceCode": "25",
+      "provinceName": "Phú Thọ",
+      "areaLabel": "Khu vực Mai Châu",
+      "searchAliases": [
+        "Vĩnh Phúc",
+        "Hòa Bình"
+      ],
+      "activityIds": [
+        "landscape",
+        "culture"
+      ],
+      "summary": "Mai Châu là một điểm tham khảo trong khu vực Mai Châu. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 20.662,
+        "longitude": 105.071,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 75
+    },
+    {
+      "placeId": "01a0db02-f835-79d1-b57b-18b29f2de08f",
+      "seedKey": "vn-44-bien-nhat-le",
+      "slug": "bien-nhat-le",
+      "name": "Biển Nhật Lệ",
+      "provinceCode": "44",
+      "provinceName": "Quảng Trị",
+      "areaLabel": "Đồng Hới",
+      "searchAliases": [
+        "Quảng Bình"
+      ],
+      "activityIds": [
+        "coastal",
+        "walking"
+      ],
+      "summary": "Biển Nhật Lệ là một điểm tham khảo trong khu vực Đồng Hới. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 17.485,
+        "longitude": 106.628,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 76
+    },
+    {
+      "placeId": "01a0db02-f82a-7e74-b8d0-868c27638cd3",
+      "seedKey": "vn-37-vuon-quoc-gia-xuan-thuy",
+      "slug": "vuon-quoc-gia-xuan-thuy",
+      "name": "Vườn quốc gia Xuân Thủy",
+      "provinceCode": "37",
+      "provinceName": "Ninh Bình",
+      "areaLabel": "Khu vực Xuân Thủy",
+      "searchAliases": [
+        "Hà Nam",
+        "Nam Định"
+      ],
+      "activityIds": [
+        "forest",
+        "coastal"
+      ],
+      "summary": "Vườn quốc gia Xuân Thủy là một điểm tham khảo trong khu vực Xuân Thủy. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 20.227,
+        "longitude": 106.545,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 77
+    },
+    {
+      "placeId": "01a0db02-f851-71bf-aeba-981a049cef80",
+      "seedKey": "vn-79-thao-cam-vien-sai-gon",
+      "slug": "thao-cam-vien-sai-gon",
+      "name": "Thảo Cầm Viên Sài Gòn",
+      "provinceCode": "79",
+      "provinceName": "Thành phố Hồ Chí Minh",
+      "areaLabel": "Khu vực trung tâm TP.HCM",
+      "searchAliases": [
+        "TP HCM",
+        "TP.HCM",
+        "Sài Gòn",
+        "Bình Dương",
+        "Bà Rịa - Vũng Tàu"
+      ],
+      "activityIds": [
+        "walking",
+        "landscape"
+      ],
+      "summary": "Thảo Cầm Viên Sài Gòn là một điểm tham khảo trong khu vực trung tâm TP.HCM. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 10.787,
+        "longitude": 106.705,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 78
+    },
+    {
+      "placeId": "01a0db02-f823-73c0-ad3b-cc1f90ca3bda",
+      "seedKey": "vn-31-do-son",
+      "slug": "do-son",
+      "name": "Đồ Sơn",
+      "provinceCode": "31",
+      "provinceName": "Hải Phòng",
+      "areaLabel": "Khu vực Đồ Sơn",
+      "searchAliases": [
+        "Hải Dương"
+      ],
+      "activityIds": [
+        "coastal",
+        "walking"
+      ],
+      "summary": "Đồ Sơn là một điểm tham khảo trong khu vực Đồ Sơn. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 20.688,
+        "longitude": 106.799,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 79
+    },
+    {
+      "placeId": "01a0db02-f82e-7f92-9f9d-06797b225a82",
+      "seedKey": "vn-40-cua-lo",
+      "slug": "cua-lo",
+      "name": "Cửa Lò",
+      "provinceCode": "40",
+      "provinceName": "Nghệ An",
+      "areaLabel": "Khu vực Cửa Lò",
+      "searchAliases": [],
+      "activityIds": [
+        "coastal",
+        "walking"
+      ],
+      "summary": "Cửa Lò là một điểm tham khảo trong khu vực Cửa Lò. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 18.809,
+        "longitude": 105.726,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 80
+    },
+    {
+      "placeId": "018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e09",
+      "seedKey": "vn-08-dinh-tay-con-linh-hoang-su-phi",
+      "slug": "dinh-tay-con-linh-hoang-su-phi",
+      "name": "Đỉnh Tây Côn Lĩnh Hoàng Su Phì",
+      "provinceCode": "08",
+      "provinceName": "Tuyên Quang",
+      "areaLabel": "Khu vực Tây Côn Lĩnh",
+      "searchAliases": [
+        "Hà Giang"
+      ],
+      "activityIds": [
+        "mountain",
+        "forest"
+      ],
+      "summary": "Đỉnh Tây Côn Lĩnh Hoàng Su Phì là một điểm tham khảo trong khu vực Tây Côn Lĩnh. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 22.8094,
+        "longitude": 104.8117,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": null,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "EXISTING_SITE_REFERENCE",
+        "coordinateSource": "OBSERVED_SITE_MAP",
+        "sourceUrl": "https://ventlore.com/vi/places/018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e09/",
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ chép từ chế độ Bản đồ của website; chưa kiểm chứng độc lập."
+      },
+      "catalogOrder": 81
+    },
+    {
+      "placeId": "01a0db02-f82b-7319-8d61-e4a9fb8da70a",
+      "seedKey": "vn-38-pu-luong",
+      "slug": "pu-luong",
+      "name": "Pù Luông",
+      "provinceCode": "38",
+      "provinceName": "Thanh Hóa",
+      "areaLabel": "Khu vực Pù Luông",
+      "searchAliases": [],
+      "activityIds": [
+        "mountain",
+        "forest"
+      ],
+      "summary": "Pù Luông là một điểm tham khảo trong khu vực Pù Luông. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 20.457,
+        "longitude": 105.148,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 82
+    },
+    {
+      "placeId": "01a0db02-f800-7f89-9143-baca8a6ef849",
+      "seedKey": "vn-01-ho-hoan-kiem",
+      "slug": "ho-hoan-kiem",
+      "name": "Hồ Hoàn Kiếm",
+      "provinceCode": "01",
+      "provinceName": "Hà Nội",
+      "areaLabel": "Khu vực hồ Hoàn Kiếm",
+      "searchAliases": [],
+      "activityIds": [
+        "lake",
+        "walking"
+      ],
+      "summary": "Hồ Hoàn Kiếm là một điểm tham khảo trong khu vực hồ Hoàn Kiếm. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.028,
+        "longitude": 105.852,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 83
+    },
+    {
+      "placeId": "01a0db02-f857-77c1-86d1-eeb59139b529",
+      "seedKey": "vn-82-cu-lao-thoi-son",
+      "slug": "cu-lao-thoi-son",
+      "name": "Cù lao Thới Sơn",
+      "provinceCode": "82",
+      "provinceName": "Đồng Tháp",
+      "areaLabel": "Khu vực Thới Sơn",
+      "searchAliases": [
+        "Tiền Giang"
+      ],
+      "activityIds": [
+        "landscape",
+        "walking"
+      ],
+      "summary": "Cù lao Thới Sơn là một điểm tham khảo trong khu vực Thới Sơn. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 10.34,
+        "longitude": 106.318,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 84
+    },
+    {
+      "placeId": "01a0db02-f84d-7852-9809-8defc24daf57",
+      "seedKey": "vn-75-vuon-quoc-gia-cat-tien",
+      "slug": "vuon-quoc-gia-cat-tien",
+      "name": "Vườn quốc gia Cát Tiên",
+      "provinceCode": "75",
+      "provinceName": "Đồng Nai",
+      "areaLabel": "Khu vực Nam Cát Tiên",
+      "searchAliases": [
+        "Bình Phước"
+      ],
+      "activityIds": [
+        "forest",
+        "walking"
+      ],
+      "summary": "Vườn quốc gia Cát Tiên là một điểm tham khảo trong khu vực Nam Cát Tiên. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 11.425,
+        "longitude": 107.428,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 85
+    },
+    {
+      "placeId": "01a0db02-f826-771d-b854-224df3f89f49",
+      "seedKey": "vn-33-den-tran-khu-vuc-thai-binh",
+      "slug": "den-tran-khu-vuc-thai-binh",
+      "name": "Đền Trần — khu vực Thái Bình",
+      "provinceCode": "33",
+      "provinceName": "Hưng Yên",
+      "areaLabel": "Hưng Hà",
+      "searchAliases": [
+        "Thái Bình"
+      ],
+      "activityIds": [
+        "culture",
+        "walking"
+      ],
+      "summary": "Đền Trần — khu vực Thái Bình là một điểm tham khảo trong khu vực Hưng Hà. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 20.651,
+        "longitude": 106.223,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 86
+    },
+    {
+      "placeId": "01a0db02-f85d-76d5-9a0d-a8f7cb2fafb9",
+      "seedKey": "vn-91-bai-sao-phu-quoc",
+      "slug": "bai-sao-phu-quoc",
+      "name": "Bãi Sao — Phú Quốc",
+      "provinceCode": "91",
+      "provinceName": "An Giang",
+      "areaLabel": "Khu vực Bãi Sao, Phú Quốc",
+      "searchAliases": [
+        "Kiên Giang"
+      ],
+      "activityIds": [
+        "coastal",
+        "walking"
+      ],
+      "summary": "Bãi Sao — Phú Quốc là một điểm tham khảo trong khu vực Bãi Sao, Phú Quốc. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 10.055,
+        "longitude": 104.035,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 87
+    },
+    {
+      "placeId": "01a0db02-f81f-7267-a4f8-b93b12398c6f",
+      "seedKey": "vn-25-tam-dao",
+      "slug": "tam-dao",
+      "name": "Tam Đảo",
+      "provinceCode": "25",
+      "provinceName": "Phú Thọ",
+      "areaLabel": "Khu vực Tam Đảo",
+      "searchAliases": [
+        "Vĩnh Phúc",
+        "Hòa Bình"
+      ],
+      "activityIds": [
+        "mountain",
+        "landscape"
+      ],
+      "summary": "Tam Đảo là một điểm tham khảo trong khu vực Tam Đảo. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.454,
+        "longitude": 105.645,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 88
+    },
+    {
+      "placeId": "01a0db02-f862-70e4-a5ae-3c5cf4ff46d7",
+      "seedKey": "vn-96-vuon-quoc-gia-u-minh-ha",
+      "slug": "vuon-quoc-gia-u-minh-ha",
+      "name": "Vườn quốc gia U Minh Hạ",
+      "provinceCode": "96",
+      "provinceName": "Cà Mau",
+      "areaLabel": "Khu vực U Minh Hạ",
+      "searchAliases": [
+        "Bạc Liêu"
+      ],
+      "activityIds": [
+        "forest",
+        "landscape"
+      ],
+      "summary": "Vườn quốc gia U Minh Hạ là một điểm tham khảo trong khu vực U Minh Hạ. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 9.254,
+        "longitude": 104.945,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 89
+    },
+    {
+      "placeId": "01a0db02-f815-7d79-99e3-ec5ae882fa49",
+      "seedKey": "vn-19-atk-dinh-hoa",
+      "slug": "atk-dinh-hoa",
+      "name": "ATK Định Hóa",
+      "provinceCode": "19",
+      "provinceName": "Thái Nguyên",
+      "areaLabel": "Định Hóa",
+      "searchAliases": [
+        "Bắc Kạn"
+      ],
+      "activityIds": [
+        "culture",
+        "walking"
+      ],
+      "summary": "ATK Định Hóa là một điểm tham khảo trong khu vực Định Hóa. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.799,
+        "longitude": 105.619,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 90
+    },
+    {
+      "placeId": "01a0db02-f804-7167-8a7c-2a5b219ea702",
+      "seedKey": "vn-04-pac-bo",
+      "slug": "pac-bo",
+      "name": "Pác Bó",
+      "provinceCode": "04",
+      "provinceName": "Cao Bằng",
+      "areaLabel": "Khu vực Pác Bó",
+      "searchAliases": [],
+      "activityIds": [
+        "culture",
+        "landscape"
+      ],
+      "summary": "Pác Bó là một điểm tham khảo trong khu vực Pác Bó. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 22.979,
+        "longitude": 106.047,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 91
+    },
+    {
+      "placeId": "01a0db02-f854-7627-a6a8-4ce8e249b437",
+      "seedKey": "vn-80-vuon-quoc-gia-lo-go-xa-mat",
+      "slug": "vuon-quoc-gia-lo-go-xa-mat",
+      "name": "Vườn quốc gia Lò Gò - Xa Mát",
+      "provinceCode": "80",
+      "provinceName": "Tây Ninh",
+      "areaLabel": "Khu vực Lò Gò - Xa Mát",
+      "searchAliases": [
+        "Long An"
+      ],
+      "activityIds": [
+        "forest",
+        "walking"
+      ],
+      "summary": "Vườn quốc gia Lò Gò - Xa Mát là một điểm tham khảo trong khu vực Lò Gò - Xa Mát. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 11.59,
+        "longitude": 105.889,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 92
+    },
+    {
+      "placeId": "01a0db02-f833-726d-b987-20f42fab0025",
+      "seedKey": "vn-42-ho-ke-go",
+      "slug": "ho-ke-go",
+      "name": "Hồ Kẻ Gỗ",
+      "provinceCode": "42",
+      "provinceName": "Hà Tĩnh",
+      "areaLabel": "Khu vực Kẻ Gỗ",
+      "searchAliases": [],
+      "activityIds": [
+        "lake",
+        "forest"
+      ],
+      "summary": "Hồ Kẻ Gỗ là một điểm tham khảo trong khu vực Kẻ Gỗ. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 18.294,
+        "longitude": 105.92,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 93
+    },
+    {
+      "placeId": "01a0db02-f842-7919-9f96-a39dab71368b",
+      "seedKey": "vn-52-ky-co",
+      "slug": "ky-co",
+      "name": "Kỳ Co",
+      "provinceCode": "52",
+      "provinceName": "Gia Lai",
+      "areaLabel": "Khu vực Kỳ Co",
+      "searchAliases": [
+        "Bình Định"
+      ],
+      "activityIds": [
+        "coastal",
+        "landscape"
+      ],
+      "summary": "Kỳ Co là một điểm tham khảo trong khu vực Kỳ Co. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 13.852,
+        "longitude": 109.311,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 94
+    },
+    {
+      "placeId": "01a0db02-f811-7175-a0ee-784f32f0b485",
+      "seedKey": "vn-15-ruong-bac-thang-mu-cang-chai",
+      "slug": "ruong-bac-thang-mu-cang-chai",
+      "name": "Ruộng bậc thang Mù Cang Chải",
+      "provinceCode": "15",
+      "provinceName": "Lào Cai",
+      "areaLabel": "Mù Cang Chải",
+      "searchAliases": [
+        "Yên Bái"
+      ],
+      "activityIds": [
+        "landscape",
+        "walking"
+      ],
+      "summary": "Ruộng bậc thang Mù Cang Chải là một điểm tham khảo trong khu vực Mù Cang Chải. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.85,
+        "longitude": 104.092,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 95
+    },
+    {
+      "placeId": "01a0db02-f844-7168-97df-3f7912d44b15",
+      "seedKey": "vn-56-vinh-vinh-hy",
+      "slug": "vinh-vinh-hy",
+      "name": "Vịnh Vĩnh Hy",
+      "provinceCode": "56",
+      "provinceName": "Khánh Hòa",
+      "areaLabel": "Khu vực Vĩnh Hy",
+      "searchAliases": [
+        "Ninh Thuận"
+      ],
+      "activityIds": [
+        "coastal",
+        "landscape"
+      ],
+      "summary": "Vịnh Vĩnh Hy là một điểm tham khảo trong khu vực Vĩnh Hy. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 11.727,
+        "longitude": 109.204,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 96
+    },
+    {
+      "placeId": "01a0db02-f813-735a-b93b-2e98fc40eeae",
+      "seedKey": "vn-19-ho-nui-coc",
+      "slug": "ho-nui-coc",
+      "name": "Hồ Núi Cốc",
+      "provinceCode": "19",
+      "provinceName": "Thái Nguyên",
+      "areaLabel": "Khu vực hồ Núi Cốc",
+      "searchAliases": [
+        "Bắc Kạn"
+      ],
+      "activityIds": [
+        "lake",
+        "landscape"
+      ],
+      "summary": "Hồ Núi Cốc là một điểm tham khảo trong khu vực hồ Núi Cốc. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 21.573,
+        "longitude": 105.678,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 97
+    },
+    {
+      "placeId": "01a0db02-f82f-7332-854f-fc05c4abb35b",
+      "seedKey": "vn-40-vuon-quoc-gia-pu-mat",
+      "slug": "vuon-quoc-gia-pu-mat",
+      "name": "Vườn quốc gia Pù Mát",
+      "provinceCode": "40",
+      "provinceName": "Nghệ An",
+      "areaLabel": "Khu vực Pù Mát",
+      "searchAliases": [],
+      "activityIds": [
+        "forest",
+        "mountain"
+      ],
+      "summary": "Vườn quốc gia Pù Mát là một điểm tham khảo trong khu vực Pù Mát. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 19.059,
+        "longitude": 104.66,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 98
+    },
+    {
+      "placeId": "01a0db02-f846-739a-b5ba-08bea5a6f00e",
+      "seedKey": "vn-66-ho-lak",
+      "slug": "ho-lak",
+      "name": "Hồ Lắk",
+      "provinceCode": "66",
+      "provinceName": "Đắk Lắk",
+      "areaLabel": "Khu vực hồ Lắk",
+      "searchAliases": [
+        "Phú Yên"
+      ],
+      "activityIds": [
+        "lake",
+        "landscape"
+      ],
+      "summary": "Hồ Lắk là một điểm tham khảo trong khu vực hồ Lắk. Xem vị trí và khám phá các điểm xung quanh.",
+      "location": {
+        "latitude": 12.421,
+        "longitude": 108.172,
+        "coordinateKind": "approximate_area",
+        "accuracyMeters": null
+      },
+      "coverImage": null,
+      "verificationStatus": "UNVERIFIED",
+      "postCount": 0,
+      "rating": null,
+      "safetyClaims": [],
+      "sourceUpdatedAt": null,
+      "provenance": {
+        "dataKind": "AUTHORED_SEED",
+        "coordinateSource": "AUTHORED_APPROXIMATE_FIXTURE",
+        "sourceUrl": null,
+        "independentlyVerified": false,
+        "preparedAt": "2026-09-26",
+        "note": "Tọa độ khu vực do người soạn ước lượng cho dữ liệu giả lập; chưa đối chiếu nguồn địa lý hoặc ranh giới. Không phải tọa độ lối vào, cung đường hay chỉ dẫn di chuyển."
+      },
+      "catalogOrder": 99
+    }
+  ]
+}

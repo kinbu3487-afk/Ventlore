@@ -1,11 +1,11 @@
 # Trạng Thái Dự Án Ventlore (PROJECT_STATE)
 
-**Cập nhật lần cuối:** 26/09/2026 (FE-First v1.0 · Hoàn thiện Toàn diện Front-End, 14 Kịch bản Nghiệm thu & Bản đồ Dữ liệu FE_DATA_MAP.md)  
-**Phiên bản đặc tả cơ sở:** Logic-ID-DB v0.3, Event UI Spec v0.3, Brand Guide v0.1, Prompt FE-First v1.0
+**Cập nhật lần cuối:** 26/09/2026 (FE-Nearby v1.5 · Tích Hợp 100 Điểm Đến Nền & Định Vị "Gần Tôi" Thuần FE)  
+**Phiên bản đặc tả cơ sở:** Logic-ID-DB v0.3, Event UI Spec v0.3, Brand Guide v0.1, Prompt FE-First v1.0, Ventlore_FE_100_Destinations_Location_v1_5.md
 
 ---
 
-## 1. Mốc hiện tại: Hoàn thành FE-First v1.0 (Chặng FE-00 đến FE-06)
+## 1. Mốc hiện tại: Hoàn thành FE-Nearby v1.5 (100 Điểm Đến & Khám Phá "Gần Tôi")
 
 | Chặng | Tên chặng | Trạng thái | Ghi chú |
 |---|---|---|---|
@@ -16,7 +16,8 @@
 | **FE-Fix v1.1** | **Sửa lỗi P0, Hoàn thiện Header, i18n, Tabs & Phân Quyền** | **HOÀN THÀNH** | - **P0-01:** Đổi revision tức thời không cần reload (Suspense + reactive searchParams + 3 fixtures revision).<br>- **P0-02:** Chặn Guest mua VIP demo, gia hạn giữ membershipId, gỡ fake txHash.<br>- **P1-01:** Header gọn gàng, bỏ persona dropdown thừa khỏi header, không đè chữ 1440/1366/390/430px.<br>- **P1-02:** i18n 6 ngôn ngữ bảo toàn query params.<br>- **P1-03:** Two-way sync URL tab `?tab=existing\|candidate`, nháp isolated theo user và tab, giữ context đăng nhập.<br>- **P1-04:** Ngữ cảnh payment rõ ràng, tắt tip khi chưa duyệt, Tab 4 Benefits không fake `OFFERED` cho user có 0 bài duyệt.<br>- **P1-05:** Gate phân quyền cho Guest/Member khi vào `/expert` và `/admin`.<br>- **P2:** Chuyển ngữ toàn bộ jargon kỹ thuật sang ngôn ngữ người dùng thân thiện.<br>- **Verify:** `pnpm run verify` đạt 100% PASS (234 trang static export). |
 | **FE-Continue v1.2** | **URL 2 Chiều Account, Đa Ngôn Ngữ 6 Locales, Di Chuyển ReviewToolbar, Chỉnh Đốn Data Map 38 Dòng** | **HOÀN THÀNH** | - **FE-12-01:** Đồng bộ 2 chiều URL query `/account?tab=...`, history Back/Forward, chuẩn hóa query lạ, bảo toàn returnTo có search params.<br>- **FE-12-02:** Đa ngôn ngữ trọn vẹn 6 locales (`vi`, `en`, `ja`, `zh-Hans`, `ko`, `fr`) 100% key parity cho Account, Contribute, VIP, PaymentModal, Header/Footer.<br>- **FE-12-03:** Chỉnh đốn Data Map 38 dòng thực tế (xóa dòng Home Highlights thừa), thống kê động, đồng bộ `FE_DATA_MAP.md` và `data-map-data.ts`.<br>- **FE-12-04:** Chuẩn hóa an toàn cho điểm mới, bỏ cam kết chung, Author NFT tối đa 1 NFT/post, dán nhãn ví & số dư demo.<br>- **FE-12-05:** Di dời ReviewToolbar sang góc dưới bên trái (`bottom-left`), tránh Netlify badge.<br>- **Verify:** `pnpm run verify` đạt 100% PASS (234/234 trang SSG). |
 | **FE-Official v1.4** | **Giao Diện Sản Phẩm Chính Thức (Clean Production Interface)** | **HOÀN THÀNH** | - Gỡ bỏ toàn bộ DEMO banner, ReviewToolbar, persona selector, scenario controls và developer jargon khỏi public interface.<br>- Bỏ route `/data-map` và tài liệu implementation khỏi header/footer/user menu/public dir.<br>- Đảm bảo 100% bản dịch và key parity trên 6 locales (`vi`, `en`, `ja`, `zh-Hans`, `ko`, `fr`).<br>- Chuyển đổi trạng thái nút chưa kết nối backend/chain thật sang trạng thái khả dụng trung thực (honest availability state), không thực hiện mô phỏng tạo biên nhận giả `0xmock`.<br>- Bỏ `DemoPaymentsStream` khỏi trang Minh bạch (`/transparency`), thay bằng Sổ quỹ công bố định kỳ.<br>- Đạt 100% typecheck, lint, build (227 trang static SSG) và validate_foundation.py PASS. |
-| Parallel v2 - BE | Back-end song song (BE-A, BE-B, BE-C) | SẴN SÀNG | Chờ Bin duyệt FE để triển khai REST API và PostgreSQL schema theo ID Contract. |
+| **FE-Nearby v1.5** | **100 Điểm Đến Nền & Định Vị "Gần Tôi" Thuần FE** | **HOÀN THÀNH** | - **100 Điểm Đến Nền:** Phủ đủ 34 tỉnh/thành hiện hữu ($\ge 2$ điểm/tỉnh, $32 \times 3 + 2 \times 2 = 100$). Tích hợp 97 điểm nền mới vào `packages/api-client/src/data/destinations-100.json`, bảo toàn nguyên vẹn 3 điểm gốc (`...e02` Cát Bà, `...e08` Cát Tiên, `...e09` Sơn Trà), 1 điểm merged (`...e04`) và 1 điểm candidate (`...e03`).<br>- **Định Vị "Gần Tôi":** One-shot Geolocation API (`navigator.geolocation.getCurrentPosition`), xử lý đủ 7 trạng thái fallback, tọa độ lưu strictly in-memory (không ghi URL/storage/analytics).<br>- **Pipeline Tìm Kiếm & Bán Kính:** Bộ lọc từ khóa/bí danh + tỉnh thành + hoạt động $\to$ Haversine $\to$ Bán kính (5, 25, 50, 100, 200 km, Không giới hạn) $\to$ Sắp xếp theo khoảng cách $\to$ Phân trang 12 điểm/trang (9 trang).<br>- **Bản Đồ & Thẻ Điểm:** Tích hợp Leaflet OpenStreetMap hiển thị toàn bộ `mappableMatches`, huy hiệu khoảng cách `≈ X km`, trạng thái rỗng bán kính với điểm gần nhất ngoài bán kính.<br>- **Build & SSG:** 906 trang SSG được sinh đầy đủ (6 locales $\times$ 100 điểm + trang lõi). Verify monorepo 100% PASS. |
+| **Parallel v2 - BE** | Back-end song song (BE-A, BE-B, BE-C) | SẴN SÀNG | Chờ Bin duyệt FE để triển khai REST API và PostgreSQL schema theo ID Contract. |
 
 ---
 

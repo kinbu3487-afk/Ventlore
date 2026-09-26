@@ -85,6 +85,11 @@ export function PlaceSummary({ place }: PlaceSummaryProps) {
                 <MapPinIcon className="w-3.5 h-3.5 text-amber" />
                 {place.regionName}
               </span>
+              {place.location?.coordinateKind === 'approximate_area' && (
+                <span className="px-2.5 py-1 rounded-control bg-amber/80 text-ink text-xs font-bold backdrop-blur-sm">
+                  {t('place.approximateArea')}
+                </span>
+              )}
               {place.coordinates && (
                 <span className="font-mono text-xs text-ivory/90 bg-black/40 px-2.5 py-1 rounded-control backdrop-blur-sm">
                   {place.coordinates.lat.toFixed(4)}°N, {place.coordinates.lng.toFixed(4)}°E
@@ -106,6 +111,18 @@ export function PlaceSummary({ place }: PlaceSummaryProps) {
           <p className="text-sm sm:text-base text-ink-secondary leading-relaxed">
             {place.description}
           </p>
+
+          {place.posts.length === 0 && (
+            <div className="p-4 rounded-control border border-sage bg-surface-canvas text-xs text-ink-secondary space-y-1">
+              <div className="font-semibold text-ink flex items-center gap-1.5">
+                <CompassIcon className="w-4 h-4 text-forest" />
+                <span>{t('place.fieldInfoPending')}</span>
+              </div>
+              <p>
+                Tọa độ khu vực mang tính ước lượng tham khảo và chưa qua thẩm định thực địa độc lập.
+              </p>
+            </div>
+          )}
 
           {/* 3. Safety Warnings Section (Crucial Invariant: No 'absolute safety') */}
           {place.warnings.length > 0 && (
@@ -155,8 +172,25 @@ export function PlaceSummary({ place }: PlaceSummaryProps) {
         </h2>
 
         {place.posts.length === 0 ? (
-          <div className="p-8 rounded-card border border-dashed border-sage bg-surface-card text-center text-sm text-ink-secondary">
-            {t('place.emptyPosts')}
+          <div className="p-8 sm:p-10 rounded-card border border-dashed border-sage bg-surface-card text-center space-y-3">
+            <div className="w-10 h-10 rounded-full bg-sage/40 text-forest flex items-center justify-center mx-auto">
+              <CompassIcon className="w-5 h-5" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="font-bold text-sm text-ink">{t('place.noFieldPostsYet')}</h3>
+              <p className="text-xs text-ink-secondary max-w-md mx-auto">
+                {t('place.emptyPosts')}
+              </p>
+            </div>
+            <div className="pt-2">
+              <Link
+                href={getLocalizedPath('/contribute')}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-control bg-forest hover:bg-forest-hover text-white text-xs font-bold transition-colors shadow-xs"
+              >
+                <span>{t('explore.proposePlaceButton')}</span>
+                <ArrowRightIcon className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
         ) : (
           <div className="space-y-3">

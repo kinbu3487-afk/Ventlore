@@ -1,13 +1,77 @@
 # Tài Liệu Bàn Giao (HANDOFF)
 
-**Chặng hoàn thành gần nhất:** FE-Official v1.4 — Triển khai Giao diện Sản phẩm Chính thức (Clean Production Interface) theo `Ventlore_FE_Official_Interface_v1_4.md`  
-**Nhiệm vụ tiếp theo:** Bin trực tiếp trải nghiệm và nghiệm thu cục bộ trên `http://localhost:3000`; Chuẩn bị cho chặng kết nối Back-end  
-**Thời điểm bàn giao:** 26/09/2026 17:15 UTC+7  
-**Tài liệu kèm theo:** `docs/PROJECT_STATE.md`, `Ventlore_FE_Official_Interface_v1_4.md`  
+**Chặng hoàn thành gần nhất:** FE-Nearby v1.5 — Tích Hợp 100 Điểm Đến Nền & Định Vị "Gần Tôi" Thuần FE theo `docs/Ventlore_Nearby_v1_5/Ventlore_FE_100_Destinations_Location_v1_5.md`  
+**Nhiệm vụ tiếp theo:** Bin trực tiếp trải nghiệm và nghiệm thu cục bộ tính năng khám phá theo vị trí trên `http://localhost:3000/explore`; Chuẩn bị cho chặng kết nối Back-end  
+**Thời điểm bàn giao:** 26/09/2026 18:15 UTC+7  
+**Tài liệu kèm theo:** `docs/PROJECT_STATE.md`, `docs/Ventlore_Nearby_v1_5/Ventlore_FE_100_Destinations_Location_v1_5.md`  
 
 ---
 
-## 1. Kết quả đạt được tại Chặng FE-Official v1.4
+## 1. Kết quả đạt được tại Chặng FE-Nearby v1.5
+
+1. **Bộ Dữ Liệu 100 Điểm Đến Nền Chuẩn Hóa:**
+   - Đặt tại `packages/api-client/src/data/destinations-100.json`, chứa đúng 100 điểm đến phân bổ khắp 34 tỉnh/thành hiện hữu của Việt Nam (mỗi tỉnh/thành $\ge 2$ điểm; $32 \times 3 + 2 \times 2 = 100$).
+   - Kết hợp hoàn hảo giữa 3 điểm thực địa gốc (`018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e02` Đảo Cát Bà, `...e08` Vườn quốc gia Cát Tiên, `...e09` Bán đảo Sơn Trà) và 97 điểm đến nền mới.
+   - Giữ nguyên vẹn 1 điểm Candidate (`...e03` Cát Cò 3) và 1 điểm Merged (`...e04` Cát Cò 4 trỏ về Cát Bà) cùng tất cả bài viết, revisions và claims liên kết.
+   - 97 điểm nền có tọa độ ước lượng mang cờ `approximate_area`, trạng thái `UNVERIFIED`, `postsCount: 0`, `independentlyVerified: false`, hiển thị thông điệp trung thực *"Thông tin thực địa đang được bổ sung"*.
+
+2. **Cơ Chế Khám Phá Định Vị "Gần Tôi" (Nearby Engine):**
+   - Đóng gói tại `packages/api-client/src/nearby.ts` và re-export tại `apps/web/src/lib/nearby.ts`.
+   - Sử dụng One-shot Device Geolocation API chuẩn (`navigator.geolocation.getCurrentPosition`), không phụ thuộc RPC, backend hay dịch vụ bên thứ ba.
+   - Xử lý đủ 7 trạng thái định vị: `ready`, `denied`, `unavailable`, `timeout`, `unsupported`, `insecure_context`, `cancelled`.
+   - Pipeline truy vấn chặt chẽ: Danh mục 100 điểm $\to$ Lọc từ khóa/bí danh + tỉnh thành + hoạt động $\to$ Tính khoảng cách theo công thức Haversine bán kính Trái Đất $R = 6371\text{ km}$ $\to$ Lọc bán kính (5, 25, 50, 100, 200 km, Không giới hạn) $\to$ Sắp xếp theo khoảng cách $\to$ Phân trang chuẩn 12 điểm/trang (9 trang).
+   - Bảo mật riêng tư tuyệt đối: Tọa độ thiết bị chỉ lưu trong bộ nhớ React state (`in-memory`), không bao giờ ghi vào URL search params, localStorage hay analytics.
+
+3. **Giao Diện Bản Đồ & Thẻ Điểm Đồng Bộ:**
+   - **Thẻ điểm:** Hiển thị huy hiệu khoảng cách `≈ X km`, nhãn `Vị trí ước lượng`, ảnh nền 16:9 với fallback SVG, nhãn cảnh báo an toàn thu gọn/mở rộng.
+   - **Trạng thái rỗng bán kính:** Khi không có điểm trong bán kính đã chọn, giao diện hiển thị thông báo thân thiện, các nút mở rộng bán kính (100 km, Không giới hạn) hoặc chọn khu vực, kèm danh sách tối đa 3 điểm gần nhất ngoài bán kính (`nearestOutsideRadius`).
+   - **Bản đồ OpenStreetMap (Leaflet):** Hiển thị toàn bộ các điểm thỏa mãn bộ lọc (`mappableMatches`), ghim vị trí người dùng kèm vòng tròn độ chính xác, nút "Xem toàn bộ" fit bounds, đồng bộ thẻ điểm khi click marker.
+   - **Đóng góp (`/contribute`):** Cung cấp ô tìm kiếm tức thời tên điểm/tỉnh thành để chọn điểm sẵn có từ 100 điểm mà không cần cuộn danh sách dài; bộ phát hiện điểm trùng lặp hoạt động tự động.
+
+4. **Đa Ngôn Ngữ & Build Tĩnh Toàn Diện:**
+   - Bổ sung hơn 35 khóa ngôn ngữ mới vào cả 6 locales (`vi`, `en`, `ja`, `zh-Hans`, `ko`, `fr`) cho các trạng thái geolocation, bán kính, thông báo vị trí ước lượng, phân trang và 7 nhóm hoạt động trải nghiệm.
+   - `generateStaticParams()` được cập nhật đầy đủ cho cả 2 route `/places/[placeId]` và `/[locale]/places/[placeId]`.
+   - Sinh thành công **906 trang SSG tĩnh** (6 locales $\times$ 100 điểm đến + các trang tài khoản, đóng góp, quản trị, bài viết).
+
+---
+
+## 2. Kết Quả Kiểm Tra Kỹ Thuật
+
+- **Tự động kiểm định Nearby (`node docs/Ventlore_Nearby_v1_5/validate-nearby.mjs`):** PASS 100% (100 điểm, 34 tỉnh, đầy đủ các ca kiểm tra biên bán kính, tìm kiếm, phân trang, lỗi tọa độ và giả lập geolocation).
+- **Foundation Validator (`python3 scripts/validate_foundation.py`):** Đạt 34/34 thực thể, 10/10 vectors (PASS 100%).
+- **TypeScript Typecheck (`pnpm -r run typecheck`):** 0 lỗi trên toàn bộ 6 workspace monorepo (PASS).
+- **ESLint (`pnpm --filter @ventlore/web lint`):** 0 lỗi (PASS).
+- **Production Build (`pnpm --filter @ventlore/web build`):** Biên dịch thành công **906/906 trang SSG**.
+- **Static Export (`pnpm run build:export`):** Xuất tĩnh thành công 906 trang vào thư mục `out/`.
+- **Tổng kiểm tra toàn dự án (`pnpm run verify`):** PASS 100%.
+
+---
+
+## 3. Hướng Dẫn Trải Nghiệm & Nghiệm Thu Cho Bin
+
+1. **Khởi động server dev (nếu chưa chạy):**
+   ```bash
+   pnpm --filter @ventlore/web dev
+   ```
+2. **Mở trình duyệt tại:** `http://localhost:3000/explore`
+3. **Các ca kiểm tra trọng yếu:**
+   - **Danh mục 100 điểm:** Khi chưa lọc gì, hiển thị "1–12 trong 100 điểm đến", tổng cộng 9 trang (trang cuối có 4 điểm).
+   - **Tìm kiếm đa dạng:**
+     - Gõ `"da nang"` hoặc `"Đà Nẵng"`: ra đúng 3 điểm của Đà Nẵng.
+     - Gõ `"Quảng Nam"` hoặc chọn tỉnh Quảng Nam: ra đúng 3 điểm.
+     - Gõ `"kon tum"`: ra đúng 3 điểm.
+     - Gõ `"Mỹ Khê"`: ra đúng 2 bãi biển Mỹ Khê riêng biệt (Quảng Ngãi và Đà Nẵng).
+     - Chọn Hoạt động `"Đi bộ đường dài"` hoặc `"Vùng núi"`: danh sách lọc chuẩn xác.
+   - **Thử nghiệm "Gần tôi":**
+     - Nhấn nút **"Gần tôi"** trên thanh tìm kiếm $\to$ Chọn **"Dùng vị trí của tôi"**.
+     - Nếu trình duyệt hỏi quyền vị trí:
+       - **Đồng ý:** Thanh điều khiển vị trí hiện ra với bán kính mặc định 50 km, các thẻ điểm hiển thị huy hiệu `≈ X km`, sắp xếp từ gần đến xa. Thử chuyển đổi các mốc bán kính (5, 25, 50, 100, 200 km, Tất cả). Thử bấm "Cập nhật vị trí" hoặc "Tắt vị trí".
+       - **Từ chối / Chặn:** Hiển thị thông báo nhẹ nhàng giải thích quyền đã bị chặn kèm nút "Chọn khu vực khác" (không bị crash hay chặn trang).
+     - **Kiểm tra URL:** Tọa độ GPS không bao giờ xuất hiện trên URL `?q=...&province=...`.
+   - **Chuyển đổi Bản đồ / Danh sách:** Bấm nút chuyển sang chế độ "Bản đồ", OpenStreetMap tải các điểm đã lọc, bấm marker để xem thông tin điểm đến.
+   - **Trang chi tiết điểm đến:** Bấm vào bất kỳ điểm nào trong 97 điểm nền mới (ví dụ `http://localhost:3000/places/PLC-000006`), trang hiển thị ảnh bìa 16:9, tọa độ ước lượng, nhãn "Thông tin thực địa đang được bổ sung", và mục "Chưa có bài viết thực địa nào" với nút CTA đóng góp.
+   - **Đóng góp bài viết (`/contribute`):** Tại tab "Điểm đến đã có", gõ thử tìm kiếm trong ô chọn điểm đến để thấy autocomplete mượt mà từ 100 điểm.
+   - **Đa ngôn ngữ:** Thử chuyển qua lại 6 ngôn ngữ (`vi`, `en`, `ja`, `zh-Hans`, `ko`, `fr`) trên trang `/explore` để kiểm tra các nhãn bán kính, khoảng cách và nút bấm đều hiển thị ngôn ngữ tương ứng.
 
 1. **Gỡ bỏ hoàn toàn Banner DEMO, ReviewToolbar & Persona Selectors:**
    - Đã gỡ bỏ thẻ `<aside>` chứa banner thông báo demo trên Header của `AppShell.tsx`, khôi phục layout padding và sticky header đúng chuẩn thiết kế.

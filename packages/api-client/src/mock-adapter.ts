@@ -33,7 +33,11 @@ import {
   ExpertPayableDTO,
   AdminReviewCaseDTO,
   AdminIntakeItemDTO,
+  ProvinceDTO,
+  ActivityDTO,
 } from './types.js';
+import destinationsData from './data/destinations-100.json';
+import { queryPlaces, Point } from './nearby.js';
 
 export function generateUUIDv7(): string {
   const now = Date.now();
@@ -99,6 +103,86 @@ export const SHARED_BIO_TRANSLATIONS: Record<string, Record<string, string>> = {
     fr: 'Lecteur indépendant découvrant les destinations vérifiées et rapports de terrain sur Ventlore.',
   },
 };
+
+const ACTIVITY_LABELS: Record<string, string> = {
+  lake: 'Hồ và sông nước',
+  walking: 'Đi bộ ngắm cảnh',
+  forest: 'Khám phá rừng',
+  mountain: 'Núi và cao nguyên',
+  coastal: 'Biển và đảo',
+  culture: 'Văn hóa và di sản',
+  landscape: 'Ngắm cảnh',
+};
+
+function buildMergedPlaces(basePlaces: PlaceDetailDTO[]): PlaceDetailDTO[] {
+  const result: PlaceDetailDTO[] = [...basePlaces];
+  const placeMap = new Map<string, PlaceDetailDTO>();
+  for (const p of result) {
+    placeMap.set(p.placeId, p);
+  }
+
+  let nextDisplayCodeNum = 6;
+  const rawSeedPlaces = (destinationsData as any).places || [];
+
+  for (const seed of rawSeedPlaces) {
+    const existing = placeMap.get(seed.placeId);
+    if (existing) {
+      existing.provinceCode = seed.provinceCode;
+      existing.provinceName = seed.provinceName;
+      existing.areaLabel = seed.areaLabel;
+      existing.searchAliases = seed.searchAliases ?? [];
+      existing.activityIds = seed.activityIds ?? [];
+      existing.seedKey = seed.seedKey;
+      existing.slug = seed.slug;
+      existing.catalogOrder = seed.catalogOrder;
+      existing.provenance = seed.provenance;
+      existing.location = seed.location;
+      if (!existing.coordinates && seed.location) {
+        existing.coordinates = {
+          lat: seed.location.latitude,
+          lng: seed.location.longitude,
+        };
+      }
+    } else {
+      const displayCode = `PLC-${String(nextDisplayCodeNum++).padStart(6, '0')}`;
+      const seedPlace: PlaceDetailDTO = {
+        placeId: seed.placeId,
+        displayCode,
+        name: seed.name,
+        regionId: `reg-prov-${seed.provinceCode}`,
+        regionName: `${seed.provinceName} / ${seed.areaLabel}`,
+        provinceCode: seed.provinceCode,
+        provinceName: seed.provinceName,
+        areaLabel: seed.areaLabel,
+        seedKey: seed.seedKey,
+        slug: seed.slug,
+        searchAliases: seed.searchAliases ?? [],
+        activityIds: seed.activityIds ?? [],
+        status: PlaceStatus.ACTIVE,
+        canonicalPlaceId: null,
+        summary: seed.summary,
+        description: `${seed.name} là một điểm tham khảo trong ${seed.areaLabel}, ${seed.provinceName}. Thông tin thực địa đang được bổ sung.`,
+        warnings: [],
+        activities: (seed.activityIds ?? []).map((id: string) => ACTIVITY_LABELS[id] || id),
+        imageUrl: undefined,
+        coverImageUrl: undefined,
+        postsCount: 0,
+        coordinates: {
+          lat: seed.location.latitude,
+          lng: seed.location.longitude,
+        },
+        location: seed.location,
+        posts: [],
+        provenance: seed.provenance,
+        catalogOrder: seed.catalogOrder,
+      };
+      placeMap.set(seedPlace.placeId, seedPlace);
+      result.push(seedPlace);
+    }
+  }
+
+  return result;
+}
 
 export class VentloreMockAdapter {
   private currentPersona: DemoPersona = 'guest';
@@ -236,7 +320,7 @@ export class VentloreMockAdapter {
   };
 
   // Places fixtures
-  private places: PlaceDetailDTO[] = [
+  private places: PlaceDetailDTO[] = buildMergedPlaces([
     {
       placeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e02',
       displayCode: 'PLC-000001',
@@ -615,7 +699,7 @@ export class VentloreMockAdapter {
         },
       ],
     },
-  ];
+  ]);
 
   // Posts fixtures with full revision history
   private posts: Record<string, PostDetailDTO> = {
@@ -1693,11 +1777,29 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
   async listPlaces(params?: {
     query?: string;
     regionId?: string;
+    provinceCode?: string | null;
     activity?: string;
+    activityId?: string | null;
+    origin?: Point | null;
+    radiusKm?: number | null;
+    sort?: 'catalog' | 'name' | 'distance';
+    page?: number;
+    pageSize?: number;
     cursor?: string;
     locale?: string;
     includeMerged?: boolean;
-  }): Promise<{ items: PlaceSummaryDTO[]; nextCursor: string | null; total: number }> {
+  }): Promise<{
+    items: PlaceSummaryDTO[];
+    allMatches: PlaceSummaryDTO[];
+    mappableMatches: PlaceSummaryDTO[];
+    nearestOutsideRadius: PlaceSummaryDTO[];
+    unlocatedCount: number;
+    totalPages: number;
+    page: number;
+    pageSize: number;
+    nextCursor: string | null;
+    total: number;
+  }> {
     // PUBLIC explore: filter out CANDIDATE (private candidates only shown to authorized roles)
     const session = await this.getSession();
     const canSeeCandidates =
@@ -1717,43 +1819,75 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
       filtered = filtered.filter(p => p.status !== PlaceStatus.MERGED);
     }
 
-    if (params?.query) {
-      const qNorm = normalizeSearchText(params.query);
-      filtered = filtered.filter(p => {
-        const matchName = normalizeSearchText(p.name).includes(qNorm);
-        const matchSummary = normalizeSearchText(p.summary).includes(qNorm);
-        const matchRegion = normalizeSearchText(p.regionName).includes(qNorm);
-        const matchActivities = p.activities.some(a => normalizeSearchText(a).includes(qNorm));
-        let matchTranslations = false;
-        if (p.translations) {
-          for (const trans of Object.values(p.translations)) {
-            if (
-              normalizeSearchText(trans.name).includes(qNorm) ||
-              normalizeSearchText(trans.summary).includes(qNorm) ||
-              normalizeSearchText(trans.regionName).includes(qNorm)
-            ) {
-              matchTranslations = true;
-              break;
-            }
-          }
+    // Determine province filter (supports provinceCode or regionId)
+    let provinceCode: string | null = null;
+    if (params?.provinceCode && params.provinceCode !== 'all') {
+      provinceCode = params.provinceCode;
+    } else if (params?.regionId && params.regionId !== 'all') {
+      if (params.regionId.startsWith('reg-prov-')) {
+        provinceCode = params.regionId.replace('reg-prov-', '');
+      } else {
+        const legacyMap: Record<string, string> = {
+          'reg-north-coast': '31',
+          'reg-north-island': '22',
+          'reg-north-mountain': '08',
+          'reg-central-highlands': '52',
+        };
+        if (legacyMap[params.regionId]) {
+          provinceCode = legacyMap[params.regionId] ?? null;
+        } else {
+          filtered = filtered.filter(p => p.regionId === params.regionId);
         }
-        return matchName || matchSummary || matchRegion || matchActivities || matchTranslations;
-      });
+      }
     }
 
-    if (params?.regionId && params.regionId !== 'all') {
-      filtered = filtered.filter(p => p.regionId === params.regionId);
-    }
-
-    if (params?.activity && params.activity !== 'all') {
+    // Determine activity filter
+    let activityId: string | null = null;
+    if (params?.activityId && params.activityId !== 'all') {
+      activityId = params.activityId;
+    } else if (params?.activity && params.activity !== 'all') {
       const actNorm = normalizeSearchText(params.activity);
-      filtered = filtered.filter(p =>
-        p.activities.some(a => normalizeSearchText(a).includes(actNorm))
-      );
+      const actMap: Record<string, string> = {
+        trekking: 'walking',
+        'cheo kayak': 'coastal',
+        'leo nui cao': 'mountain',
+        'kham pha rung': 'forest',
+        walking: 'walking',
+        lake: 'lake',
+        forest: 'forest',
+        mountain: 'mountain',
+        coastal: 'coastal',
+        culture: 'culture',
+        landscape: 'landscape',
+      };
+      activityId = actMap[actNorm] || null;
+      if (!activityId) {
+        filtered = filtered.filter(p =>
+          p.activities.some(a => normalizeSearchText(a).includes(actNorm))
+        );
+      }
     }
+
+    const isPaginated = params?.page !== undefined || params?.pageSize !== undefined;
+    const origin = params?.origin ?? null;
+    const sort = params?.sort ?? (origin ? 'distance' : 'catalog');
+    const radiusKm = params?.radiusKm ?? null;
+    const page = params?.page ?? 1;
+    const pageSize = params?.pageSize ?? (isPaginated ? 12 : filtered.length || 100);
+
+    const queryRes = queryPlaces(filtered, {
+      q: params?.query || '',
+      provinceCode,
+      activityId,
+      origin,
+      radiusKm,
+      sort,
+      page,
+      pageSize,
+    });
 
     const targetLocale = params?.locale;
-    const items: PlaceSummaryDTO[] = filtered.map(p => {
+    const localize = (p: PlaceDetailDTO): PlaceSummaryDTO => {
       const cover = p.coverImageUrl || (p as any).imageUrl || '/destinations/hero-coastal.svg';
       if (targetLocale && p.translations && p.translations[targetLocale]) {
         const t = p.translations[targetLocale];
@@ -1777,17 +1911,38 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
         isTranslated: targetLocale === 'vi' || !targetLocale,
         originalLocale: 'vi',
       };
-    });
+    };
 
     return {
-      items,
+      items: queryRes.items.map(p => localize(p as PlaceDetailDTO)),
+      allMatches: queryRes.allMatches.map(p => localize(p as PlaceDetailDTO)),
+      mappableMatches: queryRes.mappableMatches.map(p => localize(p as PlaceDetailDTO)),
+      nearestOutsideRadius: queryRes.nearestOutsideRadius.map(p => localize(p as PlaceDetailDTO)),
+      unlocatedCount: queryRes.unlocatedCount,
+      totalPages: queryRes.totalPages,
+      page: queryRes.page,
+      pageSize: queryRes.pageSize,
       nextCursor: null,
-      total: items.length,
+      total: queryRes.total,
     };
   }
 
+  async getProvinces(): Promise<ProvinceDTO[]> {
+    return (destinationsData as any).provinces as ProvinceDTO[];
+  }
+
+  async getActivities(): Promise<ActivityDTO[]> {
+    return (destinationsData as any).activities as ActivityDTO[];
+  }
+
   async getPlace(placeId: string, locale?: string): Promise<PlaceDetailDTO | null> {
-    const rawPlace = this.places.find(p => p.placeId === placeId || p.displayCode === placeId);
+    const rawPlace = this.places.find(
+      p =>
+        p.placeId === placeId ||
+        p.displayCode === placeId ||
+        p.slug === placeId ||
+        p.seedKey === placeId
+    );
     if (!rawPlace) return null;
 
     // Check candidate visibility
