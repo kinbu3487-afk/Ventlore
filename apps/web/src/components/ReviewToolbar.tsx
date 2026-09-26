@@ -15,6 +15,8 @@ import {
   UserIcon,
   CheckCircleIcon,
   AlertTriangleIcon,
+  TableIcon,
+  DownloadIcon,
 } from '@/components/Icons';
 
 interface ScenarioItem {
@@ -302,6 +304,22 @@ export function ReviewToolbar() {
                 >
                   Vào Dashboard Cá nhân
                 </Link>
+                <Link
+                  href={getLocalizedPath('/data-map')}
+                  className="py-1.5 px-2 rounded-control bg-amber/20 text-ink hover:bg-amber/30 border border-amber/30 flex items-center justify-center gap-1"
+                >
+                  <TableIcon className="w-3.5 h-3.5 text-forest" />
+                  <span>Xem Data Map (16 cột)</span>
+                </Link>
+                <a
+                  href="/docs/FE_DATA_MAP.md"
+                  download="FE_DATA_MAP.md"
+                  className="py-1.5 px-2 rounded-control bg-forest text-white hover:bg-forest-hover flex items-center justify-center gap-1"
+                  title="Tải trực tiếp file docs/FE_DATA_MAP.md"
+                >
+                  <DownloadIcon className="w-3.5 h-3.5 text-amber" />
+                  <span>Tải FE_DATA_MAP.md</span>
+                </a>
               </div>
             </div>
           </div>

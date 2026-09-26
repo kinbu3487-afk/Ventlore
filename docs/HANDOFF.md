@@ -79,6 +79,10 @@ Mở trình duyệt tại `http://localhost:3000` và kiểm tra các tính năn
   - Bấm vào thanh điều hướng trên cùng, chọn Persona "VIP Member", bài viết sẽ mở khóa hiển thị đầy đủ tọa độ và ghi chú bí mật.
 - **Trang VIP:** Vào `/vip` để xem gói thành viên 1500 USD cents / 12 tháng UTC.
 - **Sổ cái minh bạch:** Vào `/transparency` xem biểu đồ và bảng dòng tiền thu - chi.
+- **Bản đồ dữ liệu FE (Data Map):**
+  - Truy cập trực tiếp `/data-map` (hoặc `/vi/data-map`) để xem ma trận 16 cột tương tác có tìm kiếm, lọc theo nguồn dữ liệu đích và xem 5 quyết định cần chốt.
+  - Bấm nút **"Tải .md"** trên thanh header, dưới 2 nút CTA ở trang chủ, trên thanh menu điều hướng, ở chân trang (footer), hoặc trong Review Toolbar để tải file `FE_DATA_MAP.md` về máy.
+  - Đường dẫn file tĩnh tải trực tiếp: `/docs/FE_DATA_MAP.md`.
 
 ### 2.1 Triển khai xem trước trực tiếp trên Netlify (Netlify Drop)
 Để đưa lên Netlify xem ngay trên thiết bị thực tế mà không cần chạy server cục bộ:

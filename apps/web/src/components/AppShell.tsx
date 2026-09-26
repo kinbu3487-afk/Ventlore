@@ -18,7 +18,10 @@ import {
   ChevronDownIcon,
   HomeIcon,
   TargetIcon,
+  TableIcon,
+  DownloadIcon,
 } from './Icons';
+
 
 import { usePayment } from './PaymentContext';
 
@@ -50,6 +53,7 @@ export function AppShell({ children }: AppShellProps) {
     { href: '#mission', label: t('nav.mission'), icon: <TargetIcon className="w-5 h-5 shrink-0" /> },
     { href: '/transparency', label: t('nav.transparency'), icon: <ShieldCheckIcon className="w-5 h-5 shrink-0" /> },
     { href: '/vip', label: t('nav.vip'), icon: <SparklesIcon className="w-5 h-5 shrink-0" /> },
+    { href: '/data-map', label: 'Data Map (BE)', icon: <TableIcon className="w-5 h-5 shrink-0" /> },
   ];
 
   const extraNavLinks: Array<{ href: string; label: string; icon: React.ReactNode }> = [];
@@ -403,7 +407,7 @@ export function AppShell({ children }: AppShellProps) {
             <span>© 2026 Ventlore Foundation. {t('common.tagline')}</span>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-5 sm:gap-6">
             <Link href={getLocalizedPath('/')} className="hover:text-forest">
               {t('nav.home')}
             </Link>
@@ -423,6 +427,22 @@ export function AppShell({ children }: AppShellProps) {
             <Link href={getLocalizedPath('/vip')} className="hover:text-forest">
               {t('nav.vip')}
             </Link>
+            <Link
+              href={getLocalizedPath('/data-map')}
+              className="hover:text-forest font-semibold text-forest flex items-center gap-1.5"
+            >
+              <TableIcon className="w-3.5 h-3.5" />
+              <span>Data Map (BE)</span>
+            </Link>
+            <a
+              href="/docs/FE_DATA_MAP.md"
+              download="FE_DATA_MAP.md"
+              className="hover:text-forest flex items-center gap-1 font-mono text-[11px] px-2 py-0.5 rounded bg-sage/40 text-ink"
+              title="Tải trực tiếp file docs/FE_DATA_MAP.md"
+            >
+              <DownloadIcon className="w-3 h-3 text-forest" />
+              <span>Tải .md</span>
+            </a>
             <Link href={getLocalizedPath('/login')} className="hover:text-forest">
               {t('nav.login')}
             </Link>
