@@ -127,9 +127,6 @@ export function SearchFilters({
 
       if (res.status === 'ready' && res.origin) {
         onOriginChange(res.origin);
-        if (onRadiusChange && (radiusKm === null || radiusKm === undefined)) {
-          onRadiusChange(50); // Default to 50km
-        }
         // Section 6 invariant: Clear province constraint when switching to Near Me to avoid empty intersection
         onProvinceChange('all');
         if (onRegionChange) {
@@ -211,29 +208,126 @@ export function SearchFilters({
           )}
         </div>
 
-        {/* Near Me ("Gần tôi") button */}
-        <button
-          type="button"
-          onClick={handleNearMeClick}
-          className={`min-h-[44px] h-11 px-3.5 sm:px-4 rounded-control text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer ${
-            origin
-              ? 'border border-forest bg-forest/10 text-forest ring-1 ring-forest/30'
-              : isLocating
-              ? 'border border-forest bg-surface-canvas text-forest animate-pulse'
-              : 'bg-forest text-white hover:bg-forest-hover'
-          }`}
-          title={t('explore.nearMe')}
-        >
-          {isLocating ? (
-            <div className="w-4 h-4 border-2 border-forest border-t-transparent rounded-full animate-spin" />
-          ) : (
-            <MapPinIcon className={`w-4 h-4 ${origin ? 'text-forest' : 'text-amber'}`} />
+        {/* Near Me ("Gần tôi") button with Popover */}
+        <div className="relative shrink-0" ref={popoverRef}>
+          <button
+            type="button"
+            onClick={handleNearMeClick}
+            className={`min-h-[44px] h-11 px-3.5 sm:px-4 rounded-control text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer ${
+              origin
+                ? 'border border-forest bg-forest/10 text-forest ring-1 ring-forest/30 hover:bg-forest/20'
+                : isLocating
+                ? 'border border-forest bg-surface-canvas text-forest animate-pulse'
+                : 'bg-forest text-white hover:bg-forest-hover'
+            }`}
+            title={t('explore.nearMe')}
+          >
+            {isLocating ? (
+              <div className="w-4 h-4 border-2 border-forest border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <MapPinIcon className={`w-4 h-4 ${origin ? 'text-forest' : 'text-amber'}`} />
+            )}
+            <span>
+              {isLocating
+                ? t('explore.locatingPosition')
+                : origin
+                ? (
+                    <>
+                      <span className="sm:hidden">
+                        {radiusKm ? `${radiusKm} km` : t('explore.nearMe')}
+                      </span>
+                      <span className="hidden sm:inline">
+                        {radiusKm
+                          ? t('explore.nearMeActiveChip', { radius: `${radiusKm} km` })
+                          : t('explore.nearMeActiveChip', { radius: t('explore.radiusUnlimited') })}
+                      </span>
+                    </>
+                  )
+                : t('explore.nearMe')}
+            </span>
+            {origin && <ChevronDownIcon className="w-3.5 h-3.5 text-forest shrink-0" />}
+          </button>
+
+          {/* Active Near Me Popover */}
+          {origin && isPopoverOpen && (
+            <div className="absolute right-0 top-full mt-2 w-72 max-w-[calc(100vw-24px)] p-3.5 bg-surface-card rounded-card border border-forest/30 shadow-xl z-50 text-xs space-y-3 animate-fadeIn">
+              <div className="flex items-center justify-between pb-2 border-b border-sage/40">
+                <div className="font-bold text-forest flex items-center gap-1">
+                  <MapPinIcon className="w-3.5 h-3.5 text-forest" />
+                  <span>{t('explore.locatingAroundYou')}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsPopoverOpen(false)}
+                  className="text-ink-muted hover:text-ink p-1 cursor-pointer"
+                  aria-label="Close"
+                >
+                  <CloseIcon className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              {origin.accuracyMeters && (
+                <div className="text-[11px] text-ink-muted">
+                  {t('explore.accuracyMeters', { acc: Math.round(origin.accuracyMeters) })}
+                </div>
+              )}
+
+              <div className="space-y-1.5">
+                <div className="text-[11px] font-semibold text-ink-secondary">
+                  {t('explore.searchRadius')}:
+                </div>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {radiusOptions.map((r) => {
+                    const isSel = radiusKm === r;
+                    const label = r === null ? t('explore.radiusUnlimited') : `${r} km`;
+                    return (
+                      <button
+                        key={String(r)}
+                        type="button"
+                        onClick={() => {
+                          onRadiusChange?.(r);
+                          setIsPopoverOpen(false);
+                        }}
+                        className={`px-2 py-1.5 rounded text-[11px] font-medium border text-center transition-colors cursor-pointer ${
+                          isSel
+                            ? 'bg-forest text-white border-forest font-bold shadow-xs'
+                            : 'bg-white border-sage text-ink hover:border-forest/50'
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-2 border-t border-sage/40">
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleStartLocating();
+                    setIsPopoverOpen(false);
+                  }}
+                  className="inline-flex items-center gap-1 text-[11px] text-forest font-semibold hover:underline cursor-pointer"
+                >
+                  <RefreshCwIcon className="w-3 h-3" />
+                  <span>{t('explore.updatePosition')}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleClearLocation();
+                    setIsPopoverOpen(false);
+                  }}
+                  className="inline-flex items-center gap-1 text-[11px] text-status-danger font-semibold hover:underline cursor-pointer"
+                >
+                  <CloseIcon className="w-3 h-3" />
+                  <span>{t('explore.clearPosition')}</span>
+                </button>
+              </div>
+            </div>
           )}
-          <span className="hidden xs:inline sm:inline">
-            {isLocating ? t('explore.locatingPosition') : t('explore.nearMe')}
-          </span>
-          {origin && <span className="w-2 h-2 rounded-full bg-forest animate-pulse" />}
-        </button>
+        </div>
 
         {/* Filter Modal Toggle Button ("Bộ lọc") */}
         <button
@@ -254,7 +348,7 @@ export function SearchFilters({
         </button>
       </div>
 
-      {/* 3. Secondary Compact Toolbar: Activity Chips & Active Near Me Popover Chip */}
+      {/* 3. Secondary Compact Toolbar: Activity Chips */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
         {/* Activity Taxonomy Chips */}
         <div className="flex items-center gap-1.5 shrink-0">
@@ -276,104 +370,6 @@ export function SearchFilters({
             );
           })}
         </div>
-
-        {/* Active Near Me Chip with Popover Trigger */}
-        {origin && (
-          <div className="relative shrink-0" ref={popoverRef}>
-            <button
-              type="button"
-              onClick={() => setIsPopoverOpen((prev) => !prev)}
-              className="min-h-[34px] px-3 py-1 rounded-full text-xs font-bold transition-all whitespace-nowrap bg-forest/10 border border-forest/40 text-forest flex items-center gap-1.5 shadow-2xs hover:bg-forest/20 cursor-pointer"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-forest animate-pulse" />
-              <span>
-                {radiusKm
-                  ? t('explore.nearMeActiveChip', { radius: `${radiusKm} km` })
-                  : t('explore.nearMeActiveChip', { radius: t('explore.radiusUnlimited') })}
-              </span>
-              <ChevronDownIcon className="w-3 h-3 text-forest" />
-            </button>
-
-            {/* Popover */}
-            {isPopoverOpen && (
-              <div className="absolute left-0 sm:right-0 top-full mt-2 w-72 p-3.5 bg-surface-card rounded-card border border-forest/30 shadow-xl z-50 text-xs space-y-3 animate-fadeIn">
-                <div className="flex items-center justify-between pb-2 border-b border-sage/40">
-                  <div className="font-bold text-forest flex items-center gap-1">
-                    <MapPinIcon className="w-3.5 h-3.5 text-forest" />
-                    <span>{t('explore.locatingAroundYou')}</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsPopoverOpen(false)}
-                    className="text-ink-muted hover:text-ink p-1 cursor-pointer"
-                  >
-                    <CloseIcon className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-
-                {origin.accuracyMeters && (
-                  <div className="text-[11px] text-ink-muted">
-                    {t('explore.accuracyMeters', { acc: Math.round(origin.accuracyMeters) })}
-                  </div>
-                )}
-
-                <div className="space-y-1.5">
-                  <div className="text-[11px] font-semibold text-ink-secondary">
-                    {t('explore.searchRadius')}:
-                  </div>
-                  <div className="grid grid-cols-3 gap-1.5">
-                    {radiusOptions.map((r) => {
-                      const isSel = radiusKm === r;
-                      const label = r === null ? t('explore.radiusUnlimited') : `${r} km`;
-                      return (
-                        <button
-                          key={String(r)}
-                          type="button"
-                          onClick={() => {
-                            onRadiusChange?.(r);
-                            setIsPopoverOpen(false);
-                          }}
-                          className={`px-2 py-1.5 rounded text-[11px] font-medium border text-center transition-colors cursor-pointer ${
-                            isSel
-                              ? 'bg-forest text-white border-forest font-bold shadow-xs'
-                              : 'bg-white border-sage text-ink hover:border-forest/50'
-                          }`}
-                        >
-                          {label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between pt-2 border-t border-sage/40">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      handleStartLocating();
-                      setIsPopoverOpen(false);
-                    }}
-                    className="inline-flex items-center gap-1 text-[11px] text-forest font-semibold hover:underline cursor-pointer"
-                  >
-                    <RefreshCwIcon className="w-3 h-3" />
-                    <span>{t('explore.updatePosition')}</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      handleClearLocation();
-                      setIsPopoverOpen(false);
-                    }}
-                    className="inline-flex items-center gap-1 text-[11px] text-status-danger font-semibold hover:underline cursor-pointer"
-                  >
-                    <CloseIcon className="w-3 h-3" />
-                    <span>{t('explore.clearPosition')}</span>
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
       </div>
 
       {/* 4. Non-blocking Dismissible Geolocation Error / Notice */}
