@@ -143,11 +143,11 @@ export default function VipPage() {
                           }
                           className="w-full min-h-control inline-flex items-center justify-center px-6 py-3 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-sm"
                         >
-                          {isVipActive ? 'Gia hạn gói VIP (15 USD/năm)' : 'Đăng ký Hội viên VIP (15 USD/năm)'}
+                          {isVipActive ? t('vip.renewButton') : t('vip.subscribeButton')}
                         </button>
                         {isVipActive && (
                           <div className="text-center p-2 rounded-control bg-status-success-bg text-status-success text-xs font-semibold">
-                            {t('vip.alreadyActiveNotice')} &bull; Gia hạn sẽ cộng nối tiếp 12 tháng
+                            {t('vip.alreadyActiveNotice')} &bull; {t('vip.renewalBonusNotice')}
                           </div>
                         )}
                       </div>

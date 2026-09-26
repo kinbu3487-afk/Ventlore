@@ -27,12 +27,12 @@ export function WalletBinding({ walletBinding, className = '' }: WalletBindingPr
       <div className="flex items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-2 text-ink font-semibold">
           <WalletIcon className="w-4 h-4 text-forest" />
-          <span>Ví liên kết (Arbitrum Sepolia)</span>
+          <span>Ví liên kết (Mô phỏng demo)</span>
         </div>
         {walletBinding.isVerified ? (
           <span className="inline-flex items-center gap-1 font-medium px-2 py-0.5 rounded-full bg-status-success-bg text-status-success text-[11px]">
             <CheckIcon className="w-3 h-3" />
-            Đã xác minh chữ ký
+            Đã xác minh (Mô phỏng demo)
           </span>
         ) : (
           <span className="inline-flex items-center gap-1 font-medium px-2 py-0.5 rounded-full bg-status-pending-bg text-status-pending text-[11px]">
@@ -48,7 +48,7 @@ export function WalletBinding({ walletBinding, className = '' }: WalletBindingPr
       </div>
 
       <p className="mt-2 text-[11px] text-ink-muted">
-        Ví liên kết độc lập với tài khoản người dùng (`userId`). Thay đổi địa chỉ ví không làm thay đổi lịch sử đóng góp hoặc tài khoản cá nhân.
+        Ví liên kết độc lập với tài khoản người dùng. Thay đổi địa chỉ ví không làm thay đổi lịch sử đóng góp hoặc tài khoản cá nhân.
       </p>
     </div>
   );

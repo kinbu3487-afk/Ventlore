@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import {
   mockApiClient,
   ContributionItemDTO,
@@ -35,21 +35,60 @@ import {
 
 type AccountTab = 'profile' | 'contributions' | 'vip' | 'benefits' | 'expert';
 
+const VALID_TABS: AccountTab[] = ['profile', 'contributions', 'vip', 'benefits', 'expert'];
+
 export function AccountView() {
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const { session, persona, setPersona } = useSession();
   const { openPayment } = usePayment();
   const { t, formatDate, getLocalizedPath } = useI18n();
 
-  const initialTab = (searchParams.get('tab') as AccountTab) || 'profile';
+  const isExpertOrAdmin = session?.roleAssignments?.some(
+    (ra) => ra.role === 'EXPERT' || ra.role === 'ADMIN'
+  );
+
+  const rawTab = searchParams.get('tab');
+  const isValidTab = useCallback(
+    (tab: string | null): tab is AccountTab => {
+      if (!tab) return false;
+      if (!VALID_TABS.includes(tab as AccountTab)) return false;
+      if (tab === 'expert' && !isExpertOrAdmin) return false;
+      return true;
+    },
+    [isExpertOrAdmin]
+  );
+
+  const initialTab: AccountTab = isValidTab(rawTab) ? rawTab : 'profile';
   const [activeTab, setActiveTab] = useState<AccountTab>(initialTab);
 
-  const urlTab = searchParams.get('tab') as AccountTab | null;
+  // Two-way sync: Handle URL query / back / forward changes and normalize invalid/unauthorized query
   useEffect(() => {
-    if (urlTab && ['profile', 'contributions', 'benefits', 'settings'].includes(urlTab)) {
-      setActiveTab(urlTab);
+    if (!rawTab) {
+      setActiveTab((prev) => (prev !== 'profile' ? 'profile' : prev));
+      return;
     }
-  }, [urlTab]);
+    if (isValidTab(rawTab)) {
+      setActiveTab((prev) => (prev !== rawTab ? rawTab : prev));
+    } else {
+      // Invalid tab or unauthorized query -> normalize to 'profile' using replace
+      setActiveTab('profile');
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete('tab');
+      const newQuery = params.toString();
+      const newUrl = newQuery ? `${pathname}?${newQuery}` : pathname;
+      router.replace(newUrl, { scroll: false });
+    }
+  }, [rawTab, isValidTab, pathname, router, searchParams]);
+
+  // Tab change handler pushing history for back/forward navigation
+  const handleTabChange = (newTab: AccountTab) => {
+    if (newTab === activeTab) return;
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('tab', newTab);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
 
   // Contributions state
   const [contributions, setContributions] = useState<ContributionItemDTO[]>([]);
@@ -232,7 +271,7 @@ export function AccountView() {
 
         <div>
           <Link
-            href={getLocalizedPath(`/login?returnTo=${encodeURIComponent('/account')}`)}
+            href={getLocalizedPath(`/login?returnTo=${encodeURIComponent(searchParams.toString() ? `/account?${searchParams.toString()}` : '/account')}`)}
             className="inline-flex items-center justify-center px-6 py-2.5 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-sm"
           >
             Đến trang Đăng nhập
@@ -286,7 +325,7 @@ export function AccountView() {
             className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover transition-colors shadow-xs"
           >
             <PlusCircleIcon className="w-3.5 h-3.5" />
-            <span>Viết bài mới</span>
+            <span>{t('account.newPostButton')}</span>
           </Link>
         </div>
       </div>
@@ -295,7 +334,7 @@ export function AccountView() {
       <div className="flex overflow-x-auto border-b border-sage no-scrollbar">
         <button
           type="button"
-          onClick={() => setActiveTab('profile')}
+          onClick={() => handleTabChange('profile')}
           className={`flex items-center gap-2 py-3 px-5 text-xs sm:text-sm font-bold border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'profile'
               ? 'border-forest text-forest bg-surface-card rounded-t-card'
@@ -303,12 +342,12 @@ export function AccountView() {
           }`}
         >
           <UserIcon className="w-4 h-4" />
-          <span>Hồ sơ cá nhân</span>
+          <span>{t('account.tabProfile')}</span>
         </button>
 
         <button
           type="button"
-          onClick={() => setActiveTab('contributions')}
+          onClick={() => handleTabChange('contributions')}
           className={`flex items-center gap-2 py-3 px-5 text-xs sm:text-sm font-bold border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'contributions'
               ? 'border-forest text-forest bg-surface-card rounded-t-card'
@@ -316,12 +355,12 @@ export function AccountView() {
           }`}
         >
           <FileTextIcon className="w-4 h-4" />
-          <span>Đóng góp của tôi ({contributions.length})</span>
+          <span>{t('account.tabContributions')} ({contributions.length})</span>
         </button>
 
         <button
           type="button"
-          onClick={() => setActiveTab('vip')}
+          onClick={() => handleTabChange('vip')}
           className={`flex items-center gap-2 py-3 px-5 text-xs sm:text-sm font-bold border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'vip'
               ? 'border-forest text-forest bg-surface-card rounded-t-card'
@@ -329,12 +368,12 @@ export function AccountView() {
           }`}
         >
           <SparklesIcon className="w-4 h-4" />
-          <span>Gói VIP & Quyền đọc</span>
+          <span>{t('account.tabVip')}</span>
         </button>
 
         <button
           type="button"
-          onClick={() => setActiveTab('benefits')}
+          onClick={() => handleTabChange('benefits')}
           className={`flex items-center gap-2 py-3 px-5 text-xs sm:text-sm font-bold border-b-2 whitespace-nowrap transition-colors ${
             activeTab === 'benefits'
               ? 'border-forest text-forest bg-surface-card rounded-t-card'
@@ -342,13 +381,13 @@ export function AccountView() {
           }`}
         >
           <AwardIcon className="w-4 h-4" />
-          <span>Quyền lợi đóng góp (4 Khối)</span>
+          <span>{t('account.tabBenefits')}</span>
         </button>
 
-        {session.roleAssignments.some(ra => ra.role === 'EXPERT' || ra.role === 'ADMIN') && (
+        {isExpertOrAdmin && (
           <button
             type="button"
-            onClick={() => setActiveTab('expert')}
+            onClick={() => handleTabChange('expert')}
             className={`flex items-center gap-2 py-3 px-5 text-xs sm:text-sm font-bold border-b-2 whitespace-nowrap transition-colors ${
               activeTab === 'expert'
                 ? 'border-forest text-forest bg-surface-card rounded-t-card'
@@ -356,7 +395,7 @@ export function AccountView() {
             }`}
           >
             <ShieldCheckIcon className="w-4 h-4" />
-            <span>Nhiệm vụ Chuyên gia</span>
+            <span>{t('account.tabExpert')}</span>
           </button>
         )}
       </div>
@@ -367,7 +406,7 @@ export function AccountView() {
           <div className="p-6 rounded-card border border-sage bg-surface-card space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-extrabold uppercase tracking-wider text-ink">
-                Thông tin Tài khoản (Canonical User)
+                {t('account.tabProfile')}
               </h2>
               <button
                 type="button"
@@ -378,14 +417,14 @@ export function AccountView() {
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control border border-sage hover:bg-surface-canvas text-xs font-semibold text-ink transition-colors"
               >
                 <EditIcon className="w-3.5 h-3.5 text-forest" />
-                <span>{isEditingProfile ? 'Đóng chỉnh sửa' : 'Chỉnh sửa hồ sơ'}</span>
+                <span>{isEditingProfile ? t('account.cancel') : t('account.editProfile')}</span>
               </button>
             </div>
 
             {profileSavedNotice && (
               <div className="p-3 rounded-control bg-status-success-bg text-status-success text-xs font-semibold flex items-center gap-2">
                 <CheckCircleIcon className="w-4 h-4 shrink-0" />
-                <span>Đã cập nhật thông tin hồ sơ thành công (Demo)!</span>
+                <span>{t('account.profileSaved')}</span>
               </div>
             )}
 
@@ -403,7 +442,7 @@ export function AccountView() {
                 className="space-y-3 p-4 rounded-control bg-surface-canvas border border-sage"
               >
                 <div>
-                  <label className="text-xs font-bold text-ink block mb-1">Tên hiển thị công khai:</label>
+                  <label className="text-xs font-bold text-ink block mb-1">{t('account.displayName')}:</label>
                   <input
                     type="text"
                     value={profileDisplayName}
@@ -413,7 +452,7 @@ export function AccountView() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-ink block mb-1">Giới thiệu ngắn (Bio):</label>
+                  <label className="text-xs font-bold text-ink block mb-1">{t('account.bio')}:</label>
                   <textarea
                     value={profileBio}
                     onChange={(e) => setProfileBio(e.target.value)}
@@ -427,20 +466,20 @@ export function AccountView() {
                     onClick={() => setIsEditingProfile(false)}
                     className="px-3 py-1.5 rounded-control border border-sage text-ink text-xs font-medium"
                   >
-                    Hủy
+                    {t('account.cancel')}
                   </button>
                   <button
                     type="submit"
                     className="px-4 py-1.5 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover"
                   >
-                    Lưu thay đổi (Demo)
+                    {t('account.saveChanges')}
                   </button>
                 </div>
               </form>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                 <div>
-                  <label className="text-ink-muted block mb-1">Mã định danh duy nhất (UUIDv7):</label>
+                  <label className="text-ink-muted block mb-1">ID:</label>
                   <div className="p-2 rounded-control bg-surface-canvas border border-sage font-mono text-ink">
                     {session.userId}
                   </div>
@@ -771,7 +810,7 @@ export function AccountView() {
                 }
                 className="px-6 py-2.5 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover shadow-sm transition-colors"
               >
-                {isVipActive ? 'Gia hạn gói VIP (15 USD/năm)' : 'Đăng ký Hội viên VIP (15 USD/năm)'}
+                {isVipActive ? t('vip.renewButton') : t('vip.subscribeButton')}
               </button>
 
               <Link
@@ -809,10 +848,10 @@ export function AccountView() {
         <div className="space-y-6">
           <div className="space-y-1">
             <h2 className="text-lg font-extrabold text-ink tracking-tight">
-              Bốn Nhánh Quyền Lợi Sau Phê Duyệt (Independent Post-Approval Benefits)
+              {t('account.tabBenefits')}
             </h2>
             <p className="text-xs text-ink-secondary">
-              Khi một bài viết được chuyên gia thẩm định phê duyệt (APPROVED / VERIFIED), 4 quyền lợi sau được kích hoạt hoàn toàn độc lập và không phụ thuộc vào nhau.
+              {t('account.benefitsIntro')}
             </p>
           </div>
 
@@ -821,10 +860,10 @@ export function AccountView() {
             <div className="p-4 rounded-card border-2 border-amber/40 bg-status-caution-bg text-ink space-y-2 shadow-xs">
               <div className="flex items-center gap-2 font-bold text-xs text-amber-dark">
                 <InfoIcon className="w-4 h-4 text-amber shrink-0" />
-                <span>CHƯA CÓ BÀI VIẾT NÀO HOÀN TẤT KIỂM ĐỊNH THỰC ĐỊA (0 BÀI VERIFIED)</span>
+                <span>{t('account.noVerifiedPosts')}</span>
               </div>
               <p className="text-xs text-ink-secondary leading-relaxed">
-                Tài khoản của bạn hiện chưa có bài viết nào được chuyên gia thực địa hoàn thành thẩm định độc lập. Cả 4 quyền lợi dưới đây (Nhãn kiểm định, Contributor SBT, Author NFT và Tuyến nhận tip 80/20) chỉ mở khóa cho các tác giả có bài viết đã được xác thực chính thức trên thực địa.
+                {t('account.benefitsIntro')}
               </p>
               <div className="pt-1">
                 <Link
@@ -832,7 +871,7 @@ export function AccountView() {
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover shadow-xs"
                 >
                   <PlusCircleIcon className="w-3.5 h-3.5" />
-                  <span>Đóng góp bài khảo sát ngay</span>
+                  <span>{t('account.newPostButton')}</span>
                 </Link>
               </div>
             </div>
@@ -844,14 +883,14 @@ export function AccountView() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 font-bold text-sm text-ink">
                   <ShieldCheckIcon className="w-4 h-4 text-forest" />
-                  <span>1. Nhãn kiểm định thực địa</span>
+                  <span>1. {t('account.benefit1Title')}</span>
                 </div>
                 <span className="px-2 py-0.5 rounded-full bg-status-success-bg text-status-success font-bold text-[10px]">
                   ON-WEB
                 </span>
               </div>
               <p className="text-xs text-ink-secondary leading-relaxed">
-                Hiển thị huy hiệu đã kiểm tra cùng phạm vi và thời hạn trực tiếp trên giao diện công cộng của Ventlore. Người đọc xem không cần kết nối ví.
+                {t('account.benefit1Desc')}
               </p>
               <div className="p-3 rounded-control bg-surface-canvas border border-sage/60 text-xs font-mono">
                 Số nội dung đã xác nhận:{' '}
@@ -867,14 +906,14 @@ export function AccountView() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 font-bold text-sm text-ink">
                   <AwardIcon className="w-4 h-4 text-forest" />
-                  <span>2. Chứng nhận Contributor SBT</span>
+                  <span>2. {t('account.benefit2Title')}</span>
                 </div>
                 <span className="px-2 py-0.5 rounded-full bg-status-vip-bg text-status-vip font-bold text-[10px]">
                   SOULBOUND
                 </span>
               </div>
               <p className="text-xs text-ink-secondary leading-relaxed">
-                Huy hiệu danh dự vĩnh viễn gắn liền với tác giả. Không thể chuyển nhượng hay mua bán. Tác giả chủ động nhận (claim) bằng ví Web3 đã liên kết.
+                {t('account.benefit2Desc')}
               </p>
               <div className="space-y-2">
                 <div className="p-3 rounded-control bg-surface-canvas border border-sage/60 text-xs space-y-1 font-mono">
@@ -882,7 +921,7 @@ export function AccountView() {
                     Trạng thái:{' '}
                     <strong>
                       {(benefits?.verifiedContentCount ?? 0) === 0
-                        ? 'CHƯA ĐỦ ĐIỀU KIỆN'
+                        ? t('account.notEligible')
                         : benefits?.sbt.status}
                     </strong>
                   </div>
@@ -899,7 +938,7 @@ export function AccountView() {
                     disabled
                     className="w-full py-2 px-3 rounded-control bg-sage/40 text-ink-muted text-xs font-bold cursor-not-allowed opacity-60"
                   >
-                    Chưa đủ điều kiện nhận SBT
+                    {t('account.notEligible')}
                   </button>
                 ) : benefits?.sbt.status !== 'ISSUED_DEMO' ? (
                   <button
@@ -908,11 +947,11 @@ export function AccountView() {
                     disabled={isClaimingSbt}
                     className="w-full py-2 px-3 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover shadow-xs disabled:opacity-50"
                   >
-                    {isClaimingSbt ? 'Đang xác thực...' : 'Nhận Contributor SBT (Demo Claim)'}
+                    {isClaimingSbt ? t('account.claiming') : t('account.claimSbt')}
                   </button>
                 ) : (
                   <div className="text-center p-2 rounded-control bg-status-success-bg text-status-success text-xs font-bold">
-                    ✓ Đã nhận huy hiệu Contributor SBT (Demo)
+                    ✓ {t('account.claimed')}
                   </div>
                 )}
               </div>
@@ -923,14 +962,14 @@ export function AccountView() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 font-bold text-sm text-ink">
                   <SparklesIcon className="w-4 h-4 text-forest" />
-                  <span>3. Author Field Note NFT</span>
+                  <span>3. {t('account.benefit3Title')}</span>
                 </div>
                 <span className="px-2 py-0.5 rounded-full bg-surface-canvas border border-sage text-ink font-bold text-[10px]">
                   ERC-721
                 </span>
               </div>
               <p className="text-xs text-ink-secondary leading-relaxed">
-                Vật phẩm lưu niệm số đại diện cho bài viết đầu tiên được thẩm định thành công. Tối đa 1 NFT cho mỗi bài viết được duyệt.
+                {t('account.benefit3Desc')}
               </p>
               <div className="space-y-2">
                 <div className="p-3 rounded-control bg-surface-canvas border border-sage/60 text-xs space-y-1 font-mono">
@@ -939,7 +978,7 @@ export function AccountView() {
                     Trạng thái:{' '}
                     <strong>
                       {(benefits?.verifiedContentCount ?? 0) === 0
-                        ? 'CHƯA ĐỦ ĐIỀU KIỆN'
+                        ? t('account.notEligible')
                         : benefits?.nft.status}
                     </strong>
                   </div>
@@ -956,7 +995,7 @@ export function AccountView() {
                     disabled
                     className="w-full py-2 px-3 rounded-control bg-sage/40 text-ink-muted text-xs font-bold cursor-not-allowed opacity-60"
                   >
-                    Chưa đủ điều kiện nhận NFT
+                    {t('account.notEligible')}
                   </button>
                 ) : benefits?.nft.status !== 'ISSUED_DEMO' ? (
                   <button
@@ -965,11 +1004,11 @@ export function AccountView() {
                     disabled={isClaimingNft}
                     className="w-full py-2 px-3 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover shadow-xs disabled:opacity-50"
                   >
-                    {isClaimingNft ? 'Đang tạo giao dịch...' : 'Nhận Author NFT (Demo Claim)'}
+                    {isClaimingNft ? t('account.claiming') : t('account.claimNft')}
                   </button>
                 ) : (
                   <div className="text-center p-2 rounded-control bg-status-success-bg text-status-success text-xs font-bold">
-                    ✓ Đã nhận Author NFT (Demo)
+                    ✓ {t('account.claimed')}
                   </div>
                 )}
               </div>
@@ -980,14 +1019,14 @@ export function AccountView() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 font-bold text-sm text-ink">
                   <CheckCircleIcon className="w-4 h-4 text-forest" />
-                  <span>4. Tuyến chia sẻ tiền tip (80/20)</span>
+                  <span>4. {t('account.benefit4Title')}</span>
                 </div>
                 <span className="px-2 py-0.5 rounded-full bg-waypoint/20 text-waypoint font-bold text-[10px]">
                   SPLITTER
                 </span>
               </div>
               <p className="text-xs text-ink-secondary leading-relaxed">
-                Người đọc tip bài viết sẽ tự động chia 80% tới tác giả và 20% vào quỹ phát triển cộng đồng qua smart contract.
+                {t('account.benefit4Desc')}
               </p>
               <div className="space-y-2">
                 <div className="p-3 rounded-control bg-surface-canvas border border-sage/60 text-xs space-y-1 font-mono">

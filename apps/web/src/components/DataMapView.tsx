@@ -30,6 +30,11 @@ export function DataMapView() {
   const [copiedMd, setCopiedMd] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
 
+  const componentCount = useMemo(
+    () => new Set(DATA_MAP_ROWS.map((r) => r.component.split(' ')[0])).size,
+    []
+  );
+
   // Filter rows
   const filteredRows = useMemo(() => {
     return DATA_MAP_ROWS.filter((row) => {
@@ -118,7 +123,7 @@ export function DataMapView() {
           <ArrowLeftIcon className="w-3.5 h-3.5" />
           <span>Quay lại Trang chủ Ventlore</span>
         </Link>
-        <span className="font-mono">docs/FE_DATA_MAP.md &bull; v1.0</span>
+        <span className="font-mono">docs/FE_DATA_MAP.md &bull; v1.2 (26/09/2026)</span>
       </div>
 
       {/* 2. Top Header Hero Card */}
@@ -139,22 +144,22 @@ export function DataMapView() {
           </h1>
 
           <p className="text-sm text-ink-secondary leading-relaxed">
-            Tài liệu này xác lập chi tiết từng component và 39 nhóm trường dữ liệu trên toàn bộ giao diện Front-End Ventlore.
+            Tài liệu này xác lập chi tiết từng component và {DATA_MAP_ROWS.length} nhóm trường dữ liệu trên toàn bộ giao diện Front-End Ventlore.
             Đây là cơ sở kỹ thuật cốt lõi để Chủ dự án (Bin) nghiệm thu và bàn giao cho Đội ngũ Backend, Database, Indexer &amp; Smart Contract phát triển tiếp.
           </p>
 
           <div className="flex flex-wrap items-center gap-2 pt-2 text-xs font-mono">
             <span className="px-2 py-0.5 rounded bg-sage/50 text-ink font-semibold">
-              39 Nhóm Trường
+              {DATA_MAP_ROWS.length} Nhóm Trường
             </span>
             <span className="px-2 py-0.5 rounded bg-sage/50 text-ink font-semibold">
-              23 Components
+              {componentCount} Components
             </span>
             <span className="px-2 py-0.5 rounded bg-sage/50 text-ink font-semibold">
               16 Cột Phân Tích
             </span>
             <span className="px-2 py-0.5 rounded bg-amber/20 text-ink font-semibold border border-amber/40">
-              5 Quyết Định Cần Chốt
+              {KEY_DECISIONS.length} Quyết Định Cần Chốt
             </span>
           </div>
         </div>
@@ -246,9 +251,9 @@ export function DataMapView() {
           }`}
         >
           <SparklesIcon className="w-4 h-4 text-amber" />
-          <span>5 Quyết định cần Bin chốt</span>
+          <span>{KEY_DECISIONS.length} Quyết định cần Bin chốt</span>
           <span className="ml-1 px-1.5 py-0.2 rounded-full bg-amber/20 text-ink text-[11px] font-mono">
-            5
+            {KEY_DECISIONS.length}
           </span>
         </button>
 

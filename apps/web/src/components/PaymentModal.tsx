@@ -191,15 +191,15 @@ export function PaymentModal() {
             <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-forest/10 text-forest text-[11px] font-bold uppercase tracking-wider">
               <SparklesIcon className="w-3.5 h-3.5 text-amber" />
               <span>
-                {activeMode === 'PROJECT' && 'Ủng Hộ Quỹ Dự Án (100% Vào Quỹ)'}
-                {activeMode === 'POST_TIP' && 'Ủng Hộ Tác Giả Bài Viết (80% Tác Giả / 20% Quỹ)'}
-                {activeMode === 'MEMBERSHIP' && 'Đăng Ký / Gia Hạn Hội Viên VIP'}
+                {activeMode === 'PROJECT' && t('payment.projectTag')}
+                {activeMode === 'POST_TIP' && t('payment.postTipTag')}
+                {activeMode === 'MEMBERSHIP' && t('payment.membershipTag')}
               </span>
             </div>
             <h2 id="payment-modal-title" className="text-xl sm:text-2xl font-bold text-ink mt-1">
-              {activeMode === 'PROJECT' && 'Ủng Hộ Quỹ Ventlore'}
-              {activeMode === 'POST_TIP' && 'Ủng Hộ Tác Giả Bài Viết'}
-              {activeMode === 'MEMBERSHIP' && 'Đăng Ký / Gia Hạn VIP'}
+              {activeMode === 'PROJECT' && t('payment.projectTitle')}
+              {activeMode === 'POST_TIP' && t('payment.postTipTitle')}
+              {activeMode === 'MEMBERSHIP' && t('payment.membershipTitle')}
             </h2>
           </div>
 
@@ -222,10 +222,10 @@ export function PaymentModal() {
                 <CheckCircleIcon className="w-7 h-7" />
               </div>
               <h3 className="text-lg font-bold text-emerald-900 dark:text-emerald-200">
-                Mô Phỏng Hoàn Tất — Chưa Chuyển Tiền Thật
+                {t('payment.successTitle')}
               </h3>
               <p className="text-xs text-emerald-800/80 dark:text-emerald-300">
-                Ý định thanh toán demo đã được ghi nhận trong phiên làm việc. Dữ liệu đã đồng bộ sang Sổ Quỹ & Quyền Lợi Tài Khoản.
+                {t('payment.successDesc')}
               </p>
             </div>
 
@@ -251,11 +251,11 @@ export function PaymentModal() {
               {receipt.mode === 'POST_TIP' && (
                 <>
                   <div className="flex justify-between text-forest border-b border-sage/40 pb-2">
-                    <span>Phần tác giả nhận (80%):</span>
+                    <span>{t('payment.authorShare')}:</span>
                     <span className="font-bold">{receipt.authorAmountFormatted}</span>
                   </div>
                   <div className="flex justify-between text-ink-muted border-b border-sage/40 pb-2">
-                    <span>Phần đóng góp quỹ (20%):</span>
+                    <span>{t('payment.treasuryShare')}:</span>
                     <span className="font-semibold">{receipt.treasuryAmountFormatted}</span>
                   </div>
                 </>
@@ -280,7 +280,7 @@ export function PaymentModal() {
                 onClick={closePayment}
                 className="w-full min-h-control py-2.5 rounded-control font-bold text-sm text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
               >
-                Đóng & Tiếp Tục Trải Nghiệm
+                {t('payment.closeModal')}
               </button>
             </div>
           </div>
@@ -369,7 +369,7 @@ export function PaymentModal() {
                 {activeMode !== 'MEMBERSHIP' ? (
                   <div className="space-y-1.5">
                     <label className="block text-xs font-semibold text-ink">
-                      Số tiền ủng hộ ({selectedAsset}):
+                      {t('payment.amountLabel')} ({selectedAsset}):
                     </label>
                     <div className="grid grid-cols-4 gap-2">
                       {['5', '10', '20', '50'].map((preset) => (
@@ -418,15 +418,15 @@ export function PaymentModal() {
                 {activeMode === 'POST_TIP' && (
                   <div className="p-3 rounded-xl border border-forest/20 bg-forest/5 text-xs space-y-1">
                     <div className="flex justify-between font-medium">
-                      <span className="text-ink">Tác giả nhận (80%):</span>
+                      <span className="text-ink">{t('payment.authorShare')}:</span>
                       <span className="font-bold text-forest">{authorShareFormatted} {selectedAsset}</span>
                     </div>
                     <div className="flex justify-between text-ink-muted">
-                      <span>Quỹ bảo tồn nhận (20%):</span>
+                      <span>{t('payment.treasuryShare')}:</span>
                       <span>{treasuryShareFormatted} {selectedAsset}</span>
                     </div>
                     <div className="text-[10px] text-ink-muted pt-1 border-t border-forest/10">
-                      Phân bổ theo công thức nguyên tử on-chain: <code>floor(amount / 5)</code> vào quỹ, phần còn lại chuyển cho tác giả.
+                      Tác giả nhận 80% số tiền ủng hộ; 20% được chuyển tự động vào quỹ bảo tồn cộng đồng.
                     </div>
                   </div>
                 )}
@@ -435,7 +435,7 @@ export function PaymentModal() {
                 <div className="rounded-xl border border-sage/70 bg-surface-canvas p-3.5 text-xs space-y-2.5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-ink">Ví kết nối:</span>
+                      <span className="font-semibold text-ink">Ví kết nối (Mô phỏng demo):</span>
                       {isWalletConnected ? (
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -464,7 +464,7 @@ export function PaymentModal() {
                         <span className="font-mono font-bold text-ink">{walletAddress}</span>
                       </div>
                       <div>
-                        <span className="text-ink-muted block">Số dư khả dụng:</span>
+                        <span className="text-ink-muted block">Số dư khả dụng (Mô phỏng demo):</span>
                         <span className="font-bold text-forest">250.00 USDC</span>
                       </div>
                     </div>
@@ -472,7 +472,7 @@ export function PaymentModal() {
 
                   {/* Network Selector */}
                   <div className="pt-2 border-t border-sage/40 flex items-center justify-between">
-                    <span className="text-ink-muted text-[11px]">Mạng lưới:</span>
+                    <span className="text-ink-muted text-[11px]">{t('payment.networkLabel')}:</span>
                     <select
                       value={simChain}
                       onChange={(e) => setSimChain(e.target.value as SimChainId)}
@@ -486,7 +486,7 @@ export function PaymentModal() {
 
                   {isWrongNetwork && (
                     <div className="p-2 rounded bg-red-50 text-red-700 border border-red-200 text-[11px] font-medium">
-                      ⚠️ Sai mạng lưới! Vui lòng chọn Arbitrum One hoặc Arbitrum Sepolia.
+                      ⚠️ {t('payment.wrongNetwork')}
                     </div>
                   )}
                 </div>
@@ -506,7 +506,7 @@ export function PaymentModal() {
                       <div className="w-4 h-4 rounded-full border-2 border-forest border-t-transparent animate-spin" />
                     </div>
                     <div className="text-[11px] text-ink-secondary">
-                      Đang ghi nhận ý định thanh toán demo vào store chia sẻ...
+                      {t('payment.submitting')}
                     </div>
                   </div>
                 )}
@@ -520,11 +520,11 @@ export function PaymentModal() {
                     className="w-full min-h-control py-3 rounded-control font-bold text-sm text-white bg-forest hover:bg-forest-hover transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
-                      <span>Đang xử lý mô phỏng...</span>
+                      <span>{t('payment.submitting')}</span>
                     ) : (
                       <>
                         <SparklesIcon className="w-4 h-4 text-amber" />
-                        <span>Thử thanh toán (demo)</span>
+                        <span>{t('payment.confirmSimulate')}</span>
                       </>
                     )}
                   </button>

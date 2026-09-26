@@ -40,6 +40,8 @@ export interface TranslationCatalog {
     fieldPostSingular: string;
     fieldPostPlural: string;
     languageSelectAria: string;
+    downloadMd: string;
+    simulatedWalletNotice: string;
   };
   nav: {
     home: string;
@@ -56,6 +58,11 @@ export interface TranslationCatalog {
     member: string;
     author: string;
     expert: string;
+    donateFund: string;
+    donate: string;
+    myAccount: string;
+    myContributions: string;
+    benefits: string;
   };
   explore: {
     badge: string;
@@ -207,6 +214,9 @@ export interface TranslationCatalog {
     explorePlanButton: string;
     simulateSwitchButton: string;
     securityRedactionNotice: string;
+    subscribeButton: string;
+    renewButton: string;
+    renewalBonusNotice: string;
   };
   transparency: {
     badge: string;
@@ -318,5 +328,78 @@ export interface TranslationCatalog {
     finalCtaTitle: string;
     finalCtaDesc: string;
     finalCtaAction: string;
+  };
+  account: {
+    tabProfile: string;
+    tabContributions: string;
+    tabVip: string;
+    tabBenefits: string;
+    tabExpert: string;
+    editProfile: string;
+    displayName: string;
+    bio: string;
+    saveChanges: string;
+    profileSaved: string;
+    cancel: string;
+    newPostButton: string;
+    noVerifiedPosts: string;
+    benefitsIntro: string;
+    benefit1Title: string;
+    benefit1Desc: string;
+    benefit2Title: string;
+    benefit2Desc: string;
+    benefit3Title: string;
+    benefit3Desc: string;
+    benefit4Title: string;
+    benefit4Desc: string;
+    claimSbt: string;
+    claimNft: string;
+    claiming: string;
+    claimed: string;
+    notEligible: string;
+  };
+  contribute: {
+    tabExisting: string;
+    tabCandidate: string;
+    ruleExistingNotice: string;
+    ruleCandidateNotice: string;
+    placeLabel: string;
+    titleLabel: string;
+    contentLabel: string;
+    claimsLabel: string;
+    claimsHint: string;
+    addClaim: string;
+    candidateNameLabel: string;
+    candidateRegionLabel: string;
+    candidateCoordinatesLabel: string;
+    duplicateWarningTitle: string;
+    duplicateWarningDesc: string;
+    writeForExistingButton: string;
+    confirmDistinctButton: string;
+    submitButton: string;
+    submitCandidateButton: string;
+    draftSavedAt: string;
+    previewTab: string;
+    editTab: string;
+  };
+  payment: {
+    projectTitle: string;
+    postTipTitle: string;
+    membershipTitle: string;
+    projectTag: string;
+    postTipTag: string;
+    membershipTag: string;
+    amountLabel: string;
+    assetLabel: string;
+    networkLabel: string;
+    wrongNetwork: string;
+    switchToArbitrum: string;
+    authorShare: string;
+    treasuryShare: string;
+    confirmSimulate: string;
+    submitting: string;
+    successTitle: string;
+    successDesc: string;
+    closeModal: string;
   };
 }
