@@ -147,6 +147,15 @@ export const viCatalog: TranslationCatalog = {
     mapPlacesList: 'Danh sách điểm trên bản đồ ({count})',
     imageAttributionIllustration: 'Hình minh họa địa điểm',
     imageAttributionPhoto: 'Ảnh khu vực • Giấy phép mở',
+    whereToGo: 'Bạn muốn đi đâu?',
+    searchThisArea: 'Tìm trong vùng này',
+    filtersButton: 'Bộ lọc',
+    filterDrawerTitle: 'Bộ lọc tìm kiếm',
+    aboutAuditTitle: 'Về phương pháp kiểm tra thực địa độc lập',
+    aboutAuditDesc:
+      'Mọi điểm đến và bài viết trên Ventlore được ghi nhận thực địa và kiểm tra bởi chuyên gia độc lập theo phạm vi khảo sát cụ thể. Quyết định nội dung, nghiệm thu công việc và thanh toán quỹ là ba quy trình độc lập, minh bạch và có thể đối soát.',
+    learnMoreAudit: 'Tìm hiểu quy trình minh bạch & sổ quỹ',
+    nearMeActiveChip: 'Gần tôi · {radius}',
   },
   place: {
     mergedTitle: 'Địa điểm đã được sáp nhập',

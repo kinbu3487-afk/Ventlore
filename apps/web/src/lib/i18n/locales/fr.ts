@@ -147,6 +147,15 @@ export const frCatalog: TranslationCatalog = {
     mapPlacesList: 'Lieux sur la carte ({count})',
     imageAttributionIllustration: 'Illustration de la destination',
     imageAttributionPhoto: 'Photo de zone • Licence ouverte',
+    whereToGo: 'Où souhaitez-vous aller ?',
+    searchThisArea: 'Rechercher dans cette zone',
+    filtersButton: 'Filtres',
+    filterDrawerTitle: 'Filtres de recherche',
+    aboutAuditTitle: 'À propos de la vérification indépendante sur le terrain',
+    aboutAuditDesc:
+      'Toutes les destinations et tous les rapports sur Ventlore sont documentés sur le terrain et vérifiés par des experts indépendants pour des périmètres précis. Les décisions de contenu, la réception des travaux et le déboursement des fonds sont trois processus indépendants, transparents et vérifiables.',
+    learnMoreAudit: 'En savoir plus sur la transparence et le grand livre public',
+    nearMeActiveChip: 'Près de moi · {radius}',
   },
   place: {
     mergedTitle: 'Fiche de destination fusionnée',

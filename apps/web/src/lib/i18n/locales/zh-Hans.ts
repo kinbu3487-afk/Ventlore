@@ -147,6 +147,15 @@ export const zhHansCatalog: TranslationCatalog = {
     mapPlacesList: '地图地点列表 ({count})',
     imageAttributionIllustration: '目的地插图',
     imageAttributionPhoto: '区域照片 • 开源许可',
+    whereToGo: '你想去哪里？',
+    searchThisArea: '搜索此区域',
+    filtersButton: '筛选',
+    filterDrawerTitle: '搜索筛选',
+    aboutAuditTitle: '关于独立实地验证',
+    aboutAuditDesc:
+      'Ventlore上的所有目的地和实地报告均由独立专家针对特定调查范围进行实地记录与验证。内容决定、工作验收和资金支出是三个独立、透明且可核对的流程。',
+    learnMoreAudit: '了解透明度与公开账本',
+    nearMeActiveChip: '附近 · {radius}',
   },
   place: {
     mergedTitle: '目的地档案已合并',

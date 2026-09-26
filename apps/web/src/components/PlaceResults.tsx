@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { PlaceSummaryDTO } from '@ventlore/api-client';
 import { PlaceStatus } from '@ventlore/domain';
 import { useI18n } from '../lib/i18n';
-import { PlaceMap } from './PlaceMap';
+import { PlaceMap, MapBounds } from './PlaceMap';
 import {
   MapPinIcon,
   AlertTriangleIcon,
@@ -18,7 +18,7 @@ import {
 } from './Icons';
 import { Origin } from '@/lib/nearby';
 
-interface PlaceResultsProps {
+export interface PlaceResultsProps {
   places: PlaceSummaryDTO[];
   allPlaces?: PlaceSummaryDTO[];
   mappablePlaces?: PlaceSummaryDTO[];
@@ -32,6 +32,7 @@ interface PlaceResultsProps {
   onPageChange?: (page: number) => void;
   onExpandRadius?: (radius: number | null) => void;
   onSelectRegion?: () => void;
+  onSearchArea?: (bounds: MapBounds) => void;
   isLoading?: boolean;
   viewMode?: 'list' | 'map';
   onViewModeChange?: (mode: 'list' | 'map') => void;
@@ -51,6 +52,7 @@ export function PlaceResults({
   onPageChange,
   onExpandRadius,
   onSelectRegion,
+  onSearchArea,
   isLoading,
   viewMode,
   onViewModeChange,
@@ -392,9 +394,9 @@ export function PlaceResults({
 
       {/* Map Mode: Interactive OpenStreetMap with responsive split on desktop */}
       {currentViewMode === 'map' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* Left Column (Desktop): Compact Places List */}
-          <div className="lg:col-span-5 space-y-3 max-h-[580px] overflow-y-auto pr-1">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+          {/* Left Column (Desktop): Compact Places List with Cards & Photos */}
+          <div className="lg:col-span-5 xl:col-span-4 space-y-3 max-h-[calc(100vh-210px)] min-h-[520px] overflow-y-auto pr-1.5">
             <div className="flex items-center justify-between pb-1 px-1">
               <span className="text-xs font-bold text-ink">
                 {t('explore.mapPlacesList', { count: mapData.length })}
@@ -403,60 +405,107 @@ export function PlaceResults({
             {mapData.map((place) => {
               const isSelected = selectedPlaceId === place.placeId;
               const hasDistance = place.distanceKm !== null && place.distanceKm !== undefined;
+              const coverImage = place.coverImageUrl || place.imageUrl;
+              const fallbackSvg = '/destinations/hero-coastal.svg';
 
               return (
                 <div
                   key={place.placeId}
                   id={`map-card-${place.placeId}`}
                   onClick={() => setSelectedPlaceId(place.placeId)}
-                  className={`p-3.5 rounded-card border transition-all cursor-pointer ${
+                  className={`rounded-card border transition-all cursor-pointer overflow-hidden flex flex-col gap-0 ${
                     isSelected
-                      ? 'border-forest bg-forest/5 ring-1 ring-forest shadow-xs'
-                      : 'border-sage/80 bg-surface-card hover:border-forest/50'
+                      ? 'border-forest bg-forest/5 ring-2 ring-forest shadow-md'
+                      : 'border-sage/80 bg-surface-card hover:border-forest/50 shadow-2xs'
                   }`}
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="space-y-1 min-w-0">
-                      <div className="font-bold text-sm text-ink truncate hover:text-forest">
-                        {place.name}
-                      </div>
-                      <div className="text-xs text-ink-muted flex items-center gap-2">
-                        <span className="flex items-center gap-1">
-                          <MapPinIcon className="w-3 h-3 text-forest shrink-0" />
-                          <span>{place.regionName}</span>
+                  {/* Card Image: 16:9 Landscape preview */}
+                  <div className="relative aspect-video w-full overflow-hidden bg-sage/30 shrink-0">
+                    <img
+                      src={coverImage || fallbackSvg}
+                      alt={place.name}
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                      loading="lazy"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = fallbackSvg;
+                      }}
+                    />
+                    <div className="absolute top-2 left-2 flex flex-col gap-1 items-start">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-forest/90 text-ivory text-[10px] font-semibold backdrop-blur-xs shadow-xs">
+                        <MapPinIcon className="w-3 h-3 text-amber" />
+                        <span>{place.regionName}</span>
+                      </span>
+                      {hasDistance && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/75 text-ivory text-[10px] font-bold backdrop-blur-xs shadow-xs">
+                          ≈ {place.distanceKm! < 1 ? '< 1' : place.distanceKm!.toFixed(1)} km
                         </span>
-                        {hasDistance && (
-                          <span className="text-forest font-bold text-[11px] bg-forest/10 px-1.5 py-0.2 rounded">
-                            ≈ {place.distanceKm! < 1 ? '< 1' : place.distanceKm!.toFixed(1)} km
-                          </span>
-                        )}
-                      </div>
+                      )}
                     </div>
-
-                    <Link
-                      href={getLocalizedPath(`/places/${place.placeId}`)}
-                      className="inline-flex items-center gap-1 text-xs font-bold text-forest hover:text-forest-hover shrink-0 pt-0.5"
-                    >
-                      <span>{t('explore.viewPlace')}</span>
-                      <ChevronRightIcon className="w-3.5 h-3.5" />
-                    </Link>
+                    <div className="absolute bottom-1.5 right-1.5">
+                      <span className="px-1.5 py-0.5 rounded bg-black/60 backdrop-blur-xs text-white/80 text-[9px] font-medium">
+                        {(coverImage || fallbackSvg).endsWith('.svg') || (coverImage || fallbackSvg).includes('/destinations/')
+                          ? t('explore.imageAttributionIllustration')
+                          : t('explore.imageAttributionPhoto')}
+                      </span>
+                    </div>
                   </div>
 
-                  <p className="mt-2 text-xs text-ink-secondary line-clamp-2 leading-relaxed">
-                    {place.summary}
-                  </p>
+                  {/* Card Details */}
+                  <div className="p-3.5 space-y-2">
+                    <div className="flex items-start justify-between gap-2">
+                      <h4 className="font-bold text-sm text-ink truncate hover:text-forest">
+                        <Link href={getLocalizedPath(`/places/${place.placeId}`)}>
+                          {place.name}
+                        </Link>
+                      </h4>
+                      <Link
+                        href={getLocalizedPath(`/places/${place.placeId}`)}
+                        className="inline-flex items-center gap-0.5 text-xs font-bold text-forest hover:text-forest-hover shrink-0 pt-0.5"
+                      >
+                        <span>{t('explore.viewPlace')}</span>
+                        <ChevronRightIcon className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+
+                    <p className="text-xs text-ink-secondary line-clamp-2 leading-relaxed">
+                      {place.summary}
+                    </p>
+
+                    {/* Safety warning if any */}
+                    {place.warnings && place.warnings.length > 0 && (
+                      <div className="p-2 rounded bg-amber/15 border border-amber/30 text-ink text-[11px] flex items-start gap-1.5">
+                        <AlertTriangleIcon className="w-3.5 h-3.5 text-amber-700 shrink-0 mt-0.5" />
+                        <span className="line-clamp-1">{place.warnings[0]}</span>
+                      </div>
+                    )}
+
+                    {/* Activities */}
+                    {place.activities && place.activities.length > 0 && (
+                      <div className="flex flex-wrap gap-1 pt-1 border-t border-sage/40">
+                        {place.activities.slice(0, 3).map((act) => (
+                          <span
+                            key={act}
+                            className="px-2 py-0.2 rounded-full bg-surface-canvas text-ink-secondary text-[10px] border border-sage/40"
+                          >
+                            {act}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               );
             })}
           </div>
 
           {/* Right Column: Interactive Leaflet Map with all mappable places */}
-          <div className="lg:col-span-7 h-[460px] lg:h-[580px]">
+          <div className="lg:col-span-7 xl:col-span-8 h-[460px] lg:h-[calc(100vh-210px)] lg:min-h-[520px] rounded-card border border-sage overflow-hidden sticky top-4">
             <PlaceMap
               places={mapData}
               origin={origin}
               selectedPlaceId={selectedPlaceId}
               onSelectPlace={setSelectedPlaceId}
+              onSearchArea={onSearchArea}
               className="w-full h-full"
             />
           </div>

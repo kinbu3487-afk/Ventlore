@@ -156,6 +156,14 @@ export interface TranslationCatalog {
     mapPlacesList: string;
     imageAttributionIllustration: string;
     imageAttributionPhoto: string;
+    whereToGo: string;
+    searchThisArea: string;
+    filtersButton: string;
+    filterDrawerTitle: string;
+    aboutAuditTitle: string;
+    aboutAuditDesc: string;
+    learnMoreAudit: string;
+    nearMeActiveChip: string;
   };
   place: {
     mergedTitle: string;
