@@ -12,6 +12,7 @@ import { useSession } from '@/components/SessionContext';
 import { useI18n } from '@/lib/i18n';
 import { CompassIcon, ShieldCheckIcon, SparklesIcon, ArrowRightIcon } from '@/components/Icons';
 import { Origin } from '@/lib/nearby';
+import { MapBounds } from '@/components/PlaceMap';
 
 function ExploreViewInner() {
   const { persona } = useSession();
@@ -187,35 +188,32 @@ function ExploreViewInner() {
     setPage(1);
   };
 
+  const handleSearchArea = useCallback((bounds: MapBounds) => {
+    // Section 6 invariant: "Tìm trong vùng này" switches to map bounds mode, clears Near Me radius limit, keeps device position if any
+    setRadiusKm(null);
+    setPage(1);
+
+    const inBounds = queryData.allMatches.filter((p) => {
+      const lat = p.coordinates?.lat ?? p.location?.latitude;
+      const lng = p.coordinates?.lng ?? p.location?.longitude;
+      if (typeof lat !== 'number' || typeof lng !== 'number') return false;
+      return lat >= bounds.south && lat <= bounds.north && lng >= bounds.west && lng <= bounds.east;
+    });
+
+    setQueryData((prev) => ({
+      ...prev,
+      items: inBounds.slice(0, 12),
+      mappableMatches: inBounds,
+      total: inBounds.length,
+      totalPages: Math.ceil(inBounds.length / 12) || 1,
+      page: 1,
+    }));
+  }, [queryData.allMatches]);
+
   return (
     <AppShell>
-      <div className="space-y-5 sm:space-y-6">
-        {/* 1. Header Overview: Above-the-fold with quick access */}
-        <section
-          aria-label="Explore header"
-          className="rounded-card border border-sage/80 bg-surface-card p-4 sm:p-6 shadow-sm space-y-2"
-        >
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-forest text-ivory text-xs font-bold shadow-xs">
-              <CompassIcon className="w-3.5 h-3.5 text-amber" />
-              {t('explore.badge')}
-            </span>
-            <span className="text-xs text-ink-secondary flex items-center gap-1 font-medium">
-              <ShieldCheckIcon className="w-3.5 h-3.5 text-forest" />
-              {t('explore.independentAudit')}
-            </span>
-          </div>
-
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-ink leading-snug">
-            {t('explore.heroTitle')}
-          </h1>
-
-          <p className="text-xs sm:text-sm text-ink-secondary leading-normal max-w-2xl">
-            {t('explore.heroSubtitle')}
-          </p>
-        </section>
-
-        {/* 2. 56px Search & Filter Bar with 34 Provinces & Gần tôi */}
+      <div className="space-y-4 sm:space-y-5">
+        {/* 1. Compact Search & Filter Toolbar: Title "Bạn muốn đi đâu?", Search, Near Me, Filter, Activity chips */}
         <SearchFilters
           query={query}
           provinceCode={provinceCode}
@@ -230,7 +228,7 @@ function ExploreViewInner() {
           onClearFilters={handleClearFilters}
         />
 
-        {/* 3. Results with Pagination, Distance Badges, Map Sync, & Fallbacks */}
+        {/* 2. Results: Independent Cards Panel on Left (30-35%), Map on Right (65-70%) */}
         <AsyncState
           isLoading={isLoading}
           isEmpty={false}
@@ -254,10 +252,40 @@ function ExploreViewInner() {
               el?.focus();
               el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }}
+            onSearchArea={handleSearchArea}
             viewMode={viewMode}
             onViewModeChange={setViewMode}
           />
         </AsyncState>
+
+        {/* 3. Independent Field Verification Methodology Explanation */}
+        <section
+          aria-label="Independent verification methodology"
+          className="rounded-card border border-sage/80 bg-surface-card p-5 sm:p-6 shadow-sm space-y-3"
+        >
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-forest/10 flex items-center justify-center text-forest shrink-0">
+              <ShieldCheckIcon className="w-4 h-4" />
+            </div>
+            <h3 className="text-base sm:text-lg font-bold text-ink">
+              {t('explore.aboutAuditTitle')}
+            </h3>
+          </div>
+
+          <p className="text-xs sm:text-sm text-ink-secondary leading-relaxed max-w-3xl">
+            {t('explore.aboutAuditDesc')}
+          </p>
+
+          <div className="pt-1">
+            <Link
+              href={getLocalizedPath('/transparency')}
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-forest hover:text-forest-hover hover:underline"
+            >
+              <span>{t('explore.learnMoreAudit')}</span>
+              <ArrowRightIcon className="w-4 h-4" />
+            </Link>
+          </div>
+        </section>
 
         {/* 4. Community Discovery Banner ("Bạn có dữ liệu thực địa mới?") */}
         <div className="rounded-card border border-sage bg-surface-card p-5 sm:p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-5">

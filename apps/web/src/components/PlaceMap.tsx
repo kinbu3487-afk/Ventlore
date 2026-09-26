@@ -3,14 +3,22 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { PlaceSummaryDTO } from '@ventlore/api-client';
 import { useI18n } from '../lib/i18n';
-import { MapPinIcon, CompassIcon, AlertTriangleIcon, RefreshCwIcon } from './Icons';
+import { MapPinIcon, CompassIcon, AlertTriangleIcon, RefreshCwIcon, SearchIcon } from './Icons';
 import { Origin } from '@/lib/nearby';
 
-interface PlaceMapProps {
+export interface MapBounds {
+  north: number;
+  south: number;
+  east: number;
+  west: number;
+}
+
+export interface PlaceMapProps {
   places: PlaceSummaryDTO[];
   origin?: Origin | null;
   selectedPlaceId?: string | null;
   onSelectPlace?: (placeId: string) => void;
+  onSearchArea?: (bounds: MapBounds) => void;
   className?: string;
 }
 
@@ -25,6 +33,7 @@ export function PlaceMap({
   origin = null,
   selectedPlaceId,
   onSelectPlace,
+  onSearchArea,
   className = '',
 }: PlaceMapProps) {
   const { t, getLocalizedPath } = useI18n();
@@ -35,7 +44,9 @@ export function PlaceMap({
   const originCircleRef = useRef<any>(null);
   const [mapStatus, setMapStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [currentZoom, setCurrentZoom] = useState<number>(6);
+  const [showSearchArea, setShowSearchArea] = useState<boolean>(false);
   const initialFitRef = useRef<boolean>(false);
+  const isUserInteractingRef = useRef<boolean>(false);
 
   // Load Leaflet CSS and JS dynamically if not already present
   useEffect(() => {
@@ -97,6 +108,8 @@ export function PlaceMap({
   // Fit bounds helper
   const fitAllBounds = useCallback(() => {
     if (!mapInstanceRef.current || !window.L) return;
+    setShowSearchArea(false);
+    isUserInteractingRef.current = false;
     const L = window.L;
     const bounds = L.latLngBounds([]);
     let count = 0;
@@ -119,6 +132,18 @@ export function PlaceMap({
       mapInstanceRef.current.fitBounds(bounds, { padding: [50, 50], maxZoom: 13 });
     }
   }, [places, origin]);
+
+  const handleSearchThisArea = () => {
+    if (!mapInstanceRef.current || !onSearchArea) return;
+    const b = mapInstanceRef.current.getBounds();
+    onSearchArea({
+      north: b.getNorth(),
+      south: b.getSouth(),
+      east: b.getEast(),
+      west: b.getWest(),
+    });
+    setShowSearchArea(false);
+  };
 
   // Initialize and update Map when Leaflet is ready
   useEffect(() => {
@@ -143,8 +168,17 @@ export function PlaceMap({
         maxZoom: 18,
       }).addTo(map);
 
-      map.on('zoomend', () => {
+      map.on('movestart', () => {
+        if (initialFitRef.current) {
+          isUserInteractingRef.current = true;
+        }
+      });
+
+      map.on('moveend', () => {
         setCurrentZoom(map.getZoom());
+        if (isUserInteractingRef.current && onSearchArea) {
+          setShowSearchArea(true);
+        }
       });
 
       mapInstanceRef.current = map;
@@ -357,13 +391,17 @@ export function PlaceMap({
     return () => {
       clearTimeout(resizeTimer);
     };
-  }, [places, origin, mapStatus, getLocalizedPath, t, onSelectPlace, selectedPlaceId, currentZoom]);
+  }, [places, origin, mapStatus, getLocalizedPath, t, onSelectPlace, selectedPlaceId, currentZoom, onSearchArea]);
 
-  // Synchronize selectedPlaceId with popup
+  // Synchronize selectedPlaceId with popup and pan
   useEffect(() => {
-    if (!selectedPlaceId || !markersRef.current[selectedPlaceId]) return;
+    if (!selectedPlaceId || !markersRef.current[selectedPlaceId] || !mapInstanceRef.current) return;
     const marker = markersRef.current[selectedPlaceId];
     marker.openPopup();
+    const latLng = marker.getLatLng();
+    if (latLng) {
+      mapInstanceRef.current.panTo(latLng, { animate: true });
+    }
   }, [selectedPlaceId]);
 
   // Clean up on unmount
@@ -381,7 +419,7 @@ export function PlaceMap({
       {/* 1. Map Canvas Element */}
       <div
         ref={mapContainerRef}
-        className="w-full h-full min-h-[420px] bg-sage/20 z-0"
+        className="w-full h-full min-h-[420px] lg:min-h-[560px] bg-sage/20 z-0"
         aria-label="Interactive Geographic Map"
       />
 
@@ -409,25 +447,40 @@ export function PlaceMap({
         </div>
       )}
 
-      {/* 4. Map View Hints & Pin Counter */}
+      {/* 4. Sleek Map Controls: Pins Counter & Fit Bounds */}
       {mapStatus === 'ready' && (
-        <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-forest/90 text-ivory text-xs font-semibold backdrop-blur-xs shadow-md">
-            <CompassIcon className="w-3.5 h-3.5 text-amber" />
-            <span>OpenStreetMap</span>
-            <span className="text-[10px] opacity-75 font-mono">({places.length} {t('explore.pinsUnit')})</span>
-          </span>
+        <>
+          <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-forest/90 text-ivory text-xs font-semibold backdrop-blur-xs shadow-sm">
+              <MapPinIcon className="w-3.5 h-3.5 text-amber" />
+              <span>{places.length} {t('explore.placesUnit')}</span>
+            </span>
 
-          <button
-            type="button"
-            onClick={fitAllBounds}
-            title={t('explore.fitAllBoundsTitle')}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/90 text-ink text-[11px] font-semibold backdrop-blur-xs border border-sage hover:bg-white shadow-xs transition-colors"
-          >
-            <RefreshCwIcon className="w-3 h-3 text-forest" />
-            <span>{t('explore.fitAllBounds')}</span>
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={fitAllBounds}
+              title={t('explore.fitAllBoundsTitle')}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/95 text-ink text-xs font-semibold backdrop-blur-xs border border-sage hover:bg-white shadow-xs transition-colors min-h-[32px]"
+            >
+              <RefreshCwIcon className="w-3 h-3 text-forest" />
+              <span>{t('explore.fitAllBounds')}</span>
+            </button>
+          </div>
+
+          {/* 5. Floating "Search this area" Button */}
+          {showSearchArea && (
+            <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 animate-fadeIn">
+              <button
+                type="button"
+                onClick={handleSearchThisArea}
+                className="min-h-[36px] px-4 py-1.5 rounded-full bg-forest text-white text-xs font-bold shadow-md hover:bg-forest-hover transition-all flex items-center gap-1.5 border border-white/20 hover:scale-105 active:scale-95"
+              >
+                <SearchIcon className="w-3.5 h-3.5 text-amber" />
+                <span>{t('explore.searchThisArea')}</span>
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

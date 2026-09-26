@@ -147,6 +147,15 @@ export const enCatalog: TranslationCatalog = {
     mapPlacesList: 'Map places list ({count})',
     imageAttributionIllustration: 'Destination illustration',
     imageAttributionPhoto: 'Area photo • Open license',
+    whereToGo: 'Where do you want to go?',
+    searchThisArea: 'Search this area',
+    filtersButton: 'Filters',
+    filterDrawerTitle: 'Search Filters',
+    aboutAuditTitle: 'About Independent Field Verification',
+    aboutAuditDesc:
+      'All destinations and reports on Ventlore are field-documented and verified by independent experts for specific survey scopes. Content decisions, work acceptance, and fund disbursements are three independent, transparent, and auditable processes.',
+    learnMoreAudit: 'Learn more about transparency & public ledger',
+    nearMeActiveChip: 'Near me · {radius}',
   },
   place: {
     mergedTitle: 'Destination Record Merged',

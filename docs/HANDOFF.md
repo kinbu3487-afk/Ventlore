@@ -1,9 +1,9 @@
 # Tài Liệu Bàn Giao (HANDOFF)
 
-**Chặng hoàn thành gần nhất:** FE-Review v1.6 — Hoàn Thiện Đánh Giá Tiếng Anh & Trải Nghiệm Khám Phá theo `Ventlore_FE_Review_v1_6_EN.md`  
-**Nhiệm vụ tiếp theo:** Bin trải nghiệm và nghiệm thu toàn diện bản tiếng Anh trên `http://localhost:3000/en/` hoặc bản deploy; Chuẩn bị cho chặng kết nối Back-end song song  
-**Thời điểm bàn giao:** 26/09/2026 20:25 UTC+7  
-**Tài liệu kèm theo:** `docs/PROJECT_STATE.md`, `Ventlore_FE_Review_v1_6_EN.md`  
+**Chặng hoàn thành gần nhất:** FE-Explore-Map-Near-Me v1.7 — Điều chỉnh Explore: Điểm đến, Bản đồ & Gần tôi theo `Ventlore_Prompt_FE_Explore_Map_Near_Me_v1.md`  
+**Nhiệm vụ tiếp theo:** Bin trải nghiệm và nghiệm thu bố cục Explore mới trên desktop (1440x900) và mobile; Chuẩn bị cho chặng kết nối Back-end song song  
+**Thời điểm bàn giao:** 26/09/2026 21:25 UTC+7  
+**Tài liệu kèm theo:** `docs/PROJECT_STATE.md`, `Ventlore_Prompt_FE_Explore_Map_Near_Me_v1.md`  
 
 ---
 

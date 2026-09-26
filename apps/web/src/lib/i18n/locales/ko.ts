@@ -147,6 +147,15 @@ export const koCatalog: TranslationCatalog = {
     mapPlacesList: '지도 위치 목록 ({count})',
     imageAttributionIllustration: '목적지 일러스트',
     imageAttributionPhoto: '지역 사진 • 오픈 라이선스',
+    whereToGo: '어디로 가고 싶으신가요?',
+    searchThisArea: '이 지역 검색',
+    filtersButton: '필터',
+    filterDrawerTitle: '검색 필터',
+    aboutAuditTitle: '독립적인 현장 검증 정보',
+    aboutAuditDesc:
+      'Ventlore의 모든 목적지와 현장 보고서는 특정 조사 범위에 대해 독립적인 전문가에 의해 현장 기록 및 검증됩니다. 콘텐츠 결정, 작업 검수 및 자금 지출은 세 가지 독립적이고 투명하며 감사 가능한 절차입니다.',
+    learnMoreAudit: '투명성 및 공개 원장 자세히 알아보기',
+    nearMeActiveChip: '내 주변 · {radius}',
   },
   place: {
     mergedTitle: '목적지 레코드 병합 안내',

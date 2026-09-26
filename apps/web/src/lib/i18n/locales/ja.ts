@@ -147,6 +147,15 @@ export const jaCatalog: TranslationCatalog = {
     mapPlacesList: '地図上のスポット一覧 ({count})',
     imageAttributionIllustration: '目的地のイラスト',
     imageAttributionPhoto: 'エリア写真・オープンライセンス',
+    whereToGo: 'どこへ行きたいですか？',
+    searchThisArea: 'このエリアを検索',
+    filtersButton: 'フィルター',
+    filterDrawerTitle: '検索フィルター',
+    aboutAuditTitle: '独立した現地検証について',
+    aboutAuditDesc:
+      'Ventlore上のすべての目的地とレポートは、特定の調査範囲について独立した専門家によって現地記録・検証されています。コンテンツ決定、作業検収、資金支払いは独立かつ透明で監査可能な3つのプロセスです。',
+    learnMoreAudit: '透明性と公開台帳について詳しく知る',
+    nearMeActiveChip: '現在地付近 · {radius}',
   },
   place: {
     mergedTitle: '目的地の統合案内',
