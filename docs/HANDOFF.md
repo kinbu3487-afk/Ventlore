@@ -68,7 +68,7 @@
        - **Đồng ý:** Thanh điều khiển vị trí hiện ra với bán kính mặc định 50 km, các thẻ điểm hiển thị huy hiệu `≈ X km`, sắp xếp từ gần đến xa. Thử chuyển đổi các mốc bán kính (5, 25, 50, 100, 200 km, Tất cả). Thử bấm "Cập nhật vị trí" hoặc "Tắt vị trí".
        - **Từ chối / Chặn:** Hiển thị thông báo nhẹ nhàng giải thích quyền đã bị chặn kèm nút "Chọn khu vực khác" (không bị crash hay chặn trang).
      - **Kiểm tra URL:** Tọa độ GPS không bao giờ xuất hiện trên URL `?q=...&province=...`.
-   - **Chuyển đổi Bản đồ / Danh sách:** Bấm nút chuyển sang chế độ "Bản đồ", OpenStreetMap tải các điểm đã lọc, bấm marker để xem thông tin điểm đến.
+   - **Chuyển đổi Bản đồ / Danh sách:** Chế độ **Bản đồ** (Map view) được ưu tiên hiển thị mặc định khi truy cập `/explore`. Bộ nút chuyển đổi hiển thị thứ tự `[ Bản đồ ] [ Danh sách ]`. OpenStreetMap hiển thị ghim/chấm mật độ thích ứng và đồng bộ tự động cuộn danh sách thẻ bên cạnh khi bấm marker. Khi bấm chuyển sang "Danh sách", URL đồng bộ `?view=list`.
    - **Trang chi tiết điểm đến:** Bấm vào bất kỳ điểm nào trong 97 điểm nền mới (ví dụ `http://localhost:3000/places/PLC-000006`), trang hiển thị ảnh bìa 16:9, tọa độ ước lượng, nhãn "Thông tin thực địa đang được bổ sung", và mục "Chưa có bài viết thực địa nào" với nút CTA đóng góp.
    - **Đóng góp bài viết (`/contribute`):** Tại tab "Điểm đến đã có", gõ thử tìm kiếm trong ô chọn điểm đến để thấy autocomplete mượt mà từ 100 điểm.
    - **Đa ngôn ngữ:** Thử chuyển qua lại 6 ngôn ngữ (`vi`, `en`, `ja`, `zh-Hans`, `ko`, `fr`) trên trang `/explore` để kiểm tra các nhãn bán kính, khoảng cách và nút bấm đều hiển thị ngôn ngữ tương ứng.
