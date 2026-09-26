@@ -489,7 +489,7 @@ export function ContributeView() {
 
           <p className="text-sm leading-relaxed text-ink-secondary">
             {submitSuccess.isCandidate
-              ? 'Hồ sơ địa điểm và bài viết khám phá ban đầu đã được chuyển vào hàng đợi Tiếp nhận (Admin Intake) ở trạng thái Chờ kiểm định thực địa. Điểm này sẽ không hiển thị trên bản đồ công cộng cho đến khi có chuyên gia khảo sát độc lập xác thực tính chính xác và an toàn.'
+              ? 'Hồ sơ địa điểm và bài viết khám phá ban đầu đã được chuyển vào hàng đợi Tiếp nhận (Admin Intake). Hồ sơ được công khai sau khi xét duyệt. Kết quả kiểm định, nếu có, thể hiện rõ phạm vi, thời điểm và các cảnh báo liên quan.'
               : 'Bài viết của bạn đã được lưu vào kho dữ liệu ở trạng thái Chưa kiểm định độc lập. Bạn có thể theo dõi tiến trình thẩm định trong mục Đóng góp của tôi. Khi được chuyên gia xác thực, nhãn kiểm định và quyền nhận tip sẽ được kích hoạt.'}
           </p>
 
@@ -531,7 +531,7 @@ export function ContributeView() {
           }`}
         >
           <FileTextIcon className="w-4 h-4" />
-          <span>1. Viết bài về điểm đã biết</span>
+          <span>{t('contribute.tabExisting')}</span>
         </button>
 
         <button
@@ -544,7 +544,7 @@ export function ContributeView() {
           }`}
         >
           <MapPinIcon className="w-4 h-4" />
-          <span>2. Đề xuất điểm dã ngoại mới</span>
+          <span>{t('contribute.tabCandidate')}</span>
         </button>
       </div>
 
@@ -556,14 +556,14 @@ export function ContributeView() {
             <ShieldCheckIcon className="w-4 h-4 text-forest shrink-0 mt-0.5" />
             <div>
               <strong className="text-ink font-semibold">Quy chuẩn kiểm định: </strong>
-              Bài viết về địa điểm có sẵn có thể xuất bản ngay để cộng đồng tham khảo. Khi chuyên gia thực địa hoàn thành thẩm định độc lập, bài viết sẽ được gắn nhãn kiểm định chính thức và mở các quyền lợi tác giả (chứng nhận SBT, vật phẩm NFT và tuyến chia sẻ tiền tip 80/20).
+              {t('contribute.ruleExistingNotice')}
             </div>
           </div>
 
           {/* Place Selection */}
           <div className="space-y-2">
             <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-              Địa điểm bạn đã đến <span className="text-status-danger">*</span>
+              {t('contribute.placeLabel')} <span className="text-status-danger">*</span>
             </label>
             {isLoadingPlaces ? (
               <div className="h-10 bg-sage/30 animate-pulse rounded-control" />
@@ -597,7 +597,7 @@ export function ContributeView() {
           {/* Title */}
           <div className="space-y-2">
             <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-              Tiêu đề bài viết <span className="text-status-danger">*</span>
+              {t('contribute.titleLabel')} <span className="text-status-danger">*</span>
             </label>
             <input
               type="text"
@@ -659,10 +659,10 @@ export function ContributeView() {
             <div className="flex items-center justify-between">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-                  Nhận định kiểm chứng (Verifiable Claims)
+                  {t('contribute.claimsLabel')}
                 </label>
                 <p className="text-[11px] text-ink-muted">
-                  Tách riêng từng nhận định cụ thể (về nguồn nước, độ dốc, sóng ngầm, vắt rừng) để chuyên gia dễ dàng đối chiếu thực địa.
+                  {t('contribute.claimsHint')}
                 </p>
               </div>
               <button
@@ -671,7 +671,7 @@ export function ContributeView() {
                 className="inline-flex items-center gap-1 px-2.5 py-1 rounded-control bg-forest/10 text-forest text-xs font-bold hover:bg-forest/20 transition-colors"
               >
                 <PlusCircleIcon className="w-3.5 h-3.5" />
-                <span>Thêm nhận định</span>
+                <span>{t('contribute.addClaim')}</span>
               </button>
             </div>
 
@@ -707,12 +707,12 @@ export function ContributeView() {
           <div className="space-y-2 pt-2 border-t border-sage/60">
             <div className="flex items-center justify-between">
               <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-                Nội dung chi tiết (Markdown) <span className="text-status-danger">*</span>
+                {t('contribute.contentLabel')} <span className="text-status-danger">*</span>
               </label>
               <div className="flex items-center gap-2">
                 {draftSavedAt && (
                   <span className="text-[11px] text-ink-muted">
-                    Lưu nháp cục bộ lúc {draftSavedAt}
+                    {t('contribute.draftSavedAt')} {draftSavedAt}
                   </span>
                 )}
                 <button
@@ -725,7 +725,7 @@ export function ContributeView() {
                   }`}
                 >
                   <EyeIcon className="w-3.5 h-3.5" />
-                  <span>{showPreview ? 'Đóng xem trước' : 'Xem trước live'}</span>
+                  <span>{showPreview ? t('contribute.editTab') : t('contribute.previewTab')}</span>
                 </button>
               </div>
             </div>
@@ -863,7 +863,7 @@ export function ContributeView() {
                 disabled={isSubmitting}
                 className="min-h-control inline-flex items-center justify-center px-6 py-2.5 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-sm disabled:opacity-50"
               >
-                {isSubmitting ? 'Đang lưu bản ghi...' : 'Gửi bài viết (Demo)'}
+                {isSubmitting ? 'Đang lưu bản ghi...' : t('contribute.submitButton')}
               </button>
             </div>
           </div>
@@ -878,14 +878,14 @@ export function ContributeView() {
             <ShieldCheckIcon className="w-4 h-4 text-status-pending shrink-0 mt-0.5" />
             <div>
               <strong className="text-ink font-semibold">Quy chuẩn Đề xuất điểm mới: </strong>
-              Tạo đồng thời địa điểm đề xuất mới và bài viết khám phá ban đầu. Để đảm bảo an toàn cho cộng đồng dã ngoại, thông tin sẽ ở trạng thái <span className="font-semibold text-ink">Chờ kiểm định thực địa</span> và chỉ hiển thị công khai trên bản đồ sau khi có chuyên gia thẩm định xác nhận an toàn.
+              {t('contribute.ruleCandidateNotice')}
             </div>
           </div>
 
           {/* Place Name & Real-time Duplicate Detection */}
           <div className="space-y-2">
             <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-              Tên địa điểm mới <span className="text-status-danger">*</span>
+              {t('contribute.candidateNameLabel')} <span className="text-status-danger">*</span>
             </label>
             <input
               type="text"
@@ -904,10 +904,10 @@ export function ContributeView() {
               <div className="p-4 rounded-card border-2 border-waypoint bg-status-caution-bg text-ink space-y-2 animate-fadeIn">
                 <div className="flex items-center gap-2 font-bold text-xs text-waypoint">
                   <AlertTriangleIcon className="w-4 h-4" />
-                  <span>CẢNH BÁO TRÙNG LẶP ĐỊA ĐIỂM TIỀM NĂNG</span>
+                  <span>{t('contribute.duplicateWarningTitle')}</span>
                 </div>
                 <p className="text-xs text-ink-secondary leading-relaxed">
-                  Hệ thống tìm thấy địa điểm có sẵn có tên gần khớp:{' '}
+                  {t('contribute.duplicateWarningDesc')}{' '}
                   <strong className="text-ink">{duplicateWarning.name}</strong> ({duplicateWarning.displayCode} — {duplicateWarning.regionName}).
                 </p>
                 <div className="flex flex-wrap items-center gap-2 pt-1">
@@ -919,14 +919,14 @@ export function ContributeView() {
                     }}
                     className="px-3 py-1.5 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover transition-colors shadow-xs"
                   >
-                    Viết bài cho điểm đã có này
+                    {t('contribute.writeForExistingButton')}
                   </button>
                   <button
                     type="button"
                     onClick={() => setDismissDuplicate(true)}
                     className="px-3 py-1.5 rounded-control border border-sage bg-white text-xs text-ink font-medium hover:bg-surface-canvas transition-colors"
                   >
-                    Tôi xác nhận đây là điểm hoàn toàn khác
+                    {t('contribute.confirmDistinctButton')}
                   </button>
                 </div>
               </div>
@@ -937,7 +937,7 @@ export function ContributeView() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-1.5">
               <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-                Vùng địa lý <span className="text-status-danger">*</span>
+                {t('contribute.candidateRegionLabel')} <span className="text-status-danger">*</span>
               </label>
               <select
                 value={selectedRegion?.id || 'reg-catba'}
@@ -1084,7 +1084,7 @@ export function ContributeView() {
               disabled={isSubmitting}
               className="min-h-control inline-flex items-center justify-center px-6 py-2.5 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-sm disabled:opacity-50"
             >
-              {isSubmitting ? 'Đang tạo giao dịch...' : 'Gửi đề xuất điểm mới (Demo)'}
+              {isSubmitting ? 'Đang tạo giao dịch...' : t('contribute.submitCandidateButton')}
             </button>
           </div>
         </form>

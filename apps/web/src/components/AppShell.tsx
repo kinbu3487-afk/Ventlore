@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from './SessionContext';
@@ -31,12 +31,25 @@ interface AppShellProps {
 
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
+  const [currentFullPath, setCurrentFullPath] = useState(pathname);
   const { persona, session, setPersona } = useSession();
   const { t, getLocalizedPath } = useI18n();
   const { openPayment } = usePayment();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [isMissionOpen, setIsMissionOpen] = useState(false);
+
+  useEffect(() => {
+    const updateFullPath = () => {
+      if (typeof window !== 'undefined') {
+        const full = `${window.location.pathname}${window.location.search}`;
+        setCurrentFullPath(full);
+      }
+    };
+    updateFullPath();
+    window.addEventListener('popstate', updateFullPath);
+    return () => window.removeEventListener('popstate', updateFullPath);
+  }, [pathname]);
 
   React.useEffect(() => {
     setUserDropdownOpen(false);
@@ -155,7 +168,7 @@ export function AppShell({ children }: AppShellProps) {
                 className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control text-xs font-semibold text-ivory bg-white/10 hover:bg-white/20 border border-white/20 transition-all shadow-xs whitespace-nowrap shrink-0"
               >
                 <CompassIcon className="w-3.5 h-3.5 text-amber" />
-                <span>Đóng góp</span>
+                <span>{t('nav.contribute')}</span>
               </Link>
 
               {/* Language Switcher */}
@@ -169,15 +182,15 @@ export function AppShell({ children }: AppShellProps) {
                   className="min-h-control inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-control text-xs font-bold text-ink bg-amber hover:bg-amber/90 transition-all shadow-xs shrink-0"
                 >
                   <SparklesIcon className="w-3.5 h-3.5" />
-                  <span className="hidden md:inline">Ủng hộ quỹ</span>
-                  <span className="md:hidden">Ủng hộ</span>
+                  <span className="hidden md:inline">{t('nav.donateFund')}</span>
+                  <span className="md:hidden">{t('nav.donate')}</span>
                 </button>
               )}
 
               {/* Login / Profile Dropdown */}
               {persona === 'guest' ? (
                 <Link
-                  href={getLocalizedPath(`/login?returnTo=${encodeURIComponent(pathname)}`)}
+                  href={getLocalizedPath(`/login?returnTo=${encodeURIComponent(currentFullPath)}`)}
                   className="min-h-control inline-flex items-center justify-center px-3.5 py-1.5 rounded-control text-xs font-bold text-forest bg-ivory hover:bg-white transition-colors shadow-sm whitespace-nowrap shrink-0"
                 >
                   {t('nav.login')}
@@ -225,7 +238,7 @@ export function AppShell({ children }: AppShellProps) {
                           className="w-full text-left px-3 py-2 rounded-control flex items-center gap-2 text-ink hover:bg-surface-canvas transition-colors"
                         >
                           <UserIcon className="w-4 h-4 text-ink-secondary" />
-                          <span>Hồ sơ & Tài khoản</span>
+                          <span>{t('nav.myAccount')}</span>
                         </Link>
 
                         <Link
@@ -234,7 +247,7 @@ export function AppShell({ children }: AppShellProps) {
                           className="w-full text-left px-3 py-2 rounded-control flex items-center gap-2 text-ink hover:bg-surface-canvas transition-colors"
                         >
                           <CompassIcon className="w-4 h-4 text-ink-secondary" />
-                          <span>Đóng góp của tôi</span>
+                          <span>{t('nav.myContributions')}</span>
                         </Link>
 
                         <Link
@@ -243,7 +256,7 @@ export function AppShell({ children }: AppShellProps) {
                           className="w-full text-left px-3 py-2 rounded-control flex items-center gap-2 text-ink hover:bg-surface-canvas transition-colors"
                         >
                           <SparklesIcon className="w-4 h-4 text-ink-secondary" />
-                          <span>Quyền lợi sau duyệt (SBT/NFT/Tip)</span>
+                          <span>{t('nav.benefits')} (SBT/NFT/Tip)</span>
                         </Link>
 
                         {(persona === 'expert' || persona === 'admin') && (
@@ -421,7 +434,7 @@ export function AppShell({ children }: AppShellProps) {
         <Link
           href={getLocalizedPath(
             persona === 'guest'
-              ? `/login?returnTo=${encodeURIComponent(pathname)}`
+              ? `/login?returnTo=${encodeURIComponent(currentFullPath)}`
               : '/account'
           )}
           className={`flex-1 min-h-[44px] flex flex-col items-center justify-center text-[10px] font-medium transition-colors ${
@@ -431,7 +444,7 @@ export function AppShell({ children }: AppShellProps) {
           }`}
         >
           <UserIcon className="w-5 h-5 shrink-0" />
-          <span className="mt-0.5 truncate max-w-[64px]">{persona === 'guest' ? t('nav.login') : 'Tài khoản'}</span>
+          <span className="mt-0.5 truncate max-w-[64px]">{persona === 'guest' ? t('nav.login') : t('nav.myAccount')}</span>
         </Link>
       </nav>
 
@@ -481,7 +494,7 @@ export function AppShell({ children }: AppShellProps) {
               title="Tải trực tiếp file docs/FE_DATA_MAP.md"
             >
               <DownloadIcon className="w-3 h-3 text-forest" />
-              <span>Tải .md</span>
+              <span>{t('common.downloadMd')}</span>
             </a>
             <Link href={getLocalizedPath('/login')} className="hover:text-forest">
               {t('nav.login')}

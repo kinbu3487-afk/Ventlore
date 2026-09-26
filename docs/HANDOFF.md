@@ -1,120 +1,84 @@
 # Tài Liệu Bàn Giao (HANDOFF)
 
-**Chặng hoàn thành gần nhất:** FE-Fix v1.1 — Sửa lỗi P0 (Revision reactive & Chặn Guest mua VIP), Header/i18n, Phân lập Tab/Drafts, Phân quyền Demo & Quyền lợi tác giả  
-**Nhiệm vụ tiếp theo:** Bin trực tiếp trải nghiệm và nghiệm thu cục bộ trên `http://localhost:3000`; Chốt các quyết định kỹ thuật trong `docs/FE_DATA_MAP.md` trước khi sang Backend  
-**Thời điểm bàn giao:** 26/09/2026 12:00 UTC+7  
-**Tài liệu kèm theo:** `docs/FE_QA.md`, `docs/FE_DATA_MAP.md`, `docs/FE_COVERAGE.md`, `docs/FE_REVIEW.md`, `docs/FE_HANDOFF.md`  
+**Chặng hoàn thành gần nhất:** FE-Continue v1.2 — Hoàn thiện URL 2 chiều Account, Đa ngôn ngữ 6 locales, Chuẩn hóa an toàn & Nhãn demo, Di chuyển ReviewToolbar sang Bottom-Left, Chỉnh đốn Data Map 38 dòng  
+**Nhiệm vụ tiếp theo:** Bin trực tiếp trải nghiệm và nghiệm thu cục bộ trên `http://localhost:3000`; Chốt các quyết định kỹ thuật trong `docs/FE_DATA_MAP.md` trước khi bàn giao Backend  
+**Thời điểm bàn giao:** 26/09/2026 16:30 UTC+7  
+**Tài liệu kèm theo:** `docs/FE_QA.md`, `docs/FE_DATA_MAP.md`, `docs/FE_COVERAGE.md`, `docs/FE_REVIEW.md`, `docs/FE_HANDOFF.md`, `docs/PROJECT_STATE.md`  
 
 ---
 
-## 1. Kết quả đạt được tại Chặng Sửa Lỗi FE-Fix v1.1
+## 1. Kết quả đạt được tại Chặng FE-Continue v1.2
 
-1. **Sửa dứt điểm 2 lỗi P0:**
-   - **P0-01 (Revision Switching Reactive):** Chuyển đổi giữa các phiên bản bài viết (`/posts/[postId]?revisionId=...`) tức thời, không cần tải lại trang F5 (dùng `<Suspense>` boundary và `useSearchParams()` phản ứng). Nút Tip tự động khóa đối với phiên bản chưa hoàn tất kiểm định thực địa. Bổ sung thẻ thông báo lỗi rõ ràng nếu `revisionId` không tồn tại.
-   - **P0-02 (Chặn Guest Mua VIP Demo):** Khách vãng lai (Guest) tuyệt đối không thể tạo đơn hay thanh toán mua VIP demo (mở Gate yêu cầu đăng nhập tài khoản). Với Member, gia hạn giữ nguyên `membershipId` và cộng dồn 365 ngày UTC. Đã loại bỏ chuỗi mã giao dịch giả lập `txHashDemo: 0xmock...`.
+1. **FE-12-01 (Đồng bộ 2 chiều URL Query cho Trang Tài Khoản /account):**
+   - Hỗ trợ đầy đủ 5 tab qua URL: `?tab=profile`, `?tab=contributions`, `?tab=vip`, `?tab=benefits`, `?tab=expert`.
+   - Sử dụng `router.push(..., { scroll: false })` giúp lưu giữ lịch sử Back/Forward của trình duyệt để lật qua lại giữa các tab mượt mà.
+   - Tự động chuẩn hóa (normalize) bằng `router.replace` khi query không hợp lệ (e.g. `?tab=xyz`) hoặc khi người dùng thường cố truy cập `?tab=expert`.
+   - Giữ nguyên toàn bộ search query string trong `returnTo` khi Guest bấm đăng nhập (e.g. `/login?returnTo=/account?tab=benefits`).
 
-2. **Hoàn thiện các hạng mục P1 & P2:**
-   - **P1-01 (Bố cục Header chuẩn mực):** Bỏ persona dropdown thừa khỏi header (dùng ReviewToolbar góc phải dưới), không đè chữ ở mọi kích thước (1440px, 1366px, 430px, 390px). Tên hiển thị truncate max 130px.
-   - **P1-02 (Đa ngôn ngữ 6 Locales):** Bảo toàn search query params khi đổi ngôn ngữ, dịch chuẩn toàn bộ các trạng thái và nhãn giao diện.
-   - **P1-03 (Hai luồng đóng góp & Phân lập bản nháp):** Đồng bộ 2 chiều giữa URL query `?tab=existing|candidate` và giao diện. Nháp lưu riêng biệt theo người dùng và theo tab trong `localStorage` (`ventlore_draft_${userId}_${tab}`).
-   - **P1-04 (Ngữ cảnh thanh toán & Quyền lợi trung thực):** Khóa chức năng đổi mode trong `PaymentModal` để tôn trọng đúng ngữ cảnh gọi (Home $\to$ PROJECT; Post $\to$ POST_TIP; VIP $\to$ MEMBERSHIP). Tài khoản có 0 bài viết được duyệt không còn hiển thị fake `OFFERED` hay nút Claim; chỉ tác giả Minh có bài duyệt mới mở 4 khối quyền lợi. Bổ sung chức năng sửa thông tin Profile demo.
-   - **P1-05 (Phân quyền Demo Chuyên gia & Quản trị):** Thêm màn hình Gate giới thiệu chuyên môn khi Guest/Member vào `/expert` hoặc `/admin`, có nút chuyển vai trò 1-click hoặc đăng nhập.
-   - **P1-06 (Single-Hero Trang chủ & Nâng cấp ReviewToolbar 14 Kịch bản):** Gỡ bỏ toàn bộ nhãn kỹ thuật nội bộ (Data Map 16 cột, Xem Data Map, Tải .md) khỏi Header và Hero trang chủ, giữ đúng 2 CTA trải nghiệm du lịch dã ngoại. Nâng cấp `ReviewToolbar` lên `z-[9999]`, phản hồi click tức thời 0ms kèm thông báo Toast, tự động ghi nhớ kịch bản qua `sessionStorage`, bổ sung nút Thu nhỏ thông minh (`Clear view`) và đồng bộ chuẩn xác toàn bộ 14 kịch bản (Explore, Preset Cát Cò, Admin tabs, Benefits, PaymentModal).
-   - **P2 (Từ ngữ thân thiện):** Loại bỏ toàn bộ từ ngữ kỹ thuật `placeId`, `CANDIDATE`, `REVIEW_ONLY`, `UUIDv7`, `409 Conflict`, thay bằng từ ngữ gần gũi với người dùng dã ngoại.
-   - **Kiểm thử toàn diện:** `pnpm run verify` đạt 100% PASS (234 trang static export). Không có lỗi typecheck hay lint.
+2. **FE-12-02 (Đa ngôn ngữ trọn vẹn 6 Locales):**
+   - Bổ sung schema và dịch 100% key parity trên cả 6 ngôn ngữ: Tiếng Việt (`vi`), English (`en`), 日本語 (`ja`), 简体中文 (`zh-Hans`), 한국어 (`ko`), Français (`fr`).
+   - Bao phủ toàn diện: Trang `/account` (5 tab, hồ sơ, ví, 4 khối quyền lợi sau duyệt), `/contribute` (cả 2 tab, form fields, claims, candidate place, preview), `/vip` (nút đăng ký/gia hạn ngữ cảnh), `PaymentModal` (3 chế độ, phân bổ 80/20, lỗi sai mạng, tiến trình, màn hình thành công), thanh điều hướng Header và Footer.
+   - Loại bỏ triệt để hardcoded tiếng Việt và hiện tượng fallback nhầm ngôn ngữ.
 
-1. **Brand System & Design Tokens:**
-   - Cài đặt đầy đủ các màu sắc chuẩn Brand Guide v0.1: Forest `#173F35`, Jade `#2C7563`, Sage `#DCE8DA`, Ivory `#F5F1E8`, Waypoint `#F0A44B`, Ink `#182522`.
-   - Cài đặt phông chữ nội bộ Be Vietnam Pro (400, 500, 600, 700) tại `apps/web/public/fonts/` và khai báo qua `@font-face` trong `apps/web/src/app/globals.css`.
-   - Chiều cao điều khiển tối thiểu 48px, vùng chạm di động >= 44px, bo góc thẻ 16px, bo góc nút bấm 12px, focus outline `#225A91`.
+3. **FE-12-03 (Chỉnh đốn FE Data Map 38 Dòng & Trang /data-map):**
+   - Loại bỏ dòng số 3 (Home Highlights thừa từ thiết kế cũ) khỏi bảng đối soát, giảm số thành phần xuống đúng **38 dòng thực tế** theo Masterboard v1.1.
+   - Cập nhật dòng 1 & 2 chuẩn Single-Hero (2 CTA, 4 thẻ đóng góp).
+   - Chuẩn hóa toàn bộ vòng đời ID theo ID Registry v0.3: `placeId (CANDIDATE, REVIEW_ONLY)` + `postId (DISCOVERY)` + `revisionId`; `reviewCaseId` cho phân công thẩm định; Tách bạch Quyết định 1 (`acceptanceId` -> `payableId`) và Quyết định 2 (`decisionId`).
+   - Thống kê trên giao diện `/data-map` được tính động hoàn toàn theo dữ liệu mảng.
+   - Đồng bộ 100% nội dung giữa `apps/web/src/lib/data-map-data.ts`, `docs/FE_DATA_MAP.md` và `apps/web/public/docs/FE_DATA_MAP.md`.
 
-2. **13 UI Components Cốt Lõi:**
-   - C01 (`AppShell`): Khung điều hướng responsive (desktop header, mobile bottom nav >= 44px) tích hợp Persona Switcher.
-   - C02 (`SearchFilters`): Bộ lọc từ khóa, vùng miền, hoạt động, xử lý từ chối GPS không chặn thao tác.
-   - C03 (`PlaceResults`): Danh sách thẻ địa điểm kèm cảnh báo rủi ro, chuyển đổi danh sách/bản đồ với placeholder provider.
-   - C04 (`PlaceSummary`): Chi tiết địa điểm, cảnh báo an toàn, hiển thị banner điều hướng với địa điểm đã sáp nhập (MERGED).
-   - C05 (`PostReader`): Trình đọc bài viết gắn liền với revisionId bất biến, thông tin tác giả, claims, tỷ lệ tip 80/20, cam kết không dùng nhãn "an toàn tuyệt đối".
-   - C06 (`VerificationPanel`): Bảng huy hiệu kiểm định 8 trạng thái (kèm icon và text rõ ràng), hiển thị scope claims, ngày kiểm tra và thời hạn.
-   - C07 (`RevisionSelector`): Chuyển đổi giữa các phiên bản bài viết qua query param `?revisionId=`.
-   - C08 (`AccessGate`): Chặn truy cập nội dung VIP hoặc yêu cầu đăng nhập, hỗ trợ chuyển persona ngay trên gate.
-   - C09 (`SocialLogin`): Luồng đăng nhập demo với xác thực allowlist URL chuyển hướng cùng origin.
-   - C10 (`WalletBinding`): Mô phỏng trạng thái ví Web3 (chưa liên kết, đã kết nối, đã xác thực).
-   - C46 (`AsyncState`): Xử lý trạng thái tải dữ liệu, rỗng, lỗi 401–429, timeout, offline. Số dư chưa tải hiển thị skeleton thay vì hiển thị 0.
-   - C49 (`PermissionGate`): Kiểm soát hiển thị tính năng dựa trên capability của session người dùng.
-   - C50 (`PublicLedger`): Sổ cái công khai số dư khả dụng/cam kết/đã chi, cơ cấu nguồn thu và giải ngân minh bạch.
+4. **FE-12-04 (Chuẩn hóa Ngữ nghĩa An toàn & Nhãn Mô phỏng Demo):**
+   - Áp dụng văn bản chuẩn hoá an toàn cho đề xuất điểm mới tại `/contribute`: *"Hồ sơ được công khai sau khi xét duyệt. Kết quả kiểm định, nếu có, thể hiện rõ phạm vi, thời điểm và các cảnh báo liên quan."*
+   - Xóa bỏ triệt để các cách diễn đạt mang tính cam kết chung ("xác nhận an toàn", "điểm đến an toàn").
+   - Loại bỏ thuật ngữ kỹ thuật thuật toán (`floor(amount / 5)`, `UUIDv7`, `Canonical User`).
+   - Dán nhãn mô phỏng rõ ràng: "Ví liên kết (Mô phỏng demo)", "Đã xác minh (Mô phỏng demo)", "Số dư khả dụng (Mô phỏng demo)".
+   - Khối Author NFT ghi rõ: *Mỗi bài viết hoàn tất kiểm định chỉ được phát hành tối đa 1 Author NFT độc bản (`AUTHOR_CONTRIBUTION`)*.
 
-3. **7 Màn hình App Router & Điều Hướng:**
-   - S01: `/explore` — Khám phá địa điểm và bài viết mới nhất.
-   - S02: `/places/[placeId]` — Chi tiết địa điểm (hỗ trợ hiển thị điểm đã sáp nhập).
-   - S03: `/posts/[postId]` — Đọc bài viết theo phiên bản (hỗ trợ chuyển đổi revision).
-   - S04: `/people/[handle]` — Trang hồ sơ cá nhân và đóng góp của tác giả.
-   - S05: `/login` — Đăng nhập và liên kết tài khoản.
-   - S21: `/vip` — Đăng ký/gia hạn gói VIP (1500 USD cents / 12 tháng UTC).
-   - S34: `/transparency` — Sổ cái tài chính cộng đồng công khai.
-   - Route gốc `/` chuyển hướng HTTP 307 về `/explore`.
-
-4. **Fixture Mock Adapter Đạt 6 Kịch Bản Bắt Buộc:**
-   - Kịch bản 1: Bài viết nhiều revision (`PST-000001` có `REV-000001` và `REV-000002`).
-   - Kịch bản 2: Địa điểm đã sáp nhập (`PLC-000002` sáp nhập vào `PLC-000001`).
-   - Kịch bản 3: Bài viết chưa kiểm định (`PST-000003` - `UNVERIFIED`).
-   - Kịch bản 4: Phiên bản hết hạn kiểm định (`PST-000001` xem `REV-000001` - `EXPIRED`).
-   - Kịch bản 5: Bài viết có nội dung VIP (`PST-000004` - nội dung bí mật được redact tại server, DOM không rò rỉ tọa độ).
-   - Kịch bản 6: Điểm đề xuất ứng viên (`PLC-000004` - `CANDIDATE` chỉ hiển thị cho Author hoặc Expert, ẩn với Khách).
-   - Toàn bộ 38 định danh mẫu đều tuân thủ 100% định dạng canonical UUIDv7 hợp lệ.
-
-5. **Bộ Kiểm Tra Tổng Hợp (`pnpm run verify`):**
-   - Vượt qua cả 7 bước kiểm tra hợp quy trong `scripts/validate_foundation.py`.
-   - Vượt qua 100% typecheck và lint trên toàn bộ các gói trong monorepo.
-   - Build thành công ứng dụng Next.js với 8/8 routes tĩnh và động.
+5. **FE-12-05 (Di dời ReviewToolbar sang Bottom-Left tránh Netlify Badge):**
+   - Cố định thanh ReviewToolbar ở góc dưới bên trái: `bottom-16 sm:bottom-4 left-3 sm:left-4`.
+   - Toast thông báo neo lề trái (`left-0`), Drawer mở bung lên trên neo theo lề trái (`origin-bottom-left`).
+   - Chiều rộng responsive an toàn: `w-[calc(100vw-24px)] sm:w-[440px] max-w-[440px]`.
+   - Giải quyết triệt để xung đột click với badge Deploy Preview của Netlify ở góc phải dưới.
 
 ---
 
-## 2. Hướng dẫn nghiệm thu dành cho Bin
+## 2. Danh Sách Các File Đã Chỉnh Sửa
 
-Bin có thể chạy thử ứng dụng cục bộ để kiểm tra giao diện và tính năng theo các bước sau:
+- `apps/web/src/lib/i18n/types.ts`: Khai báo schema bản dịch cho `account`, `contribute`, `payment`, `vip`, `nav`.
+- `apps/web/src/lib/i18n/locales/{vi,en,ja,zh-Hans,ko,fr}.ts`: 6 file từ điển bản địa hóa chuẩn xác 100%.
+- `apps/web/src/components/AccountView.tsx`: URL query 2 chiều, Back/Forward history, đa ngôn ngữ 6 locales, loại bỏ jargon.
+- `apps/web/src/components/AppShell.tsx`: URL tracking an toàn SSR, đa ngôn ngữ header/footer/dropdown, loại bỏ hardcoded.
+- `apps/web/src/app/vip/page.tsx`: Nút CTA theo ngữ cảnh người dùng và đa ngôn ngữ.
+- `apps/web/src/components/ContributeView.tsx`: Chuẩn hoá văn bản an toàn, đa ngôn ngữ toàn bộ form.
+- `apps/web/src/components/PaymentModal.tsx`: Đa ngôn ngữ, phân bổ 80/20 rõ ràng, dán nhãn mô phỏng demo.
+- `apps/web/src/components/WalletBinding.tsx`: Dán nhãn ví demo, bỏ code tick `userId`.
+- `apps/web/src/components/ReviewToolbar.tsx`: Chuyển vị trí sang góc dưới bên trái `bottom-left`.
+- `apps/web/src/lib/data-map-data.ts`: Xóa dòng 3, cập nhật 38 dòng chuẩn ID Registry v0.3.
+- `apps/web/src/components/DataMapView.tsx`: Thống kê động, cập nhật nhãn phiên bản v1.2 (26/09/2026).
+- `docs/FE_DATA_MAP.md` & `apps/web/public/docs/FE_DATA_MAP.md`: Đồng bộ bảng 38 dòng tương ứng.
+- `docs/FE_QA.md`: Cập nhật bảng nghiệm thu 15 tiêu chí QA-01 đến QA-15 (100% PASS).
+
+---
+
+## 3. Kết Quả Kiểm Tra Kỹ Thuật
+
+- **TypeScript Typecheck (`pnpm -r run typecheck`):** 0 lỗi (PASS 100% trên 6 packages).
+- **ESLint (`pnpm -r run lint`):** 0 lỗi.
+- **Production Build (`pnpm --filter @ventlore/web build`):** Biên dịch thành công **234/234 trang SSG**.
+- **Foundation Validator (`validate_foundation.py`):** Đạt 34/34 thực thể, 10/10 vectors (PASS 100%).
+
+---
+
+## 4. Hướng Dẫn Nghiệm Thu Cục Bộ Cho Bin
 
 ```bash
-# 1. Chuyển sang nhánh FE-01 (nếu đang ở nhánh khác)
-git checkout feat/fe-01-reader-flow
-
-# 2. Chạy lệnh kiểm tra tổng hợp
-pnpm run verify
-
-# 3. Khởi chạy ứng dụng Web
+# 1. Khởi động server (đã chạy sẵn hoặc chạy lại)
 pnpm --filter @ventlore/web dev
 ```
 
-Mở trình duyệt tại `http://localhost:3000` và kiểm tra các tính năng:
-- **Khám phá:** Duyệt danh sách địa điểm, tìm kiếm theo từ khóa, lọc theo vùng miền tại `/explore`.
-- **Xem bài viết & Đổi phiên bản:** Vào `/posts/PST-000001`, chọn đổi giữa phiên bản v2 (Hiệu lực) và v1 (Hết hạn).
-- **Địa điểm sáp nhập:** Vào `/places/PLC-000002` để xem banner thông báo địa điểm đã sáp nhập vào Hang Múa (`PLC-000001`).
-- **Bảo mật nội dung VIP:**
-  - Ở persona mặc định là "Khách", vào `/posts/PST-000004`, nội dung bí mật bị khóa và hiển thị hộp thoại `AccessGate`.
-  - Bấm vào thanh điều hướng trên cùng, chọn Persona "VIP Member", bài viết sẽ mở khóa hiển thị đầy đủ tọa độ và ghi chú bí mật.
-- **Trang VIP:** Vào `/vip` để xem gói thành viên 1500 USD cents / 12 tháng UTC.
-- **Sổ cái minh bạch:** Vào `/transparency` xem biểu đồ và bảng dòng tiền thu - chi.
-- **Bản đồ dữ liệu FE (Data Map):**
-  - Truy cập trực tiếp `/data-map` (hoặc `/vi/data-map`) để xem ma trận 16 cột tương tác có tìm kiếm, lọc theo nguồn dữ liệu đích và xem 5 quyết định cần chốt.
-  - Bấm nút **"Tải .md"** trên thanh header, dưới 2 nút CTA ở trang chủ, trên thanh menu điều hướng, ở chân trang (footer), hoặc trong Review Toolbar để tải file `FE_DATA_MAP.md` về máy.
-  - Đường dẫn file tĩnh tải trực tiếp: `/docs/FE_DATA_MAP.md`.
+Mở trình duyệt tại: `http://localhost:3000`
 
-### 2.1 Triển khai xem trước trực tiếp trên Netlify (Netlify Drop)
-Để đưa lên Netlify xem ngay trên thiết bị thực tế mà không cần chạy server cục bộ:
-```bash
-# Đóng gói static export và tạo file zip
-pnpm run package:netlify
-```
-- Mở **https://app.netlify.com/drop**
-- Kéo thả file `dist/ventlore-netlify-drop.zip` vào để nhận link xem ngay lập tức!
-- Chi tiết hướng dẫn: xem `docs/NETLIFY_DEPLOYMENT.md`
-- Báo cáo đánh giá UI toàn diện: xem `docs/UI_EVALUATION.md`
-
----
-
-## 3. Các bước tiếp theo
-
-1. Agent mở Pull Request hướng về `main` với tiêu đề `[FE-01] Front-end nền tảng và trải nghiệm người đọc (S01-S05, S21, S34)`.
-2. Agent theo dõi trạng thái GitHub Actions CI trên PR.
-3. Cập nhật nhãn Issue #2 từ `in-progress` sang `review`.
-4. Agent dừng lại, nhường quyền cho Bin trực tiếp kiểm tra và nhấn nút Merge PR trên GitHub.
-5. Sau khi Bin merge PR, sẽ tiếp tục kích hoạt Chặng 02 (Prompt 02 / BE-01).
+1. **ReviewToolbar:** Quan sát nút thuốc (pill) ở góc dưới bên trái màn hình. Bấm mở panel 14 scenarios thử nghiệm, click nhạy và không bị cản trở bởi Netlify badge.
+2. **Account Tabs & Query:** Vào `/account`, bấm chuyển tab, quan sát URL cập nhật và bấm Back/Forward trình duyệt.
+3. **Đa ngôn ngữ:** Thử chuyển sang English, 日本語, 한국어, Français và duyệt các trang `/account`, `/contribute`, `/vip`, `/data-map`.
+4. **Data Map:** Vào `/data-map`, kiểm tra đủ 38 dòng, bấm tải file `.md`.

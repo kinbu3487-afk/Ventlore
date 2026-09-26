@@ -228,11 +228,11 @@ export function ReviewToolbar() {
   return (
     <aside
       aria-label="Review Toolbar"
-      className="fixed bottom-16 sm:bottom-4 right-3 sm:right-4 z-[9999] font-sans pointer-events-auto"
+      className="fixed bottom-16 sm:bottom-4 left-3 sm:left-4 z-[9999] font-sans pointer-events-auto"
     >
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="absolute bottom-full right-0 mb-2 px-3 py-2 rounded-control bg-forest text-white text-xs font-semibold shadow-xl border border-white/20 whitespace-nowrap animate-in fade-in slide-in-from-bottom-2 flex items-center gap-2">
+        <div className="absolute bottom-full left-0 mb-2 px-3 py-2 rounded-control bg-forest text-white text-xs font-semibold shadow-xl border border-white/20 whitespace-nowrap animate-in fade-in slide-in-from-bottom-2 flex items-center gap-2">
           <CheckCircleIcon className="w-4 h-4 text-status-vip" />
           <span>{toastMessage}</span>
         </div>
@@ -258,7 +258,7 @@ export function ReviewToolbar() {
         </button>
       ) : (
         /* Expanded Panel */
-        <div className="bg-surface-card border-2 border-forest rounded-card shadow-2xl w-[94vw] sm:w-[440px] max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+        <div className="bg-surface-card border-2 border-forest rounded-card shadow-2xl w-[calc(100vw-24px)] sm:w-[440px] max-w-[440px] max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150 origin-bottom-left">
           {/* Header */}
           <div className="p-3.5 bg-forest text-white flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
