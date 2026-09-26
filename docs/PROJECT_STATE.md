@@ -1,22 +1,19 @@
 # Trạng Thái Dự Án Ventlore (PROJECT_STATE)
 
-**Cập nhật lần cuối:** 25/09/2026 (Parallel v2 Giai đoạn A · Chốt nền chung, bộ tài liệu docs/parallel/ & Thiết lập 4 Worktree FE, BE, CHAIN, MERGE)  
-**Phiên bản đặc tả cơ sở:** Logic-ID-DB v0.3, Event UI Spec v0.3, Brand Guide v0.1, Prompt 04 Merge Parallel v2 Giai đoạn A
+**Cập nhật lần cuối:** 26/09/2026 (FE-First v1.0 · Hoàn thiện Toàn diện Front-End, 14 Kịch bản Nghiệm thu & Bản đồ Dữ liệu FE_DATA_MAP.md)  
+**Phiên bản đặc tả cơ sở:** Logic-ID-DB v0.3, Event UI Spec v0.3, Brand Guide v0.1, Prompt FE-First v1.0
 
 ---
 
-## 1. Mốc hiện tại: Hoàn thành Giai đoạn A (Parallel v2 · Chốt nền chung và tạo nơi làm việc 4 Worktrees)
+## 1. Mốc hiện tại: Hoàn thành FE-First v1.0 (Chặng FE-00 đến FE-06)
 
 | Chặng | Tên chặng | Trạng thái | Ghi chú |
 |---|---|---|---|
 | **00** | **Đọc nguồn, khóa quy tắc và dựng nền tảng** | **HOÀN THÀNH** | Đọc đủ 6 tài liệu nguồn; dựng cấu trúc workspace pnpm, AGENTS.md, OpenAPI, toàn bộ tài liệu kiến trúc/hợp đồng dữ liệu, ma trận coverage S01-S35 / C01-C50 / U01-U12, thư viện TypeScript và test runner kiểm tra ID. |
 | **LOOP-00** | **Thiết lập quy trình 5 loop & CI baseline** | **HOÀN THÀNH** | Bổ sung `docs/loops/` (POLICY, RUN_TASK, SYSTEM_REVIEW, REPORT_TEMPLATE), mẫu Issue/PR, GitHub Actions `quality.yml`, lệnh `pnpm run verify` đạt 100%, khóa `pnpm-lock.yaml`. |
-| **01 (FE-01 Round 5)** | **Single-Hero HomePage & Hoàn thiện Review Preview 8** | **HOÀN THÀNH** | Hoàn thành cả 8 nhóm: 1. Thu gọn HomePage thành single-viewport hero min-h-[100dvh], bỏ 6 khối bên dưới; 2. LanguageSwitcher 6 ngôn ngữ trực tiếp góc trên phải Home; 3. Sửa điều hướng Home/Explore độc lập; 4. Sứ mệnh mở MissionDialog (không còn anchor chết #mission); 5. ContributeDialog cho CTA đóng góp; 6. Loại bỏ tràn ngang; 7. Sửa mâu thuẫn trạng thái EXPIRED trên PST-000003; 8. Ngữ pháp số nhiều tiếng Anh/Pháp và bản dịch PST-000002/PST-000003. 199/199 static pages export thành công. |
-| **Parallel v2 - Giai đoạn A** | **Chốt nền chung & Tạo nơi làm việc (4 Worktrees)** | **HOÀN THÀNH** | Kiểm kê Prompt 00–01 PASS 100%, thiết lập bộ tài liệu `docs/parallel/` (BASELINE, CONTRACTS, OWNERSHIP, WORKSPACES, SYNC, ACCEPTANCE, requests/), tạo `.env.example`, khóa base ref cố định `v2-parallel-base`, thiết lập 4 worktree độc lập (FE, BE, CHAIN, MERGE). |
-| Parallel v2 - FE | Front-end song song (FE-A, FE-B, FE-C) | SẴN SÀNG | Worktree `Ventlore-FE`, nhánh `parallel/v2-fe`, port 3001, MockAdapter. |
-| Parallel v2 - BE | Back-end song song (BE-A, BE-B, BE-C) | SẴN SÀNG | Worktree `Ventlore-BE`, nhánh `parallel/v2-be`, port 3002, DB/worker. |
-| Parallel v2 - CHAIN | On-chain song song (CHAIN-A, CHAIN-B, CHAIN-C) | SẴN SÀNG | Worktree `Ventlore-Chain`, nhánh `parallel/v2-chain`, port 8546 Anvil. |
-| Parallel v2 - MERGE | Tích hợp từng mốc & Nghiệm thu (I1, I2, I3) | SẴN SÀNG | Worktree `Ventlore-Merge`, nhánh `parallel/v2-integration`, port 3000. |
+| **FE-01** | **Single-Hero HomePage & Core Read Pages** | **HOÀN THÀNH** | Hoàn thành single-viewport hero, đa ngôn ngữ 6 locales, Explore, Place, Post/Revisions, People profiles. |
+| **FE-First v1.0 (FE-00 $\to$ FE-06)** | **Hoàn thiện Toàn diện Front-End Nghiệm Thu** | **HOÀN THÀNH** | 1. **FE-00:** Audit baseline & cố định script builds. 2. **FE-01:** `PaymentModal` dùng chung cho 3 modes (PROJECT, POST_TIP, MEMBERSHIP), `ReportDialog`. 3. **FE-02:** Trang `/contribute` (Viết bài điểm có sẵn, Đề xuất điểm mới có phát hiện trùng lặp, Live Markdown, mô phỏng 409), Trang `/account` (Profile, Đóng góp của tôi, Gói VIP, Bốn khối quyền lợi sau duyệt, Không gian chuyên gia). 4. **FE-03:** 4 điểm vào mở `PaymentModal` với số nguyên atomic bigint và tỷ lệ 80/20, stream live trên `/transparency`. 5. **FE-04:** Trang `/expert` (Bảng việc Offered $\to$ In Progress $\to$ Submitted $\to$ Accepted Work, nộp bằng chứng theo claim, payables), Trang `/admin` (Tiếp nhận hồ sơ & so sánh trùng, Giao việc, Hai quyết định độc lập: Nghiệm thu công đạt VÀ Bác nội dung, App Hold). 6. **FE-05:** Widget `ReviewToolbar` nổi chọn 14 kịch bản & 5 Personas, Next.js build 227/227 static pages. 7. **FE-06:** Bộ tài liệu `FE_DATA_MAP.md` (16 cột), `FE_COVERAGE.md`, `FE_REVIEW.md`, `FE_HANDOFF.md`, `FE_QA.md`. |
+| Parallel v2 - BE | Back-end song song (BE-A, BE-B, BE-C) | SẴN SÀNG | Chờ Bin duyệt FE để triển khai REST API và PostgreSQL schema theo ID Contract. |
 
 ---
 

@@ -13,6 +13,8 @@ import {
   UserIcon,
 } from './Icons';
 
+import { usePayment } from './PaymentContext';
+
 interface ContributeDialogProps {
   isOpen: boolean;
   onClose: () => void;
@@ -21,6 +23,7 @@ interface ContributeDialogProps {
 export function ContributeDialog({ isOpen, onClose }: ContributeDialogProps) {
   const { t, getLocalizedPath } = useI18n();
   const { persona } = useSession();
+  const { openPayment } = usePayment();
   const dialogRef = useRef<HTMLDivElement>(null);
 
   // Close on Escape key
@@ -66,10 +69,10 @@ export function ContributeDialog({ isOpen, onClose }: ContributeDialogProps) {
     >
       <div
         ref={dialogRef}
-        className="relative w-full max-w-xl rounded-2xl border border-sage/80 bg-surface-card p-6 sm:p-8 shadow-2xl space-y-6 text-ink animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl border border-sage/80 bg-surface-card p-5 sm:p-7 shadow-2xl space-y-5 text-ink animate-in zoom-in-95 duration-200"
       >
         {/* Header with Title and Close Button */}
-        <div className="flex items-start justify-between gap-4 border-b border-sage/60 pb-4">
+        <div className="flex items-start justify-between gap-4 border-b border-sage/60 pb-3">
           <div className="space-y-1">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-forest/10 text-forest text-xs font-bold uppercase tracking-wider">
               <CompassIcon className="w-3.5 h-3.5" />
@@ -86,119 +89,145 @@ export function ContributeDialog({ isOpen, onClose }: ContributeDialogProps) {
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-control text-ink-muted hover:text-ink hover:bg-surface-canvas transition-colors"
+            className="p-1.5 rounded-control text-ink-muted hover:text-ink hover:bg-surface-canvas transition-colors"
             aria-label={t('common.close')}
           >
             <CloseIcon className="w-5 h-5" />
           </button>
         </div>
 
-        {/* 3 Real Options */}
-        <div className="space-y-4">
-          {/* Option 1: Submit Field Report */}
-          <div className="rounded-xl border border-sage/80 bg-surface-canvas p-4 sm:p-5 space-y-3 shadow-xs">
+        {/* 4 Distinct Contribution Options */}
+        <div className="space-y-3.5">
+          {/* Option 1: Write Field Report / Propose Place */}
+          <div className="rounded-xl border border-sage/80 bg-surface-canvas p-4 space-y-2.5 shadow-xs">
             <div className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-full bg-forest/10 text-forest flex items-center justify-center font-bold text-sm shrink-0 mt-0.5">
+              <div className="w-8 h-8 rounded-full bg-forest/10 text-forest flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
                 1
               </div>
-              <div className="space-y-1 flex-1">
+              <div className="space-y-0.5 flex-1">
                 <h3 className="font-bold text-sm sm:text-base text-ink">
-                  {t('home.contributeOption1Title')}
+                  Đóng góp bài viết & Đề xuất điểm mới
                 </h3>
                 <p className="text-xs text-ink-secondary leading-relaxed">
-                  {t('home.contributeOption1Desc')}
+                  Soạn bài trải nghiệm cho điểm đã biết hoặc gửi hồ sơ đề xuất điểm hoang sơ mới. Hỗ trợ lưu nháp và đối chiếu điểm trùng.
                 </p>
               </div>
             </div>
 
-            <div className="pt-2 flex flex-wrap items-center gap-2.5 border-t border-sage/40">
+            <div className="pt-2 flex flex-wrap items-center gap-2 border-t border-sage/40">
               {persona === 'guest' ? (
                 <Link
-                  href={getLocalizedPath('/login?returnTo=/explore')}
+                  href={getLocalizedPath('/login?returnTo=/contribute')}
                   onClick={onClose}
-                  className="min-h-control inline-flex items-center gap-1.5 px-4 py-2 rounded-control font-semibold text-xs text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
+                  className="min-h-control inline-flex items-center gap-1.5 px-3.5 py-2 rounded-control font-semibold text-xs text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
                 >
                   <UserIcon className="w-3.5 h-3.5" />
-                  <span>{t('home.contributeOption1ActionGuest')}</span>
+                  <span>Đăng nhập để đóng góp</span>
                 </Link>
               ) : (
-                <div className="w-full space-y-2">
-                  <div className="p-2 rounded bg-amber/10 border border-amber/20 text-[11px] font-medium text-amber-900 dark:text-amber-300">
-                    ℹ️ {t('home.contributeOption1StatusFe02')}
-                  </div>
-                  <Link
-                    href={getLocalizedPath('/posts/018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e20')}
-                    onClick={onClose}
-                    className="min-h-control inline-flex items-center gap-1.5 px-4 py-2 rounded-control font-semibold text-xs text-forest bg-sage/40 hover:bg-sage/60 transition-colors"
-                  >
-                    <span>{t('home.contributeOption1ActionMember')}</span>
-                    <ArrowRightIcon className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
+                <Link
+                  href={getLocalizedPath('/contribute')}
+                  onClick={onClose}
+                  className="min-h-control inline-flex items-center gap-1.5 px-3.5 py-2 rounded-control font-semibold text-xs text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
+                >
+                  <span>Mở Trình Soạn Thảo Đóng Góp</span>
+                  <ArrowRightIcon className="w-3.5 h-3.5" />
+                </Link>
               )}
             </div>
           </div>
 
           {/* Option 2: Independent Field Auditor */}
-          <div className="rounded-xl border border-sage/80 bg-surface-canvas p-4 sm:p-5 space-y-3 shadow-xs">
+          <div className="rounded-xl border border-sage/80 bg-surface-canvas p-4 space-y-2.5 shadow-xs">
             <div className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-full bg-forest/10 text-forest flex items-center justify-center font-bold text-sm shrink-0 mt-0.5">
+              <div className="w-8 h-8 rounded-full bg-forest/10 text-forest flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
                 2
               </div>
-              <div className="space-y-1 flex-1">
+              <div className="space-y-0.5 flex-1">
                 <h3 className="font-bold text-sm sm:text-base text-ink">
-                  {t('home.contributeOption2Title')}
+                  Tham gia kiểm định thực địa độc lập
                 </h3>
                 <p className="text-xs text-ink-secondary leading-relaxed">
-                  {t('home.contributeOption2Desc')}
+                  Dành cho kiểm lâm viên, hướng dẫn viên và nhà trắc địa thực hiện khảo sát độc lập, nghiệm thu công việc và nhận thù lao.
                 </p>
               </div>
             </div>
 
-            <div className="pt-2 border-t border-sage/40">
+            <div className="pt-2 border-t border-sage/40 flex flex-wrap gap-2">
               <Link
-                href={getLocalizedPath('/people/hoang_ranger')}
+                href={getLocalizedPath('/expert')}
                 onClick={onClose}
-                className="min-h-control inline-flex items-center gap-1.5 px-4 py-2 rounded-control font-semibold text-xs text-forest bg-sage/40 hover:bg-sage/60 transition-colors"
+                className="min-h-control inline-flex items-center gap-1.5 px-3.5 py-2 rounded-control font-semibold text-xs text-forest bg-sage/40 hover:bg-sage/60 transition-colors"
               >
                 <ShieldCheckIcon className="w-3.5 h-3.5" />
-                <span>{t('home.contributeOption2Action')}</span>
+                <span>Không Gian Kiểm Định Chuyên Gia</span>
                 <ArrowRightIcon className="w-3.5 h-3.5" />
               </Link>
             </div>
           </div>
 
-          {/* Option 3: Support Fund & VIP Plan */}
-          <div className="rounded-xl border border-sage/80 bg-surface-canvas p-4 sm:p-5 space-y-3 shadow-xs">
+          {/* Option 3: Support Fund (PaymentModal PROJECT mode) */}
+          <div className="rounded-xl border border-forest/30 bg-forest/5 p-4 space-y-2.5 shadow-xs">
             <div className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-full bg-forest/10 text-forest flex items-center justify-center font-bold text-sm shrink-0 mt-0.5">
+              <div className="w-8 h-8 rounded-full bg-forest text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
                 3
               </div>
-              <div className="space-y-1 flex-1">
-                <h3 className="font-bold text-sm sm:text-base text-ink">
-                  {t('home.contributeOption3Title')}
+              <div className="space-y-0.5 flex-1">
+                <h3 className="font-bold text-sm sm:text-base text-forest">
+                  Ủng hộ quỹ bảo tồn & kiểm định Ventlore
                 </h3>
                 <p className="text-xs text-ink-secondary leading-relaxed">
-                  {t('home.contributeOption3Desc')}
+                  100% khoản đóng góp chuyển vào quỹ thẩm định độc lập để trả công trắc địa và duy trì minh bạch dữ liệu.
                 </p>
               </div>
             </div>
 
-            <div className="pt-2 flex flex-wrap items-center gap-2.5 border-t border-sage/40">
+            <div className="pt-2 border-t border-forest/20">
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  openPayment('PROJECT');
+                }}
+                className="min-h-control inline-flex items-center gap-1.5 px-4 py-2 rounded-control font-bold text-xs text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
+              >
+                <SparklesIcon className="w-3.5 h-3.5 text-amber" />
+                <span>Ủng Hộ Quỹ Ngay (Demo)</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Option 4: VIP & Public Transparency Ledger */}
+          <div className="rounded-xl border border-sage/80 bg-surface-canvas p-4 space-y-2.5 shadow-xs">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-forest/10 text-forest flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                4
+              </div>
+              <div className="space-y-0.5 flex-1">
+                <h3 className="font-bold text-sm sm:text-base text-ink">
+                  Gói Hội Viên VIP & Sổ Quỹ Minh Bạch
+                </h3>
+                <p className="text-xs text-ink-secondary leading-relaxed">
+                  Trở thành Hội viên VIP để mở khóa tài liệu địa chất chuyên sâu hoặc tra cứu thời gian thực dòng tiền thu chi của quỹ.
+                </p>
+              </div>
+            </div>
+
+            <div className="pt-2 flex flex-wrap items-center gap-2 border-t border-sage/40">
               <Link
                 href={getLocalizedPath('/vip')}
                 onClick={onClose}
-                className="min-h-control inline-flex items-center gap-1.5 px-4 py-2 rounded-control font-semibold text-xs text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
+                className="min-h-control inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control font-semibold text-xs text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
               >
                 <SparklesIcon className="w-3.5 h-3.5 text-amber" />
-                <span>{t('home.contributeOption3ActionVip')}</span>
+                <span>Xem Gói VIP (15 USD/năm)</span>
               </Link>
               <Link
                 href={getLocalizedPath('/transparency')}
                 onClick={onClose}
-                className="min-h-control inline-flex items-center gap-1.5 px-4 py-2 rounded-control font-semibold text-xs text-forest bg-sage/40 hover:bg-sage/60 transition-colors"
+                className="min-h-control inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control font-semibold text-xs text-forest bg-sage/40 hover:bg-sage/60 transition-colors"
               >
-                <span>{t('home.contributeOption3ActionLedger')}</span>
+                <span>Xem Sổ Quỹ Minh Bạch</span>
                 <ArrowRightIcon className="w-3.5 h-3.5" />
               </Link>
             </div>

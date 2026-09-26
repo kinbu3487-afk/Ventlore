@@ -1,14 +1,16 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { PostDetailDTO } from '@ventlore/api-client';
 import { TipRouteStatus, VerificationStatus } from '@ventlore/domain';
 import { useI18n } from '../lib/i18n';
+import { usePayment } from './PaymentContext';
 import { VerificationPanel } from './VerificationPanel';
 import { RevisionSelector } from './RevisionSelector';
 import { AccessGate } from './AccessGate';
 import { MarkdownView } from './MarkdownView';
+import { ReportDialog } from './ReportDialog';
 import {
   MapPinIcon,
   ClockIcon,
@@ -17,6 +19,7 @@ import {
   WalletIcon,
   CheckIcon,
   GlobeIcon,
+  SparklesIcon,
 } from './Icons';
 
 interface PostReaderProps {
@@ -25,7 +28,11 @@ interface PostReaderProps {
 
 export function PostReader({ post }: PostReaderProps) {
   const { t, formatDate, locale, getLocalizedPath } = useI18n();
+  const { openPayment } = usePayment();
   const { revision, author, place, revisionsList } = post;
+
+  const [isReportOpen, setIsReportOpen] = useState(false);
+  const [selectedClaim, setSelectedClaim] = useState<{ id?: string; text?: string } | undefined>(undefined);
 
   const isUntranslated = revision.isTranslated === false && locale !== 'vi';
   const coverImage = revision.coverImageUrl || '/destinations/hero-coastal.svg';
@@ -195,13 +202,26 @@ export function PostReader({ post }: PostReaderProps) {
                   ) : (
                     <span className="w-2 h-2 rounded-full bg-ink-muted/50 shrink-0 mt-1.5 ml-1 mr-1" />
                   )}
-                  <div className="flex-1">
-                    <span className="font-medium text-ink">{claim.text}</span>
-                    {claim.category && (
-                      <span className="ml-2 font-mono text-[10px] text-ink-muted bg-white px-1.5 py-0.5 rounded border border-sage/40">
-                        {claim.category}
-                      </span>
-                    )}
+                  <div className="flex-1 flex items-center justify-between gap-2">
+                    <div>
+                      <span className="font-medium text-ink">{claim.text}</span>
+                      {claim.category && (
+                        <span className="ml-2 font-mono text-[10px] text-ink-muted bg-white px-1.5 py-0.5 rounded border border-sage/40">
+                          {claim.category}
+                        </span>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedClaim({ id: claim.claimId, text: claim.text });
+                        setIsReportOpen(true);
+                      }}
+                      className="text-[10px] text-ink-muted hover:text-red-700 underline shrink-0 transition-colors"
+                      title="Phản ánh sai lệch cho khẳng định này"
+                    >
+                      Báo sai
+                    </button>
                   </div>
                 </div>
               ))}
@@ -209,28 +229,78 @@ export function PostReader({ post }: PostReaderProps) {
           </div>
         )}
 
-        {/* Onchain Tip Route Status (Branch 4 after approval: 80% author / 20% project) */}
-        {revision.tipRoute && revision.tipRoute.status === TipRouteStatus.ACTIVE && (
-          <div className="rounded-card border border-forest/30 bg-forest/5 p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
+        {/* Tip & Report Actions Section */}
+        <div className="rounded-card border border-forest/30 bg-forest/5 p-4 sm:p-5 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-forest text-white flex items-center justify-center shrink-0 shadow-xs">
                 <WalletIcon className="w-5 h-5" />
               </div>
               <div className="space-y-0.5">
                 <h4 className="font-bold text-sm text-ink">
-                  {t('post.tipRouteTitle')}
+                  {t('post.tipRouteTitle')} (Tỷ lệ 80/20)
                 </h4>
                 <p className="text-xs text-ink-secondary">
-                  {t('post.tipSplitRatio')} • {t('post.beneficiaryAddress')}: <code className="font-mono text-forest font-semibold">{revision.tipRoute.beneficiaryAddress}</code>
+                  80% gửi tới tác giả <strong>{author.displayName}</strong>, 20% vào quỹ bảo tồn cộng đồng.
                 </p>
               </div>
             </div>
 
-            <div className="text-xs font-semibold text-forest bg-white px-3 py-1.5 rounded-control border border-forest/20 shadow-xs">
-              {t('post.tipRouteActive', { version: revision.versionNumber })}
-            </div>
+            <button
+              type="button"
+              onClick={() => {
+                const isEligible =
+                  revision.tipRoute?.status === TipRouteStatus.ACTIVE &&
+                  revision.verificationStatus === VerificationStatus.VERIFIED;
+                openPayment('POST_TIP', {
+                  targetTitle: revision.title,
+                  targetId: post.postId,
+                  revisionId: revision.revisionId,
+                  authorHandle: author.handle,
+                  authorDisplayName: author.displayName,
+                  authorWalletAddress: revision.tipRoute?.beneficiaryAddress || '0x88F...42C1',
+                  isEligibleForTip: isEligible,
+                  ineligibleReason: !isEligible
+                    ? revision.verificationStatus === VerificationStatus.EXPIRED
+                      ? 'Phiên bản này đã hết hạn kiểm định. Lộ trình tip tạm dừng để đảm bảo tính an toàn dữ liệu.'
+                      : 'Phiên bản này chưa được thẩm định đạt chuẩn hoặc chưa hoàn tất đăng ký route on-chain.'
+                    : undefined,
+                });
+              }}
+              className="min-h-control inline-flex items-center gap-2 px-4 py-2 rounded-control font-bold text-xs text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
+            >
+              <WalletIcon className="w-4 h-4 text-amber" />
+              <span>Ủng Hộ Tác Giả (Tip)</span>
+            </button>
           </div>
-        )}
+
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-forest/20 text-xs">
+            <span className="text-ink-secondary text-[11px]">
+              Phát hiện thông tin sai lệch hoặc rủi ro an toàn thực địa?
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedClaim(undefined);
+                setIsReportOpen(true);
+              }}
+              className="inline-flex items-center gap-1.5 text-red-700 hover:text-red-800 font-semibold hover:underline"
+            >
+              <AlertTriangleIcon className="w-3.5 h-3.5" />
+              <span>Báo Sai / Phản Ánh Rủi Ro</span>
+            </button>
+          </div>
+        </div>
+
+        <ReportDialog
+          isOpen={isReportOpen}
+          onClose={() => setIsReportOpen(false)}
+          postId={post.postId}
+          postTitle={revision.title}
+          revisionId={revision.revisionId}
+          claimId={selectedClaim?.id}
+          claimText={selectedClaim?.text}
+        />
       </div>
 
       {/* Right Column: Revision Selector & Meta (lg:col-span-4) */}

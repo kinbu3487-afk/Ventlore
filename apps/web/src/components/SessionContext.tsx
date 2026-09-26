@@ -17,7 +17,7 @@ const SessionContext = createContext<SessionContextType>({
   setPersona: () => {},
 });
 
-const VALID_PERSONAS: DemoPersona[] = ['guest', 'member', 'vip', 'author', 'expert'];
+const VALID_PERSONAS: DemoPersona[] = ['guest', 'member', 'vip', 'author', 'expert', 'admin'];
 
 export function SessionProvider({ children }: { children: ReactNode }) {
   const [persona, setPersonaState] = useState<DemoPersona>(() => {

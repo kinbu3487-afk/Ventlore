@@ -20,6 +20,8 @@ import {
   TargetIcon,
 } from './Icons';
 
+import { usePayment } from './PaymentContext';
+
 interface AppShellProps {
   children: React.ReactNode;
 }
@@ -28,11 +30,21 @@ export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
   const { persona, session, setPersona } = useSession();
   const { t, getLocalizedPath } = useI18n();
+  const { openPayment } = usePayment();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [personaDropdownOpen, setPersonaDropdownOpen] = useState(false);
   const [isMissionOpen, setIsMissionOpen] = useState(false);
 
-  const navLinks = [
+  const isHomePage =
+    pathname === '/' ||
+    pathname.endsWith('/vi') ||
+    pathname.endsWith('/en') ||
+    pathname.endsWith('/ja') ||
+    pathname.endsWith('/zh-Hans') ||
+    pathname.endsWith('/ko') ||
+    pathname.endsWith('/fr');
+
+  const baseNavLinks = [
     { href: '/', label: t('nav.home'), icon: <HomeIcon className="w-5 h-5 shrink-0" /> },
     { href: '/explore', label: t('nav.explore'), icon: <CompassIcon className="w-5 h-5 shrink-0" /> },
     { href: '#mission', label: t('nav.mission'), icon: <TargetIcon className="w-5 h-5 shrink-0" /> },
@@ -40,12 +52,27 @@ export function AppShell({ children }: AppShellProps) {
     { href: '/vip', label: t('nav.vip'), icon: <SparklesIcon className="w-5 h-5 shrink-0" /> },
   ];
 
+  const extraNavLinks: Array<{ href: string; label: string; icon: React.ReactNode }> = [];
+  if (persona !== 'guest') {
+    extraNavLinks.push({ href: '/contribute', label: 'Đóng góp', icon: <CompassIcon className="w-5 h-5 shrink-0" /> });
+    extraNavLinks.push({ href: '/account', label: 'Tài khoản', icon: <UserIcon className="w-5 h-5 shrink-0" /> });
+  }
+  if (persona === 'expert' || persona === 'admin') {
+    extraNavLinks.push({ href: '/expert', label: 'Khu kiểm định', icon: <ShieldCheckIcon className="w-5 h-5 shrink-0" /> });
+  }
+  if (persona === 'admin') {
+    extraNavLinks.push({ href: '/admin', label: 'Quản trị', icon: <ShieldCheckIcon className="w-5 h-5 shrink-0 text-amber" /> });
+  }
+
+  const navLinks = [...baseNavLinks, ...extraNavLinks];
+
   const personas: Array<{ id: DemoPersona; name: string; tag: string }> = [
-    { id: 'guest', name: t('common.guestPersona'), tag: 'PUBLIC_READ' },
+    { id: 'guest', name: t('common.guestPersona'), tag: 'GUEST' },
     { id: 'member', name: 'Bin Khám Phá', tag: 'MEMBER' },
-    { id: 'vip', name: 'An Thám Hiểm VIP', tag: 'VIP_ACTIVE' },
-    { id: 'author', name: 'Minh Hướng Dẫn Viên', tag: 'AUTHOR' },
+    { id: 'vip', name: 'An Thám Hiểm VIP', tag: 'VIP_MEMBER' },
+    { id: 'author', name: 'Minh Hướng Dẫn Viên', tag: 'MEMBER/AUTHOR' },
     { id: 'expert', name: 'Hoàng Kiểm Lâm', tag: 'EXPERT' },
+    { id: 'admin', name: 'Linh Quản Trị Viên', tag: 'ADMIN' },
   ];
 
   return (
@@ -182,6 +209,19 @@ export function AppShell({ children }: AppShellProps) {
                   </div>
                 )}
               </div>
+
+              {/* Donate Button on non-home pages */}
+              {!isHomePage && (
+                <button
+                  type="button"
+                  onClick={() => openPayment('PROJECT')}
+                  className="min-h-control inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control text-xs font-bold text-ink bg-amber hover:bg-amber/90 transition-all shadow-xs shrink-0"
+                >
+                  <SparklesIcon className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Ủng hộ quỹ</span>
+                  <span className="sm:hidden">Ủng hộ</span>
+                </button>
+              )}
 
               {/* Login / Profile Button */}
               {persona === 'guest' ? (
@@ -337,19 +377,17 @@ export function AppShell({ children }: AppShellProps) {
         <Link
           href={getLocalizedPath(
             persona === 'guest'
-              ? '/login'
-              : session?.handle
-              ? `/people/${session.handle}`
-              : '/explore'
+              ? `/login?returnTo=${encodeURIComponent(pathname)}`
+              : '/account'
           )}
-          className={`flex-1 min-h-[44px] flex flex-col items-center justify-center text-[11px] font-medium transition-colors ${
-            pathname.includes('/login') || pathname.includes('/people')
+          className={`flex-1 min-h-[44px] flex flex-col items-center justify-center text-[10px] font-medium transition-colors ${
+            pathname.includes('/login') || pathname.includes('/account')
               ? 'text-forest font-bold'
               : 'text-ink-secondary hover:text-ink'
           }`}
         >
           <UserIcon className="w-5 h-5 shrink-0" />
-          <span className="mt-0.5 truncate max-w-[64px]">{persona === 'guest' ? t('nav.login') : t('nav.profile')}</span>
+          <span className="mt-0.5 truncate max-w-[64px]">{persona === 'guest' ? t('nav.login') : 'Tài khoản'}</span>
         </Link>
       </nav>
 

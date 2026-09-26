@@ -6,6 +6,11 @@ import {
   VerificationStatus,
   TipRouteStatus,
   TreasuryFundingSource,
+  ContributionType,
+  ReviewDecisionOutcome,
+  TaskType,
+  TaskWorkStatus,
+  PayableStatus,
 } from '@ventlore/domain';
 
 import {
@@ -17,7 +22,27 @@ import {
   VipPlanDTO,
   TransparencySummaryDTO,
   DemoPersona,
+  PaymentIntentDTO,
+  ReportDTO,
+  ContributionItemDTO,
+  CreatePostInput,
+  ProposeCandidatePlaceInput,
+  BenefitsDTO,
+  TaskSubmissionDTO,
+  ExpertTaskDTO,
+  ExpertPayableDTO,
+  AdminReviewCaseDTO,
+  AdminIntakeItemDTO,
 } from './types.js';
+
+export function generateUUIDv7(): string {
+  const now = Date.now();
+  const timeHex = now.toString(16).padStart(12, '0');
+  const rand1 = Math.floor(Math.random() * 0x0fff).toString(16).padStart(3, '0');
+  const rand2 = ((Math.floor(Math.random() * 0x3fff)) | 0x8000).toString(16).padStart(4, '0');
+  const rand3 = Math.floor(Math.random() * 0xffffffffffff).toString(16).padStart(12, '0');
+  return `${timeHex.slice(0, 8)}-${timeHex.slice(8, 12)}-7${rand1}-${rand2}-${rand3}`;
+}
 
 function normalizeSearchText(str?: string): string {
   if (!str) return '';
@@ -50,7 +75,7 @@ export const SHARED_BIO_TRANSLATIONS: Record<string, Record<string, string>> = {
     ja: '北東部の地形安全および自然遊歩道を管轄する森林警備隊員。12年の特別林管理および実地検証経験。',
     'zh-Hans': '负责东北部地形安全与自然步道的森林巡护员，具备12年特种林区保护管理与实地核验经验。',
     ko: '동북부 지형 안전 및 자연 트레일을 담당하는 산림 레인저. 12년간의 특수 산림 보호구역 관리 및 현장 검증 경력.',
-    fr: 'Garde forestier responsable de la sécurité des terrains et sentiers naturels du Nord-Est. 12 ans d’expérience en gestion forestière et vérification terrain.',
+    fr: 'Garde forestier responsable de la sécurité des terrains et sentiers naturels du Nord-Est. 12 ans d’expérience en gestion forestière và vérification terrain.',
   },
   an_vip_explorer: {
     en: 'Annual supporting member of the Ventlore exploration and conservation fund. Passionate about alpine trekking and speleological surveys.',
@@ -58,6 +83,13 @@ export const SHARED_BIO_TRANSLATIONS: Record<string, Record<string, string>> = {
     'zh-Hans': 'Ventlore探险与保护基金年度资助会员，热衷于高难度徒步越野与洞穴地貌勘测。',
     ko: 'Ventlore 탐험 및 보존 기금의 연간 후원 회원. 고난도 트레킹과 동굴 지형 조사에 열정을 쏟고 있습니다.',
     fr: 'Membre bienfaiteur annuel du fonds d’exploration et de conservation Ventlore. Passionné de trekking d’aventure et de spéléologie.',
+  },
+  linh_admin: {
+    en: 'Ventlore platform coordinator and verification process supervisor.',
+    ja: 'Ventloreプラットフォームコーディネーター兼検証プロセスマネージャー。',
+    'zh-Hans': 'Ventlore平台协调员与审核流程主管。',
+    ko: 'Ventlore 플랫폼 코디네이터 및 검증 프로세스 총괄.',
+    fr: 'Coordinatrice de la plateforme Ventlore et superviseuse des processus de vérification.',
   },
   guest_reader: {
     en: 'Independent reader exploring community verified destinations and field reports on Ventlore.',
@@ -170,6 +202,36 @@ export class VentloreMockAdapter {
         isVerified: true,
       },
       capabilities: ['can_read_public', 'can_review_tasks', 'can_submit_evidence'],
+    },
+    admin: {
+      userId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e08',
+      handle: 'linh_admin',
+      displayName: 'Linh Quản Trị Viên',
+      avatarUrl: '/brand/Ventlore_Avatar_Forest.png',
+      roleAssignments: [
+        {
+          roleAssignmentId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e99',
+          role: RoleType.ADMIN,
+        },
+      ],
+      membership: null,
+      walletBinding: {
+        walletBindingId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5ea0',
+        address: '0x11A...99FF',
+        chainNamespace: 'eip155:421614',
+        isVerified: true,
+      },
+      capabilities: [
+        'can_read_public',
+        'can_read_vip',
+        'can_review_tasks',
+        'can_administer_intake',
+        'can_assign_tasks',
+        'can_accept_work',
+        'can_decide_content',
+        'can_manage_treasury',
+        'can_hold_content',
+      ],
     },
   };
 
@@ -1449,6 +1511,24 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
       credentials: [],
       publishedPosts: [],
     },
+    linh_admin: {
+      userId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e08',
+      handle: 'linh_admin',
+      displayName: 'Linh Quản Trị Viên',
+      avatarUrl: '/brand/Ventlore_Avatar_Forest.png',
+      bio: 'Điều phối viên nền tảng Ventlore và giám sát quy trình thẩm định thực địa độc lập.',
+      joinedAt: '2024-01-01T00:00:00Z',
+      credentials: [
+        {
+          credentialId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e75',
+          title: 'Chứng nhận Quản Trị Hệ Thống (Operator Certificate)',
+          badgeType: 'OPERATOR_CREDENTIAL',
+          issuedAt: '2024-01-01T00:00:00Z',
+          tokenId: '1000000000000001',
+        },
+      ],
+      publishedPosts: [],
+    },
   };
 
   // VIP plan multi-lingual translations
@@ -2022,6 +2102,906 @@ Cette crique isolée est abritée derrière des pitons karstiques, totalement pr
 
   async getTransparencySummary(year?: number): Promise<TransparencySummaryDTO> {
     return this.transparencySummary;
+  }
+
+  // === NEW ADAPTER STORES FOR FE FIRST V1.0 ===
+
+  private contributions: Record<string, ContributionItemDTO[]> = {
+    '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e05': [
+      {
+        postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e10',
+        displayCode: 'PST-000001',
+        placeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e02',
+        placeName: 'Vịnh Cát Cò 3 - Hải Trình Ven Đảo',
+        title: 'Kinh nghiệm vượt ghềnh Cát Cò 3 an toàn mùa nắng',
+        contributionType: ContributionType.EXPERIENCE,
+        currentRevisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e12',
+        versionNumber: 2,
+        observedAt: '2026-04-15T08:00:00Z',
+        createdAt: '2026-04-16T10:00:00Z',
+        verificationStatus: VerificationStatus.VERIFIED,
+        visibility: PostVisibility.PUBLISHED,
+        accessTier: AccessTier.PUBLIC,
+      },
+      {
+        postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e40',
+        displayCode: 'PST-000004',
+        placeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e02',
+        placeName: 'Vịnh Cát Cò 3 - Hải Trình Ven Đảo',
+        title: 'Khảo sát luồng lạch & điểm neo thuyền hoang sơ vịnh Lan Hạ (VIP)',
+        contributionType: ContributionType.GUIDE,
+        currentRevisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e41',
+        versionNumber: 1,
+        observedAt: '2026-05-10T14:30:00Z',
+        createdAt: '2026-05-11T09:00:00Z',
+        verificationStatus: VerificationStatus.VERIFIED,
+        visibility: PostVisibility.PUBLISHED,
+        accessTier: AccessTier.VIP,
+      },
+    ],
+    '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e01': [
+      {
+        postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e20',
+        displayCode: 'PST-000002',
+        placeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e04',
+        placeName: 'Mũi Móng Rồng - Đảo Cô Tô',
+        title: 'Trải nghiệm đón bình minh tại vách đá Mũi Móng Rồng',
+        contributionType: ContributionType.DISCOVERY,
+        currentRevisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e21',
+        versionNumber: 1,
+        observedAt: '2026-05-20T05:30:00Z',
+        createdAt: '2026-05-21T08:00:00Z',
+        verificationStatus: VerificationStatus.VERIFIED,
+        visibility: PostVisibility.PUBLISHED,
+        accessTier: AccessTier.PUBLIC,
+      },
+    ],
+    '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e06': [
+      {
+        postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e30',
+        displayCode: 'PST-000003',
+        placeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e03',
+        placeName: 'Đỉnh Tây Côn Lĩnh Hoàng Su Phì',
+        title: 'Hành trình vượt dốc Tây Côn Lĩnh mùa đông (Kiểm định hết hạn)',
+        contributionType: ContributionType.EXPERIENCE,
+        currentRevisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e31',
+        versionNumber: 1,
+        observedAt: '2025-11-20T06:00:00Z',
+        createdAt: '2025-11-21T07:00:00Z',
+        verificationStatus: VerificationStatus.EXPIRED,
+        visibility: PostVisibility.PUBLISHED,
+        accessTier: AccessTier.PUBLIC,
+      },
+    ],
+  };
+
+  private reports: ReportDTO[] = [
+    {
+      reportId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f01',
+      postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e30',
+      postTitle: 'Hành trình vượt dốc Tây Côn Lĩnh mùa đông',
+      revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e31',
+      claimId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e65',
+      claimText: 'Độ cao ghi nhận 2.428m',
+      reporterUserId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e01',
+      reporterHandle: 'bin_traveler',
+      reason: 'Độ cao thực tế theo mốc trắc địa quốc gia mới là 2.431m, có sai lệch 3m so với bài viết.',
+      status: 'INVESTIGATING',
+      createdAt: '2026-09-20T10:15:00Z',
+    },
+  ];
+
+  private payments: PaymentIntentDTO[] = [
+    {
+      id: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f10',
+      mode: 'PROJECT',
+      targetTitle: 'Quỹ Bảo Tồn & Thẩm Định Độc Lập Ventlore',
+      amountAtomic: '50000000',
+      amountFormatted: '50 USDC',
+      asset: 'USDC',
+      status: 'SIMULATED_SUCCESS',
+      txHashDemo: '0xmock...treasury50',
+      timestamp: '2026-09-22T14:20:00Z',
+    },
+    {
+      id: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f11',
+      mode: 'POST_TIP',
+      targetTitle: 'Kinh nghiệm vượt ghềnh Cát Cò 3 an toàn mùa nắng',
+      targetId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e10',
+      revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e12',
+      authorHandle: 'minh_trailguide',
+      authorDisplayName: 'Minh Hướng Dẫn Viên',
+      authorWalletAddress: '0x88F...42C1',
+      amountAtomic: '10000000',
+      amountFormatted: '10 USDC',
+      asset: 'USDC',
+      authorAmountAtomic: '8000000',
+      treasuryAmountAtomic: '2000000',
+      authorAmountFormatted: '8 USDC',
+      treasuryAmountFormatted: '2 USDC',
+      status: 'SIMULATED_SUCCESS',
+      txHashDemo: '0xmock...tip10',
+      timestamp: '2026-09-24T09:12:00Z',
+    },
+  ];
+
+  private tasks: ExpertTaskDTO[] = [
+    {
+      taskId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f20',
+      displayCode: 'TSK-000001',
+      type: TaskType.EXISTING_PLACE_POST_REVIEW,
+      postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e20',
+      postTitle: 'Trải nghiệm đón bình minh tại vách đá Mũi Móng Rồng',
+      placeName: 'Mũi Móng Rồng - Đảo Cô Tô',
+      revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e21',
+      scope: 'Độ ổn định của tầng đá phiến và hiện tượng sóng ngầm chân ghềnh',
+      claims: [
+        { claimId: 'c1', text: 'Tầng đá phiến trầm tích không có dấu hiệu nứt tách lớn', status: 'VERIFIED' },
+        { claimId: 'c2', text: 'Sóng lớn nguy hiểm từ 05:00 - 07:00 khi triều dâng', status: 'VERIFIED' },
+      ],
+      deadline: '2026-10-05T23:59:59Z',
+      rewardAmountFormatted: '50 USDC',
+      rewardAsset: 'USDC',
+      workStatus: TaskWorkStatus.OFFERED,
+      acceptanceCriteria: [
+        'Khảo sát trực tiếp bằng thiết bị đo độ dốc và chụp ảnh vết nứt',
+        'Ghi nhận bảng thủy triều thời điểm khảo sát',
+        'Có nhật ký thực địa rõ ngày giờ',
+      ],
+      submissions: [],
+    },
+    {
+      taskId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f21',
+      displayCode: 'TSK-000002',
+      type: TaskType.EXISTING_PLACE_POST_REVIEW,
+      postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e30',
+      postTitle: 'Hành trình vượt dốc Tây Côn Lĩnh mùa đông (Kiểm định hết hạn)',
+      placeName: 'Đỉnh Tây Côn Lĩnh Hoàng Su Phì',
+      revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e31',
+      scope: 'Tình trạng sạt lở đường mòn và điểm tiếp nước suối tự nhiên',
+      claims: [
+        { claimId: 'c3', text: 'Suối cạn nước từ km số 14', status: 'UNVERIFIED' },
+        { claimId: 'c4', text: 'Có nguy cơ trượt đất tại dốc Gió', status: 'UNVERIFIED' },
+      ],
+      deadline: '2026-09-30T23:59:59Z',
+      rewardAmountFormatted: '80 USDC',
+      rewardAsset: 'USDC',
+      workStatus: TaskWorkStatus.IN_PROGRESS,
+      acceptanceCriteria: [
+        'Xác minh tọa độ GPS 3 điểm lấy nước khả thi',
+        'Đánh giá nguy cơ sạt lở theo thang cấp 1-4',
+      ],
+      submissions: [],
+    },
+    {
+      taskId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f22',
+      displayCode: 'TSK-000003',
+      type: TaskType.EXISTING_PLACE_POST_REVIEW,
+      postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e10',
+      postTitle: 'Kinh nghiệm vượt ghềnh Cát Cò 3 an toàn mùa nắng',
+      placeName: 'Vịnh Cát Cò 3 - Hải Trình Ven Đảo',
+      revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e12',
+      scope: 'Độ trơn trượt vách đá và phao tiêu cảnh báo',
+      claims: [
+        { claimId: 'c5', text: 'Vách đá bám rêu trơn trượt sáng sớm', status: 'VERIFIED' },
+      ],
+      deadline: '2026-09-25T23:59:59Z',
+      rewardAmountFormatted: '50 USDC',
+      rewardAsset: 'USDC',
+      workStatus: TaskWorkStatus.SUBMITTED,
+      acceptanceCriteria: ['Báo cáo thực địa có ảnh đối chứng'],
+      submissions: [
+        {
+          submissionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f30',
+          taskId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f22',
+          submittedAt: '2026-09-24T16:00:00Z',
+          expertUserId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e07',
+          expertHandle: 'hoang_ranger',
+          findings: 'Đã hoàn thành kiểm tra độ trơn trượt tại 4 điểm ven ghềnh Cát Cò 3. Xác nhận khuyến nghị giày chuyên dụng là chính xác.',
+          evidenceUrls: ['/evidence/catco3-survey-1.jpg'],
+          claimsEvaluation: [{ claimId: 'c5', verified: true, notes: 'Khớp hoàn toàn với hiện trường.' }],
+          versionNumber: 1,
+        },
+      ],
+    },
+    {
+      taskId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f23',
+      displayCode: 'TSK-000004',
+      type: TaskType.EXISTING_PLACE_POST_REVIEW,
+      postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e30',
+      postTitle: 'Khảo sát lối mòn vách vực đèo Mã Pí Lèng',
+      placeName: 'Đèo Mã Pí Lèng - Hà Giang',
+      revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e31',
+      scope: 'Đo đạc độ dốc taluy âm và rào chắn an toàn',
+      claims: [
+        { claimId: 'c6', text: 'Đường mòn an toàn cho xe máy thông thường', status: 'REJECTED' },
+      ],
+      deadline: '2026-09-18T23:59:59Z',
+      rewardAmountFormatted: '60 USDC',
+      rewardAsset: 'USDC',
+      workStatus: TaskWorkStatus.ACCEPTED_WORK,
+      acceptanceCriteria: ['Nghiệm thu báo cáo khảo sát hiện trường chuyên gia'],
+      submissions: [
+        {
+          submissionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f31',
+          taskId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f23',
+          submittedAt: '2026-09-17T11:00:00Z',
+          expertUserId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e07',
+          expertHandle: 'hoang_ranger',
+          findings: 'Chuyên gia Hoàng đã tiến hành trắc đạc cẩn thận. Phát hiện bài viết của tác giả tuyên bố "an toàn cho xe thông thường" là SAI NGUY HIỂM vì vực sâu không có rào chắn.',
+          evidenceUrls: ['/evidence/mapileng-cliff.jpg'],
+          claimsEvaluation: [{ claimId: 'c6', verified: false, notes: 'Cực kỳ nguy hiểm, không đạt chuẩn an toàn.' }],
+          versionNumber: 1,
+        },
+      ],
+      payableStatus: PayableStatus.OPEN,
+    },
+  ];
+
+  private payables: ExpertPayableDTO[] = [
+    {
+      payableId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f40',
+      taskId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f23',
+      taskDisplayCode: 'TSK-000004',
+      postTitle: 'Khảo sát lối mòn vách vực đèo Mã Pí Lèng',
+      amountFormatted: '60 USDC',
+      asset: 'USDC',
+      status: PayableStatus.OPEN,
+      acceptedAt: '2026-09-19T08:30:00Z',
+    },
+  ];
+
+  private adminCases: AdminReviewCaseDTO[] = [
+    {
+      caseId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f50',
+      postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e30',
+      postTitle: 'Hành trình vượt dốc Tây Côn Lĩnh mùa đông (Kiểm định hết hạn)',
+      revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e31',
+      placeName: 'Đỉnh Tây Côn Lĩnh Hoàng Su Phì',
+      authorHandle: 'an_vip_explorer',
+      authorUserId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e06',
+      status: 'ASSIGNED',
+      assignedExpertHandle: 'hoang_ranger',
+      assignedExpertUserId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e07',
+      taskId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f21',
+      taskWorkStatus: TaskWorkStatus.IN_PROGRESS,
+      submissionCount: 0,
+    },
+    {
+      caseId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f51',
+      postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e10',
+      postTitle: 'Kinh nghiệm vượt ghềnh Cát Cò 3 an toàn mùa nắng',
+      revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e12',
+      placeName: 'Vịnh Cát Cò 3 - Hải Trình Ven Đảo',
+      authorHandle: 'minh_trailguide',
+      authorUserId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e05',
+      status: 'EVALUATING',
+      assignedExpertHandle: 'hoang_ranger',
+      assignedExpertUserId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e07',
+      taskId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f22',
+      taskWorkStatus: TaskWorkStatus.SUBMITTED,
+      submissionCount: 1,
+    },
+    {
+      caseId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f52',
+      postId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e30',
+      postTitle: 'Khảo sát lối mòn vách vực đèo Mã Pí Lèng',
+      revisionId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e31',
+      placeName: 'Đèo Mã Pí Lèng - Hà Giang',
+      authorHandle: 'bin_traveler',
+      authorUserId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e01',
+      status: 'DECIDED',
+      assignedExpertHandle: 'hoang_ranger',
+      assignedExpertUserId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e07',
+      taskId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f23',
+      taskWorkStatus: TaskWorkStatus.ACCEPTED_WORK,
+      acceptanceStatus: 'ACCEPTED_WORK',
+      contentDecision: ReviewDecisionOutcome.REJECTED,
+      decisionNotes: 'Chuyên gia hoàn thành xuất sắc nhiệm vụ (được trả công), nhưng bài viết bị BÁC BỎ do khuyến nghị an toàn không chính xác.',
+      submissionCount: 1,
+      payableId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f40',
+    },
+  ];
+
+  private adminIntakes: AdminIntakeItemDTO[] = [
+    {
+      intakeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f60',
+      type: 'PROPOSAL_NEW_PLACE',
+      entityId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e04',
+      title: 'Đề xuất địa điểm mới: Mũi Móng Rồng - Cô Tô',
+      submittedByHandle: 'bin_traveler',
+      submittedAt: '2026-09-21T08:00:00Z',
+      regionName: 'Quảng Ninh / Cô Tô',
+      potentialDuplicates: [],
+      summary: 'Điểm vách đá trầm tích hoang sơ hướng đông nam Cô Tô, cần chuyên gia thẩm định rủi ro trượt ngã.',
+      status: 'PENDING',
+    },
+    {
+      intakeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f61',
+      type: 'USER_REPORT',
+      entityId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5f01',
+      title: 'Khiếu nại sai lệch thông số độ cao Tây Côn Lĩnh',
+      submittedByHandle: 'bin_traveler',
+      submittedAt: '2026-09-20T10:15:00Z',
+      summary: 'Báo cáo sai lệch 3m so với mốc trắc địa quốc gia mới.',
+      status: 'PENDING',
+    },
+  ];
+
+  private benefits: Record<string, BenefitsDTO> = {
+    '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e05': {
+      userId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e05',
+      verifiedContentCount: 2,
+      sbt: {
+        credentialId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e71',
+        title: 'Huy hiệu Đóng Góp Thực Địa Vàng (Contributor SBT)',
+        status: 'ISSUED_DEMO',
+        issuedAt: '2025-01-10T09:00:00Z',
+        tokenId: '4829104819204812',
+      },
+      nft: {
+        collectibleId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e81',
+        title: 'Author NFT: Cát Cò 3 First Discovery',
+        postTitle: 'Kinh nghiệm vượt ghềnh Cát Cò 3 an toàn mùa nắng',
+        status: 'ISSUED_DEMO',
+        tokenId: '9182309128301923',
+        imageUrl: '/destinations/cat-co-3.svg',
+      },
+      tipRoute: {
+        routeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e82',
+        status: TipRouteStatus.ACTIVE,
+        authorPercent: 80,
+        treasuryPercent: 20,
+        walletAddress: '0x88F...42C1',
+        consentGiven: true,
+      },
+    },
+    '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e01': {
+      userId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e01',
+      verifiedContentCount: 1,
+      sbt: {
+        credentialId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e73',
+        title: 'Huy hiệu Khám Phá Quần Đảo (Contributor SBT)',
+        status: 'OFFERED',
+      },
+      nft: {
+        collectibleId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e83',
+        title: 'Author NFT: Cô Tô Dawn Report',
+        postTitle: 'Trải nghiệm đón bình minh tại vách đá Mũi Móng Rồng',
+        status: 'OFFERED',
+        imageUrl: '/destinations/co-to.svg',
+      },
+      tipRoute: {
+        routeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e84',
+        status: TipRouteStatus.AWAITING_CONSENT,
+        authorPercent: 80,
+        treasuryPercent: 20,
+        walletAddress: '0x71C...B29a',
+        consentGiven: false,
+      },
+    },
+    '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e06': {
+      userId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e06',
+      verifiedContentCount: 0,
+      sbt: {
+        credentialId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e74',
+        title: 'Huy hiệu Đóng Góp Cộng Đồng',
+        status: 'NOT_ELIGIBLE',
+      },
+      nft: {
+        collectibleId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e85',
+        title: 'Author NFT: Tây Côn Lĩnh Expedition',
+        postTitle: 'Hành trình vượt dốc Tây Côn Lĩnh mùa đông',
+        status: 'OFFERED',
+      },
+      tipRoute: {
+        routeId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e86',
+        status: TipRouteStatus.PENDING,
+        authorPercent: 80,
+        treasuryPercent: 20,
+        consentGiven: true,
+      },
+    },
+  };
+
+  private appHoldRevisions: Set<string> = new Set();
+
+  // === NEW ADAPTER METHODS FOR DEMO MUTATIONS ===
+
+  async getContributions(userId: string): Promise<ContributionItemDTO[]> {
+    return this.contributions[userId] || [];
+  }
+
+  async submitContributionPost(
+    input: CreatePostInput,
+    authorUserId: string,
+    authorHandle: string
+  ): Promise<ContributionItemDTO> {
+    const postId = generateUUIDv7();
+    const revisionId = generateUUIDv7();
+    const targetPlace = this.places.find(p => p.placeId === input.placeId);
+    const placeName = targetPlace ? targetPlace.name : 'Địa điểm khảo sát';
+
+    const newContrib: ContributionItemDTO = {
+      postId,
+      displayCode: `PST-00${Math.floor(1000 + Math.random() * 9000)}`,
+      placeId: input.placeId,
+      placeName,
+      title: input.title,
+      contributionType: input.contributionType,
+      currentRevisionId: revisionId,
+      versionNumber: 1,
+      observedAt: input.observedAt || new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+      verificationStatus: VerificationStatus.UNVERIFIED,
+      visibility: PostVisibility.PUBLISHED,
+      accessTier: input.accessTier || AccessTier.PUBLIC,
+      feedbackNotes: 'Bài viết đã được xuất bản ở trạng thái CHƯA KIỂM ĐỊNH theo quy chế Ventlore.',
+    };
+
+    if (!this.contributions[authorUserId]) {
+      this.contributions[authorUserId] = [];
+    }
+    this.contributions[authorUserId].unshift(newContrib);
+
+    // Also register in admin intake
+    this.adminIntakes.unshift({
+      intakeId: generateUUIDv7(),
+      type: 'NEW_POST',
+      entityId: postId,
+      title: `Bài viết mới: ${input.title}`,
+      submittedByHandle: authorHandle,
+      submittedAt: new Date().toISOString(),
+      summary: `Bài viết mới tại ${placeName}. Cần phân công chuyên gia kiểm định thực địa.`,
+      status: 'PENDING',
+    });
+
+    return newContrib;
+  }
+
+  async submitRevision(
+    postId: string,
+    input: Partial<CreatePostInput>,
+    authorUserId: string
+  ): Promise<ContributionItemDTO> {
+    const list = this.contributions[authorUserId] || [];
+    const existing = list.find(item => item.postId === postId);
+    if (!existing) throw new Error('Post not found in author contributions');
+
+    const newRevisionId = generateUUIDv7();
+    const newVersion = existing.versionNumber + 1;
+    existing.currentRevisionId = newRevisionId;
+    existing.versionNumber = newVersion;
+    if (input.title) existing.title = input.title;
+    if (input.contributionType) existing.contributionType = input.contributionType;
+    existing.verificationStatus = VerificationStatus.UNVERIFIED;
+    existing.feedbackNotes = `Phiên bản sửa đổi v${newVersion} đã gửi. Giữ nguyên postId, sinh revisionId mới trỏ parent revision trước.`;
+
+    if (this.posts[postId]) {
+      const p = this.posts[postId];
+      const parentRevId = p.currentRevisionId;
+      p.currentRevisionId = newRevisionId;
+      p.revisionsList.unshift({
+        revisionId: newRevisionId,
+        displayCode: `REV-00000${newVersion + 5}`,
+        versionNumber: newVersion,
+        title: input.title || p.revision.title,
+        createdAt: new Date().toISOString(),
+        verificationStatus: VerificationStatus.UNVERIFIED,
+        accessTier: p.revision.accessTier,
+      });
+      p.revision = {
+        ...p.revision,
+        revisionId: newRevisionId,
+        displayCode: `REV-00000${newVersion + 5}`,
+        parentRevisionId: parentRevId,
+        title: input.title || p.revision.title,
+        content: input.content || p.revision.content,
+        claims: input.claims ? input.claims.map((c, i) => ({ claimId: generateUUIDv7(), text: c, orderIndex: i })) : p.revision.claims,
+        verificationStatus: VerificationStatus.UNVERIFIED,
+      };
+    }
+
+    return existing;
+  }
+
+  async proposeCandidatePlace(
+    input: ProposeCandidatePlaceInput,
+    authorUserId: string,
+    authorHandle: string
+  ): Promise<{ place: PlaceDetailDTO; post: ContributionItemDTO }> {
+    const placeId = generateUUIDv7();
+    const postId = generateUUIDv7();
+    const revisionId = generateUUIDv7();
+
+    const candidatePlace: PlaceDetailDTO = {
+      placeId,
+      displayCode: `PLC-00${Math.floor(1000 + Math.random() * 9000)}`,
+      name: input.name,
+      regionId: input.regionId,
+      regionName: input.regionName,
+      status: PlaceStatus.CANDIDATE,
+      canonicalPlaceId: null,
+      summary: input.summary,
+      description: input.description,
+      warnings: input.warnings,
+      activities: input.activities,
+      postsCount: 1,
+      coordinates: input.coordinates,
+      posts: [],
+    };
+
+    const newContrib: ContributionItemDTO = {
+      postId,
+      displayCode: `PST-00${Math.floor(1000 + Math.random() * 9000)}`,
+      placeId,
+      placeName: input.name,
+      title: input.postTitle,
+      contributionType: ContributionType.DISCOVERY,
+      currentRevisionId: revisionId,
+      versionNumber: 1,
+      observedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+      verificationStatus: VerificationStatus.IN_REVIEW,
+      visibility: PostVisibility.REVIEW_ONLY,
+      accessTier: AccessTier.PUBLIC,
+      isCandidatePlace: true,
+      feedbackNotes: 'Đề xuất điểm mới đang ở trạng thái CHỜ DUYỆT (REVIEW_ONLY). Chưa hiển thị công khai trên Explore.',
+    };
+
+    this.places.push(candidatePlace);
+
+    if (!this.contributions[authorUserId]) {
+      this.contributions[authorUserId] = [];
+    }
+    this.contributions[authorUserId].unshift(newContrib);
+
+    // Register in admin intake with potential duplicate comparison
+    const duplicates = this.places
+      .filter(p => p.placeId !== placeId && (p.name.toLowerCase().includes(input.name.toLowerCase()) || input.name.toLowerCase().includes(p.name.toLowerCase())))
+      .map(p => ({ placeId: p.placeId, name: p.name, similarity: '85%' }));
+
+    this.adminIntakes.unshift({
+      intakeId: generateUUIDv7(),
+      type: 'PROPOSAL_NEW_PLACE',
+      entityId: placeId,
+      title: `Đề xuất điểm mới: ${input.name}`,
+      submittedByHandle: authorHandle,
+      submittedAt: new Date().toISOString(),
+      regionName: input.regionName,
+      potentialDuplicates: duplicates,
+      summary: input.summary,
+      status: 'PENDING',
+    });
+
+    return { place: candidatePlace, post: newContrib };
+  }
+
+  async submitReport(input: {
+    postId: string;
+    postTitle?: string;
+    revisionId: string;
+    claimId?: string;
+    claimText?: string;
+    reason: string;
+    evidenceUrl?: string;
+    reporterUserId: string;
+    reporterHandle: string;
+  }): Promise<ReportDTO> {
+    const report: ReportDTO = {
+      reportId: generateUUIDv7(),
+      postId: input.postId,
+      postTitle: input.postTitle || 'Bài viết được báo cáo',
+      revisionId: input.revisionId,
+      claimId: input.claimId,
+      claimText: input.claimText,
+      reporterUserId: input.reporterUserId,
+      reporterHandle: input.reporterHandle,
+      reason: input.reason,
+      evidenceUrl: input.evidenceUrl,
+      status: 'OPEN',
+      createdAt: new Date().toISOString(),
+    };
+
+    this.reports.unshift(report);
+
+    this.adminIntakes.unshift({
+      intakeId: generateUUIDv7(),
+      type: 'USER_REPORT',
+      entityId: report.reportId,
+      title: `Khiếu nại bài viết: ${report.postTitle}`,
+      submittedByHandle: input.reporterHandle,
+      submittedAt: report.createdAt,
+      summary: input.reason,
+      status: 'PENDING',
+    });
+
+    return report;
+  }
+
+  async getReports(): Promise<ReportDTO[]> {
+    return this.reports;
+  }
+
+  async getBenefits(userId: string): Promise<BenefitsDTO> {
+    if (this.benefits[userId]) {
+      return this.benefits[userId];
+    }
+    return {
+      userId,
+      verifiedContentCount: 0,
+      sbt: {
+        credentialId: generateUUIDv7(),
+        title: 'Huy hiệu Đóng Góp Cộng Đồng',
+        status: 'NOT_ELIGIBLE',
+      },
+      nft: {
+        collectibleId: generateUUIDv7(),
+        title: 'Author Field Note NFT',
+        postTitle: 'Chưa có bài viết đủ điều kiện',
+        status: 'OFFERED',
+      },
+      tipRoute: {
+        routeId: generateUUIDv7(),
+        status: TipRouteStatus.AWAITING_CONSENT,
+        authorPercent: 80,
+        treasuryPercent: 20,
+        consentGiven: false,
+      },
+    };
+  }
+
+  async claimBenefit(userId: string, type: 'sbt' | 'nft'): Promise<BenefitsDTO> {
+    const current = await this.getBenefits(userId);
+    if (type === 'sbt') {
+      current.sbt.status = 'ISSUED_DEMO';
+      current.sbt.issuedAt = new Date().toISOString();
+      current.sbt.tokenId = Math.floor(1000000000000000 + Math.random() * 9000000000000000).toString();
+    } else {
+      current.nft.status = 'ISSUED_DEMO';
+      current.nft.tokenId = Math.floor(1000000000000000 + Math.random() * 9000000000000000).toString();
+    }
+    this.benefits[userId] = current;
+    return current;
+  }
+
+  async updateTipConsent(userId: string, consent: boolean): Promise<BenefitsDTO> {
+    const current = await this.getBenefits(userId);
+    current.tipRoute.consentGiven = consent;
+    current.tipRoute.status = consent ? TipRouteStatus.ACTIVE : TipRouteStatus.AWAITING_CONSENT;
+    this.benefits[userId] = current;
+    return current;
+  }
+
+  async getExpertTasks(expertUserId?: string): Promise<ExpertTaskDTO[]> {
+    return this.tasks;
+  }
+
+  async getExpertPayables(expertUserId?: string): Promise<ExpertPayableDTO[]> {
+    return this.payables;
+  }
+
+  async acceptTask(taskId: string): Promise<ExpertTaskDTO> {
+    const task = this.tasks.find(t => t.taskId === taskId);
+    if (!task) throw new Error('Task not found');
+    task.workStatus = TaskWorkStatus.IN_PROGRESS;
+    return task;
+  }
+
+  async declineTask(taskId: string): Promise<ExpertTaskDTO> {
+    const task = this.tasks.find(t => t.taskId === taskId);
+    if (!task) throw new Error('Task not found');
+    task.workStatus = TaskWorkStatus.DECLINED;
+    return task;
+  }
+
+  async submitTaskEvidence(
+    taskId: string,
+    findings: string,
+    claimsEvaluation: Array<{ claimId: string; verified: boolean; notes: string }>,
+    evidenceUrls: string[]
+  ): Promise<ExpertTaskDTO> {
+    const task = this.tasks.find(t => t.taskId === taskId);
+    if (!task) throw new Error('Task not found');
+
+    const submission: TaskSubmissionDTO = {
+      submissionId: generateUUIDv7(),
+      taskId,
+      submittedAt: new Date().toISOString(),
+      expertUserId: '018e3a2b-8a4c-7c0a-9f5b-1a2b3c4d5e07',
+      expertHandle: 'hoang_ranger',
+      findings,
+      evidenceUrls,
+      claimsEvaluation,
+      versionNumber: task.submissions.length + 1,
+    };
+
+    task.submissions.push(submission);
+    task.workStatus = TaskWorkStatus.SUBMITTED;
+
+    // Update corresponding admin case
+    const c = this.adminCases.find(ac => ac.taskId === taskId);
+    if (c) {
+      c.status = 'EVALUATING';
+      c.taskWorkStatus = TaskWorkStatus.SUBMITTED;
+      c.submissionCount = task.submissions.length;
+    }
+
+    return task;
+  }
+
+  async getAdminIntake(): Promise<AdminIntakeItemDTO[]> {
+    return this.adminIntakes;
+  }
+
+  async getAdminReviewCases(): Promise<AdminReviewCaseDTO[]> {
+    return this.adminCases;
+  }
+
+  async adminAssignTask(
+    caseId: string,
+    expertUserId: string,
+    deadlineDays: number,
+    rewardAmount: string
+  ): Promise<AdminReviewCaseDTO> {
+    const c = this.adminCases.find(ac => ac.caseId === caseId);
+    if (!c) throw new Error('Case not found');
+
+    const newTaskId = generateUUIDv7();
+    const newTask: ExpertTaskDTO = {
+      taskId: newTaskId,
+      displayCode: `TSK-00${Math.floor(1000 + Math.random() * 9000)}`,
+      type: TaskType.EXISTING_PLACE_POST_REVIEW,
+      postId: c.postId,
+      postTitle: c.postTitle,
+      placeName: c.placeName,
+      revisionId: c.revisionId,
+      scope: 'Thẩm định an toàn thực địa theo yêu cầu Ban Điều Hành',
+      claims: [],
+      deadline: new Date(Date.now() + deadlineDays * 86400000).toISOString(),
+      rewardAmountFormatted: `${rewardAmount} USDC`,
+      rewardAsset: 'USDC',
+      workStatus: TaskWorkStatus.OFFERED,
+      acceptanceCriteria: ['Khảo sát thực địa và có bằng chứng ảnh đối chứng'],
+      submissions: [],
+    };
+
+    this.tasks.unshift(newTask);
+    c.status = 'ASSIGNED';
+    c.assignedExpertHandle = 'hoang_ranger';
+    c.assignedExpertUserId = expertUserId;
+    c.taskId = newTaskId;
+    c.taskWorkStatus = TaskWorkStatus.OFFERED;
+
+    return c;
+  }
+
+  async adminAcceptWork(
+    taskId: string,
+    outcome: 'ACCEPTED_WORK' | 'REJECTED_WORK',
+    reason?: string
+  ): Promise<{ task: ExpertTaskDTO; payable?: ExpertPayableDTO }> {
+    const task = this.tasks.find(t => t.taskId === taskId);
+    if (!task) throw new Error('Task not found');
+
+    task.workStatus = outcome === 'ACCEPTED_WORK' ? TaskWorkStatus.ACCEPTED_WORK : TaskWorkStatus.REJECTED_WORK;
+
+    let payable: ExpertPayableDTO | undefined;
+    if (outcome === 'ACCEPTED_WORK') {
+      const payableId = generateUUIDv7();
+      payable = {
+        payableId,
+        taskId,
+        taskDisplayCode: task.displayCode,
+        postTitle: task.postTitle,
+        amountFormatted: task.rewardAmountFormatted,
+        asset: task.rewardAsset,
+        status: PayableStatus.OPEN,
+        acceptedAt: new Date().toISOString(),
+      };
+      this.payables.unshift(payable);
+      task.payableStatus = PayableStatus.OPEN;
+    }
+
+    const c = this.adminCases.find(ac => ac.taskId === taskId);
+    if (c) {
+      c.acceptanceStatus = outcome;
+      c.taskWorkStatus = task.workStatus;
+      if (payable) {
+        c.payableId = payable.payableId;
+      }
+    }
+
+    return { task, payable };
+  }
+
+  async adminDecideContent(
+    caseId: string,
+    outcome: ReviewDecisionOutcome,
+    notes: string,
+    scope?: string
+  ): Promise<AdminReviewCaseDTO> {
+    const c = this.adminCases.find(ac => ac.caseId === caseId);
+    if (!c) throw new Error('Case not found');
+
+    c.contentDecision = outcome;
+    c.decisionNotes = notes;
+    c.status = 'DECIDED';
+
+    // Update post revision if present in posts
+    const postEntry = this.posts[c.postId];
+    if (postEntry && postEntry.revision) {
+      if (outcome === ReviewDecisionOutcome.APPROVED) {
+        postEntry.revision.verificationStatus = VerificationStatus.VERIFIED;
+        postEntry.revision.checkedAt = new Date().toISOString();
+        postEntry.revision.validUntil = '2027-12-31T23:59:59Z';
+        if (scope) postEntry.revision.scope = scope;
+      } else if (outcome === ReviewDecisionOutcome.REJECTED) {
+        postEntry.revision.verificationStatus = VerificationStatus.REJECTED;
+      } else if (outcome === ReviewDecisionOutcome.CHANGES_REQUESTED) {
+        postEntry.revision.verificationStatus = VerificationStatus.NEEDS_CHANGES;
+      } else {
+        postEntry.revision.verificationStatus = VerificationStatus.INCONCLUSIVE;
+      }
+    }
+
+    return c;
+  }
+
+  async adminToggleAppHold(revisionId: string, isHold: boolean): Promise<{ revisionId: string; isAppHold: boolean }> {
+    if (isHold) {
+      this.appHoldRevisions.add(revisionId);
+    } else {
+      this.appHoldRevisions.delete(revisionId);
+    }
+
+    const c = this.adminCases.find(ac => ac.revisionId === revisionId);
+    if (c) {
+      c.isAppHold = isHold;
+    }
+
+    return { revisionId, isAppHold: isHold };
+  }
+
+  isRevisionOnAppHold(revisionId: string): boolean {
+    return this.appHoldRevisions.has(revisionId);
+  }
+
+  async recordPayment(intent: PaymentIntentDTO): Promise<PaymentIntentDTO> {
+    const paymentId = generateUUIDv7();
+    const now = new Date().toISOString();
+    const recorded: PaymentIntentDTO = {
+      ...intent,
+      id: paymentId,
+      status: 'SIMULATED_SUCCESS',
+      txHashDemo: `0xmock...${paymentId.slice(0, 8)}`,
+      timestamp: now,
+    };
+
+    this.payments.unshift(recorded);
+
+    // If membership, update current persona's session entitlement if applicable
+    if (intent.mode === 'MEMBERSHIP') {
+      const activePersona = this.currentPersona;
+      if (this.sessions[activePersona]) {
+        this.sessions[activePersona].membership = {
+          membershipId: generateUUIDv7(),
+          planCode: 'VIP_ANNUAL',
+          startsAt: now,
+          endsAt: new Date(Date.now() + 365 * 86400000).toISOString(),
+          isActive: true,
+        };
+        if (!this.sessions[activePersona].capabilities.includes('can_read_vip')) {
+          this.sessions[activePersona].capabilities.push('can_read_vip');
+        }
+      }
+    }
+
+    return recorded;
+  }
+
+  async getPaymentIntents(): Promise<PaymentIntentDTO[]> {
+    return this.payments;
   }
 }
 
