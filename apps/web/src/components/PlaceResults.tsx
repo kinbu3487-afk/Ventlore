@@ -56,7 +56,7 @@ export function PlaceResults({
   onViewModeChange,
 }: PlaceResultsProps) {
   const { t, getLocalizedPath } = useI18n();
-  const [internalViewMode, setInternalViewMode] = useState<'list' | 'map'>('list');
+  const [internalViewMode, setInternalViewMode] = useState<'list' | 'map'>('map');
   const currentViewMode = viewMode ?? internalViewMode;
 
   const handleSetViewMode = (mode: 'list' | 'map') => {
@@ -363,19 +363,6 @@ export function PlaceResults({
         <div className="inline-flex rounded-control border border-sage bg-surface-card p-1 shadow-xs shrink-0 self-start sm:self-auto">
           <button
             type="button"
-            onClick={() => handleSetViewMode('list')}
-            aria-pressed={currentViewMode === 'list'}
-            className={`min-h-[36px] flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-control transition-colors ${
-              currentViewMode === 'list'
-                ? 'bg-forest text-white'
-                : 'text-ink-secondary hover:text-ink'
-            }`}
-          >
-            <ListIcon className="w-4 h-4" />
-            <span>{t('explore.listView')}</span>
-          </button>
-          <button
-            type="button"
             onClick={() => handleSetViewMode('map')}
             aria-pressed={currentViewMode === 'map'}
             className={`min-h-[36px] flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-control transition-colors ${
@@ -386,6 +373,19 @@ export function PlaceResults({
           >
             <MapIcon className="w-4 h-4" />
             <span>{t('explore.mapView')}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleSetViewMode('list')}
+            aria-pressed={currentViewMode === 'list'}
+            className={`min-h-[36px] flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-control transition-colors ${
+              currentViewMode === 'list'
+                ? 'bg-forest text-white'
+                : 'text-ink-secondary hover:text-ink'
+            }`}
+          >
+            <ListIcon className="w-4 h-4" />
+            <span>{t('explore.listView')}</span>
           </button>
         </div>
       </div>

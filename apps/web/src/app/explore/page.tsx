@@ -21,7 +21,7 @@ function ExploreViewInner() {
   const [query, setQuery] = useState('');
   const [provinceCode, setProvinceCode] = useState('all');
   const [activityId, setActivityId] = useState('all');
-  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
   const [page, setPage] = useState(1);
   const [isUrlInitialized, setIsUrlInitialized] = useState(false);
 
@@ -58,7 +58,7 @@ function ExploreViewInner() {
     // Convert legacy region if needed
     const normalizedProv = prov.startsWith('reg-prov-') ? prov.replace('reg-prov-', '') : prov;
     const a = searchParams.get('activity') || 'all';
-    const v = searchParams.get('view') === 'map' ? 'map' : 'list';
+    const v = searchParams.get('view') === 'list' ? 'list' : 'map';
     const p = parseInt(searchParams.get('page') || '1', 10);
 
     setQuery(q);
@@ -77,7 +77,7 @@ function ExploreViewInner() {
       const prov = p.get('province') || p.get('region') || 'all';
       setProvinceCode(prov.startsWith('reg-prov-') ? prov.replace('reg-prov-', '') : prov);
       setActivityId(p.get('activity') || 'all');
-      setViewMode(p.get('view') === 'map' ? 'map' : 'list');
+      setViewMode(p.get('view') === 'list' ? 'list' : 'map');
       const pageNum = parseInt(p.get('page') || '1', 10);
       setPage(Number.isInteger(pageNum) && pageNum > 0 ? pageNum : 1);
     };
@@ -92,7 +92,7 @@ function ExploreViewInner() {
     if (query) p.set('q', query); else p.delete('q');
     if (provinceCode && provinceCode !== 'all') p.set('province', provinceCode); else p.delete('province');
     if (activityId && activityId !== 'all') p.set('activity', activityId); else p.delete('activity');
-    if (viewMode === 'map') p.set('view', 'map'); else p.delete('view');
+    if (viewMode === 'list') p.set('view', 'list'); else p.delete('view');
     if (page > 1) p.set('page', String(page)); else p.delete('page');
 
     const searchStr = p.toString();
