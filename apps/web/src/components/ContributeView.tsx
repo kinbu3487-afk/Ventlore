@@ -89,13 +89,6 @@ export function ContributeView() {
   const [duplicateWarning, setDuplicateWarning] = useState<PlaceSummaryDTO | null>(null);
   const [dismissDuplicate, setDismissDuplicate] = useState(false);
 
-  // 409 Conflict Simulation State
-  const [showConflictDialog, setShowConflictDialog] = useState(false);
-  const [conflictDraft, setConflictDraft] = useState({
-    serverVersion: 'REV v2 (Đã có thay đổi từ người kiểm định khác trước đó)',
-    myVersion: 'REV v2 nháp cục bộ của bạn',
-  });
-
   // Local draft status
   const [draftSavedAt, setDraftSavedAt] = useState<string | null>(null);
 
@@ -327,7 +320,7 @@ export function ContributeView() {
     }
 
     if (persona === 'guest' || !session) {
-      alert('Bạn đang ở phiên Guest. Hãy đăng nhập hoặc chọn persona Minh Hướng Dẫn Viên/Member để nộp bài.');
+      alert('Bạn đang ở phiên Khách vãng lai. Vui lòng đăng nhập tài khoản để gửi bài viết.');
       return;
     }
 
@@ -376,7 +369,7 @@ export function ContributeView() {
     }
 
     if (persona === 'guest' || !session) {
-      alert('Bạn đang ở phiên Guest. Hãy đăng nhập hoặc chọn persona Minh Hướng Dẫn Viên/Member để đề xuất điểm mới.');
+      alert('Bạn đang ở phiên Khách vãng lai. Vui lòng đăng nhập tài khoản để đề xuất điểm mới.');
       return;
     }
 
@@ -448,23 +441,16 @@ export function ContributeView() {
                 Phiên khách vãng lai (Guest)
               </p>
               <p className="text-xs text-ink-secondary">
-                Bạn có thể tự do soạn thảo và lưu bản nháp trên máy. Để xuất bản bài viết và nhận chứng nhận tác giả, vui lòng đăng nhập hoặc chuyển sang tài khoản thành viên demo.
+                Bạn có thể tự do soạn thảo và lưu bản nháp trên máy. Để gửi bài viết đóng góp và nhận chứng nhận tác giả, vui lòng đăng nhập tài khoản.
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setPersona('author')}
-              className="px-3 py-1.5 rounded-control text-xs font-bold text-white bg-forest hover:bg-forest-hover transition-colors whitespace-nowrap shadow-xs"
-            >
-              Chọn Persona Tác Giả (Minh)
-            </button>
             <Link
               href={getLocalizedPath(`/login?returnTo=${encodeURIComponent(`/contribute?tab=${activeTab}`)}`)}
-              className="px-3 py-1.5 rounded-control text-xs font-bold text-ink border border-sage hover:bg-surface-canvas transition-colors whitespace-nowrap"
+              className="px-4 py-2 rounded-control text-xs font-bold text-white bg-forest hover:bg-forest-hover transition-colors whitespace-nowrap shadow-xs"
             >
-              Đăng nhập
+              Đăng nhập tài khoản
             </Link>
           </div>
         </div>
@@ -805,10 +791,10 @@ export function ContributeView() {
             ))}
           </div>
 
-          {/* Media Mock Attachments */}
+          {/* Media Attachments */}
           <div className="space-y-2 pt-2 border-t border-sage/60">
             <label className="block text-xs font-bold uppercase tracking-wider text-ink">
-              Tệp hình ảnh đối chứng (Demo Upload)
+              Ảnh và tài liệu
             </label>
             <div className="p-4 rounded-control border-2 border-dashed border-sage bg-surface-canvas text-center">
               <input
@@ -827,7 +813,7 @@ export function ContributeView() {
                 <span>Chọn ảnh từ thiết bị</span>
               </label>
               <p className="text-[11px] text-ink-muted mt-2">
-                Tệp trong demo chỉ preview và lưu cục bộ theo adapter; chưa tải lên dịch vụ đám mây công khai.
+                Các tệp đính kèm được lưu an toàn cùng bản nháp trên thiết bị của bạn.
               </p>
 
               {mockFiles.length > 0 && (
@@ -846,26 +832,15 @@ export function ContributeView() {
             </div>
           </div>
 
-          {/* Conflict 409 Simulation & Actions */}
-          <div className="pt-4 border-t border-sage flex flex-wrap items-center justify-between gap-4">
+          {/* Actions */}
+          <div className="pt-4 border-t border-sage flex items-center justify-end">
             <button
-              type="button"
-              onClick={() => setShowConflictDialog(true)}
-              className="text-xs text-status-pending hover:underline font-semibold flex items-center gap-1"
+              type="submit"
+              disabled={isSubmitting}
+              className="min-h-control inline-flex items-center justify-center px-6 py-2.5 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-sm disabled:opacity-50"
             >
-              <AlertTriangleIcon className="w-3.5 h-3.5" />
-              <span>Thử mô phỏng xung đột 409 (Concurrent Edit)</span>
+              {isSubmitting ? 'Đang lưu bản ghi...' : t('contribute.submitButton')}
             </button>
-
-            <div className="flex items-center gap-3">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="min-h-control inline-flex items-center justify-center px-6 py-2.5 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-sm disabled:opacity-50"
-              >
-                {isSubmitting ? 'Đang lưu bản ghi...' : t('contribute.submitButton')}
-              </button>
-            </div>
           </div>
         </form>
       )}
@@ -1088,71 +1063,6 @@ export function ContributeView() {
             </button>
           </div>
         </form>
-      )}
-
-      {/* 409 Conflict Dialog Modal */}
-      {showConflictDialog && (
-        <div className="fixed inset-0 z-modal bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-surface-card rounded-card border-2 border-waypoint shadow-xl max-w-2xl w-full p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-sage/60 pb-3">
-              <div className="flex items-center gap-2 text-waypoint font-bold text-base">
-                <AlertTriangleIcon className="w-5 h-5" />
-                <span>Mô phỏng Xung đột Phiên bản 409 Conflict</span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowConflictDialog(false)}
-                className="p-1 text-ink-muted hover:text-ink rounded-control"
-              >
-                <CloseIcon className="w-5 h-5" />
-              </button>
-            </div>
-
-            <p className="text-xs text-ink-secondary leading-relaxed">
-              Theo quy chuẩn Ventlore, khi gửi bản sửa đổi với <code className="bg-sage/40 px-1 py-0.5 rounded text-forest">expectedVersion</code> không còn khớp (do người khác đã nộp revision mới trước), hệ thống không ghi đè im lặng mà giữ cả hai phiên bản để bạn so sánh và quyết định:
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
-              <div className="p-3 rounded-control bg-surface-canvas border border-sage">
-                <div className="font-bold text-ink mb-1">Phiên bản hiện tại trên Server:</div>
-                <div className="text-ink-secondary text-[11px] space-y-1">
-                  <div>- Version: REV v3</div>
-                  <div>- Updated: 10 phút trước</div>
-                  <div>- Cảnh báo: Đoạn thác có đá ngầm sâu 2m</div>
-                </div>
-              </div>
-
-              <div className="p-3 rounded-control bg-status-vip-bg/40 border border-status-vip/40">
-                <div className="font-bold text-status-vip mb-1">Bản sửa đổi của bạn:</div>
-                <div className="text-ink-secondary text-[11px] space-y-1">
-                  <div>- Base Version: REV v2</div>
-                  <div>- Draft status: Chưa hợp nhất</div>
-                  <div>- Cảnh báo: Đoạn thác có đá ngầm sâu 1.5m</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-end gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setShowConflictDialog(false);
-                  alert('Đã cập nhật bản nháp với phiên bản mới nhất từ server.');
-                }}
-                className="px-4 py-2 rounded-control bg-forest text-white text-xs font-bold hover:bg-forest-hover"
-              >
-                Tải bản mới nhất và gộp nội dung
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowConflictDialog(false)}
-                className="px-4 py-2 rounded-control border border-sage text-ink text-xs font-medium"
-              >
-                Đóng
-              </button>
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );

@@ -278,6 +278,8 @@ export interface TranslationCatalog {
     contributeOption3ActionLedger: string;
     missionDialogTitle: string;
     missionDialogSubtitle: string;
+    missionClose: string;
+    missionExploreCta: string;
     missionCorePrinciplesTitle: string;
     missionPrinciple1Title: string;
     missionPrinciple1Desc: string;

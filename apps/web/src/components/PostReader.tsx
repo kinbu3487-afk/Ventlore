@@ -366,40 +366,11 @@ export function PostReader({ post }: PostReaderProps) {
           </Link>
         </div>
 
-        {/* Collapsible Technical ID Details (Business UUIDv7 & Display Codes) */}
-        <details className="rounded-card border border-sage/60 bg-surface-canvas p-4 text-xs text-ink-secondary">
-          <summary className="font-bold text-ink cursor-pointer hover:text-forest transition-colors select-none">
-            {locale === 'en'
-              ? 'Technical Version Details (IDs)'
-              : locale === 'ja'
-              ? '技術仕様および識別子情報'
-              : locale === 'zh-Hans'
-              ? '技术标识与版本规范'
-              : locale === 'ko'
-              ? '기술 사양 및 식별자 정보'
-              : locale === 'fr'
-              ? 'Spécifications techniques de la révision'
-              : 'Thông tin kỹ thuật phiên bản (ID)'}
-          </summary>
-          <div className="mt-3 space-y-2 font-mono text-[11px] border-t border-sage/40 pt-2.5">
-            <div>
-              <span className="text-ink-muted">Post ID (UUIDv7):</span>
-              <div className="text-ink break-all font-semibold">{post.postId}</div>
-            </div>
-            <div>
-              <span className="text-ink-muted">Display Code:</span>
-              <div className="text-ink font-semibold">{post.displayCode}</div>
-            </div>
-            <div>
-              <span className="text-ink-muted">Revision ID (UUIDv7):</span>
-              <div className="text-ink break-all font-semibold">{revision.revisionId}</div>
-            </div>
-            <div>
-              <span className="text-ink-muted">Revision Display Code:</span>
-              <div className="text-ink font-semibold">{revision.displayCode}</div>
-            </div>
-          </div>
-        </details>
+        {/* Version Metadata */}
+        <div className="rounded-card border border-sage/60 bg-surface-canvas p-3 text-xs text-ink-muted flex flex-wrap items-center justify-between gap-2 font-mono">
+          <span>Mã bài viết: <strong className="text-ink">{post.displayCode}</strong></span>
+          <span>Bản ghi: <strong className="text-ink">{revision.displayCode}</strong></span>
+        </div>
       </div>
     </div>
   );
