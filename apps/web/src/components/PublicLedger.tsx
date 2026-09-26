@@ -138,6 +138,130 @@ export function PublicLedger({ data }: PublicLedgerProps) {
           <span>{t('transparency.privacyNotice')}</span>
         </div>
       </div>
+
+      {/* 4. Live Demo Payments Stream */}
+      <DemoPaymentsStream />
+    </div>
+  );
+}
+
+function DemoPaymentsStream() {
+  const [payments, setPayments] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        const { mockApiClient } = await import('@ventlore/api-client');
+        const list = await mockApiClient.getPaymentIntents();
+        if (mounted) setPayments(list);
+      } catch {
+        // ignore
+      }
+    }
+    load();
+    const interval = setInterval(load, 3000);
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  return (
+    <div className="rounded-card border-2 border-forest/30 bg-surface-card p-6 sm:p-8 shadow-sm space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-sage/60 pb-3">
+        <div>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-forest/10 text-forest text-[11px] font-bold uppercase tracking-wider">
+            <span>DEMO STREAM</span>
+          </div>
+          <h3 className="text-base sm:text-lg font-extrabold text-ink mt-1">
+            Nhật ký Giao dịch Thanh toán Mô phỏng (Simulated Payment Ledger)
+          </h3>
+        </div>
+        <span className="text-xs font-mono text-ink-muted">
+          Tự động cập nhật mỗi 3s
+        </span>
+      </div>
+
+      <p className="text-xs text-ink-secondary leading-relaxed">
+        Bảng đối soát phản ánh các lượt đóng góp Quỹ dự án (100%), Ủng hộ tác giả (80/20) và Gói Hội viên VIP vừa được thực hiện qua <strong className="text-ink">PaymentModal</strong> trong phiên trải nghiệm.
+      </p>
+
+      {payments.length === 0 ? (
+        <div className="p-6 rounded-control bg-surface-canvas border border-dashed border-sage text-center text-xs text-ink-muted">
+          Chưa có giao dịch mô phỏng nào trong phiên này. Hãy thử bấm &ldquo;Ủng hộ&rdquo; trên thanh điều hướng hoặc &ldquo;Tip tác giả&rdquo; trong bài viết để xem đối soát tức thì!
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="border-b border-sage text-ink-secondary font-semibold">
+                <th className="py-2.5 px-3">Mã đơn (UUIDv7)</th>
+                <th className="py-2.5 px-3">Loại nghiệp vụ</th>
+                <th className="py-2.5 px-3">Mục tiêu / Đối tượng</th>
+                <th className="py-2.5 px-3 text-right">Số tiền</th>
+                <th className="py-2.5 px-3">Phân bổ Split</th>
+                <th className="py-2.5 px-3 text-right">Biên nhận Onchain</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-sage/40">
+              {payments.map((p) => {
+                const isTip = p.mode === 'POST_TIP';
+                const isProject = p.mode === 'PROJECT';
+
+                return (
+                  <tr key={p.id} className="hover:bg-surface-canvas/60">
+                    <td className="py-2.5 px-3 font-mono text-ink font-semibold">
+                      {p.id.slice(0, 13)}...
+                    </td>
+                    <td className="py-2.5 px-3">
+                      {isTip && (
+                        <span className="px-2 py-0.5 rounded-full bg-waypoint/20 text-waypoint font-bold text-[10px]">
+                          POST_TIP
+                        </span>
+                      )}
+                      {isProject && (
+                        <span className="px-2 py-0.5 rounded-full bg-forest/15 text-forest font-bold text-[10px]">
+                          PROJECT_DONATION
+                        </span>
+                      )}
+                      {p.mode === 'MEMBERSHIP' && (
+                        <span className="px-2 py-0.5 rounded-full bg-status-vip-bg text-status-vip font-bold text-[10px]">
+                          VIP_MEMBERSHIP
+                        </span>
+                      )}
+                    </td>
+                    <td className="py-2.5 px-3 text-ink max-w-[200px] truncate">
+                      {p.targetTitle || 'Ventlore Community Fund'}
+                    </td>
+                    <td className="py-2.5 px-3 text-right font-bold text-ink">
+                      {p.amountFormatted || '$5.00'}
+                    </td>
+                    <td className="py-2.5 px-3 font-mono text-[11px] text-ink-secondary">
+                      {isTip ? (
+                        <span className="text-forest font-semibold">
+                          80% Tác giả / 20% Quỹ
+                        </span>
+                      ) : isProject ? (
+                        <span className="text-forest">
+                          100% Quỹ Ventlore
+                        </span>
+                      ) : (
+                        <span>
+                          100% Tài khoản VIP
+                        </span>
+                      )}
+                    </td>
+                    <td className="py-2.5 px-3 text-right font-mono text-[11px] text-forest">
+                      {p.txHashDemo || '0xmock...demo'}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

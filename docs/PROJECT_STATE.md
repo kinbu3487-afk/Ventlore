@@ -1,26 +1,19 @@
 # Trạng Thái Dự Án Ventlore (PROJECT_STATE)
 
-**Cập nhật lần cuối:** 25/09/2026 (FE-01 Round 5 · Thu gọn Single-Hero HomePage, 6-Language Switcher trực tiếp, Sửa Điều hướng Home/Explore, Khắc phục mâu thuẫn kiểm định PST-000003 & Loại bỏ tràn ngang)  
-**Phiên bản đặc tả cơ sở:** Logic-ID-DB v0.3, Event UI Spec v0.3, Brand Guide v0.1, Prompt 01 Round 5 Single Hero Home & Review deploy-preview-8
+**Cập nhật lần cuối:** 26/09/2026 (FE-First v1.0 · Hoàn thiện Toàn diện Front-End, 14 Kịch bản Nghiệm thu & Bản đồ Dữ liệu FE_DATA_MAP.md)  
+**Phiên bản đặc tả cơ sở:** Logic-ID-DB v0.3, Event UI Spec v0.3, Brand Guide v0.1, Prompt FE-First v1.0
 
 ---
 
-## 1. Mốc hiện tại: Hoàn thành Chặng 01 / FE-01 Round 5 (Single-Hero HomePage · Khắc phục toàn diện sau Review deploy-preview-8)
+## 1. Mốc hiện tại: Hoàn thành FE-First v1.0 (Chặng FE-00 đến FE-06)
 
 | Chặng | Tên chặng | Trạng thái | Ghi chú |
 |---|---|---|---|
 | **00** | **Đọc nguồn, khóa quy tắc và dựng nền tảng** | **HOÀN THÀNH** | Đọc đủ 6 tài liệu nguồn; dựng cấu trúc workspace pnpm, AGENTS.md, OpenAPI, toàn bộ tài liệu kiến trúc/hợp đồng dữ liệu, ma trận coverage S01-S35 / C01-C50 / U01-U12, thư viện TypeScript và test runner kiểm tra ID. |
 | **LOOP-00** | **Thiết lập quy trình 5 loop & CI baseline** | **HOÀN THÀNH** | Bổ sung `docs/loops/` (POLICY, RUN_TASK, SYSTEM_REVIEW, REPORT_TEMPLATE), mẫu Issue/PR, GitHub Actions `quality.yml`, lệnh `pnpm run verify` đạt 100%, khóa `pnpm-lock.yaml`. |
-| **01 (FE-01 Round 5)** | **Single-Hero HomePage & Hoàn thiện Review Preview 8** | **HOÀN THÀNH** | Hoàn thành cả 8 nhóm: 1. Thu gọn HomePage thành single-viewport hero min-h-[100dvh], bỏ 6 khối bên dưới; 2. LanguageSwitcher 6 ngôn ngữ trực tiếp góc trên phải Home; 3. Sửa điều hướng Home/Explore độc lập; 4. Sứ mệnh mở MissionDialog (không còn anchor chết #mission); 5. ContributeDialog cho CTA đóng góp; 6. Loại bỏ tràn ngang; 7. Sửa mâu thuẫn trạng thái EXPIRED trên PST-000003; 8. Ngữ pháp số nhiều tiếng Anh/Pháp và bản dịch PST-000002/PST-000003. 199/199 static pages export thành công. |
-| 02 | Front-end đóng góp, chuyên gia và vận hành | SẴN SÀNG | Mục tiêu kế tiếp (FE-02): S06-S12, S17-S19, S24-S27, S30, S31, S35. |
-| 03 | Front-end tiền, quyền lợi và bàn giao API | CHƯA BẮT ĐẦU | S13-S16, S20, S22, S23, S28, S29, S32-S34, hoàn thành C01-C50, FE_HANDOFF. |
-| 04 | Back-end dữ liệu, đăng nhập và phân quyền | CHƯA BẮT ĐẦU | Schema PostgreSQL 34 bảng, Supabase Auth, wallet challenge, API foundation. |
-| 05 | Back-end nội dung, review và nghĩa vụ trả công | CHƯA BẮT ĐẦU | Business services, duplicate detection, review lifecycle, budget reserve, BE_HANDOFF. |
-| 06 | Back-end thanh toán, VIP, outbox và indexer | CHƯA BẮT ĐẦU | Worker process, outbox pattern, payment adapter, accounting ledger. |
-| 07 | Smart contract Arbitrum: route, donate và trả công | CHƯA BẮT ĐẦU | Foundry, VentloreRegistry, VentlorePayments, EIP-712 route consent, CONTRACTS_HANDOFF. |
-| 08 | Smart contract SBT và NFT tác giả | CHƯA BẮT ĐẦU | ContributorSBT (ERC-5192), AuthorContributionNFT (ERC-721), token identity. |
-| 09 | Nối ba lớp và chuẩn bị Arbitrum Sepolia | CHƯA BẮT ĐẦU | Local end-to-end integration, Arbitrum Sepolia testnet package. |
-| 10 | Rà soát, sửa lỗi và bàn giao bản chạy được | CHƯA BẮT ĐẦU | QA01-QA25 verification, runbooks, readiness report. |
+| **FE-01** | **Single-Hero HomePage & Core Read Pages** | **HOÀN THÀNH** | Hoàn thành single-viewport hero, đa ngôn ngữ 6 locales, Explore, Place, Post/Revisions, People profiles. |
+| **FE-First v1.0 (FE-00 $\to$ FE-06)** | **Hoàn thiện Toàn diện Front-End Nghiệm Thu** | **HOÀN THÀNH** | 1. **FE-00:** Audit baseline & cố định script builds. 2. **FE-01:** `PaymentModal` dùng chung cho 3 modes (PROJECT, POST_TIP, MEMBERSHIP), `ReportDialog`. 3. **FE-02:** Trang `/contribute` (Viết bài điểm có sẵn, Đề xuất điểm mới có phát hiện trùng lặp, Live Markdown, mô phỏng 409), Trang `/account` (Profile, Đóng góp của tôi, Gói VIP, Bốn khối quyền lợi sau duyệt, Không gian chuyên gia). 4. **FE-03:** 4 điểm vào mở `PaymentModal` với số nguyên atomic bigint và tỷ lệ 80/20, stream live trên `/transparency`. 5. **FE-04:** Trang `/expert` (Bảng việc Offered $\to$ In Progress $\to$ Submitted $\to$ Accepted Work, nộp bằng chứng theo claim, payables), Trang `/admin` (Tiếp nhận hồ sơ & so sánh trùng, Giao việc, Hai quyết định độc lập: Nghiệm thu công đạt VÀ Bác nội dung, App Hold). 6. **FE-05:** Widget `ReviewToolbar` nổi chọn 14 kịch bản & 5 Personas, Next.js build 227/227 static pages. 7. **FE-06:** Bộ tài liệu `FE_DATA_MAP.md` (16 cột), `FE_COVERAGE.md`, `FE_REVIEW.md`, `FE_HANDOFF.md`, `FE_QA.md`. |
+| Parallel v2 - BE | Back-end song song (BE-A, BE-B, BE-C) | SẴN SÀNG | Chờ Bin duyệt FE để triển khai REST API và PostgreSQL schema theo ID Contract. |
 
 ---
 

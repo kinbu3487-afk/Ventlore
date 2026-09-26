@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { SessionProvider } from '@/components/SessionContext';
 import { I18nProvider } from '@/lib/i18n';
+import { PaymentProvider } from '@/components/PaymentContext';
+import { PaymentModal } from '@/components/PaymentModal';
+import { ReviewToolbar } from '@/components/ReviewToolbar';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -18,7 +21,13 @@ export default function RootLayout({
     <html lang="vi">
       <body className="min-h-screen bg-surface-canvas text-ink antialiased">
         <SessionProvider>
-          <I18nProvider>{children}</I18nProvider>
+          <I18nProvider>
+            <PaymentProvider>
+              {children}
+              <PaymentModal />
+              <ReviewToolbar />
+            </PaymentProvider>
+          </I18nProvider>
         </SessionProvider>
       </body>
     </html>

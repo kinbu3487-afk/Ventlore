@@ -6,6 +6,7 @@ import { AppShell } from '@/components/AppShell';
 import { AsyncState } from '@/components/AsyncState';
 import { mockApiClient, VipPlanDTO } from '@ventlore/api-client';
 import { useSession } from '@/components/SessionContext';
+import { usePayment } from '@/components/PaymentContext';
 import { useI18n } from '@/lib/i18n';
 import {
   SparklesIcon,
@@ -15,6 +16,7 @@ import {
 
 export default function VipPage() {
   const { session, persona, setPersona } = useSession();
+  const { openPayment } = usePayment();
   const { t, formatDate, getLocalizedPath, locale } = useI18n();
   const [plans, setPlans] = useState<VipPlanDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -120,11 +122,7 @@ export default function VipPage() {
 
                   {/* Actions */}
                   <div className="space-y-3">
-                    {isVipActive ? (
-                      <div className="text-center p-3 rounded-control bg-status-success-bg text-status-success text-xs font-semibold">
-                        {t('vip.alreadyActiveNotice')}
-                      </div>
-                    ) : persona === 'guest' ? (
+                    {persona === 'guest' ? (
                       <Link
                         href={getLocalizedPath(`/login?returnTo=${encodeURIComponent('/vip')}`)}
                         className="w-full min-h-control inline-flex items-center justify-center px-6 py-3 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-sm"
@@ -132,13 +130,27 @@ export default function VipPage() {
                         {t('vip.signInToSubscribe')}
                       </Link>
                     ) : (
-                      <button
-                        type="button"
-                        onClick={() => setPersona('vip')}
-                        className="w-full min-h-control inline-flex items-center justify-center px-6 py-3 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-sm"
-                      >
-                        {t('vip.simulateActivate')}
-                      </button>
+                      <div className="space-y-2">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            openPayment('MEMBERSHIP', {
+                              targetId: plan.planCode,
+                              planPriceUsdCents: plan.priceUsdCents,
+                              termMonths: plan.termMonths,
+                              targetTitle: plan.name,
+                            })
+                          }
+                          className="w-full min-h-control inline-flex items-center justify-center px-6 py-3 rounded-control font-bold text-white bg-forest hover:bg-forest-hover transition-colors shadow-sm text-sm"
+                        >
+                          {isVipActive ? 'Gia hạn gói VIP (15 USD/năm)' : 'Đăng ký Hội viên VIP (15 USD/năm)'}
+                        </button>
+                        {isVipActive && (
+                          <div className="text-center p-2 rounded-control bg-status-success-bg text-status-success text-xs font-semibold">
+                            {t('vip.alreadyActiveNotice')} &bull; Gia hạn sẽ cộng nối tiếp 12 tháng
+                          </div>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>

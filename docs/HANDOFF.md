@@ -1,16 +1,13 @@
 # Tài Liệu Bàn Giao (HANDOFF)
 
-**Chặng hoàn thành gần nhất:** FE-01 Round 5 — Thu gọn Single-Hero HomePage, Tích hợp 6-Language Switcher trực tiếp, Sửa Điều hướng Home/Explore, Khắc phục mâu thuẫn kiểm định PST-000003 & Loại bỏ tràn ngang  
-**Nhiệm vụ tiếp theo:** Nghiệm thu FE-01 Round 5 từ Bin → Chuyển sang Chặng 02 (FE-02: Đóng góp, chuyên gia và vận hành)  
-**Thời điểm bàn giao:** 25/09/2026 06:30 UTC+7  
-**Nhánh làm việc:** `feat/fe-01-round-5-single-hero-home`  
-**Gói triển khai Netlify Drop:** `dist/ventlore-netlify-drop.zip` (6.4 MB)  
-**Báo cáo chi tiết:** `docs/loops/reports/TASK-FE-01-ROUND-5-SINGLE-HERO-HOME.md`  
-**Tài liệu liên quan:** `Ventlore_Preview_8_Review_2026-09-24.md`, `docs/UI_REDESIGN_V2.md`, `docs/I18N.md`
+**Chặng hoàn thành gần nhất:** FE-First v1.0 — Hoàn thiện Toàn diện Front-End, 14 Kịch bản Nghiệm thu & Bản đồ Dữ liệu `docs/FE_DATA_MAP.md`  
+**Nhiệm vụ tiếp theo:** Bin trực tiếp trải nghiệm và nghiệm thu qua `Review Toolbar`; Chốt danh sách quyết định kỹ thuật để khởi động Backend (BE-01)  
+**Thời điểm bàn giao:** 26/09/2026 10:25 UTC+7  
+**Tài liệu kèm theo:** `docs/FE_DATA_MAP.md`, `docs/FE_COVERAGE.md`, `docs/FE_REVIEW.md`, `docs/FE_HANDOFF.md`, `docs/FE_QA.md`  
 
 ---
 
-## 1. Kết quả đạt được tại FE-01
+## 1. Kết quả đạt được tại Chặng FE-First v1.0 (FE-00 đến FE-06)
 
 1. **Brand System & Design Tokens:**
    - Cài đặt đầy đủ các màu sắc chuẩn Brand Guide v0.1: Forest `#173F35`, Jade `#2C7563`, Sage `#DCE8DA`, Ivory `#F5F1E8`, Waypoint `#F0A44B`, Ink `#182522`.

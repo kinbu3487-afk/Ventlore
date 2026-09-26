@@ -65,7 +65,7 @@
     {
       "name": "FE-01 Fixtures & Invariants",
       "status": "PASS",
-      "details": "Đầy đủ 6 kịch bản bắt buộc, tìm thấy 39 UUIDv7 canonical hợp lệ, bảo mật lọc VIP ở mock adapter"
+      "details": "Đầy đủ 6 kịch bản bắt buộc, tìm thấy 66 UUIDv7 canonical hợp lệ, bảo mật lọc VIP ở mock adapter"
     }
   ],
   "missing_references": [
