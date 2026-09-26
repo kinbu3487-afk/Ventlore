@@ -76,7 +76,9 @@ export function PlaceSummary({ place }: PlaceSummaryProps) {
           />
           <div className="absolute top-4 right-4 z-10">
             <span className="px-2 py-1 rounded bg-black/60 backdrop-blur-md text-[11px] text-white/90 font-medium">
-              {t('explore.imageAttribution')}
+              {coverImage.endsWith('.svg') || coverImage.includes('/destinations/')
+                ? t('explore.imageAttributionIllustration')
+                : t('explore.imageAttributionPhoto')}
             </span>
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent flex flex-col justify-end p-6 sm:p-8">
@@ -167,9 +169,20 @@ export function PlaceSummary({ place }: PlaceSummaryProps) {
 
       {/* 4. Posts relating to this place */}
       <div className="space-y-4">
-        <h2 className="text-lg font-bold text-ink flex items-center justify-between">
-          <span>{t('place.postsSectionTitle', { count: place.posts.length })}</span>
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold text-ink">
+            {t('place.postsSectionTitle', { count: place.posts.length })}
+          </h2>
+          {place.posts.length > 0 && (
+            <Link
+              href={getLocalizedPath(`/contribute?tab=existing&placeId=${encodeURIComponent(place.placeId)}`)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-forest/10 hover:bg-forest/20 text-forest text-xs font-semibold transition-colors"
+            >
+              <span>{t('place.shareExperience')}</span>
+              <ArrowRightIcon className="w-3.5 h-3.5" />
+            </Link>
+          )}
+        </div>
 
         {place.posts.length === 0 ? (
           <div className="p-8 sm:p-10 rounded-card border border-dashed border-sage bg-surface-card text-center space-y-3">
@@ -184,10 +197,10 @@ export function PlaceSummary({ place }: PlaceSummaryProps) {
             </div>
             <div className="pt-2">
               <Link
-                href={getLocalizedPath('/contribute')}
+                href={getLocalizedPath(`/contribute?tab=existing&placeId=${encodeURIComponent(place.placeId)}`)}
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-control bg-forest hover:bg-forest-hover text-white text-xs font-bold transition-colors shadow-xs"
               >
-                <span>{t('explore.proposePlaceButton')}</span>
+                <span>{t('place.shareExperience')}</span>
                 <ArrowRightIcon className="w-3.5 h-3.5" />
               </Link>
             </div>

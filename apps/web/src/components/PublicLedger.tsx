@@ -3,7 +3,7 @@
 import React from 'react';
 import { TransparencySummaryDTO } from '@ventlore/api-client';
 import { useI18n } from '../lib/i18n';
-import { ShieldCheckIcon } from './Icons';
+import { ShieldCheckIcon, ExternalLink } from './Icons';
 
 interface PublicLedgerProps {
   data: TransparencySummaryDTO;
@@ -31,7 +31,7 @@ export function PublicLedger({ data }: PublicLedgerProps) {
           </div>
           <div className="text-right">
             <span className="inline-flex items-center text-xs font-semibold text-forest bg-sage/60 px-3 py-1 rounded-control border border-sage">
-              Sổ quỹ công bố định kỳ
+              {t('transparency.periodicReport')}
             </span>
           </div>
         </div>
@@ -80,8 +80,12 @@ export function PublicLedger({ data }: PublicLedgerProps) {
           {data.sources.map((src, idx) => (
             <div key={idx} className="p-4 rounded-control border border-sage/70 bg-surface-canvas">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-sage text-forest">
-                  {src.sourceType}
+                <span className="text-xs font-medium px-2 py-0.5 rounded bg-sage text-forest">
+                  {src.sourceType === 'OWNER_FUNDING' && t('transparency.sourceFounderEndowment')}
+                  {src.sourceType === 'VIP_REVENUE' && t('transparency.sourceVipRevenue')}
+                  {src.sourceType === 'PROJECT_DONATION' && t('transparency.sourceCommunityDonation')}
+                  {src.sourceType === 'POST_TIP_SHARE' && t('transparency.sourceTipShare')}
+                  {!['OWNER_FUNDING', 'VIP_REVENUE', 'PROJECT_DONATION', 'POST_TIP_SHARE'].includes(src.sourceType) && src.sourceType}
                 </span>
                 <span className="font-bold text-sm text-ink">{src.amountFormatted}</span>
               </div>
@@ -118,13 +122,21 @@ export function PublicLedger({ data }: PublicLedgerProps) {
                   <td className="py-3 px-3 text-ink-secondary">
                     {formatDate(d.date)}
                   </td>
-                  <td className="py-3 px-3 text-right font-mono text-xs text-ink-secondary">
-                    {d.txHash ? (
-                      <span className="inline-flex items-center gap-1 text-forest underline cursor-pointer">
-                        {d.txHash}
-                      </span>
+                  <td className="py-3 px-3 text-right text-xs">
+                    {d.txHash && d.txHash.length > 20 && !d.txHash.includes('...') ? (
+                      <a
+                        href={`https://arbiscan.io/tx/${d.txHash}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 font-mono text-forest underline hover:text-forest-hover"
+                      >
+                        <span>{d.txHash.slice(0, 6)}...{d.txHash.slice(-4)}</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
                     ) : (
-                      'Nội bộ'
+                      <span className="inline-flex items-center px-2 py-0.5 rounded bg-sage/60 text-ink-muted text-[11px] font-sans">
+                        {t('transparency.internalVoucher')}
+                      </span>
                     )}
                   </td>
                 </tr>

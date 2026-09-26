@@ -34,12 +34,11 @@ export function HomePageView() {
           className="inline-flex items-center gap-2.5 text-ivory hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-waypoint rounded-control p-1"
           aria-label="Ventlore Home"
         >
-          <div className="w-9 h-9 rounded-lg bg-forest border border-sage/40 flex items-center justify-center text-ivory font-bold shadow-md">
-            <CompassIcon className="w-5 h-5 text-amber" />
-          </div>
-          <span className="font-heading font-bold text-xl sm:text-2xl tracking-tight text-white drop-shadow">
-            Ventlore
-          </span>
+          <img
+            src="/brand/Ventlore_Logo_Ivory.png"
+            alt="Ventlore"
+            className="h-8 sm:h-10 w-auto object-contain drop-shadow"
+          />
         </Link>
 
         {/* Right side: 6-Language Switcher */}

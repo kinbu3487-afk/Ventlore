@@ -5,8 +5,10 @@ import { AppShell } from '@/components/AppShell';
 import { PublicLedger } from '@/components/PublicLedger';
 import { AsyncState } from '@/components/AsyncState';
 import { mockApiClient, TransparencySummaryDTO } from '@ventlore/api-client';
+import { useI18n } from '@/lib/i18n';
 
 export default function TransparencyPage() {
+  const { locale } = useI18n();
   const [data, setData] = useState<TransparencySummaryDTO | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -15,7 +17,7 @@ export default function TransparencyPage() {
     async function loadLedger() {
       setIsLoading(true);
       try {
-        const summary = await mockApiClient.getTransparencySummary(2026);
+        const summary = await mockApiClient.getTransparencySummary(2026, locale);
         if (mounted) {
           setData(summary);
           setIsLoading(false);
@@ -28,7 +30,7 @@ export default function TransparencyPage() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [locale]);
 
   return (
     <AppShell>

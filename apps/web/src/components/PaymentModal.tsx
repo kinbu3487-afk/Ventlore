@@ -111,7 +111,7 @@ export function PaymentModal() {
             type="button"
             onClick={closePayment}
             className="p-1.5 rounded-control text-ink-muted hover:text-ink hover:bg-surface-canvas transition-colors"
-            aria-label="Đóng"
+            aria-label={t('payment.closeModal')}
           >
             <CloseIcon className="w-5 h-5" />
           </button>
@@ -122,16 +122,16 @@ export function PaymentModal() {
           {/* Target Information Card */}
           <div className="rounded-xl border border-sage/70 bg-surface-canvas p-3.5 text-xs space-y-1.5">
             <div className="text-ink-muted font-medium uppercase tracking-wider text-[10px]">
-              {activeMode === 'PROJECT' && 'Đích đến quyên góp'}
-              {activeMode === 'POST_TIP' && 'Tác giả & Bài viết'}
-              {activeMode === 'MEMBERSHIP' && 'Tài khoản thụ hưởng'}
+              {activeMode === 'PROJECT' && t('payment.targetDestination')}
+              {activeMode === 'POST_TIP' && t('payment.authorPostTarget')}
+              {activeMode === 'MEMBERSHIP' && t('payment.beneficiaryAccount')}
             </div>
 
             {activeMode === 'PROJECT' && (
               <div>
-                <div className="font-bold text-sm text-ink">Quỹ Thẩm Định & Bảo Tồn Ventlore</div>
+                <div className="font-bold text-sm text-ink">{t('payment.projectFundName')}</div>
                 <div className="text-ink-secondary text-[11px]">
-                  100% số tiền được chuyển trực tiếp vào ví đa chữ ký của quỹ cộng đồng. Chi phí gas riêng.
+                  {t('payment.projectFundDesc')}
                 </div>
               </div>
             )}
@@ -139,16 +139,16 @@ export function PaymentModal() {
             {activeMode === 'POST_TIP' && (
               <div>
                 <div className="font-bold text-sm text-ink">
-                  {initialData?.targetTitle || 'Bài viết kiểm định thực địa'}
+                  {initialData?.targetTitle || 'Ventlore Field Post'}
                 </div>
                 <div className="text-ink-secondary text-[11px] flex flex-wrap gap-2 mt-0.5">
-                  <span>Tác giả: <strong>{initialData?.authorDisplayName || 'Minh Hướng Dẫn Viên'}</strong></span>
-                  <span>Ví nhận: <code className="text-forest">{initialData?.authorWalletAddress || '0x88F...42C1'}</code></span>
+                  <span>{t('payment.authorLabel')}: <strong>{initialData?.authorDisplayName || 'Ventlore Contributor'}</strong></span>
+                  <span>{t('payment.receivingWallet')}: <code className="text-forest">{initialData?.authorWalletAddress || '0x88F...42C1'}</code></span>
                 </div>
 
                 {initialData?.isEligibleForTip === false && (
                   <div className="mt-2 p-2 rounded-lg bg-amber-50 border border-amber-300 text-amber-900 text-[11px]">
-                    ⚠️ {initialData.ineligibleReason || 'Bài viết chưa có lộ trình tip hiệu lực (chưa kiểm định hoặc đang tạm dừng).'}
+                    ⚠️ {initialData.ineligibleReason || t('post.tipNotEligible')}
                   </div>
                 )}
               </div>
@@ -158,7 +158,7 @@ export function PaymentModal() {
               <div>
                 {persona === 'guest' ? (
                   <div className="text-ink-secondary text-xs">
-                    Tài khoản: <strong>Chưa đăng nhập</strong> (Cần đăng nhập tài khoản để gắn quyền VIP)
+                    {t('payment.guestAccountNotice')}
                   </div>
                 ) : (
                   <div>
@@ -167,7 +167,7 @@ export function PaymentModal() {
                       <span>{session?.displayName} (@{session?.handle})</span>
                     </div>
                     <div className="text-ink-secondary text-[11px] mt-0.5">
-                      Định mức niêm yết: <strong>1.500 USD cents</strong> (15 USD/năm). Thời hạn 12 tháng lịch UTC tính từ lúc kích hoạt.
+                      {t('payment.vipTermDesc')}
                     </div>
                   </div>
                 )}
@@ -180,10 +180,10 @@ export function PaymentModal() {
             <div className="p-4 sm:p-5 rounded-xl bg-amber-50 border border-amber-200 text-ink space-y-3">
               <div className="flex items-center gap-2 font-bold text-amber-900 text-sm">
                 <AlertTriangleIcon className="w-4 h-4 text-amber-700 shrink-0" />
-                <span>Cần đăng nhập tài khoản để nhận quyền VIP</span>
+                <span>{t('payment.vipLoginRequiredTitle')}</span>
               </div>
               <p className="text-xs text-amber-800 leading-relaxed">
-                Gói Hội viên VIP gắn liền với tài khoản người dùng cá nhân (userId) để đồng bộ trên mọi thiết bị. Tài khoản Khách (Guest) không thể kích hoạt gói thành viên.
+                {t('payment.vipLoginRequiredDesc')}
               </p>
               <div className="pt-1">
                 <Link
@@ -191,7 +191,7 @@ export function PaymentModal() {
                   onClick={closePayment}
                   className="w-full min-h-control inline-flex items-center justify-center gap-2 py-3 rounded-control font-bold text-sm text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
                 >
-                  <span>Đăng nhập để đăng ký VIP ($15/năm)</span>
+                  <span>{t('payment.vipLoginRequiredCta')}</span>
                 </Link>
               </div>
             </div>
@@ -227,7 +227,7 @@ export function PaymentModal() {
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
                       className="w-full min-h-control px-3 py-2 rounded-xl border border-sage text-sm font-bold bg-surface-canvas text-ink focus:outline-none focus:ring-2 focus:ring-forest"
-                      placeholder="Nhập số tiền khác..."
+                      placeholder={t('payment.customAmountPlaceholder')}
                     />
                     <div className="absolute right-3 top-2.5 text-xs font-bold text-ink-muted">
                       {selectedAsset}
@@ -237,11 +237,11 @@ export function PaymentModal() {
               ) : (
                 <div className="p-3.5 rounded-xl border border-sage/80 bg-surface-canvas flex justify-between items-center text-xs">
                   <div>
-                    <div className="font-bold text-sm text-ink">15 USD / 12 Tháng</div>
-                    <div className="text-ink-muted text-[11px]">Quy đổi: 15 USDC theo tỷ giá neo</div>
+                    <div className="font-bold text-sm text-ink">{t('payment.pegRate')}</div>
+                    <div className="text-ink-muted text-[11px]">{t('payment.pegUsdc')}</div>
                   </div>
                   <span className="px-2 py-1 rounded bg-forest/10 text-forest font-bold text-xs">
-                    Gói Chuẩn
+                    {t('payment.standardPackage')}
                   </span>
                 </div>
               )}
@@ -258,7 +258,7 @@ export function PaymentModal() {
                     <span>{treasuryShareFormatted} {selectedAsset}</span>
                   </div>
                   <div className="text-[10px] text-ink-muted pt-1 border-t border-forest/10">
-                    Tác giả nhận 80% số tiền ủng hộ; 20% được chuyển tự động vào quỹ bảo tồn cộng đồng.
+                    {t('payment.tipSplitNotice')}
                   </div>
                 </div>
               )}
@@ -266,13 +266,13 @@ export function PaymentModal() {
               {/* Payment Gateway Information */}
               <div className="rounded-xl border border-sage/70 bg-surface-canvas p-3.5 text-xs space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-ink">Phương thức:</span>
-                  <span className="font-mono text-ink">Ví Web3 (USDC trên Arbitrum)</span>
+                  <span className="font-semibold text-ink">{t('payment.method')}:</span>
+                  <span className="font-mono text-ink">{t('payment.web3Wallet')}</span>
                 </div>
                 <div className="flex items-center justify-between border-t border-sage/40 pt-2">
-                  <span className="text-ink-muted">Trạng thái cổng:</span>
+                  <span className="text-ink-muted">{t('payment.gatewayStatus')}:</span>
                   <span className="font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded text-[11px]">
-                    Đang kết nối hạ tầng đối soát
+                    {t('payment.gatewayConnecting')}
                   </span>
                 </div>
               </div>
@@ -284,11 +284,11 @@ export function PaymentModal() {
                   disabled
                   className="w-full min-h-control py-3 rounded-control font-bold text-sm text-ink-muted bg-sage/40 cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  Cổng thanh toán trực tuyến đang kết nối
+                  {t('payment.gatewayConnectingBtn')}
                 </button>
 
                 <p className="text-[11px] text-ink-muted text-center leading-relaxed">
-                  Hạ tầng thanh toán trực tuyến qua ví Web3 (USDC trên mạng Arbitrum) đang trong quá trình tích hợp kiểm định bảo mật. Mọi đóng góp và giao dịch chính thức sẽ được công bố trên Sổ quỹ công khai.
+                  {t('payment.gatewaySecurityNotice')}
                 </p>
               </div>
             </>

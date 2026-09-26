@@ -159,6 +159,145 @@ export default function VipPage() {
           </div>
         </AsyncState>
 
+        {/* Access Tier Comparison Table (FE-16-06) */}
+        <div className="rounded-card border border-sage bg-surface-card p-6 sm:p-8 shadow-sm space-y-5">
+          <div className="text-left space-y-1">
+            <h2 className="text-xl sm:text-2xl font-bold text-ink">
+              {t('vip.comparisonTitle')}
+            </h2>
+            <p className="text-xs sm:text-sm text-ink-secondary">
+              {t('vip.comparisonSubtitle')}
+            </p>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs sm:text-sm border-collapse">
+              <thead>
+                <tr className="border-b-2 border-sage bg-surface-canvas/60">
+                  <th className="py-3 px-3.5 font-bold text-ink w-2/5">
+                    {t('vip.colFeature')}
+                  </th>
+                  <th className="py-3 px-3 font-semibold text-ink-muted text-center w-1/5">
+                    {t('vip.colGuest')}
+                  </th>
+                  <th className="py-3 px-3 font-semibold text-ink-secondary text-center w-1/5">
+                    {t('vip.colMember')}
+                  </th>
+                  <th className="py-3 px-3 font-bold text-forest text-center bg-forest/5 rounded-t-lg w-1/5">
+                    {t('vip.colVip')}
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-sage/50">
+                <tr className="hover:bg-surface-canvas/40">
+                  <td className="py-3 px-3.5 font-medium text-ink">
+                    {t('vip.featPublicRead')}
+                  </td>
+                  <td className="py-3 px-3 text-center">
+                    <CheckIcon className="w-4 h-4 text-forest mx-auto" />
+                  </td>
+                  <td className="py-3 px-3 text-center">
+                    <CheckIcon className="w-4 h-4 text-forest mx-auto" />
+                  </td>
+                  <td className="py-3 px-3 text-center bg-forest/5">
+                    <CheckIcon className="w-4 h-4 text-forest mx-auto" />
+                  </td>
+                </tr>
+
+                <tr className="hover:bg-surface-canvas/40">
+                  <td className="py-3 px-3.5 font-medium text-ink">
+                    {t('vip.featNearby')}
+                  </td>
+                  <td className="py-3 px-3 text-center">
+                    <CheckIcon className="w-4 h-4 text-forest mx-auto" />
+                  </td>
+                  <td className="py-3 px-3 text-center">
+                    <CheckIcon className="w-4 h-4 text-forest mx-auto" />
+                  </td>
+                  <td className="py-3 px-3 text-center bg-forest/5">
+                    <CheckIcon className="w-4 h-4 text-forest mx-auto" />
+                  </td>
+                </tr>
+
+                <tr className="hover:bg-surface-canvas/40">
+                  <td className="py-3 px-3.5 font-medium text-ink">
+                    {t('vip.featContribute')}
+                  </td>
+                  <td className="py-3 px-3 text-center text-ink-muted text-xs">
+                    {t('vip.valGuestContribute')}
+                  </td>
+                  <td className="py-3 px-3 text-center">
+                    <CheckIcon className="w-4 h-4 text-forest mx-auto" />
+                  </td>
+                  <td className="py-3 px-3 text-center bg-forest/5">
+                    <CheckIcon className="w-4 h-4 text-forest mx-auto" />
+                  </td>
+                </tr>
+
+                <tr className="hover:bg-surface-canvas/40">
+                  <td className="py-3 px-3.5 font-medium text-ink">
+                    {t('vip.featSbtNft')}
+                  </td>
+                  <td className="py-3 px-3 text-center text-ink-muted text-xs">
+                    —
+                  </td>
+                  <td className="py-3 px-3 text-center text-forest text-xs font-semibold">
+                    {t('vip.valEligibleOnApproval')}
+                  </td>
+                  <td className="py-3 px-3 text-center text-forest text-xs font-semibold bg-forest/5">
+                    {t('vip.valEligibleOnApproval')}
+                  </td>
+                </tr>
+
+                <tr className="hover:bg-surface-canvas/40">
+                  <td className="py-3 px-3.5 font-medium text-ink">
+                    {t('vip.featExclusiveReports')}
+                  </td>
+                  <td className="py-3 px-3 text-center text-ink-muted text-xs">
+                    {t('vip.valSummaryOnly')}
+                  </td>
+                  <td className="py-3 px-3 text-center text-ink-muted text-xs">
+                    {t('vip.valSummaryOnly')}
+                  </td>
+                  <td className="py-3 px-3 text-center text-forest font-bold text-xs bg-forest/5">
+                    {t('vip.valFullUnlimited')}
+                  </td>
+                </tr>
+
+                <tr className="hover:bg-surface-canvas/40">
+                  <td className="py-3 px-3.5 font-medium text-ink">
+                    {t('vip.featOfflineCoords')}
+                  </td>
+                  <td className="py-3 px-3 text-center text-ink-muted text-xs">
+                    —
+                  </td>
+                  <td className="py-3 px-3 text-center text-ink-muted text-xs">
+                    —
+                  </td>
+                  <td className="py-3 px-3 text-center bg-forest/5">
+                    <CheckIcon className="w-4 h-4 text-forest mx-auto" />
+                  </td>
+                </tr>
+
+                <tr className="hover:bg-surface-canvas/40">
+                  <td className="py-3 px-3.5 font-medium text-ink">
+                    {t('vip.featAdFreeBadge')}
+                  </td>
+                  <td className="py-3 px-3 text-center text-ink-muted text-xs">
+                    —
+                  </td>
+                  <td className="py-3 px-3 text-center text-ink-muted text-xs">
+                    —
+                  </td>
+                  <td className="py-3 px-3 text-center bg-forest/5 rounded-b-lg">
+                    <CheckIcon className="w-4 h-4 text-forest mx-auto" />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         {/* Architectural Invariants Callout */}
         <div className="rounded-card border border-sage bg-surface-card p-6 shadow-sm text-xs text-ink-secondary space-y-2">
           <div className="flex items-center gap-2 font-bold text-ink text-sm">

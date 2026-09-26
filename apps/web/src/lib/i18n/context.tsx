@@ -135,14 +135,54 @@ export function I18nProvider({
           ko: '로그인 | Ventlore',
           fr: 'Connexion | Ventlore',
         },
+        contribute: {
+          vi: 'Đóng góp thực địa | Ventlore',
+          en: 'Contribute Field Records | Ventlore',
+          ja: '現地調査の投稿 | Ventlore',
+          'zh-Hans': '实地共建贡献 | Ventlore',
+          ko: '현장 기여 | Ventlore',
+          fr: 'Contribution de terrain | Ventlore',
+        },
+        places: {
+          vi: 'Chi tiết điểm đến | Ventlore',
+          en: 'Destination Details | Ventlore',
+          ja: '目的地の詳細 | Ventlore',
+          'zh-Hans': '目的地详情 | Ventlore',
+          ko: '목적지 상세 정보 | Ventlore',
+          fr: 'Détails de la destination | Ventlore',
+        },
+        posts: {
+          vi: 'Bài viết thực địa | Ventlore',
+          en: 'Field Report | Ventlore',
+          ja: '現地調査レポート | Ventlore',
+          'zh-Hans': '实地考察报告 | Ventlore',
+          ko: '현장 조사 보고서 | Ventlore',
+          fr: 'Rapport de terrain | Ventlore',
+        },
+        people: {
+          vi: 'Hồ sơ người dùng | Ventlore',
+          en: 'User Profile | Ventlore',
+          ja: 'ユーザープロフィール | Ventlore',
+          'zh-Hans': '用户主页 | Ventlore',
+          ko: '사용자 프로필 | Ventlore',
+          fr: 'Profil utilisateur | Ventlore',
+        },
       };
 
       const segments = pathname.split('/').filter(Boolean);
-      const route = segments.length > 1 ? segments[1] : '';
+      let route = '';
+      if (segments.length > 0) {
+        if (SUPPORTED_LOCALES.some((l) => l.code === segments[0])) {
+          route = segments[1] || '';
+        } else {
+          route = segments[0] || '';
+        }
+      }
 
-      if (route && routeTitles[route]) {
-        document.title = routeTitles[route][locale] || siteTaglines[locale];
-      } else if (!route || route === '') {
+      const matchedRoute = route ? routeTitles[route] : undefined;
+      if (matchedRoute) {
+        document.title = matchedRoute[locale] || siteTaglines[locale];
+      } else {
         document.title = siteTaglines[locale];
       }
     }

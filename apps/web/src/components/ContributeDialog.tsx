@@ -106,10 +106,10 @@ export function ContributeDialog({ isOpen, onClose }: ContributeDialogProps) {
               </div>
               <div className="space-y-0.5 flex-1">
                 <h3 className="font-bold text-sm sm:text-base text-ink">
-                  Đóng góp bài viết & Đề xuất điểm mới
+                  {t('home.contributeOpt1Title')}
                 </h3>
                 <p className="text-xs text-ink-secondary leading-relaxed">
-                  Soạn bài trải nghiệm cho điểm đã biết hoặc gửi hồ sơ đề xuất điểm hoang sơ mới. Hỗ trợ lưu nháp và đối chiếu điểm trùng.
+                  {t('home.contributeOpt1Desc')}
                 </p>
               </div>
             </div>
@@ -122,7 +122,7 @@ export function ContributeDialog({ isOpen, onClose }: ContributeDialogProps) {
                   className="min-h-control inline-flex items-center gap-1.5 px-3.5 py-2 rounded-control font-semibold text-xs text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
                 >
                   <UserIcon className="w-3.5 h-3.5" />
-                  <span>Đăng nhập để đóng góp</span>
+                  <span>{t('home.contributeOpt1Login')}</span>
                 </Link>
               ) : (
                 <Link
@@ -130,7 +130,7 @@ export function ContributeDialog({ isOpen, onClose }: ContributeDialogProps) {
                   onClick={onClose}
                   className="min-h-control inline-flex items-center gap-1.5 px-3.5 py-2 rounded-control font-semibold text-xs text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
                 >
-                  <span>Mở Trình Soạn Thảo Đóng Góp</span>
+                  <span>{t('home.contributeOpt1Open')}</span>
                   <ArrowRightIcon className="w-3.5 h-3.5" />
                 </Link>
               )}
@@ -145,10 +145,10 @@ export function ContributeDialog({ isOpen, onClose }: ContributeDialogProps) {
               </div>
               <div className="space-y-0.5 flex-1">
                 <h3 className="font-bold text-sm sm:text-base text-ink">
-                  Tham gia kiểm định thực địa độc lập
+                  {t('home.contributeOpt2Title')}
                 </h3>
                 <p className="text-xs text-ink-secondary leading-relaxed">
-                  Dành cho kiểm lâm viên, hướng dẫn viên và nhà trắc địa thực hiện khảo sát độc lập, nghiệm thu công việc và nhận thù lao.
+                  {t('home.contributeOpt2Desc')}
                 </p>
               </div>
             </div>
@@ -160,7 +160,7 @@ export function ContributeDialog({ isOpen, onClose }: ContributeDialogProps) {
                 className="min-h-control inline-flex items-center gap-1.5 px-3.5 py-2 rounded-control font-semibold text-xs text-forest bg-sage/40 hover:bg-sage/60 transition-colors"
               >
                 <ShieldCheckIcon className="w-3.5 h-3.5" />
-                <span>Không Gian Kiểm Định Chuyên Gia</span>
+                <span>{t('home.contributeOpt2Open')}</span>
                 <ArrowRightIcon className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -174,10 +174,10 @@ export function ContributeDialog({ isOpen, onClose }: ContributeDialogProps) {
               </div>
               <div className="space-y-0.5 flex-1">
                 <h3 className="font-bold text-sm sm:text-base text-forest">
-                  Ủng hộ quỹ bảo tồn & kiểm định Ventlore
+                  {t('payment.projectTitle')}
                 </h3>
                 <p className="text-xs text-ink-secondary leading-relaxed">
-                  100% khoản đóng góp chuyển vào quỹ thẩm định độc lập để trả công trắc địa và duy trì minh bạch dữ liệu.
+                  {t('home.contributeOption3Desc')}
                 </p>
               </div>
             </div>
@@ -192,7 +192,7 @@ export function ContributeDialog({ isOpen, onClose }: ContributeDialogProps) {
                 className="min-h-control inline-flex items-center gap-1.5 px-4 py-2 rounded-control font-bold text-xs text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
               >
                 <SparklesIcon className="w-3.5 h-3.5 text-amber" />
-                <span>Ủng Hộ Quỹ Ventlore</span>
+                <span>{t('payment.projectTitle')}</span>
               </button>
             </div>
           </div>
@@ -205,10 +205,10 @@ export function ContributeDialog({ isOpen, onClose }: ContributeDialogProps) {
               </div>
               <div className="space-y-0.5 flex-1">
                 <h3 className="font-bold text-sm sm:text-base text-ink">
-                  Gói Hội Viên VIP & Sổ Quỹ Minh Bạch
+                  {t('home.contributeOpt4Title')}
                 </h3>
                 <p className="text-xs text-ink-secondary leading-relaxed">
-                  Trở thành Hội viên VIP để mở khóa tài liệu địa chất chuyên sâu hoặc tra cứu sổ quỹ công khai của dự án.
+                  {t('home.contributeOpt4Desc')}
                 </p>
               </div>
             </div>
@@ -220,14 +220,14 @@ export function ContributeDialog({ isOpen, onClose }: ContributeDialogProps) {
                 className="min-h-control inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control font-semibold text-xs text-white bg-forest hover:bg-forest-hover transition-colors shadow-xs"
               >
                 <SparklesIcon className="w-3.5 h-3.5 text-amber" />
-                <span>Xem Gói VIP (15 USD/năm)</span>
+                <span>{t('home.contributeOpt4Vip')}</span>
               </Link>
               <Link
                 href={getLocalizedPath('/transparency')}
                 onClick={onClose}
                 className="min-h-control inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control font-semibold text-xs text-forest bg-sage/40 hover:bg-sage/60 transition-colors"
               >
-                <span>Xem Sổ Quỹ Minh Bạch</span>
+                <span>{t('home.contributeOpt4Ledger')}</span>
                 <ArrowRightIcon className="w-3.5 h-3.5" />
               </Link>
             </div>
